@@ -1,0 +1,277 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+enum CustomerRole {
+    GUEST
+    CUSTOMER
+}
+
+enum UserRole {
+    ADMIN
+    SELLER
+    MANAGER
+}
+
+enum FulfillmentStatus {
+    FULFILLED
+    PARTIALLY_FULFILLED
+    UNFULFILLED
+}
+
+enum OrderProductStatus {
+    PROCESSING
+    SENT
+    RECEIVED
+}
+
+enum PaymentStatus {
+    UNPAID
+    REFUNDED
+    PAID
+}
+
+model VerificationCode {
+    id        String   @id @default(uuid())
+    email     String
+    code      String
+    createdAt DateTime @default(now())
+}
+
+model Customer {
+    id               String            @id @default(uuid())
+    email            String?           @unique
+    phone            String?
+    firstName        String?
+    lastName         String?
+    role             CustomerRole      @default(GUEST)
+    addresses        Address[]
+    orders           Order[]
+    favoriteProducts FavoriteProduct[]
+    tokens           CustomerToken[]
+    cart             CartProduct[]
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+}
+
+model User {
+    id        String      @id @default(uuid())
+    email     String
+    password  String
+    name      String
+    role      UserRole    @default(SELLER)
+    tokens    UserToken[]
+    offers    Offer[]
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+}
+
+model CartProduct {
+    id         String   @id @default(uuid())
+    variant    Variant  @relation(fields: [variantId], references: [id])
+    variantId  String
+    customer   Customer @relation(fields: [customerId], references: [id])
+    customerId String
+    offer      Offer?   @relation(fields: [offerId], references: [id])
+    offerId    String?  @unique
+}
+
+model CustomerToken {
+    id           String   @id @default(uuid())
+    customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    customerId   String
+    refreshToken String
+    expiresIn    DateTime
+    createdAt    DateTime @default(now())
+}
+
+model UserToken {
+    id           String   @id @default(uuid())
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    userId       String
+    refreshToken String
+    expiresIn    DateTime
+    createdAt    DateTime @default(now())
+}
+
+model Address {
+    id         String   @id @default(uuid())
+    city       String
+    address    String
+    postCode   String
+    customer   Customer @relation(fields: [customerId], references: [id])
+    customerId String
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
+model Order {
+    id                Int               @id @default(autoincrement())
+    products          OrderProduct[]
+    paymentStatus     PaymentStatus
+    fulfillmentStatus FulfillmentStatus
+    totalPrice        Int
+    totalDiscount     Int
+    address           OrderAddress?
+    delivery          OrderDelivery?
+    comment           String?
+    additionalService String?
+    customer          Customer          @relation(fields: [customerId], references: [id])
+    customerId        String
+    createdAt         DateTime          @default(now())
+    updatedAt         DateTime          @updatedAt
+}
+
+model OrderProduct {
+    id        String             @id @default(uuid())
+    status    OrderProductStatus
+    tracking  String
+    price     Int
+    order     Order              @relation(fields: [orderId], references: [id])
+    orderId   Int
+    variant   Variant            @relation(fields: [variantId], references: [id])
+    variantId String
+    offer     Offer?             @relation(fields: [offerId], references: [id])
+    offerId   String?            @unique
+    createdAt DateTime           @default(now())
+    updatedAt DateTime           @updatedAt
+}
+
+model OrderAddress {
+    id        String   @id @default(uuid())
+    city      String
+    address   String
+    postCode  String
+    order     Order    @relation(fields: [orderId], references: [id])
+    orderId   Int      @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model OrderDelivery {
+    id        String   @id @default(uuid())
+    name      String
+    price     Int
+    duration  Int
+    order     Order    @relation(fields: [orderId], references: [id])
+    orderId   Int      @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model FavoriteProduct {
+    id         String   @id @default(uuid())
+    product    Product  @relation(fields: [productId], references: [id])
+    productId  String
+    customer   Customer @relation(fields: [customerId], references: [id])
+    customerId String
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
+model Collection {
+    id        String    @id @default(uuid())
+    name      String    @unique
+    products  Product[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}
+
+model Product {
+    id               String            @id @default(uuid())
+    handle           String
+    name             String
+    vendor           String
+    description      String
+    available        Boolean           @default(false)
+    images           Image[]
+    collections      Collection[]
+    variants         Variant[]
+    productIsFavored FavoriteProduct[]
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+}
+
+model Image {
+    id          String   @id @default(uuid())
+    mediaType   String
+    width       Int
+    height      Int
+    src         String
+    alt         String
+    aspectRatio Float
+    path        String
+    position    Int
+    product     Product? @relation(fields: [productId], references: [id])
+    productId   String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Variant {
+    id             String         @id @default(uuid())
+    price          Int
+    compareAtPrice Int?
+    product        Product        @relation(fields: [productId], references: [id])
+    productId      String
+    name           String
+    offers         Offer[]
+    orders         OrderProduct[]
+    cartProduct    CartProduct[]
+    createdAt      DateTime       @default(now())
+    updatedAt      DateTime       @updatedAt
+}
+
+model Offer {
+    id                String           @id @default(uuid())
+    price             Int
+    compareAtPrice    Int
+    sPrice            Int
+    isActive          Boolean          @default(false)
+    isSold            Boolean          @default(false)
+    variant           Variant          @relation(fields: [variantId], references: [id])
+    variantId         String
+    user              User?            @relation(fields: [userId], references: [id])
+    userId            String?
+    order             OrderProduct?
+    deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id])
+    deliveryProfileId String?
+    cartProduct       CartProduct?
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+}
+
+model DeliveryProfile {
+    id        String         @id @default(uuid())
+    name      String
+    offers    Offer[]
+    zones     DeliveryZone[]
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+}
+
+model DeliveryZone {
+    id                String           @id @default(uuid())
+    name              String
+    options           DeliveryOption[]
+    deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id])
+    deliveryProfileId String
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+}
+
+model DeliveryOption {
+    id             String       @id @default(uuid())
+    name           String
+    price          Int
+    duration       Int
+    deliveryZone   DeliveryZone @relation(fields: [deliveryZoneId], references: [id])
+    deliveryZoneId String
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
+}

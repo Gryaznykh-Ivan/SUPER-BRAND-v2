@@ -1,0 +1,25 @@
+{
+  "name": "super-brand",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "cd ./server && npm run start:dev",
+    "dev:admin": "cd ./admin && npm run dev",
+    "dev:store": "cd ./store && npm run dev",
+    "dev": "concurrently \"npm run dev:store\" \"npm run dev:server\" \"npm run dev:admin\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gryaznykh-Ivan/SUPER-BRAND.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gryaznykh-Ivan/SUPER-BRAND/issues"
+  },
+  "homepage": "https://github.com/Gryaznykh-Ivan/SUPER-BRAND#readme",
+  "dependencies": {
+    "jwt-decode": "^3.1.2"
+  }
+}
