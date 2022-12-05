@@ -7,12 +7,18 @@ interface IProps {
 
 export default function SideBar({ onClick }: IProps) {
     return (
-        <div className="w-full my-2 px-2 space-y-1 text-sm" onClick={ onClick }>
+        <div className="w-full my-2 px-2 space-y-1 text-sm" onClick={onClick}>
             <NavLink href="/" className={({ isActive }) => `flex items-center font-semibold px-3 py-2 hover:bg-gray-200 rounded-md stroke-black ${isActive ? "stroke-green-700 text-green-700 bg-gray-200" : ""}`}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.2652 5.10536 20.5196 5.29289 20.7071C5.48043 20.8946 5.73478 21 6 21H9M19 10L21 12M19 10V20C19 20.2652 18.8946 20.5196 18.7071 20.7071C18.5196 20.8946 18.2652 21 18 21H15M9 21C9.26522 21 9.51957 20.8946 9.70711 20.7071C9.89464 20.5196 10 20.2652 10 20V16C10 15.7348 10.1054 15.4804 10.2929 15.2929C10.4804 15.1054 10.7348 15 11 15H13C13.2652 15 13.5196 15.1054 13.7071 15.2929C13.8946 15.4804 14 15.7348 14 16V20C14 20.2652 14.1054 20.5196 14.2929 20.7071C14.4804 20.8946 14.7348 21 15 21M9 21H15" stroke="inherit" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <span className="ml-2">Главная</span>
+            </NavLink>
+            <NavLink href="/orders" className={({ isActive }) => `flex items-center font-semibold px-3 py-2 hover:bg-gray-200 rounded-md stroke-black ${isActive && "stroke-green-700 text-green-700 bg-gray-200"}`}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 8H19M5 8C4.46957 8 3.96086 7.78929 3.58579 7.41421C3.21071 7.03914 3 6.53043 3 6C3 5.46957 3.21071 4.96086 3.58579 4.58579C3.96086 4.21071 4.46957 4 5 4H19C19.5304 4 20.0391 4.21071 20.4142 4.58579C20.7893 4.96086 21 5.46957 21 6C21 6.53043 20.7893 7.03914 20.4142 7.41421C20.0391 7.78929 19.5304 8 19 8M5 8V18C5 18.5304 5.21071 19.0391 5.58579 19.4142C5.96086 19.7893 6.46957 20 7 20H17C17.5304 20 18.0391 19.7893 18.4142 19.4142C18.7893 19.0391 19 18.5304 19 18V8M10 12H14" stroke="inherit" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="ml-2">Заказы</span>
             </NavLink>
             <NavLink href="/products" className={({ isActive }) => `flex items-center font-semibold px-3 py-2 hover:bg-gray-200 rounded-md stroke-black ${isActive && "stroke-green-700 text-green-700 bg-gray-200"}`}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,11 +26,11 @@ export default function SideBar({ onClick }: IProps) {
                 </svg>
                 <span className="ml-2">Товары</span>
             </NavLink>
-            <NavLink href="/orders" className={({ isActive }) => `flex items-center font-semibold px-3 py-2 hover:bg-gray-200 rounded-md stroke-black ${isActive && "stroke-green-700 text-green-700 bg-gray-200"}`}>
+            <NavLink href="/offers" className={({ isActive }) => `flex items-center font-semibold px-3 py-2 hover:bg-gray-200 rounded-md stroke-black ${isActive && "stroke-green-700 text-green-700 bg-gray-200"}`}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 8H19M5 8C4.46957 8 3.96086 7.78929 3.58579 7.41421C3.21071 7.03914 3 6.53043 3 6C3 5.46957 3.21071 4.96086 3.58579 4.58579C3.96086 4.21071 4.46957 4 5 4H19C19.5304 4 20.0391 4.21071 20.4142 4.58579C20.7893 4.96086 21 5.46957 21 6C21 6.53043 20.7893 7.03914 20.4142 7.41421C20.0391 7.78929 19.5304 8 19 8M5 8V18C5 18.5304 5.21071 19.0391 5.58579 19.4142C5.96086 19.7893 6.46957 20 7 20H17C17.5304 20 18.0391 19.7893 18.4142 19.4142C18.7893 19.0391 19 18.5304 19 18V8M10 12H14" stroke="inherit" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15M9 5C9 5.53043 9.21071 6.03914 9.58579 6.41421C9.96086 6.78929 10.4696 7 11 7H13C13.5304 7 14.0391 6.78929 14.4142 6.41421C14.7893 6.03914 15 5.53043 15 5M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="inherit" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span className="ml-2">Заказы</span>
+                <span className="ml-2">Офферы</span>
             </NavLink>
             <NavLink href="/collections" className={({ isActive }) => `flex items-center font-semibold px-3 py-2 hover:bg-gray-200 rounded-md stroke-black ${isActive && "stroke-green-700 text-green-700 bg-gray-200"}`}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

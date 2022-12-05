@@ -21,6 +21,7 @@ export default function withAuth<T>(Component: NextComponentType<T>) {
 
                         const now = Math.floor(Date.now() / 1000);
                         if (jwt.exp - now <= 0) {
+                            // todo: refresh
                             localStorage.removeItem("token")
                         } else {
                             dispatch({ type: "auth/login", payload: { token, decode: jwt } });

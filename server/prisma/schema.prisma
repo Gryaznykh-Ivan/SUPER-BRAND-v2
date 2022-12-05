@@ -77,8 +77,8 @@ model CartProduct {
     variantId  String
     customer   Customer @relation(fields: [customerId], references: [id])
     customerId String
-    offer      Offer?   @relation(fields: [offerId], references: [id])
-    offerId    String?  @unique
+    offer      Offer    @relation(fields: [offerId], references: [id])
+    offerId    String
 }
 
 model CustomerToken {
@@ -155,7 +155,7 @@ model OrderAddress {
 
 model OrderDelivery {
     id        String   @id @default(uuid())
-    name      String
+    title     String
     price     Int
     duration  Int
     order     Order    @relation(fields: [orderId], references: [id])
@@ -176,7 +176,7 @@ model FavoriteProduct {
 
 model Collection {
     id        String    @id @default(uuid())
-    name      String    @unique
+    title     String    @unique
     products  Product[]
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -184,17 +184,30 @@ model Collection {
 
 model Product {
     id               String            @id @default(uuid())
-    handle           String
-    name             String
+    handle           String            @unique
+    title            String
     vendor           String
     description      String
+    metaTitle        String
+    metaDescription  String
     available        Boolean           @default(false)
     images           Image[]
     collections      Collection[]
     variants         Variant[]
     productIsFavored FavoriteProduct[]
+    productOption    ProductOption[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
+}
+
+model ProductOption {
+    id        String   @id @default(uuid())
+    title     String
+    position  Int
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    productId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Image {
@@ -215,11 +228,16 @@ model Image {
 
 model Variant {
     id             String         @id @default(uuid())
+    title          String
     price          Int
     compareAtPrice Int?
+    option1        String
+    option2        String?
+    option3        String?
+    SKU            String?
+    barcode        String?
     product        Product        @relation(fields: [productId], references: [id])
     productId      String
-    name           String
     offers         Offer[]
     orders         OrderProduct[]
     cartProduct    CartProduct[]
@@ -230,7 +248,7 @@ model Variant {
 model Offer {
     id                String           @id @default(uuid())
     price             Int
-    compareAtPrice    Int
+    compareAtPrice    Int?
     sPrice            Int
     isActive          Boolean          @default(false)
     isSold            Boolean          @default(false)
@@ -241,14 +259,14 @@ model Offer {
     order             OrderProduct?
     deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id])
     deliveryProfileId String?
-    cartProduct       CartProduct?
+    cartProduct       CartProduct[]
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
 }
 
 model DeliveryProfile {
     id        String         @id @default(uuid())
-    name      String
+    title     String
     offers    Offer[]
     zones     DeliveryZone[]
     createdAt DateTime       @default(now())
@@ -257,7 +275,7 @@ model DeliveryProfile {
 
 model DeliveryZone {
     id                String           @id @default(uuid())
-    name              String
+    title             String
     options           DeliveryOption[]
     deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id])
     deliveryProfileId String
@@ -267,7 +285,7 @@ model DeliveryZone {
 
 model DeliveryOption {
     id             String       @id @default(uuid())
-    name           String
+    title          String
     price          Int
     duration       Int
     deliveryZone   DeliveryZone @relation(fields: [deliveryZoneId], references: [id])

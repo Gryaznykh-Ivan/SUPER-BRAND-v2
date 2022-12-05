@@ -54,19 +54,19 @@ function Index() {
                                     </tr>
                                 </tbody>
                             </table>
-                            <div className="flex justify-center mt-4 space-x-1">
-                                <Link href="#" className="p-2 font-bold border-[1px] rounded-md">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </Link>
-                                <div className="min-w-[40px] text-center p-2 font-medium rounded-md">1</div>
-                                <Link href="#" className="p-2 font-bold border-[1px] rounded-md">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </Link>
-                            </div>
+                        </div>
+                        <div className="flex justify-center mt-4 space-x-1">
+                            <Link href="#" className="p-2 font-bold border-[1px] rounded-md">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </Link>
+                            <div className="min-w-[40px] text-center p-2 font-medium rounded-md">1</div>
+                            <Link href="#" className="p-2 font-bold border-[1px] rounded-md">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </Link>
                         </div>
                     </div>
                 </div>

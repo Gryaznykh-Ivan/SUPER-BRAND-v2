@@ -12,8 +12,11 @@ interface IProps {
 
 export default function NavLink({ href, children, className }: IProps) {
     const router = useRouter()
+    const isActive = href === "/"
+        ? router.pathname === href
+        : router.pathname.indexOf(href) !== -1
 
     return (
-        <Link href={href} className={className({ isActive: router.pathname === href })}>{children}</Link>
+        <Link href={href} className={className({ isActive })}>{children}</Link>
     )
 }

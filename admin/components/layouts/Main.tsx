@@ -12,10 +12,12 @@ export default function MainLayout({ children }: IProps) {
             <Header />
             <div className="flex flex-1 mt-16 bg-main-bg">
                 <div className="w-64 hidden md:block border-r-[1px]">
-                    <SideBar />
+                    <div className="sticky top-[72px]">
+                        <SideBar />
+                    </div>
                 </div>
                 <div className="flex-1">
-                    { children }
+                    {children}
                 </div>
             </div>
         </div>
