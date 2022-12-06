@@ -1,11 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import withAuth from '../../hoc/withAuth'
 
 function Index() {
+    const router = useRouter()
+
     return (
         <MainLayout>
             <div className="px-6 my-4">
@@ -39,7 +42,7 @@ function Index() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/offers/example") }>
                                         <td className="px-3 py-2 font-medium">№3</td>
                                         <td className="px-3 py-2">1906R "White Gold"</td>
                                         <td className="px-3 py-2">US 5</td>
@@ -48,7 +51,7 @@ function Index() {
                                         <td className="px-3 py-2">40,000₽</td>
                                         <td className="px-3 py-2">Активен</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/offers/example") }>
                                         <td className="px-3 py-2 font-medium">№3</td>
                                         <td className="px-3 py-2">1906R "White Gold"</td>
                                         <td className="px-3 py-2">US 6</td>
@@ -57,7 +60,7 @@ function Index() {
                                         <td className="px-3 py-2">45,000₽</td>
                                         <td className="px-3 py-2">Активен</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/offers/example") }>
                                         <td className="px-3 py-2 font-medium">№3</td>
                                         <td className="px-3 py-2">1906R "White Gold"</td>
                                         <td className="px-3 py-2">US 7</td>
