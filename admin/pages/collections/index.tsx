@@ -1,17 +1,20 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import withAuth from '../../hoc/withAuth'
 
 function Index() {
+    const router = useRouter()
+
     return (
         <MainLayout>
             <div className="px-6 my-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-medium">Коллекции</h1>
                     <div className="">
-                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</button>
+                        <Link href="/collections/new" className="block bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</Link>
                     </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
@@ -32,22 +35,22 @@ function Index() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/collections/example") }>
                                         <td className="px-3 py-2 font-medium">Nike</td>
                                         <td className="px-3 py-2">27.11.2022 14:32</td>
                                         <td className="px-3 py-2">1456</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/collections/example") }>
                                         <td className="px-3 py-2 font-medium">Air Jordan 1</td>
                                         <td className="px-3 py-2">27.11.2022 14:32</td>
                                         <td className="px-3 py-2">522</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/collections/example") }>
                                         <td className="px-3 py-2 font-medium">500</td>
                                         <td className="px-3 py-2">27.11.2022 14:32</td>
                                         <td className="px-3 py-2">321</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/collections/example") }>
                                         <td className="px-3 py-2 font-medium">Новое поступление</td>
                                         <td className="px-3 py-2">27.11.2022 14:32</td>
                                         <td className="px-3 py-2">344</td>

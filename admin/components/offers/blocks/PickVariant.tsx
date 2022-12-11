@@ -15,8 +15,8 @@ export default function PickVariant() {
     }
 
     return (
-        <div className="flex rounded-md bg-white shadow-sm p-5 space-x-4">
-            <div className="relative w-64 aspect-5/3 border-[1px] border-dashed rounded-md border-gray-400">
+        <div className="flex rounded-md bg-white shadow-sm p-5 space-x-4 flex-col md:flex-row">
+            <div className="relative w-64 aspect-5/3 border-[1px] border-dashed rounded-md border-gray-400 mx-auto">
                 {/* <Image fill src={`/assets/images/air-force0.jpg`} className="object-contain" alt="" /> */}
             </div>
             <div className="flex flex-col flex-1 space-y-2">

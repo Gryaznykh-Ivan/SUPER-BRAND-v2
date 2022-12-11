@@ -22,6 +22,13 @@ export default function withAuth<T>(Component: NextComponentType<T>) {
                     try {
                         const jwt: IJwtDecode = jwtDecode(token);
 
+                        // const now = Math.floor(Date.now() / 1000);
+                        // if (jwt.exp - now <= 0) {
+                        //     localStorage.removeItem("token")
+                        //     dispatch(authService.endpoints.refresh.initiate())
+                        // } else {
+                        // }
+
                         dispatch({ type: "auth/login", payload: { token, decode: jwt } });
                     } catch (e) {
                         dispatch({ type: "auth/logout" });

@@ -4,8 +4,9 @@ import MainLayout from '../../../../components/layouts/Main'
 import Media from '../../../../components/media/blocks/Media'
 import GeneralInfo from '../../../../components/variants/blocks/GeneralInfo'
 import VariantList from '../../../../components/variants/blocks/VariantList'
+import withAuth from '../../../../hoc/withAuth'
 
-export default function New() {
+function New() {
     return (
         <MainLayout>
             <div className="px-6 my-4 max-w-5xl mx-auto">
@@ -36,3 +37,5 @@ export default function New() {
         </MainLayout>
     )
 }
+
+export default withAuth(New)

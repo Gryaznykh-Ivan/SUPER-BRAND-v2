@@ -14,7 +14,7 @@ enum CustomerRole {
 
 enum UserRole {
     ADMIN
-    SELLER
+    COURIER
     MANAGER
 }
 
@@ -44,27 +44,37 @@ model VerificationCode {
 }
 
 model Customer {
-    id               String            @id @default(uuid())
-    email            String?           @unique
-    phone            String?
-    firstName        String?
-    lastName         String?
-    role             CustomerRole      @default(GUEST)
-    addresses        Address[]
-    orders           Order[]
-    favoriteProducts FavoriteProduct[]
-    tokens           CustomerToken[]
-    cart             CartProduct[]
-    createdAt        DateTime          @default(now())
-    updatedAt        DateTime          @updatedAt
+    id                   String            @id @default(uuid())
+    email                String?           @unique
+    phone                String?
+    firstName            String?
+    lastName             String?
+    patronymic           String?
+    inn                  String?
+    account              String?
+    correspondentAccount String?
+    bic                  String?
+    passport             String?
+    comment              String?
+    isVerified           Boolean           @default(false)
+    isSubscribed         Boolean           @default(false)
+    role                 CustomerRole      @default(GUEST)
+    addresses            Address[]
+    orders               Order[]
+    favoriteProducts     FavoriteProduct[]
+    tokens               CustomerToken[]
+    cart                 CartProduct[]
+    createdAt            DateTime          @default(now())
+    updatedAt            DateTime          @updatedAt
 }
 
 model User {
     id        String      @id @default(uuid())
     email     String
+    phone     String
     password  String
     name      String
-    role      UserRole    @default(SELLER)
+    role      UserRole
     tokens    UserToken[]
     offers    Offer[]
     createdAt DateTime    @default(now())
@@ -101,9 +111,10 @@ model UserToken {
 
 model Address {
     id         String   @id @default(uuid())
+    country    String
     city       String
     address    String
-    postCode   String
+    region     String
     customer   Customer @relation(fields: [customerId], references: [id])
     customerId String
     createdAt  DateTime @default(now())
@@ -175,11 +186,14 @@ model FavoriteProduct {
 }
 
 model Collection {
-    id        String    @id @default(uuid())
-    title     String    @unique
-    products  Product[]
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
+    id          String    @id @default(uuid())
+    title       String    @unique
+    description String
+    products    Product[]
+    image       Image     @relation(fields: [imageId], references: [id])
+    imageId     String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
 }
 
 model Product {
@@ -191,11 +205,11 @@ model Product {
     metaTitle        String
     metaDescription  String
     available        Boolean           @default(false)
-    images           Image[]
+    images           ProductImage[]
     collections      Collection[]
     variants         Variant[]
     productIsFavored FavoriteProduct[]
-    productOption    ProductOption[]
+    productOptions   ProductOption[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
 }
@@ -210,7 +224,7 @@ model ProductOption {
     updatedAt DateTime @updatedAt
 }
 
-model Image {
+model ProductImage {
     id          String   @id @default(uuid())
     mediaType   String
     width       Int
@@ -238,11 +252,28 @@ model Variant {
     barcode        String?
     product        Product        @relation(fields: [productId], references: [id])
     productId      String
+    image          Image          @relation(fields: [imageId], references: [id])
+    imageId        String
     offers         Offer[]
     orders         OrderProduct[]
-    cartProduct    CartProduct[]
+    cartProducts   CartProduct[]
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
+}
+
+model Image {
+    id          String       @id @default(uuid())
+    mediaType   String
+    width       Int
+    height      Int
+    src         String
+    alt         String
+    aspectRatio Float
+    path        String
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    variants    Variant[]
+    collections Collection[]
 }
 
 model Offer {

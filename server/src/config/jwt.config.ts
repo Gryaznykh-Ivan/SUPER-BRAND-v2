@@ -6,7 +6,9 @@ export const JwtConfig = () => ({
 
 export const AccessJwtConfig = (): JwtSignOptions => ({
   secret: process.env.SECRET,
-  expiresIn: '15m',
+  expiresIn: '5s',
+  // expiresIn: '15m',
 });
 
 export const RefreshTokenExpiresInConfig = () => new Date(Date.now() + 86400000 * 90)
+// export const RefreshTokenExpiresInConfig = () => new Date(Date.now() + 86400000 * 90)

@@ -6,8 +6,9 @@ import MainLayout from '../../../../components/layouts/Main'
 import Media from '../../../../components/media/blocks/Media'
 import GeneralInfo from '../../../../components/variants/blocks/GeneralInfo'
 import VariantList from '../../../../components/variants/blocks/VariantList'
+import withAuth from '../../../../hoc/withAuth'
 
-export default function Variant() {
+function Variant() {
     const router = useRouter()
 
     return (
@@ -51,3 +52,5 @@ export default function Variant() {
         </MainLayout>
     )
 }
+
+export default withAuth(Variant)

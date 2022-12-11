@@ -48,6 +48,17 @@ const authSlice = createSlice({
                 state.payload = null
             }
         )
+
+        builder.addMatcher(
+            authService.endpoints.refresh.matchFulfilled,
+            (state, { payload }) => {
+                localStorage.setItem("token", payload.data);
+
+                state.isAuth = true
+                state.token = payload.data
+                state.payload = jwt_decode(payload.data)
+            }
+        )
     }
 })
 

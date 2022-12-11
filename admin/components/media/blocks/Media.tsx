@@ -82,7 +82,11 @@ export default function Media() {
                             onDragOver={(e) => onDragOver(e, item)}
                             onDrop={(e) => onDrop(e, item)}
                         >
-                            <MediaCard src={item.src} alt="" />
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-black bg-opacity-0 z-10 group-hover:bg-opacity-10"></div>
+                                <MediaCard className="cursor-grab aspect-square" src={item.src} alt="" />
+                            </div>
+
                         </div>
                     )}
 
