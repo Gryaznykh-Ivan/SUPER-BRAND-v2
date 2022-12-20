@@ -37,14 +37,14 @@ enum PaymentStatus {
 }
 
 model VerificationCode {
-    id        String   @id @default(uuid())
+    id        String   @id @default(cuid())
     email     String
     code      String
     createdAt DateTime @default(now())
 }
 
 model Customer {
-    id                   String            @id @default(uuid())
+    id                   String            @id @default(cuid())
     email                String?           @unique
     phone                String?
     firstName            String?
@@ -69,7 +69,7 @@ model Customer {
 }
 
 model User {
-    id        String      @id @default(uuid())
+    id        String      @id @default(cuid())
     email     String
     phone     String
     password  String
@@ -82,17 +82,17 @@ model User {
 }
 
 model CartProduct {
-    id         String   @id @default(uuid())
+    id         String   @id @default(cuid())
     variant    Variant  @relation(fields: [variantId], references: [id])
     variantId  String
     customer   Customer @relation(fields: [customerId], references: [id])
     customerId String
-    offer      Offer    @relation(fields: [offerId], references: [id])
-    offerId    String
+    offer      Offer?   @relation(fields: [offerId], references: [id])
+    offerId    String?
 }
 
 model CustomerToken {
-    id           String   @id @default(uuid())
+    id           String   @id @default(cuid())
     customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     customerId   String
     refreshToken String
@@ -101,7 +101,7 @@ model CustomerToken {
 }
 
 model UserToken {
-    id           String   @id @default(uuid())
+    id           String   @id @default(cuid())
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     userId       String
     refreshToken String
@@ -110,7 +110,7 @@ model UserToken {
 }
 
 model Address {
-    id         String   @id @default(uuid())
+    id         String   @id @default(cuid())
     country    String
     city       String
     address    String
@@ -127,11 +127,12 @@ model Order {
     paymentStatus     PaymentStatus
     fulfillmentStatus FulfillmentStatus
     totalPrice        Int
-    totalDiscount     Int
-    address           OrderAddress?
-    delivery          OrderDelivery?
+    mailingCountry    String
+    mailingCity       String
+    mailingRegion     String
+    mailingAddress    String
+    // delivery          OrderDelivery?
     comment           String?
-    additionalService String?
     customer          Customer          @relation(fields: [customerId], references: [id])
     customerId        String
     createdAt         DateTime          @default(now())
@@ -139,7 +140,7 @@ model Order {
 }
 
 model OrderProduct {
-    id        String             @id @default(uuid())
+    id        String             @id @default(cuid())
     status    OrderProductStatus
     tracking  String
     price     Int
@@ -153,30 +154,30 @@ model OrderProduct {
     updatedAt DateTime           @updatedAt
 }
 
-model OrderAddress {
-    id        String   @id @default(uuid())
-    city      String
-    address   String
-    postCode  String
-    order     Order    @relation(fields: [orderId], references: [id])
-    orderId   Int      @unique
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
+// model OrderAddress {
+//     id        String   @id @default(cuid())
+//     city      String
+//     address   String
+//     postCode  String
+//     order     Order    @relation(fields: [orderId], references: [id])
+//     orderId   Int      @unique
+//     createdAt DateTime @default(now())
+//     updatedAt DateTime @updatedAt
+// }
 
-model OrderDelivery {
-    id        String   @id @default(uuid())
-    title     String
-    price     Int
-    duration  Int
-    order     Order    @relation(fields: [orderId], references: [id])
-    orderId   Int      @unique
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
+// model OrderDelivery {
+//     id        String   @id @default(cuid())
+//     title     String
+//     price     Int
+//     duration  Int
+//     order     Order    @relation(fields: [orderId], references: [id])
+//     orderId   Int      @unique
+//     createdAt DateTime @default(now())
+//     updatedAt DateTime @updatedAt
+// }
 
 model FavoriteProduct {
-    id         String   @id @default(uuid())
+    id         String   @id @default(cuid())
     product    Product  @relation(fields: [productId], references: [id])
     productId  String
     customer   Customer @relation(fields: [customerId], references: [id])
@@ -186,7 +187,7 @@ model FavoriteProduct {
 }
 
 model Collection {
-    id          String    @id @default(uuid())
+    id          String    @id @default(cuid())
     title       String    @unique
     description String
     products    Product[]
@@ -197,7 +198,7 @@ model Collection {
 }
 
 model Product {
-    id               String            @id @default(uuid())
+    id               String            @id @default(cuid())
     handle           String            @unique
     title            String
     vendor           String
@@ -215,7 +216,7 @@ model Product {
 }
 
 model ProductOption {
-    id        String   @id @default(uuid())
+    id        String   @id @default(cuid())
     title     String
     position  Int
     product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -225,7 +226,7 @@ model ProductOption {
 }
 
 model ProductImage {
-    id          String   @id @default(uuid())
+    id          String   @id @default(cuid())
     mediaType   String
     width       Int
     height      Int
@@ -241,7 +242,7 @@ model ProductImage {
 }
 
 model Variant {
-    id             String         @id @default(uuid())
+    id             String         @id @default(cuid())
     title          String
     price          Int
     compareAtPrice Int?
@@ -262,7 +263,7 @@ model Variant {
 }
 
 model Image {
-    id          String       @id @default(uuid())
+    id          String       @id @default(cuid())
     mediaType   String
     width       Int
     height      Int
@@ -270,14 +271,14 @@ model Image {
     alt         String
     aspectRatio Float
     path        String
-    createdAt   DateTime     @default(now())
-    updatedAt   DateTime     @updatedAt
     variants    Variant[]
     collections Collection[]
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
 }
 
 model Offer {
-    id                String           @id @default(uuid())
+    id                String           @id @default(cuid())
     price             Int
     compareAtPrice    Int?
     sPrice            Int
@@ -296,7 +297,7 @@ model Offer {
 }
 
 model DeliveryProfile {
-    id        String         @id @default(uuid())
+    id        String         @id @default(cuid())
     title     String
     offers    Offer[]
     zones     DeliveryZone[]
@@ -305,9 +306,10 @@ model DeliveryProfile {
 }
 
 model DeliveryZone {
-    id                String           @id @default(uuid())
-    title             String
+    id                String           @id @default(cuid())
     options           DeliveryOption[]
+    region            Region           @relation(fields: [regionId], references: [id])
+    regionId          String
     deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id])
     deliveryProfileId String
     createdAt         DateTime         @default(now())
@@ -315,7 +317,7 @@ model DeliveryZone {
 }
 
 model DeliveryOption {
-    id             String       @id @default(uuid())
+    id             String       @id @default(cuid())
     title          String
     price          Int
     duration       Int
@@ -323,4 +325,32 @@ model DeliveryOption {
     deliveryZoneId String
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
+}
+
+model Country {
+    id        String   @id @default(cuid())
+    title     String
+    regions   Region[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Region {
+    id            String         @id @default(cuid())
+    title         String
+    deliveryZones DeliveryZone[]
+    cities        City[]
+    country       Country        @relation(fields: [countryId], references: [id])
+    countryId     String
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+}
+
+model City {
+    id        String   @id @default(cuid())
+    title     String
+    region    Region   @relation(fields: [regionId], references: [id])
+    regionId  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
