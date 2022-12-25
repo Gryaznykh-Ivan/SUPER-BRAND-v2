@@ -7,27 +7,30 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-enum CustomerRole {
+enum Role {
+    ADMIN
+    COURIER
+    MANAGER
     GUEST
     CUSTOMER
 }
 
-enum UserRole {
-    ADMIN
-    COURIER
-    MANAGER
+enum OfferStatus {
+    OFFERED
+    ACCEPTED
+    DECLINED
+    ACTIVE
+    SOLD
+}
+
+enum OrderStatus {
+    FULFILLED
+    UNFULFILLED
 }
 
 enum FulfillmentStatus {
     FULFILLED
-    PARTIALLY_FULFILLED
     UNFULFILLED
-}
-
-enum OrderProductStatus {
-    PROCESSING
-    SENT
-    RECEIVED
 }
 
 enum PaymentStatus {
@@ -43,10 +46,11 @@ model VerificationCode {
     createdAt DateTime @default(now())
 }
 
-model Customer {
+model User {
     id                   String            @id @default(cuid())
     email                String?           @unique
     phone                String?
+    password             String?
     firstName            String?
     lastName             String?
     patronymic           String?
@@ -58,132 +62,105 @@ model Customer {
     comment              String?
     isVerified           Boolean           @default(false)
     isSubscribed         Boolean           @default(false)
-    role                 CustomerRole      @default(GUEST)
+    role                 Role              @default(GUEST)
     addresses            Address[]
     orders               Order[]
     favoriteProducts     FavoriteProduct[]
-    tokens               CustomerToken[]
+    tokens               Token[]
     cart                 CartProduct[]
+    offer                Offer[]
     createdAt            DateTime          @default(now())
     updatedAt            DateTime          @updatedAt
 }
 
-model User {
-    id        String      @id @default(cuid())
-    email     String
-    phone     String
-    password  String
-    name      String
-    role      UserRole
-    tokens    UserToken[]
-    offers    Offer[]
-    createdAt DateTime    @default(now())
-    updatedAt DateTime    @updatedAt
-}
-
 model CartProduct {
-    id         String   @id @default(cuid())
-    variant    Variant  @relation(fields: [variantId], references: [id])
-    variantId  String
-    customer   Customer @relation(fields: [customerId], references: [id])
-    customerId String
-    offer      Offer?   @relation(fields: [offerId], references: [id])
-    offerId    String?
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    offer     Offer    @relation(fields: [offerId], references: [id])
+    offerId   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@id([userId, offerId])
 }
 
-model CustomerToken {
+model Token {
     id           String   @id @default(cuid())
-    customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    customer     User     @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     customerId   String
     refreshToken String
     expiresIn    DateTime
     createdAt    DateTime @default(now())
 }
 
-model UserToken {
-    id           String   @id @default(cuid())
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    userId       String
-    refreshToken String
-    expiresIn    DateTime
-    createdAt    DateTime @default(now())
-}
-
 model Address {
-    id         String   @id @default(cuid())
-    country    String
-    city       String
-    address    String
-    region     String
-    customer   Customer @relation(fields: [customerId], references: [id])
-    customerId String
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
+    id        String   @id @default(cuid())
+    country   String
+    city      String
+    address   String
+    region    String
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Order {
-    id                Int               @id @default(autoincrement())
-    products          OrderProduct[]
-    paymentStatus     PaymentStatus
-    fulfillmentStatus FulfillmentStatus
-    totalPrice        Int
-    mailingCountry    String
-    mailingCity       String
-    mailingRegion     String
-    mailingAddress    String
-    // delivery          OrderDelivery?
-    comment           String?
-    customer          Customer          @relation(fields: [customerId], references: [id])
-    customerId        String
-    createdAt         DateTime          @default(now())
-    updatedAt         DateTime          @updatedAt
+    id             String         @id @default(cuid())
+    products       OrderProduct[]
+    fulfillments   Fulfillment[]
+    paymentStatus  PaymentStatus
+    totalPrice     Int
+    mailingCountry String
+    mailingCity    String
+    mailingRegion  String
+    mailingAddress String
+    comment        String?
+    user           User           @relation(fields: [userId], references: [id])
+    userId         String
+    createdAt      DateTime       @default(now())
+    updatedAt      DateTime       @updatedAt
+}
+
+model Fulfillment {
+    id               String            @id @default(cuid())
+    title            String
+    status           FulfillmentStatus
+    tracking         String
+    shippingTitle    Int
+    shippingPrice    Int
+    shippingDuration Int
+    orderProduct     OrderProduct[]
+    order            Order             @relation(fields: [orderId], references: [id])
+    orderId          String
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
 }
 
 model OrderProduct {
-    id        String             @id @default(cuid())
-    status    OrderProductStatus
-    tracking  String
-    price     Int
-    order     Order              @relation(fields: [orderId], references: [id])
-    orderId   Int
-    variant   Variant            @relation(fields: [variantId], references: [id])
-    variantId String
-    offer     Offer?             @relation(fields: [offerId], references: [id])
-    offerId   String?            @unique
-    createdAt DateTime           @default(now())
-    updatedAt DateTime           @updatedAt
+    id            String       @id @default(cuid())
+    price         Int
+    order         Order        @relation(fields: [orderId], references: [id])
+    orderId       String
+    variant       Variant      @relation(fields: [variantId], references: [id])
+    variantId     String
+    offer         Offer        @relation(fields: [offerId], references: [id])
+    offerId       String       @unique
+    fulfillment   Fulfillment? @relation(fields: [fulfillmentId], references: [id])
+    fulfillmentId String?
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @updatedAt
 }
 
-// model OrderAddress {
-//     id        String   @id @default(cuid())
-//     city      String
-//     address   String
-//     postCode  String
-//     order     Order    @relation(fields: [orderId], references: [id])
-//     orderId   Int      @unique
-//     createdAt DateTime @default(now())
-//     updatedAt DateTime @updatedAt
-// }
-
-// model OrderDelivery {
-//     id        String   @id @default(cuid())
-//     title     String
-//     price     Int
-//     duration  Int
-//     order     Order    @relation(fields: [orderId], references: [id])
-//     orderId   Int      @unique
-//     createdAt DateTime @default(now())
-//     updatedAt DateTime @updatedAt
-// }
-
 model FavoriteProduct {
-    id         String   @id @default(cuid())
-    product    Product  @relation(fields: [productId], references: [id])
-    productId  String
-    customer   Customer @relation(fields: [customerId], references: [id])
-    customerId String
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
+    product   Product  @relation(fields: [productId], references: [id])
+    productId String
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@id([productId, userId])
 }
 
 model Collection {
@@ -257,7 +234,6 @@ model Variant {
     imageId        String
     offers         Offer[]
     orders         OrderProduct[]
-    cartProducts   CartProduct[]
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
 }
@@ -281,13 +257,12 @@ model Offer {
     id                String           @id @default(cuid())
     price             Int
     compareAtPrice    Int?
-    sPrice            Int
-    isActive          Boolean          @default(false)
-    isSold            Boolean          @default(false)
+    offersPrice       Int
+    status            OfferStatus      @default(OFFERED)
     variant           Variant          @relation(fields: [variantId], references: [id])
     variantId         String
-    user              User?            @relation(fields: [userId], references: [id])
-    userId            String?
+    user              User             @relation(fields: [userId], references: [id])
+    userId            String
     order             OrderProduct?
     deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id])
     deliveryProfileId String?
@@ -307,13 +282,15 @@ model DeliveryProfile {
 
 model DeliveryZone {
     id                String           @id @default(cuid())
+    country           String
+    region            String
     options           DeliveryOption[]
-    region            Region           @relation(fields: [regionId], references: [id])
-    regionId          String
     deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id])
     deliveryProfileId String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
+
+    @@unique([deliveryProfileId, country, region])
 }
 
 model DeliveryOption {
@@ -329,21 +306,22 @@ model DeliveryOption {
 
 model Country {
     id        String   @id @default(cuid())
-    title     String
+    title     String   @unique
     regions   Region[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
 model Region {
-    id            String         @id @default(cuid())
-    title         String
-    deliveryZones DeliveryZone[]
-    cities        City[]
-    country       Country        @relation(fields: [countryId], references: [id])
-    countryId     String
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
+    id        String   @id @default(cuid())
+    title     String
+    cities    City[]
+    country   Country  @relation(fields: [countryId], references: [id])
+    countryId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([countryId, title])
 }
 
 model City {
@@ -353,4 +331,6 @@ model City {
     regionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@unique([regionId, title])
 }
