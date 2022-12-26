@@ -1,8 +1,8 @@
-import { CustomerRole } from "@prisma/client";
+import { Role } from "@prisma/client";
 
 export interface IUser {
     id: string;
-    role: CustomerRole;
+    role: Role;
     iat: number;
     exp: number;
 }

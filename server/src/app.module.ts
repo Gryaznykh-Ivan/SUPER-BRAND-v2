@@ -1,16 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ServeStaticModule } from '@nestjs/serve-static';
+import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
 
 
 @Module({
     imports: [
         ConfigModule.forRoot(),
-        ServeStaticModule.forRoot({
-            serveRoot: "/static",
-            rootPath: process.env.STATIC_FILES_PATH
-        }),
+        AuthModule,
         CoreModule
     ],
 })

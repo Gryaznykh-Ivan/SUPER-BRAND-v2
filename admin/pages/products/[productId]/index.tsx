@@ -10,7 +10,6 @@ import Status from '../../../components/products/blocks/Status'
 import EditinalInfo from '../../../components/products/blocks/EditinalInfo'
 import VariantList from '../../../components/variants/blocks/VariantList'
 import OptionList from '../../../components/variants/blocks/OptionList'
-import withAuth from '../../../hoc/withAuth'
 
 function Index() {
     const router = useRouter()
@@ -62,4 +61,4 @@ function Index() {
     )
 }
 
-export default withAuth(Index)
+export default Index

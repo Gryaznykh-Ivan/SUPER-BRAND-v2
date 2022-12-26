@@ -2,7 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
-import withAuth from '../../hoc/withAuth'
+
 
 import { useRouter } from 'next/router'
 
@@ -13,7 +13,7 @@ function Index() {
         <MainLayout>
             <div className="px-6 my-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-medium">Клиенты</h1>
+                    <h1 className="text-xl font-medium">Пользователи</h1>
                     <div className="p-4"></div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
@@ -40,7 +40,7 @@ function Index() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/clients/example") }>
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/users/example") }>
                                         <td className="px-3 py-2 font-medium">Иван Иванов</td>
                                         <td className="px-3 py-2">-</td>
                                         <td className="px-3 py-2">test@gmail.com</td>
@@ -50,7 +50,7 @@ function Index() {
                                         <td className="px-3 py-2">3</td>
                                         <td className="px-3 py-2">-</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/clients/example") }>
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/users/example") }>
                                         <td className="px-3 py-2 font-medium">Иван Иванов</td>
                                         <td className="px-3 py-2">+79963226559</td>
                                         <td className="px-3 py-2">-</td>
@@ -60,7 +60,7 @@ function Index() {
                                         <td className="px-3 py-2">3</td>
                                         <td className="px-3 py-2">-</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/clients/example") }>
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/users/example") }>
                                         <td className="px-3 py-2 font-medium">-</td>
                                         <td className="px-3 py-2">-</td>
                                         <td className="px-3 py-2">test@gmail.com</td>
@@ -95,4 +95,4 @@ function Index() {
     )
 }
 
-export default withAuth(Index)
+export default Index

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
-import withAuth from '../../hoc/withAuth'
+
 
 function Index() {
     const router = useRouter()
@@ -78,4 +78,4 @@ function Index() {
     )
 }
 
-export default withAuth(Index)
+export default Index

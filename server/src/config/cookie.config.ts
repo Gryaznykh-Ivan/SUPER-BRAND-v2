@@ -1,7 +1,5 @@
 
 
-
-
-export const CookieConfig =  {
-    httpOnly: true
+export const CookieConfig = {
+    domain: "sb.com"
 }

@@ -4,8 +4,6 @@ import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import Profiles from '../../components/shipping/blocks/Profiles'
 
-import withAuth from '../../hoc/withAuth'
-
 function Index() {
     return (
         <MainLayout>
@@ -35,4 +33,4 @@ function Index() {
     )
 }
 
-export default withAuth(Index)
+export default Index

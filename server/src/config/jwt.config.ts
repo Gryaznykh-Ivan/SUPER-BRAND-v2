@@ -10,5 +10,5 @@ export const AccessJwtConfig = (): JwtSignOptions => ({
   // expiresIn: '15m',
 });
 
-export const RefreshTokenExpiresInConfig = () => new Date(Date.now() + 86400000 * 90)
+export const RefreshTokenExpiresInConfig = () => new Date(Date.now() + 86400000 * 180)
 // export const RefreshTokenExpiresInConfig = () => new Date(Date.now() + 86400000 * 90)

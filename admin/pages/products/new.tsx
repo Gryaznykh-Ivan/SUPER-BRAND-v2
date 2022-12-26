@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-import withAuth from '../../hoc/withAuth'
+
 import MainLayout from '../../components/layouts/Main'
 import EditinalInfo from '../../components/products/blocks/EditinalInfo'
 import GeneralInfo from '../../components/products/blocks/GeneralInfo'
@@ -43,4 +43,4 @@ function New() {
     )
 }
 
-export default withAuth(New)
+export default New

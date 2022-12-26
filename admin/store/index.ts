@@ -1,11 +1,9 @@
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { api } from './api'
-import authSlice from './slices/auth.slice'
 
 const rootReducer = combineReducers({
     [api.reducerPath]: api.reducer,
-    auth: authSlice
 })
 
 export const store = configureStore({

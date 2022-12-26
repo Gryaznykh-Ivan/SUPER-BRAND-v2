@@ -1,6 +1,6 @@
 import { IsEmail, IsOptional, IsString, IsUUID } from "class-validator";
 
-export class CustomerLoginDto {
+export class LoginDto {
     @IsEmail()
     readonly login: string;
 
@@ -8,6 +8,5 @@ export class CustomerLoginDto {
     readonly code: string;
 
     @IsOptional()
-    @IsUUID()
     readonly guestId: string;
 }

@@ -9,10 +9,24 @@ export interface IErrorResponse {
     statusCode: number;
 }
 
-export type LoginResponse = IResponse<string>
+export type Role = "ADMIN"
+
+export interface IJwtDecode {
+    id: string;
+    role: Role;
+    iat: number;
+    exp: number;
+}
+
+export type LoginResponse = IResponse<void>
 export type LoginRequest = {
     login: string;
-    password: string;
+    code: string;
+}
+
+export type SendCodeResponse = IResponse<void>
+export type SendCodeRequest = {
+    login: string
 }
 
 export type RefreshResponse = IResponse<string>
@@ -21,3 +35,4 @@ export type RefreshRequest = void
 
 export type LogoutResponse = IResponse<void>
 export type LogoutRequest = void
+

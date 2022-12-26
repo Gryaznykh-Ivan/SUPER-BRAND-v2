@@ -21,7 +21,7 @@ export default function JSXAccordion({ name, content }: IProps) {
                 </div>
                 <div className={`ml-2 transition-transform duration-300 ${isOpened ? "rotate-45" : "rotate-0"}`}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 6V12M12 12V18M12 12H18M12 12H6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 6V12M12 12V18M12 12H18M12 12H6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </div>
             </div>

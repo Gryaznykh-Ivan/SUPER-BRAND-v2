@@ -6,7 +6,6 @@ import PickVariant from '../../../components/offers/blocks/PickVariant'
 import Prices from '../../../components/offers/blocks/Prices'
 import Provider from '../../../components/offers/blocks/Client'
 import Status from '../../../components/offers/blocks/Status'
-import withAuth from '../../../hoc/withAuth'
 import Client from '../../../components/offers/blocks/Client'
 
 
@@ -54,4 +53,4 @@ function New() {
     )
 }
 
-export default withAuth(New)
+export default New

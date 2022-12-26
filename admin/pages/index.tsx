@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import MainLayout from '../components/layouts/Main'
-import withAuth from '../hoc/withAuth'
 
 
 function Index() {
@@ -17,4 +16,4 @@ function Index() {
     )
 }
 
-export default withAuth(Index)
+export default Index
