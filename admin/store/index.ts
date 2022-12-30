@@ -1,10 +1,34 @@
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { AnyAction, configureStore, Reducer } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux'
 import { api } from './api'
+import authSlice from './slices/auth.slice'
 
-const rootReducer = combineReducers({
+const reducers = {
     [api.reducerPath]: api.reducer,
-})
+    auth: authSlice,
+};
+
+const combinedReducer = combineReducers<typeof reducers>(reducers);
+type combinedReducerType = typeof combinedReducer;
+
+export const rootReducer: combinedReducerType = (
+    state,
+    action: AnyAction
+) => {
+    if (action.type === HYDRATE) {
+        delete action.payload.auth // не трогаем авторизация auth при хидрации
+
+        const nextState = {
+            ...state,
+            ...action.payload,
+        }
+
+        return nextState;
+    } else {
+        return combinedReducer(state, action);
+    }
+};
 
 export const store = configureStore({
     reducer: rootReducer,
@@ -12,11 +36,10 @@ export const store = configureStore({
         getDefaultMiddleware().concat(api.middleware),
 })
 
-const makeStore = () => store;
+const makeStore = () => store
 
-export type RootState = ReturnType<typeof rootReducer>
-export type AppStore = typeof store
-export type AppState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type AppStore = ReturnType<typeof makeStore>;
+export type AppState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];
 
-export const wrapper = createWrapper(makeStore, { debug: false });
+export const wrapper = createWrapper<AppStore>(makeStore, { debug: false });

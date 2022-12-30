@@ -38,3 +38,8 @@ export const {
     useSendCodeMutation,
     useLogoutMutation,
 } = authService
+
+export const {
+    refresh,
+    logout
+} = authService.endpoints

@@ -18,7 +18,7 @@ export interface IJwtDecode {
     exp: number;
 }
 
-export type LoginResponse = IResponse<void>
+export type LoginResponse = IResponse<string>
 export type LoginRequest = {
     login: string;
     code: string;

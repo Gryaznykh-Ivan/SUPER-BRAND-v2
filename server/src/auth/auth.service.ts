@@ -41,9 +41,7 @@ export class AuthService {
             }
         })
 
-        response.cookie('token', accessToken, { httpOnly: true, domain: CookieConfig.domain })
-        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain })
-
+        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain, sameSite: "lax" })
 
         return {
             success: true,
@@ -120,11 +118,11 @@ export class AuthService {
             }
         })
 
-        response.cookie('token', accessToken, { httpOnly: true, domain: CookieConfig.domain })
-        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain})
+        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain, sameSite: "lax" })
 
         return {
-            success: true
+            success: true,
+            data: accessToken
         }
     }
 
@@ -139,19 +137,19 @@ export class AuthService {
         if (token === null) {
             throw new HttpException('Неверные данные токена', HttpStatus.UNAUTHORIZED)
         }
-
+        
         if (Date.parse(token.expiresIn.toString()) < Date.now()) {
             throw new HttpException('Токен протух', HttpStatus.UNAUTHORIZED)
         }
-
+        
         const payload = {
             id: token.user.id,
             role: token.user.role
         }
-
+        
         const newAccessToken = await this.jwtService.signAsync(payload, AccessJwtConfig())
         const newRefreshToken = uuid()
-
+        
         await this.prisma.token.update({
             where: {
                 id: token.id
@@ -162,11 +160,11 @@ export class AuthService {
             }
         })
 
-        response.cookie('token', newAccessToken, { httpOnly: true, domain: CookieConfig.domain })
-        response.cookie('refresh_token', newRefreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain })
-
+        response.cookie('refresh_token', newRefreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain, sameSite: "lax" })
+        
         return {
             success: true,
+            data: newAccessToken
         }
     }
 
@@ -202,8 +200,7 @@ export class AuthService {
             }
         })
 
-        response.cookie('token', "", { maxAge: -1 })
-        response.cookie('refresh_token', "", { maxAge: -1 })
+        response.cookie('refresh_token', "", { maxAge: -1, domain: CookieConfig.domain, sameSite: "lax" })
 
         return { success: true }
     }
