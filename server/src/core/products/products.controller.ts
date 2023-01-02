@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { Access } from 'src/decorators/access.decorator';
-import { MulterOptions } from '../../config/multer.config';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { Auth } from 'src/decorators/auth.decorator';
 import { AddVariantDto } from './dto/addVariant.dto';
 import { CreateProductnDto } from './dto/createProduct.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
@@ -31,7 +30,7 @@ export class ProductController {
     }
 
     @Post('create')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     createProduct(
         @Body() createProductDto: CreateProductnDto
     ) {
@@ -39,8 +38,8 @@ export class ProductController {
     }
 
     @Post(':id/uploadImages')
-    @Access('PRIVATE', ['ADMIN'])
-    @UseInterceptors(FilesInterceptor('images', 5, MulterOptions))
+    @Auth()
+    @UseInterceptors(FilesInterceptor('images'))
     uploadImages(
         @Param('id') id: string,
         @UploadedFiles() images: Express.Multer.File[],
@@ -49,7 +48,7 @@ export class ProductController {
     }
 
     @Put(':id/updateImage/:imageId')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     updateImage(
         @Param('imageId') imageId: string,
         @Body() updateProductImageDto: UpdateImageDto
@@ -58,7 +57,7 @@ export class ProductController {
     }
 
     @Delete(':id/removeImage/:imageId')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     removeImage(
         @Param('imageId') imageId: string,
     ) {
@@ -66,7 +65,7 @@ export class ProductController {
     }
 
     @Post(':id/addVariant')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     addVariant(
         @Param('id') id: string,
         @Body() addVariantDto: AddVariantDto
@@ -75,7 +74,7 @@ export class ProductController {
     }
 
     @Put(':id/updateVariant/:variantId')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     updateVariant(
         @Param('variantId') variantId: string,
         @Body() updateVariantDto: UpdateVariantDto
@@ -84,7 +83,7 @@ export class ProductController {
     }
 
     @Delete(':id/removeVariant/:variantId')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     removeVariant(
         @Param('variantId') variantId: string
     ) {
@@ -92,7 +91,7 @@ export class ProductController {
     }
 
     @Put(':id/update')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     updateProduct(
         @Param('id') id: string,
         @Body() updateProductDto: UpdateProductDto
@@ -101,7 +100,7 @@ export class ProductController {
     }
 
     @Delete(':id/remove')
-    @Access('PRIVATE', ['ADMIN'])
+    @Auth()
     removeProduct(
         @Param('id') id: string,
     ) {

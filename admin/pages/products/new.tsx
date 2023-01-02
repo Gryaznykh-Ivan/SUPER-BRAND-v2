@@ -35,7 +35,7 @@ function New() {
                 <div className="flex justify-between">
                     <div className=""></div>
                     <div className="flex justify-end">
-                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать продукт</button>
+                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</button>
                     </div>
                 </div>
             </div>

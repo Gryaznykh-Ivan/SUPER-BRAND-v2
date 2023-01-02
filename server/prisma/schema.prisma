@@ -1,5 +1,6 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -9,10 +10,38 @@ datasource db {
 
 enum Role {
     ADMIN
-    COURIER
     MANAGER
     GUEST
     CUSTOMER
+}
+
+enum Right {
+    ORDER_CREATE
+    ORDER_READ
+    ORDER_UPDATE
+    ORDER_DELETE
+    PRODUCT_CREATE
+    PRODUCT_READ
+    PRODUCT_UPDATE
+    PRODUCT_DELETE
+    OFFER_CREATE
+    OFFER_READ
+    OFFER_UPDATE
+    OFFER_DELETE
+    COLLECTION_CREATE
+    COLLECTION_READ
+    COLLECTION_UPDATE
+    COLLECTION_DELETE
+    USER_CREATE
+    USER_READ
+    USER_UPDATE
+    USER_DELETE
+    SHIPPING_CREATE
+    SHIPPING_READ
+    SHIPPING_UPDATE
+    SHIPPING_DELETE
+    MEDIA_UPLOAD
+    MEDIA_DELETE
 }
 
 enum OfferStatus {
@@ -54,6 +83,7 @@ model User {
     phone                String?
     firstName            String?
     lastName             String?
+    fullName             String?
     inn                  String?
     account              String?
     correspondentAccount String?
@@ -68,15 +98,29 @@ model User {
     favoriteProducts     FavoriteProduct[]
     tokens               Token[]
     cart                 CartProduct[]
-    offer                Offer[]
+    offers               Offer[]
+    permissions          Permission[]
     createdAt            DateTime          @default(now())
     updatedAt            DateTime          @updatedAt
+
+    @@fulltext([fullName, email, phone])
+}
+
+model Permission {
+    id        String   @id @default(cuid())
+    right     Right
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, right])
 }
 
 model CartProduct {
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId    String
-    offer     Offer    @relation(fields: [offerId], references: [id])
+    offer     Offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     offerId   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -99,7 +143,7 @@ model Address {
     city      String
     address   String
     region    String
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -119,7 +163,7 @@ model Order {
     products       OrderProduct[]
     fulfillments   Fulfillment[]
     timeline       Timeline[]
-    user           User           @relation(fields: [userId], references: [id])
+    user           User           @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId         String
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
@@ -128,7 +172,7 @@ model Order {
 model Timeline {
     id        String   @id @default(cuid())
     message   String
-    order     Order    @relation(fields: [orderId], references: [id])
+    order     Order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId   String
     createdAt DateTime @default(now())
 }
@@ -142,7 +186,7 @@ model Fulfillment {
     shippingPrice    Int
     shippingDuration Int
     orderProduct     OrderProduct[]
-    order            Order             @relation(fields: [orderId], references: [id])
+    order            Order             @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId          String
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
@@ -151,22 +195,22 @@ model Fulfillment {
 model OrderProduct {
     id            String       @id @default(cuid())
     price         Int
-    order         Order        @relation(fields: [orderId], references: [id])
+    order         Order        @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId       String
-    variant       Variant      @relation(fields: [variantId], references: [id])
+    variant       Variant      @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
     variantId     String
-    offer         Offer        @relation(fields: [offerId], references: [id])
+    offer         Offer        @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Restrict)
     offerId       String       @unique
-    fulfillment   Fulfillment? @relation(fields: [fulfillmentId], references: [id])
+    fulfillment   Fulfillment? @relation(fields: [fulfillmentId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     fulfillmentId String?
     createdAt     DateTime     @default(now())
     updatedAt     DateTime     @updatedAt
 }
 
 model FavoriteProduct {
-    product   Product  @relation(fields: [productId], references: [id])
+    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -179,8 +223,8 @@ model Collection {
     title       String    @unique
     description String
     products    Product[]
-    image       Image     @relation(fields: [imageId], references: [id])
-    imageId     String
+    image       Image?     @relation(fields: [imageId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    imageId     String?
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
 }
@@ -207,23 +251,23 @@ model ProductOption {
     id        String   @id @default(cuid())
     title     String
     position  Int
-    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
 model ProductImage {
-    id          String   @id @default(cuid())
-    name        String
-    path        String
-    src         String
-    alt         String
-    position    Int
-    product     Product? @relation(fields: [productId], references: [id])
-    productId   String?
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    id        String   @id @default(cuid())
+    name      String
+    path      String
+    src       String
+    alt       String
+    position  Int
+    product   Product? @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    productId String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Variant {
@@ -236,10 +280,10 @@ model Variant {
     option3        String?
     SKU            String?
     barcode        String?
-    product        Product        @relation(fields: [productId], references: [id])
+    product        Product        @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId      String
-    image          Image          @relation(fields: [imageId], references: [id])
-    imageId        String
+    image          Image?          @relation(fields: [imageId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    imageId        String?
     offers         Offer[]
     orders         OrderProduct[]
     createdAt      DateTime       @default(now())
@@ -264,12 +308,12 @@ model Offer {
     compareAtPrice    Int?
     offersPrice       Int
     status            OfferStatus      @default(OFFERED)
-    variant           Variant          @relation(fields: [variantId], references: [id])
+    variant           Variant          @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
     variantId         String
-    user              User             @relation(fields: [userId], references: [id])
+    user              User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId            String
     order             OrderProduct?
-    deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id])
+    deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     deliveryProfileId String?
     cartProduct       CartProduct[]
     createdAt         DateTime         @default(now())
@@ -290,7 +334,7 @@ model DeliveryZone {
     country           String
     region            String
     options           DeliveryOption[]
-    deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id])
+    deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     deliveryProfileId String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
@@ -303,7 +347,7 @@ model DeliveryOption {
     title          String
     price          Int
     duration       Int
-    deliveryZone   DeliveryZone @relation(fields: [deliveryZoneId], references: [id])
+    deliveryZone   DeliveryZone @relation(fields: [deliveryZoneId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     deliveryZoneId String
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
@@ -321,7 +365,7 @@ model Region {
     id        String   @id @default(cuid())
     title     String
     cities    City[]
-    country   Country  @relation(fields: [countryId], references: [id])
+    country   Country  @relation(fields: [countryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     countryId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -332,7 +376,7 @@ model Region {
 model City {
     id        String   @id @default(cuid())
     title     String
-    region    Region   @relation(fields: [regionId], references: [id])
+    region    Region   @relation(fields: [regionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     regionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

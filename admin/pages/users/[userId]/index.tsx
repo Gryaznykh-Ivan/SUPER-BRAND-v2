@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import React from 'react'
-import Addresses from '../../../components/clients/blocks/Addresses'
-import Consignment from '../../../components/clients/blocks/Consignment'
-import GeneralInfo from '../../../components/clients/blocks/GeneralInfo'
-import Status from '../../../components/clients/blocks/Status'
+import Addresses from '../../../components/users/blocks/Addresses'
+import Consignment from '../../../components/users/blocks/Consignment'
+import GeneralInfo from '../../../components/users/blocks/GeneralInfo'
+import Status from '../../../components/users/blocks/Status'
 import MainLayout from '../../../components/layouts/Main'
+import Permissions from '../../../components/users/blocks/Permissions'
+import Roles from '../../../components/users/blocks/Roles'
 
 export default function Index() {
     return (
@@ -32,8 +34,10 @@ export default function Index() {
                     <div className="flex-1 space-y-4">
                         <GeneralInfo />
                         <Consignment />
+                        <Permissions />
                     </div>
                     <div className="space-y-4 lg:w-80">
+                        <Roles />
                         <Status />
                         <Addresses />
                     </div>

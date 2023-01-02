@@ -1,8 +1,7 @@
 import jwt_decode from 'jwt-decode'
-import { HYDRATE } from 'next-redux-wrapper';
 import { createSlice } from "@reduxjs/toolkit";
 import { authService } from "../../services/authService";
-import { IAuthState } from "../../types/store";
+import { IAuthState, IJwtDecode } from "../../types/store";
 
 const initialState: IAuthState = {
     isAuth: false,
@@ -15,14 +14,13 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, { payload }) => {
+            const decoded: IJwtDecode = jwt_decode(payload.data)
+
+            if ((['ADMIN', 'MANAGER']).includes(decoded.role) === false) return
+
             state.isAuth = true
             state.token = payload.data
-            state.payload = jwt_decode(payload.data)
-        },
-        refresh: (state, { payload }) => {
-            state.isAuth = true
-            state.token = payload.data
-            state.payload = jwt_decode(payload.data)
+            state.payload = decoded
         },
         logout: (state) => {
             state.isAuth = false
@@ -38,13 +36,13 @@ const authSlice = createSlice({
         )
 
         builder.addMatcher(
-            authService.endpoints.logout.matchFulfilled,
-            authSlice.caseReducers.logout
+            authService.endpoints.refresh.matchFulfilled,
+            authSlice.caseReducers.login
         )
 
         builder.addMatcher(
-            authService.endpoints.refresh.matchFulfilled,
-            authSlice.caseReducers.refresh
+            authService.endpoints.logout.matchFulfilled,
+            authSlice.caseReducers.logout
         )
     }
 })

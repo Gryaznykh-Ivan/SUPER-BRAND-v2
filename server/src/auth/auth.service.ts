@@ -6,16 +6,13 @@ import { IResponse } from 'src/interfaces/Response';
 import { NotifierService } from 'src/notifier/notifier.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SendCodeDto } from './dto/sendCode.dto';
-import { HashConfig } from 'src/config/hash.config';
-import { AccessJwtConfig, RefreshTokenExpiresInConfig } from 'src/config/jwt.config';
 import { v4 as uuid } from 'uuid'
 import { Role, Prisma } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
-import { CookieConfig } from 'src/config/cookie.config';
+
 
 @Injectable()
 export class AuthService {
-
     constructor(
         private readonly jwtService: JwtService,
         private readonly notifier: NotifierService,
@@ -27,21 +24,23 @@ export class AuthService {
 
         const payload = {
             id: user.id,
-            role: user.role
+            role: user.role,
+            name: "",
+            permissions: []
         }
 
-        const accessToken = await this.jwtService.signAsync(payload, AccessJwtConfig())
+        const accessToken = await this.jwtService.signAsync(payload, { secret: process.env.SECRET, expiresIn: process.env.EXPIRES_IN })
         const refreshToken = uuid()
 
         await this.prisma.token.create({
             data: {
                 userId: user.id,
                 refreshToken: refreshToken,
-                expiresIn: RefreshTokenExpiresInConfig()
+                expiresIn: this.refreshTokenExpiresIn()
             }
         })
 
-        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain, sameSite: "lax" })
+        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: process.env.COOKIE_DOMAIN, sameSite: "lax" })
 
         return {
             success: true,
@@ -70,7 +69,11 @@ export class AuthService {
             throw new HttpException('Код неверный', HttpStatus.BAD_REQUEST)
         }
 
-        let user = await this.prisma.user.findFirst({ where: { email: login } })
+        let user = await this.prisma.user.findFirst({
+            where: {
+                email: login
+            }
+        })
         if (user === null) {
             try {
                 user = await this.prisma.user.create({
@@ -102,23 +105,34 @@ export class AuthService {
             })
         }
 
+        const permissions = await this.prisma.permission.findMany({
+            where: {
+                userId: user.id
+            },
+            select: {
+                right: true
+            }
+        })
+
         const payload = {
             id: user.id,
-            role: user.role
+            role: user.role,
+            name: user.fullName,
+            permissions: permissions.map(({ right }) => right)
         }
 
-        const accessToken = await this.jwtService.signAsync(payload, AccessJwtConfig())
+        const accessToken = await this.jwtService.signAsync(payload, { secret: process.env.SECRET, expiresIn: process.env.EXPIRES_IN })
         const refreshToken = uuid()
 
         await this.prisma.token.create({
             data: {
                 userId: user.id,
                 refreshToken: refreshToken,
-                expiresIn: RefreshTokenExpiresInConfig()
+                expiresIn: this.refreshTokenExpiresIn()
             }
         })
 
-        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain, sameSite: "lax" })
+        response.cookie('refresh_token', refreshToken, { httpOnly: true, maxAge: 15552000000, domain: process.env.COOKIE_DOMAIN, sameSite: "lax" })
 
         return {
             success: true,
@@ -129,39 +143,54 @@ export class AuthService {
     async refreshToken(response: Response, refreshToken: string): Promise<IResponse<string>> {
         const token = await this.prisma.token.findFirst({
             where: { refreshToken: refreshToken },
-            include: {
-                user: true
+            select: {
+                id: true,
+                expiresIn: true,
+                user: {
+                    select: {
+                        id: true,
+                        role: true,
+                        fullName: true,
+                        permissions: {
+                            select: {
+                                right: true
+                            }
+                        }
+                    }
+                }
             }
         })
 
         if (token === null) {
             throw new HttpException('Неверные данные токена', HttpStatus.UNAUTHORIZED)
         }
-        
+
         if (Date.parse(token.expiresIn.toString()) < Date.now()) {
             throw new HttpException('Токен протух', HttpStatus.UNAUTHORIZED)
         }
-        
+
         const payload = {
             id: token.user.id,
-            role: token.user.role
+            role: token.user.role,
+            name: token.user.fullName,
+            permissions: token.user.permissions.map(({ right }) => right)
         }
-        
-        const newAccessToken = await this.jwtService.signAsync(payload, AccessJwtConfig())
+
+        const newAccessToken = await this.jwtService.signAsync(payload, { secret: process.env.SECRET, expiresIn: process.env.EXPIRES_IN })
         const newRefreshToken = uuid()
-        
+
         await this.prisma.token.update({
             where: {
                 id: token.id
             },
             data: {
                 refreshToken: newRefreshToken,
-                expiresIn: RefreshTokenExpiresInConfig()
+                expiresIn: this.refreshTokenExpiresIn()
             }
         })
 
-        response.cookie('refresh_token', newRefreshToken, { httpOnly: true, maxAge: 15552000000, domain: CookieConfig.domain, sameSite: "lax" })
-        
+        response.cookie('refresh_token', newRefreshToken, { httpOnly: true, maxAge: 15552000000, domain: process.env.COOKIE_DOMAIN, sameSite: "lax" })
+
         return {
             success: true,
             data: newAccessToken
@@ -181,7 +210,7 @@ export class AuthService {
         }
 
         const code = await this.notifier.sendVerificationCode(login)
-        const codeHash = await hash(code, HashConfig.saltRounds)
+        const codeHash = await hash(code, 8)
 
         await this.prisma.verificationCode.create({
             data: {
@@ -200,8 +229,12 @@ export class AuthService {
             }
         })
 
-        response.cookie('refresh_token', "", { maxAge: -1, domain: CookieConfig.domain, sameSite: "lax" })
+        response.cookie('refresh_token', "", { maxAge: -1, domain: process.env.COOKIE_DOMAIN, sameSite: "lax" })
 
         return { success: true }
+    }
+
+    private refreshTokenExpiresIn() {
+        return new Date(Date.now() + 86400000 * 180)
     }
 }

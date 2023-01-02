@@ -7,7 +7,7 @@ export default function GeneralInfo() {
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Основное</h2>
             <div className="space-y-4 p-5">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col">
                         <label htmlFor="lastName" className="text-sm text-gray-600 mb-1">Фамилия</label>
                         <Input type="text" id="SKU" placeholder="Фамилия" onChange={() => { }} />
@@ -15,10 +15,6 @@ export default function GeneralInfo() {
                     <div className="flex flex-col">
                         <label htmlFor="firstName" className="text-sm text-gray-600 mb-1">Имя</label>
                         <Input type="text" id="firstName" placeholder="Имя" onChange={() => { }} />
-                    </div>
-                    <div className="flex flex-col">
-                        <label htmlFor="patronymic" className="text-sm text-gray-600 mb-1">Отчество</label>
-                        <Input type="text" id="patronymic" placeholder="Отчество" onChange={() => { }} />
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">

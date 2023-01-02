@@ -1,19 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { JwtConfig } from 'src/config/jwt.config';
-
-
-export const ACCESS = {
-    PUBLIC: 'PUBLIC',
-    PRIVATE: 'PRIVATE',
-};
-
-export const ROLE = {
-    ADMIN: 'ADMIN',
-    SELLER: 'SELLER',
-    MANAGER: 'MANAGER',
-};
+import { Right, Role } from '@prisma/client';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,26 +14,25 @@ export class AuthGuard implements CanActivate {
         context: ExecutionContext,
     ): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
-        const access = this.reflector.get<boolean>('access', context.getHandler()) || ACCESS.PUBLIC;
-        const roles = this.reflector.get<(keyof typeof ROLE)[]>('roles', context.getHandler()) || [];
+        const roles = this.reflector.get<Role[]>('roles', context.getHandler());
+        const permissions = this.reflector.get<Right[]>('permissions', context.getHandler());
 
         try {
             const authHeader = request.headers.authorization
             const [_, token] = authHeader.split(' ')
 
-            const decode = await this.jwtService.verifyAsync(token, JwtConfig())
-            request.user = decode
-            
-        } catch (e) {
-            if (access !== ACCESS.PUBLIC) {
-                throw new UnauthorizedException();
-            }
+            const decode = await this.jwtService.verifyAsync(token, { secret: process.env.SECRET })
 
-            return true
+            request.user = decode
+        } catch (e) {
+            throw new UnauthorizedException();
         }
 
         if (roles.length !== 0) {
             return roles.includes(request.user.role);
+        }
+        if (roles.length !== 0) {
+            return permissions.some(permission => request.user.permission.includes(permission));
         }
 
         return true;

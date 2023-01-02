@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { UploadService } from '../../upload/upload.service';
 import { AddVariantDto } from './dto/addVariant.dto';
 import { CreateProductnDto } from './dto/createProduct.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
@@ -11,7 +10,6 @@ import { UpdateVariantDto } from './dto/updateVariant.dto';
 export class ProductService {
 
     constructor(
-        private uploadService: UploadService,
         private prisma: PrismaService
 
     ) { }
@@ -33,7 +31,7 @@ export class ProductService {
         images: Express.Multer.File[]
     ) {
         for (const image of images) {
-            await this.uploadService.uploadImage(image);
+
         }
 
         return true;

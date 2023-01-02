@@ -1,20 +1,54 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link'
-import React from 'react'
+import { toast } from 'react-toastify';
+import React, { useEffect, useMemo, useState } from 'react'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
-
-
 import { useRouter } from 'next/router'
+import { useLazyGetUserBySearchQuery } from '../../services/userService'
+
+
 
 function Index() {
     const router = useRouter()
+
+    const itemPerPage = 20
+
+    const [getUserSearch, { isSuccess, isFetching, data }] = useLazyGetUserBySearchQuery();
+    const [query, setQuery] = useState({
+        q: "",
+        limit: itemPerPage,
+        skip: 0
+    })
+
+    useEffect(() => {
+        getUserSearch(query)
+    }, [query])
+
+    const onSearch = (q: string) => {
+        setQuery({ q, limit: itemPerPage, skip: 0 })
+    }
+
+    const onNextPage = () => {
+        if (data?.data.length !== itemPerPage) return
+
+        setQuery(prev => ({ ...prev, skip: prev.skip + prev.limit }))
+    }
+
+    const onPrevPage = () => {
+        if (query.skip === 0) return
+
+        setQuery(prev => ({ ...prev, skip: prev.skip - prev.limit }))
+    }
 
     return (
         <MainLayout>
             <div className="px-6 my-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-medium">Пользователи</h1>
-                    <div className="p-4"></div>
+                    <div className="">
+                        <Link href="/users/new" className="block bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</Link>
+                    </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
                     <div className="flex space-x-2 border-b-[1px]">
@@ -22,71 +56,69 @@ function Index() {
                     </div>
                     <div className="py-4 space-y-4">
                         <div className="">
-                            <SearchInput placeholder="Поиск" onChange={() => { }} />
+                            <SearchInput placeholder="Поиск" onChange={onSearch} />
                         </div>
                         <div className="relative block overflow-x-auto">
-                            <table className="table-auto block max-w-0 xl:table sm:w-full xl:max-w-none">
-                                <thead>
-                                    <tr className="border-b-[1px] text-sm">
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Имя</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Телефон</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Email</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Дата создания</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Местоположение</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Количество заказов</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Количество офферов</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Комментарий</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/users/example") }>
-                                        <td className="px-3 py-2 font-medium">Иван Иванов</td>
-                                        <td className="px-3 py-2">-</td>
-                                        <td className="px-3 py-2">test@gmail.com</td>
-                                        <td className="px-3 py-2">27.11.2022 14:32</td>
-                                        <td className="px-3 py-2">Санкт-Петербург</td>
-                                        <td className="px-3 py-2">3</td>
-                                        <td className="px-3 py-2">3</td>
-                                        <td className="px-3 py-2">-</td>
-                                    </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/users/example") }>
-                                        <td className="px-3 py-2 font-medium">Иван Иванов</td>
-                                        <td className="px-3 py-2">+79963226559</td>
-                                        <td className="px-3 py-2">-</td>
-                                        <td className="px-3 py-2">27.11.2022 14:32</td>
-                                        <td className="px-3 py-2">Санкт-Петербург</td>
-                                        <td className="px-3 py-2">3</td>
-                                        <td className="px-3 py-2">3</td>
-                                        <td className="px-3 py-2">-</td>
-                                    </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/users/example") }>
-                                        <td className="px-3 py-2 font-medium">-</td>
-                                        <td className="px-3 py-2">-</td>
-                                        <td className="px-3 py-2">test@gmail.com</td>
-                                        <td className="px-3 py-2">27.11.2022 14:32</td>
-                                        <td className="px-3 py-2">Санкт-Петербург</td>
-                                        <td className="px-3 py-2">3</td>
-                                        <td className="px-3 py-2">3</td>
-                                        <td className="px-3 py-2">-</td>
-                                    </tr>
-                                    
-                                    
-                                </tbody>
-                            </table>
+                            {isFetching &&
+                                <div className="animate-pulse space-y-2">
+                                    <div className="bg-gray-300 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                </div>
+                            }
+                            {!isFetching && data?.data &&
+                                <table className="table-auto block max-w-0 xl:table sm:w-full xl:max-w-none">
+                                    <thead>
+                                        <tr className="border-b-[1px] text-sm">
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Имя</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Телефон</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Email</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Местоположение</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Количество заказов</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Количество офферов</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Комментарий</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Дата создания</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {data.data.map(user => (
+                                            <tr
+                                                key={user.id}
+                                                className="border-b-[1px] hover:bg-gray-100 cursor-pointer"
+                                                onClick={() => router.push(`/users/${user.id}`)}
+                                            >
+                                                <td className="px-3 py-2 font-medium">{user.fullName}</td>
+                                                <td className="px-3 py-2">{user.phone}</td>
+                                                <td className="px-3 py-2">{user.email}</td>
+                                                <td className="px-3 py-2">{user.location}</td>
+                                                <td className="px-3 py-2">{user.ordersCount}</td>
+                                                <td className="px-3 py-2">{user.offersCount}</td>
+                                                <td className="px-3 py-2">{user.comment}</td>
+                                                <td className="px-3 py-2">{new Date(user.createdAt).toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" })}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            }
                         </div>
                         <div className="flex justify-center mt-4 space-x-1">
-                            <Link href="#" className="p-2 font-bold border-[1px] rounded-md">
+                            <button className={`p-2 font-bold border-[1px] rounded-md ${query.skip === 0 && "bg-gray-100 cursor-not-allowed"}`} onClick={onPrevPage} disabled={query.skip === 0}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
-                            </Link>
-                            <div className="min-w-[40px] text-center p-2 font-medium rounded-md">1</div>
-                            <Link href="#" className="p-2 font-bold border-[1px] rounded-md">
+                            </button>
+                            <button className={`p-2 font-bold border-[1px] rounded-md ${data?.data.length !== itemPerPage && "bg-gray-100 cursor-not-allowed"}`} onClick={onNextPage} disabled={data?.data.length !== itemPerPage}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>

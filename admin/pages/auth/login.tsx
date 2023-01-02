@@ -4,13 +4,15 @@ import { useLoginMutation, useSendCodeMutation } from '../../services/authServic
 import { IErrorResponse } from '../../types/api'
 import AuthLayout from '../../components/layouts/Auth'
 import { useTimer } from '../../hooks/useTimer'
+import { useAppSelector } from '../../hooks/store'
 
 export default function Login() {
     const router = useRouter()
+    const auth = useAppSelector(state => state.auth)
     const [sendCodeButton, setSendCodeButton] = useState<boolean>(true)
     const { count, startTimer, clearTimer, resetTimer } = useTimer(() => setSendCodeButton(true))
 
-    const [login, { isSuccess, error }] = useLoginMutation()
+    const [login, { error }] = useLoginMutation()
     const [sendCode, { isSuccess: isCodeSent, error: codeSentError }] = useSendCodeMutation()
     const [authData, setAuthData] = useState({
         login: "",
@@ -18,10 +20,10 @@ export default function Login() {
     })
 
     useEffect(() => {
-        if (isSuccess === true) {
+        if (auth.isAuth === true) {
             router.push("/")
         }
-    }, [isSuccess])
+    }, [auth.isAuth])
 
     useEffect(() => {
         if (isCodeSent === true) {
