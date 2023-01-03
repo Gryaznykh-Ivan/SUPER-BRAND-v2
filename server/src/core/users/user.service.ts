@@ -106,7 +106,7 @@ export class UserService {
         const createUserQuery = {
             firstName: data.firstName,
             lastName: data.lastName,
-            fullName: `${data.firstName} ${data.lastName}`,
+            fullName: `${data.firstName ?? ""} ${data.lastName ?? ""}`,
             account: data.account,
             bic: data.bic,
             comment: data.comment,
@@ -151,32 +151,75 @@ export class UserService {
         }
     }
 
-    async updateUser(data: UpdateUserDto) {
+    async updateUser(userId: string, data: UpdateUserDto) {
+        const updateUserQuery = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            account: data.account,
+            bic: data.bic,
+            comment: data.comment,
+            correspondentAccount: data.correspondentAccount,
+            email: data.email,
+            inn: data.inn,
+            isSubscribed: data.isSubscribed,
+            isVerified: data.isVerified,
+            passport: data.passport,
+            phone: data.phone,
+            role: data.role,
+        }
+
+        if (data.firstName || data.lastName || data.permissions) {
+            const user = await this.prisma.user.findUnique({
+                where: { id: userId },
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    permissions: {
+                        select: {
+                            id: true,
+                            right: true
+                        }
+                    }
+                }
+            })
+
+            if (user === null) {
+                throw new HttpException("Пользователя не существует", HttpStatus.BAD_REQUEST)
+            }
+
+            if (data.firstName || data.lastName) {
+                Object.assign(updateUserQuery, {
+                    fullName: `${ data.firstName ?? user.firstName ?? "" } ${ data.lastName ?? user.lastName ?? "" }`
+                })
+            }
+
+            if (data.permissions) {
+                const createList = data.permissions.filter(permission => !user.permissions.some(c => c.right === permission)).map(c => ({ right: c }))
+                const deleteList = user.permissions.filter(permission => !data.permissions.some(c => c === permission.right)).map(c => ({ id: c.id }))
+
+                Object.assign(updateUserQuery, {
+                    permissions: {
+                        deleteMany: deleteList,
+                        createMany: {
+                            data: createList
+                        }
+                    }
+                })
+            }
+        }
+
         try {
             await this.prisma.user.update({
-                where: { id: data.id },
-                data: {
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    fullName: `${data.firstName} ${data.lastName}`,
-                    account: data.account,
-                    bic: data.bic,
-                    comment: data.comment,
-                    correspondentAccount: data.correspondentAccount,
-                    email: data.email,
-                    inn: data.inn,
-                    isSubscribed: data.isSubscribed,
-                    isVerified: data.isVerified,
-                    passport: data.passport,
-                    phone: data.phone,
-                    role: data.role,
-                }
+                where: { id: userId },
+                data: updateUserQuery
             })
 
             return {
                 success: true
             }
         } catch (e) {
+
+            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

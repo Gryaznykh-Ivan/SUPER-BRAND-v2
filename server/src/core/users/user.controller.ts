@@ -34,12 +34,12 @@ export class UserController {
         return this.userService.createUser(data)
     }
 
-
-    @Put('update')
+    @Put(':userId')
     updateUser(
+        @Param('userId') userId: string,
         @Body() data: UpdateUserDto
     ) {
-        return this.userService.updateUser(data)
+        return this.userService.updateUser(userId, data)
     }
 
     @Post(':userId/addAddress')

@@ -1,3 +1,5 @@
+import { Right } from "./store";
+
 export interface IResponse<T> {
     success: boolean;
     data: T
@@ -30,7 +32,7 @@ export interface IUserAddress {
 
 export interface IUserPermission {
     id: string;
-    right: string;
+    right: Right;
 }
 
 export interface IUser {
@@ -118,22 +120,23 @@ export type UserCreateRequest = {
 }
 
 export type UserUpdateResponse = IResponse<void>
-export type UserUpdateRequest = {
+export type UserUpdateRequest = Partial<{
     userId: string;
-    email?: string;
-    phone?: string;
-    lastName?: string;
-    fullName?: string;
-    inn?: string;
-    account?: string;
-    correspondentAccount?: string;
-    bic?: string;
-    passport?: string;
-    comment?: string;
+    email?: string | null;
+    phone?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    inn?: string | null;
+    account?: string | null;
+    correspondentAccount?: string | null;
+    bic?: string | null;
+    passport?: string | null;
+    comment?: string | null;
+    role?: string;
     isVerified?: boolean;
     isSubscribed?: boolean;
-    role?: string;
-}
+    permissions?: Right[];
+}>
 
 export type UserAddAddressResponse = IResponse<void>
 export type UserAddAddressRequest = {

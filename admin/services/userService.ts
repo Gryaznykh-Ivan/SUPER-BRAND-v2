@@ -3,18 +3,20 @@ import { UserAddAddressRequest, UserAddAddressResponse, UserAddPermissionRequest
 
 export const userService = api.injectEndpoints({
     endpoints: builder => ({
-        getUserBySearch: builder.query<UserSearchResponse, UserSearchRequest>({
+        getUsersBySearch: builder.query<UserSearchResponse, UserSearchRequest>({
             query: (credentials) => ({
                 url: "users/search",
                 method: "GET",
                 params: credentials
-            })
+            }),
+            providesTags: ["USERS"]
         }),
         getUserById: builder.query<UserGetByIdResponse, UserGetByIdRequest>({
             query: ({ userId }) => ({
                 url: `users/${ userId }`,
                 method: "GET",
-            })
+            }),
+            providesTags: ["USER"]
         }),
         createUser: builder.mutation<UserCreateResponse, UserCreateRequest>({
             query: (credentials) => ({
@@ -28,27 +30,28 @@ export const userService = api.injectEndpoints({
                 url: `users/${ userId }`,
                 method: "PUT",
                 body: rest
-            })
+            }),
+            invalidatesTags: ["USERS", "USER"]
         }),
         addAddress: builder.mutation<UserAddAddressResponse, UserAddAddressRequest>({
             query: ({ userId, data }) => ({
                 url: `users/${ userId }/addAddress`,
                 method: "POST",
                 body: data
-            })
+            }),
         }),
         removeAddress: builder.mutation<UserRemoveAddressResponse, UserRemoveAddressRequest>({
             query: ({ userId, addressId }) => ({
                 url: `users/${ userId }/removeAddress/${ addressId }`,
                 method: "DELETE"
-            })
+            }),
         }),
         addPermission: builder.mutation<UserAddPermissionResponse, UserAddPermissionRequest>({
             query: ({ userId, data }) => ({
                 url: `users/${ userId }/addPermission`,
                 method: "POST",
                 body: data
-            })
+            }),
         }),
         removePermission: builder.mutation<UserRemovePermissionResponse, UserRemovePermissionRequest>({
             query: ({ userId, permissionId }) => ({
@@ -60,14 +63,14 @@ export const userService = api.injectEndpoints({
             query: ({ userId }) => ({
                 url: `users/${ userId }`,
                 method: "DELETE"
-            })
+            }),
+            invalidatesTags: ["USERS", "USER"]
         }),
     })
 })
 
 export const {
-    useLazyGetUserBySearchQuery,
-    useGetUserBySearchQuery,
+    useLazyGetUsersBySearchQuery,
     useGetUserByIdQuery,
     useCreateUserMutation,
     useUpdateUserMutation,
