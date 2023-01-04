@@ -33,32 +33,6 @@ export const userService = api.injectEndpoints({
             }),
             invalidatesTags: ["USERS", "USER"]
         }),
-        addAddress: builder.mutation<UserAddAddressResponse, UserAddAddressRequest>({
-            query: ({ userId, data }) => ({
-                url: `users/${ userId }/addAddress`,
-                method: "POST",
-                body: data
-            }),
-        }),
-        removeAddress: builder.mutation<UserRemoveAddressResponse, UserRemoveAddressRequest>({
-            query: ({ userId, addressId }) => ({
-                url: `users/${ userId }/removeAddress/${ addressId }`,
-                method: "DELETE"
-            }),
-        }),
-        addPermission: builder.mutation<UserAddPermissionResponse, UserAddPermissionRequest>({
-            query: ({ userId, data }) => ({
-                url: `users/${ userId }/addPermission`,
-                method: "POST",
-                body: data
-            }),
-        }),
-        removePermission: builder.mutation<UserRemovePermissionResponse, UserRemovePermissionRequest>({
-            query: ({ userId, permissionId }) => ({
-                url: `users/${ userId }/addPermission/${ permissionId }`,
-                method: "DELETE",
-            })
-        }),
         deleteUser: builder.mutation<UserDeleteResponse, UserDeleteRequest>({
             query: ({ userId }) => ({
                 url: `users/${ userId }`,
@@ -75,8 +49,4 @@ export const {
     useCreateUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,
-    useAddAddressMutation,
-    useRemoveAddressMutation,
-    useAddPermissionMutation,
-    useRemovePermissionMutation
 } = userService

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { UserUpdateRequest } from '../../../types/api';
+import { Role } from '../../../types/store';
 import Select from '../../inputs/Select'
 
 interface IProps {
-    role: string;
+    role: Role;
     onChange: (obj: UserUpdateRequest) => void;
 }
 
@@ -34,7 +35,7 @@ export default function Roles({ onChange, ...data }: IProps) {
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Роль</h2>
             <div className="space-y-4 p-5">
-                <Select options={{ CUSTOMER: "CUSTOMER", GUSTE: "GUEST", MANAGER: "MANAGER", ADMIN: "ADMIN" }} name="role" value={ state.role } onChange={onInputChange} />
+                <Select options={{ CUSTOMER: "CUSTOMER", GUEST: "GUEST", MANAGER: "MANAGER", ADMIN: "ADMIN" }} name="role" value={ state.role } onChange={onInputChange} />
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { UserUpdateRequest } from '../../../types/api';
+import { UserCreateRequest, UserUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
 
@@ -9,16 +9,16 @@ interface IProps {
     email: string | null;
     phone: string | null;
     comment: string | null;
-    onChange: (obj: UserUpdateRequest) => void;
+    onChange: (obj: UserCreateRequest | UserUpdateRequest) => void;
 }
 
 export default function GeneralInfo({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
-        email: data.email || "",
-        comment: data.comment || "",
-        firstName: data.firstName || "",
-        lastName: data.lastName || "",
-        phone: data.phone || ""
+        email: data.email ?? "",
+        comment: data.comment ?? "",
+        firstName: data.firstName ?? "",
+        lastName: data.lastName ?? "",
+        phone: data.phone ?? ""
     })
 
     useEffect(() => {

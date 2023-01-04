@@ -1,6 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
-import { AddAddressDto } from './dto/addAddress.dto';
-import { AddPermissionDto } from './dto/addPermission.dto';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { UserService } from './user.service';
@@ -28,6 +26,7 @@ export class UserController {
     }
 
     @Post('create')
+    @HttpCode(200)
     createUser(
         @Body() data: CreateUserDto
     ) {
@@ -40,38 +39,6 @@ export class UserController {
         @Body() data: UpdateUserDto
     ) {
         return this.userService.updateUser(userId, data)
-    }
-
-    @Post(':userId/addAddress')
-    addAddress(
-        @Param('userId') userId: string,
-        @Body() data: AddAddressDto
-    ) {
-        return this.userService.addAddress(userId, data)
-    }
-
-    @Delete(':userId/removeAddress/:addressId')
-    removeAddress(
-        @Param('userId') userId: string,
-        @Param('addressId') addressId: string,
-    ) {
-        return this.userService.removeAddress(userId, addressId)
-    }
-
-    @Post(':userId/addPermission')
-    addPermission(
-        @Param('userId') userId: string,
-        @Body() data: AddPermissionDto
-    ) {
-        return this.userService.addPermission(userId, data)
-    }
-
-    @Delete(':userId/removePermission/:permissionId')
-    removePermission(
-        @Param('userId') userId: string,
-        @Param('permissionId') permissionId: string,
-    ) {
-        return this.userService.removePermission(userId, permissionId)
     }
 
     @Delete(':userId')

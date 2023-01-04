@@ -1,7 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddAddressDto } from './dto/addAddress.dto';
-import { AddPermissionDto } from './dto/addPermission.dto';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
@@ -120,31 +118,32 @@ export class UserService {
             role: data.role,
         }
 
-        if (data.addresses !== undefined) {
+        if (data.createAddresses !== undefined) {
             Object.assign(createUserQuery, {
                 addresses: {
                     createMany: {
-                        data: data.addresses
+                        data: data.createAddresses
                     }
                 }
             })
         }
 
-        if (data.permissions !== undefined) {
+        if (data.createPermissions !== undefined) {
             Object.assign(createUserQuery, {
                 permissions: {
                     createMany: {
-                        data: data.permissions?.map(permission => ({ right: permission }))
+                        data: data.createPermissions?.map(permission => ({ right: permission }))
                     }
                 }
             })
         }
 
         try {
-            await this.prisma.user.create({ data: createUserQuery })
+            const user = await this.prisma.user.create({ data: createUserQuery })
 
             return {
-                success: true
+                success: true,
+                data: user.id
             }
         } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
@@ -168,7 +167,7 @@ export class UserService {
             role: data.role,
         }
 
-        if (data.firstName || data.lastName || data.permissions) {
+        if (data.firstName || data.lastName) {
             const user = await this.prisma.user.findUnique({
                 where: { id: userId },
                 select: {
@@ -189,20 +188,47 @@ export class UserService {
 
             if (data.firstName || data.lastName) {
                 Object.assign(updateUserQuery, {
-                    fullName: `${ data.firstName ?? user.firstName ?? "" } ${ data.lastName ?? user.lastName ?? "" }`
+                    fullName: `${data.firstName ?? user.firstName ?? ""} ${data.lastName ?? user.lastName ?? ""}`
                 })
             }
+        }
 
-            if (data.permissions) {
-                const createList = data.permissions.filter(permission => !user.permissions.some(c => c.right === permission)).map(c => ({ right: c }))
-                const deleteList = user.permissions.filter(permission => !data.permissions.some(c => c === permission.right)).map(c => ({ id: c.id }))
+        if (data.createPermissions || data.deletePermissions) {
+            Object.assign(updateUserQuery, {
+                permissions: {
+                    deleteMany: data.deletePermissions?.map(id => ({ id })) ?? [],
+                    createMany: {
+                        data: data.createPermissions?.map(right => ({ right })) ?? []
+                    }
+                }
+            })
+        }
 
-                Object.assign(updateUserQuery, {
-                    permissions: {
-                        deleteMany: deleteList,
-                        createMany: {
-                            data: createList
-                        }
+        if (data.createAddresses || data.deleteAddresses) {
+            Object.assign(updateUserQuery, {
+                addresses: {
+                    deleteMany: data.deleteAddresses?.map(id => ({ id })) ?? [],
+                    createMany: {
+                        data: data.createAddresses?.map(address => ({
+                            country: address.country,
+                            region: address.region,
+                            city: address.city,
+                            address: address.address,
+                        })) ?? []
+                    }
+                }
+            })
+        }
+
+        if (data.updateAddresses) {
+            for (const { id, country, region, city, address } of data.updateAddresses) {
+                await this.prisma.address.update({
+                    where: { id },
+                    data: {
+                        country,
+                        region,
+                        city,
+                        address
                     }
                 })
             }
@@ -220,79 +246,6 @@ export class UserService {
         } catch (e) {
 
             console.log(e)
-            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
-    async addAddress(userId: string, data: AddAddressDto) {
-        try {
-            await this.prisma.user.update({
-                where: { id: userId },
-                data: {
-                    addresses: {
-                        create: {
-                            address: data.address,
-                            city: data.city,
-                            country: data.country,
-                            region: data.region
-                        }
-                    }
-                }
-            })
-
-            return {
-                success: true
-            }
-        } catch (e) {
-            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
-    async removeAddress(userId: string, addressId: string) {
-        try {
-            await this.prisma.address.delete({
-                where: { id: addressId },
-            })
-
-            return {
-                success: true
-            }
-        } catch (e) {
-            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
-    async addPermission(userId: string, data: AddPermissionDto) {
-        try {
-            await this.prisma.user.update({
-                where: { id: userId },
-                data: {
-                    permissions: {
-                        create: {
-                            right: data.right
-                        }
-                    }
-                }
-            })
-
-            return {
-                success: true
-            }
-        } catch (e) {
-            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
-    async removePermission(userId: string, permissionId: string) {
-        try {
-            await this.prisma.permission.delete({
-                where: { id: permissionId },
-            })
-
-            return {
-                success: true
-            }
-        } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

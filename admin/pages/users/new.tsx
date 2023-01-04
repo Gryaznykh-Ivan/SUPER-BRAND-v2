@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import MainLayout from '../../components/layouts/Main'
 import GeneralInfo from '../../components/users/blocks/GeneralInfo'
@@ -7,8 +7,46 @@ import Roles from '../../components/users/blocks/Roles'
 import Status from '../../components/users/blocks/Status'
 import Addresses from '../../components/users/blocks/Addresses'
 import Permissions from '../../components/users/blocks/Permissions'
+import { useCreateUserMutation } from '../../services/userService'
+import { toast } from 'react-toastify'
+import { IErrorResponse, UserCreateRequest, UserUpdateRequest } from '../../types/api'
+import { useRouter } from 'next/router'
 
 export default function New() {
+    const router = useRouter()
+
+    const [createUser, { isSuccess: isCreateUserSuccess, isError: isCreateUserError, error: createUserError, data }] = useCreateUserMutation()
+
+    const [changes, setChanges] = useState<UserCreateRequest>({})
+    const onCollectChanges = (obj: UserCreateRequest) => {
+        setChanges(prev => ({ ...prev, ...obj }))
+    }
+
+    useEffect(() => {
+        if (isCreateUserSuccess) {
+            setTimeout(() => toast.success("Пользователь создан"), 100)
+        }
+
+        if (isCreateUserError) {
+            if (createUserError && "status" in createUserError) {
+                toast.error((createUserError.data as IErrorResponse).message)
+            } else {
+                toast.error("Произошла неизвесная ошибка")
+            }
+        }
+    }, [isCreateUserSuccess, isCreateUserError])
+
+    const onSaveChanges = async () => {
+        const user = await createUser(changes).unwrap()
+        if (user) {
+            router.push('/users/' + user.data)
+        }
+    }
+
+    const mustBeSaved = useMemo(() => {
+        return Object.values(changes).some(c => c !== undefined)
+    }, [changes])
+
     return (
         <MainLayout>
             <div className="px-6 my-4 max-w-5xl mx-auto">
@@ -27,20 +65,47 @@ export default function New() {
 
                 <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
                     <div className="flex-1 space-y-4">
-                        <GeneralInfo />
-                        <Consignment />
-                        <Permissions />
+                        <GeneralInfo
+                            firstName={null}
+                            lastName={null}
+                            phone={null}
+                            email={null}
+                            comment={null}
+                            onChange={onCollectChanges}
+                        />
+                        <Consignment
+                            account={null}
+                            bic={null}
+                            inn={null}
+                            correspondentAccount={null}
+                            passport={null}
+                            onChange={onCollectChanges}
+                        />
+                        <Permissions
+                            permissions={[]}
+                            onChange={onCollectChanges}
+                        />
                     </div>
                     <div className="space-y-4 lg:w-80">
-                        <Roles />
-                        <Status />
-                        <Addresses />
+                        <Roles
+                            role={'GUEST'}
+                            onChange={onCollectChanges}
+                        />
+                        <Status
+                            isSubscribed={false}
+                            isVerified={false}
+                            onChange={onCollectChanges}
+                        />
+                        <Addresses
+                            addresses={[]}
+                            onChange={onCollectChanges}
+                        />
                     </div>
                 </div>
                 <div className="flex justify-between">
                     <div className=""></div>
                     <div className="flex justify-end">
-                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</button>
+                        <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={onSaveChanges}>Создать</button>
                     </div>
                 </div>
             </div>

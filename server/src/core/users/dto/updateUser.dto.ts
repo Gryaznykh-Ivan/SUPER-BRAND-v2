@@ -1,5 +1,7 @@
 import { Right, Role } from "@prisma/client";
-import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
+import { CreateAddressDto, UpdateAddressDto } from "./address.dto";
 
 export class UpdateUserDto {
     @IsOptional()
@@ -67,5 +69,25 @@ export class UpdateUserDto {
 
     @IsOptional()
     @IsEnum(Right, { each: true })
-    permissions: Right[];
+    createPermissions: Right[];
+
+    @IsOptional()
+    @IsString({ each: true })
+    deletePermissions: string[];
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateAddressDto)
+    createAddresses: CreateAddressDto[]
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => UpdateAddressDto)
+    updateAddresses: UpdateAddressDto[]
+
+    @IsOptional()
+    @IsString({ each: true })
+    deleteAddresses: string[];
 }

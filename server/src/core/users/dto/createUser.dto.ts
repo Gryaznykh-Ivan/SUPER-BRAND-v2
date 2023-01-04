@@ -1,7 +1,7 @@
 import { Right, Role } from "@prisma/client";
 import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
-import { AddAddressDto } from "./addAddress.dto";
+import { CreateAddressDto } from "./address.dto";
 
 export class CreateUserDto {
     @IsOptional()
@@ -69,11 +69,11 @@ export class CreateUserDto {
 
     @IsOptional()
     @IsEnum(Right, { each: true })
-    permissions: Right[];
+    createPermissions: Right[];
 
     @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => AddAddressDto)
-    addresses: AddAddressDto[]
+    @Type(() => CreateAddressDto)
+    createAddresses: CreateAddressDto[]
 }

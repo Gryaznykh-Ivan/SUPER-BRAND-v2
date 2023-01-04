@@ -1,4 +1,4 @@
-import { Right } from "./store";
+import { Right, Role } from "./store";
 
 export interface IResponse<T> {
     success: boolean;
@@ -50,7 +50,7 @@ export interface IUser {
     comment: string | null;
     isVerified: boolean;
     isSubscribed: boolean;
-    role: string;
+    role: Role;
     createdAt: Date;
     updatedAt: Date;
     addresses: IUserAddress[];
@@ -102,21 +102,21 @@ export type UserGetByIdRequest = {
 
 export type UserCreateResponse = IResponse<void>
 export type UserCreateRequest = {
-    email?: string;
-    phone?: string;
-    lastName?: string;
-    fullName?: string;
-    inn?: string;
-    account?: string;
-    correspondentAccount?: string;
-    bic?: string;
-    passport?: string;
-    comment?: string;
+    email?: string | null;
+    phone?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    inn?: string | null;
+    account?: string | null;
+    correspondentAccount?: string | null;
+    bic?: string | null;
+    passport?: string | null;
+    comment?: string | null;
+    role?: string;
     isVerified?: boolean;
     isSubscribed?: boolean;
-    role?: string;
-    addresses?: (Omit<IUserAddress, "id">)[];
-    permissions?: (Omit<IUserPermission, "id">)[];
+    createAddresses?: Omit<IUserAddress, "id">[];
+    createPermissions?: Right[];
 }
 
 export type UserUpdateResponse = IResponse<void>
@@ -135,7 +135,11 @@ export type UserUpdateRequest = Partial<{
     role?: string;
     isVerified?: boolean;
     isSubscribed?: boolean;
-    permissions?: Right[];
+    createPermissions?: Right[];
+    deletePermissions?: string[];
+    createAddresses?: Omit<IUserAddress, "id">[];
+    updateAddresses?: IUserAddress[];
+    deleteAddresses?: string[];
 }>
 
 export type UserAddAddressResponse = IResponse<void>

@@ -9,13 +9,16 @@ import MainLayout from '../../../components/layouts/Main'
 import Permissions from '../../../components/users/blocks/Permissions'
 import Roles from '../../../components/users/blocks/Roles'
 import { useRouter } from 'next/router'
-import { useGetUserByIdQuery, useUpdateUserMutation } from '../../../services/userService'
+import { useDeleteUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../../services/userService'
 import { toast } from 'react-toastify'
 
 export default function Index() {
     const router = useRouter()
+
     const { isError, error, isLoading, data } = useGetUserByIdQuery({ userId: router.query.userId as string })
+
     const [updateUser, { isSuccess: isUpdateUserSuccess, isError: isUpdateUserError, error: updateUserError }] = useUpdateUserMutation()
+    const [deleteUser, { isSuccess: isDeleteUserSuccess, isError: isDeleteUserError, error: deleteUserError }] = useDeleteUserMutation()
 
     const [changes, setChanges] = useState<UserUpdateRequest>({})
     const onCollectChanges = (obj: UserUpdateRequest) => {
@@ -36,6 +39,21 @@ export default function Index() {
         }
     }, [isUpdateUserSuccess, isUpdateUserError])
 
+    useEffect(() => {
+        console.log(isDeleteUserSuccess)
+        if (isDeleteUserSuccess) {
+            setTimeout(() => toast.success("Пользователь удален"), 100)
+        }
+
+        if (isDeleteUserError) {
+            if (deleteUserError && "status" in deleteUserError) {
+                toast.error((deleteUserError.data as IErrorResponse).message)
+            } else {
+                toast.error("Произошла неизвесная ошибка")
+            }
+        }
+    }, [isDeleteUserSuccess, isDeleteUserError])
+
     const onSaveChanges = () => {
         updateUser({ userId: router.query.userId as string, ...changes })
         setChanges({})
@@ -44,6 +62,11 @@ export default function Index() {
     const mustBeSaved = useMemo(() => {
         return Object.values(changes).some(c => c !== undefined)
     }, [changes])
+
+    const onUserDelete = async () => {
+        await deleteUser({ userId: router.query.userId as string });
+        router.push("/users")
+    }
 
     return (
         <MainLayout>
@@ -112,12 +135,15 @@ export default function Index() {
                                     isVerified={data.data.isVerified}
                                     onChange={onCollectChanges}
                                 />
-                                <Addresses />
+                                <Addresses
+                                    addresses={data.data.addresses}
+                                    onChange={onCollectChanges}
+                                />
                             </div>
                         </div>
                         <div className="flex justify-between">
                             <div className="">
-                                <button className="border-red-700 border-[1px] text-red-700 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white">Удалить</button>
+                                <button className="border-red-700 border-[1px] text-red-700 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={onUserDelete}>Удалить</button>
                             </div>
                             <div className="flex justify-end">
                                 <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={onSaveChanges}>Сохранить</button>
