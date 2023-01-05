@@ -6,6 +6,9 @@ import SearchInput from '../../inputs/SearchInput';
 import Input from '../../inputs/Input';
 import { IUserAddress } from '../../../types/api';
 import { toast } from 'react-toastify';
+import CountriesSmartInput from '../../inputs/CountriesSmartInput';
+import RegionsSmartInput from '../../inputs/RegionsSmartInput';
+import CitiesSmartInput from '../../inputs/CitiesSmartInput';
 
 interface IProps {
     title: string;
@@ -63,15 +66,15 @@ export default function ManageAddress({ title, initialState, isDeletable, onClos
                         <div className="p-5 space-y-4 max-h-96 overflow-y-auto">
                             <div className="flex flex-col">
                                 <label htmlFor="country" className="text-sm text-gray-600 mb-1">Страна</label>
-                                <Input type="text" id="country" placeholder="Страна" name="country" value={state.country} onChange={onInputChange} />
+                                <CountriesSmartInput id="country" placeholder="Страна" name="country" value={state.country} onChange={onInputChange} />
                             </div>
                             <div className="flex flex-col">
                                 <label htmlFor="region" className="text-sm text-gray-600 mb-1">Регион</label>
-                                <Input type="text" id="region" placeholder="Регион" name="region" value={state.region} onChange={onInputChange} />
+                                <RegionsSmartInput id="region" country={ state.country } placeholder="Регион" name="region" value={state.region} onChange={onInputChange} />
                             </div>
                             <div className="flex flex-col">
                                 <label htmlFor="city" className="text-sm text-gray-600 mb-1">Город</label>
-                                <Input type="text" id="city" placeholder="Город" name="city" value={state.city} onChange={onInputChange} />
+                                <CitiesSmartInput id="city" region={ state.region } placeholder="Город" name="city" value={state.city} onChange={onInputChange} />
                             </div>
                             <div className="flex flex-col">
                                 <label htmlFor="address" className="text-sm text-gray-600 mb-1">Улица</label>

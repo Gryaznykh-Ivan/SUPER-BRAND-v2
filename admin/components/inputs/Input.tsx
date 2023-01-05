@@ -8,11 +8,10 @@ interface IProps {
     type: string;
     placeholder: string;
     onChange: (e: React.ChangeEvent<any>) => void;
-    [key: string]: unknown;
 }
 
-export default function Input({ onChange, value, placeholder, type, className, id, name, ...rest }: IProps) {
+export default function Input({ onChange, value, placeholder, type, className, id, name }: IProps) {
     return (
-        <input className={`w-full text-sm border-[1px] border-gray-300 rounded-md ${className}`} name={name} value={value} id={id} type={type} placeholder={placeholder} onChange={onChange} { ...rest } />
+        <input className={`w-full text-sm border-[1px] border-gray-300 rounded-md ${className}`} name={name} value={value} id={id} type={type} placeholder={placeholder} onChange={onChange} />
     )
 }

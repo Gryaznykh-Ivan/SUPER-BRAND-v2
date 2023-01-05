@@ -170,3 +170,25 @@ export type UserDeleteResponse = IResponse<void>
 export type UserDeleteRequest = {
     userId: string;
 }
+
+
+
+
+// suggestionService
+
+export type CountriesSuggestionResponse = IResponse<string[]>
+export type CountriesSuggestionRequest = {
+    q: string;
+}
+
+export type RegionsSuggestionResponse = IResponse<string[]>
+export type RegionsSuggestionRequest = {
+    q: string;
+    country?: string;
+}
+
+export type CitiesSuggestionResponse = IResponse<string[]>
+export type CitiesSuggestionRequest = {
+    q: string;
+    region?: string;
+}
