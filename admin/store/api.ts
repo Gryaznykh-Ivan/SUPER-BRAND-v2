@@ -34,9 +34,10 @@ const baseQueryWithLogic: BaseQueryFn<
     }
 
     if (result.error && result.error.status === 401) {
-        const refreshResult = await baseQuery('/auth/refresh', api, extraOptions)
+        const refreshResult = await baseQuery({ url: '/auth/refresh', method: "POST" }, api, extraOptions)
+        console.log(refreshResult)
         if (refreshResult.data) {
-            api.dispatch({ type: "auth/refresh", payload: refreshResult.data })
+            api.dispatch({ type: "auth/login", payload: refreshResult.data })
 
             result = await baseQuery(args, api, extraOptions)
         } else {
