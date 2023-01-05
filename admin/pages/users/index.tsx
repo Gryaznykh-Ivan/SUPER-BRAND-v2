@@ -6,6 +6,7 @@ import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import { useRouter } from 'next/router'
 import { useLazyGetUsersBySearchQuery } from '../../services/userService'
+import { IErrorResponse } from '../../types/api';
 
 
 
@@ -14,7 +15,7 @@ function Index() {
 
     const itemPerPage = 20
 
-    const [getUsersBySearch, { isSuccess, isFetching, data }] = useLazyGetUsersBySearchQuery();
+    const [getUsersBySearch, { isError, isFetching, data, error }] = useLazyGetUsersBySearchQuery();
     const [query, setQuery] = useState({
         q: "",
         limit: itemPerPage,
@@ -59,6 +60,14 @@ function Index() {
                             <SearchInput placeholder="Поиск" onChange={onSearch} />
                         </div>
                         <div className="relative block overflow-x-auto">
+                            {isError &&
+                                <div className="flex flex-col items-center py-5">
+                                    <div className="text-2xl font-bold text-red-600">Что-то пошло не так</div>
+                                    {(error && "status" in error) &&
+                                        <div className="text-gray-500">{(error.data as IErrorResponse).message}</div>
+                                    }
+                                </div>
+                            }
                             {isFetching &&
                                 <div className="animate-pulse space-y-2">
                                     <div className="bg-gray-300 rounded-lg h-8"></div>

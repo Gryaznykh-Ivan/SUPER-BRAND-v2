@@ -1,4 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Role } from '@prisma/client';
+import { IUser } from 'src/interfaces/user.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
@@ -100,7 +102,11 @@ export class UserService {
     }
 
 
-    async createUser(data: CreateUserDto) {
+    async createUser(data: CreateUserDto, self: IUser) {
+        if (self.role === Role.MANAGER && (data.role === Role.ADMIN || data.role === Role.MANAGER)) {
+            throw new HttpException("Вы не можете создавать менеджеров/администраторов", HttpStatus.FORBIDDEN)
+        }
+
         const createUserQuery = {
             firstName: data.firstName,
             lastName: data.lastName,
@@ -129,6 +135,10 @@ export class UserService {
         }
 
         if (data.createPermissions !== undefined) {
+            if (self.role !== Role.ADMIN) {
+                throw new HttpException("Вы не можете выдавать права", HttpStatus.FORBIDDEN)
+            }
+
             Object.assign(createUserQuery, {
                 permissions: {
                     createMany: {
@@ -150,7 +160,34 @@ export class UserService {
         }
     }
 
-    async updateUser(userId: string, data: UpdateUserDto) {
+    async updateUser(userId: string, data: UpdateUserDto, self: IUser) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                firstName: true,
+                lastName: true,
+                role: true,
+                permissions: {
+                    select: {
+                        id: true,
+                        right: true
+                    }
+                }
+            }
+        })
+
+        if (user === null) {
+            throw new HttpException("Пользователя не существует", HttpStatus.BAD_REQUEST)
+        }
+
+        if (self.role === Role.MANAGER && (user.role === Role.ADMIN || user.role === Role.MANAGER)) {
+            throw new HttpException("Вы не можете редактировать менеджеров/администраторов", HttpStatus.FORBIDDEN)
+        }
+
+        if (self.role === Role.MANAGER && data.role === Role.ADMIN) {
+            throw new HttpException("Вы не можете выдать роль администратора", HttpStatus.FORBIDDEN)
+        }
+
         const updateUserQuery = {
             firstName: data.firstName,
             lastName: data.lastName,
@@ -168,32 +205,16 @@ export class UserService {
         }
 
         if (data.firstName || data.lastName) {
-            const user = await this.prisma.user.findUnique({
-                where: { id: userId },
-                select: {
-                    firstName: true,
-                    lastName: true,
-                    permissions: {
-                        select: {
-                            id: true,
-                            right: true
-                        }
-                    }
-                }
+            Object.assign(updateUserQuery, {
+                fullName: `${data.firstName ?? user.firstName ?? ""} ${data.lastName ?? user.lastName ?? ""}`
             })
-
-            if (user === null) {
-                throw new HttpException("Пользователя не существует", HttpStatus.BAD_REQUEST)
-            }
-
-            if (data.firstName || data.lastName) {
-                Object.assign(updateUserQuery, {
-                    fullName: `${data.firstName ?? user.firstName ?? ""} ${data.lastName ?? user.lastName ?? ""}`
-                })
-            }
         }
 
         if (data.createPermissions || data.deletePermissions) {
+            if (self.role !== Role.ADMIN) {
+                throw new HttpException("Вы не можете выдавать права", HttpStatus.FORBIDDEN)
+            }
+
             Object.assign(updateUserQuery, {
                 permissions: {
                     deleteMany: data.deletePermissions?.map(id => ({ id })) ?? [],
@@ -250,7 +271,30 @@ export class UserService {
         }
     }
 
-    async deleteUser(id: string) {
+    async deleteUser(id: string, self: IUser) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: {
+                firstName: true,
+                lastName: true,
+                role: true,
+                permissions: {
+                    select: {
+                        id: true,
+                        right: true
+                    }
+                }
+            }
+        })
+
+        if (user === null) {
+            throw new HttpException("Пользователя не существует", HttpStatus.BAD_REQUEST)
+        }
+
+        if (self.role === Role.MANAGER && (user.role === Role.ADMIN || user.role === Role.MANAGER)) {
+            throw new HttpException("Вы не можете удалять менеджеров/администраторов", HttpStatus.FORBIDDEN)
+        }
+
         try {
             await this.prisma.user.delete({
                 where: { id }

@@ -40,7 +40,6 @@ export default function Index() {
     }, [isUpdateUserSuccess, isUpdateUserError])
 
     useEffect(() => {
-        console.log(isDeleteUserSuccess)
         if (isDeleteUserSuccess) {
             setTimeout(() => toast.success("Пользователь удален"), 100)
         }
@@ -64,8 +63,10 @@ export default function Index() {
     }, [changes])
 
     const onUserDelete = async () => {
-        await deleteUser({ userId: router.query.userId as string });
-        router.push("/users")
+        const result = await deleteUser({ userId: router.query.userId as string }).unwrap();
+        if (result.success === true) {
+            router.push("/users")
+        }
     }
 
     return (

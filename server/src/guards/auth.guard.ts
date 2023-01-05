@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Right, Role } from '@prisma/client';
@@ -28,11 +28,12 @@ export class AuthGuard implements CanActivate {
             throw new UnauthorizedException();
         }
 
-        if (roles.length !== 0) {
-            return roles.includes(request.user.role);
+        if (roles.length !== 0 && roles.includes(request.user.role) === false) {
+            throw new HttpException("Ваша роль не соответствует требованиям", HttpStatus.FORBIDDEN)
         }
-        if (roles.length !== 0) {
-            return permissions.some(permission => request.user.permission.includes(permission));
+
+        if (permissions.length !== 0 && permissions.some(permission => request.user.permissions.includes(permission)) === false) {
+            throw new HttpException("У вас нет прав на действие", HttpStatus.FORBIDDEN)
         }
 
         return true;

@@ -1,4 +1,8 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Right, Role } from '@prisma/client';
+import { Auth } from 'src/decorators/auth.decorator';
+import { User } from 'src/decorators/user.decorator';
+import { IUser } from 'src/interfaces/user.interface';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { UserService } from './user.service';
@@ -10,6 +14,7 @@ export class UserController {
     ) { }
 
     @Get('search')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_READ])
     getUsersBySearch(
         @Query('q') q: string,
         @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
@@ -19,6 +24,7 @@ export class UserController {
     }
 
     @Get(':userId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_READ])
     getUserById(
         @Param('userId') userId: string
     ) {
@@ -27,24 +33,30 @@ export class UserController {
 
     @Post('create')
     @HttpCode(200)
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_CREATE])
     createUser(
-        @Body() data: CreateUserDto
+        @Body() data: CreateUserDto,
+        @User() self: IUser
     ) {
-        return this.userService.createUser(data)
+        return this.userService.createUser(data, self)
     }
 
     @Put(':userId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_UPDATE])
     updateUser(
         @Param('userId') userId: string,
-        @Body() data: UpdateUserDto
+        @Body() data: UpdateUserDto,
+        @User() self: IUser
     ) {
-        return this.userService.updateUser(userId, data)
+        return this.userService.updateUser(userId, data, self)
     }
 
     @Delete(':userId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_DELETE])
     deleteUser(
-        @Param('userId') id: string
+        @Param('userId') id: string,
+        @User() self: IUser
     ) {
-        return this.userService.deleteUser(id)
+        return this.userService.deleteUser(id, self)
     }
 }

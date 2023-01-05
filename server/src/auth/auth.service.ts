@@ -2,7 +2,6 @@ import { Response } from 'express'
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { IResponse } from 'src/interfaces/Response';
 import { NotifierService } from 'src/notifier/notifier.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SendCodeDto } from './dto/sendCode.dto';
@@ -19,7 +18,7 @@ export class AuthService {
         private readonly prisma: PrismaService
     ) { }
 
-    async createGuest(response: Response): Promise<IResponse<string>> {
+    async createGuest(response: Response) {
         const user = await this.prisma.user.create({ data: {} })
 
         const payload = {
@@ -48,7 +47,7 @@ export class AuthService {
         }
     }
 
-    async login(response: Response, { login, code, guestId }: LoginDto): Promise<IResponse<string>> {
+    async login(response: Response, { login, code, guestId }: LoginDto) {
         const vc = await this.prisma.verificationCode.findFirst({
             where: {
                 email: login
@@ -140,7 +139,7 @@ export class AuthService {
         }
     }
 
-    async refreshToken(response: Response, refreshToken: string): Promise<IResponse<string>> {
+    async refreshToken(response: Response, refreshToken: string) {
         const token = await this.prisma.token.findFirst({
             where: { refreshToken: refreshToken },
             select: {
@@ -197,7 +196,7 @@ export class AuthService {
         }
     }
 
-    async sendCode({ login }: SendCodeDto): Promise<IResponse<void>> {
+    async sendCode({ login }: SendCodeDto) {
         const vc = await this.prisma.verificationCode.findFirst({
             where: {
                 email: login
@@ -222,7 +221,7 @@ export class AuthService {
         return { success: true }
     }
 
-    async logout(response: Response, refreshToken: string): Promise<IResponse<void>> {
+    async logout(response: Response, refreshToken: string) {
         await this.prisma.token.deleteMany({
             where: {
                 refreshToken: refreshToken
