@@ -7,7 +7,7 @@ import Input from './Input';
 interface IProps {
     className?: string;
     id?: string;
-    value?: any;
+    value?: string;
     name?: string;
     region?: string;
     placeholder: string;
@@ -17,7 +17,7 @@ interface IProps {
 export default function CitiesSmartInput({ onChange, value, placeholder, className, id, name, region }: IProps) {
     const ref = useRef<HTMLInputElement>(null)
     const [focus, setFocus] = useState(false)
-    const [state, setState] = useState("")
+    const [state, setState] = useState(value ?? "")
     const debounced = useDebounce(state)
 
     const [suggest, { isFetching, isSuccess, data }] = useLazyCitiesQuery()

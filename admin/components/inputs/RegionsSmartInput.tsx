@@ -7,7 +7,7 @@ import Input from './Input';
 interface IProps {
     className?: string;
     id?: string;
-    value?: any;
+    value?: string;
     name?: string;
     country?: string;
     placeholder: string;
@@ -17,7 +17,7 @@ interface IProps {
 export default function RegionsSmartInput({ onChange, value, placeholder, className, id, name, country }: IProps) {
     const ref = useRef<HTMLInputElement>(null)
     const [focus, setFocus] = useState(false)
-    const [state, setState] = useState("")
+    const [state, setState] = useState(value ?? "")
     const debounced = useDebounce(state)
 
     const [suggest, { isFetching, isSuccess, data }] = useLazyRegionsQuery()

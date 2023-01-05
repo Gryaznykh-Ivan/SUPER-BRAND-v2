@@ -70,11 +70,11 @@ export default function ManageAddress({ title, initialState, isDeletable, onClos
                             </div>
                             <div className="flex flex-col">
                                 <label htmlFor="region" className="text-sm text-gray-600 mb-1">Регион</label>
-                                <RegionsSmartInput id="region" country={ state.country } placeholder="Регион" name="region" value={state.region} onChange={onInputChange} />
+                                <RegionsSmartInput id="region" country={ state.country || undefined } placeholder="Регион" name="region" value={state.region} onChange={onInputChange} />
                             </div>
                             <div className="flex flex-col">
                                 <label htmlFor="city" className="text-sm text-gray-600 mb-1">Город</label>
-                                <CitiesSmartInput id="city" region={ state.region } placeholder="Город" name="city" value={state.city} onChange={onInputChange} />
+                                <CitiesSmartInput id="city" region={ state.region || undefined } placeholder="Город" name="city" value={state.city} onChange={onInputChange} />
                             </div>
                             <div className="flex flex-col">
                                 <label htmlFor="address" className="text-sm text-gray-600 mb-1">Улица</label>
