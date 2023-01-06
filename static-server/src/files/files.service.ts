@@ -8,7 +8,7 @@ import { DeleteFileDto } from './dto/deleteFile.dto';
 
 @Injectable()
 export class FilesService {
-    private SIZES = [2048, 1200, 800, 400]
+    private SIZES = [2048, 1000, 800, 600, 300, 200]
 
     async static(res: Response, url: string) {
         const path = join(process.env.STATIC_FILES_PATH, url)
@@ -51,7 +51,7 @@ export class FilesService {
                 if (isPathExist === false) {
                     await this.mkdir(fileFolder)
                 }
-
+                
                 for (const size of this.SIZES) {
                     const filePath = join(fileFolder, `${size}.jpg`)
                     await sharp(file.buffer).resize(size).jpeg({ quality: 80 }).toFile(filePath)
