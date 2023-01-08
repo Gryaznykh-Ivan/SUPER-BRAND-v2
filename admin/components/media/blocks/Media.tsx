@@ -1,71 +1,59 @@
-import { AnimatePresence } from 'framer-motion';
 import Image from 'next/image'
 import React, { useState } from 'react'
 import MediaCard from '../cards/MediaCard';
 
-interface DADItem {
-    id: number;
+interface Item {
+    id: string;
     src: string;
     position: number;
 }
 
 export default function Media() {
-    const [currentItem, setCurrentItem] = useState<DADItem | null>(null)
-    const [items, setItems] = useState<DADItem[]>([{
-        id: 1,
+    const [selected, setSelected] = useState<Item | null>(null)
+    const [items, setItems] = useState<Item[]>([{
+        id: "1",
         src: "/assets/images/1.jpg",
         position: 1,
     }, {
-        id: 2,
+        id: "2",
         src: "/assets/images/2.jpg",
         position: 2,
     }, {
-        id: 3,
+        id: "3",
         src: "/assets/images/3.jpg",
         position: 3,
     }, {
-        id: 4,
+        id: "4",
         src: "/assets/images/4.jpg",
         position: 4,
     }])
 
-    const onDragStart = (e: React.DragEvent<HTMLDivElement>, item: DADItem) => {
-        setCurrentItem(item)
+    const onDragStart = (item: Item) => {
+        setSelected(item)
     }
 
-    const onDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-
+    const onDragEnd = (e: React.DragEvent) => {
+        setSelected(null)
     }
 
-    const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    const onDragOver = (e: React.DragEvent, item: Item) => {
+        e.preventDefault();
 
-    }
+        if (item.id === selected?.id) return
 
-    const onDragOver = (e: React.DragEvent<HTMLDivElement>, item: DADItem) => {
-        e.preventDefault()
-    }
+        setItems(prev => prev.map(current => {
+            if (selected === null) return current
 
-    const onDrop = (e: React.DragEvent<HTMLDivElement>, item: DADItem) => {
-        e.preventDefault()
-
-        let newItems = items.map((a) => {
-            if (currentItem === null) return a
-
-            if (a.id === item.id) {
-                return { ...a, position: currentItem.position }
+            if (current.id === item.id) {
+                return selected
             }
 
-            if (a.id === currentItem.id) {
-                return { ...a, position: item.position }
+            if (current.id === selected.id) {
+                return item
             }
 
-            return a
-        })
-
-        newItems.sort((a, b) => (a.position - b.position))
-
-        setItems(newItems)
-        setCurrentItem(null)
+            return current
+        }))
     }
 
     return (
@@ -74,13 +62,12 @@ export default function Media() {
             <div className="space-y-4 p-5">
                 <div className="grid grid-cols-4 gap-4 ">
                     {items.map((item, index) =>
-                        <div key={item.id} className={`border-[1px] ${index === 0 && "col-span-2 row-span-2"} rounded-md border-gray-400`}
+                        <div key={item.id} 
+                            className={ `border-[1px] ${index === 0 && "col-span-2 row-span-2"} rounded-md border-gray-400 ${ item.id === selected?.id && "opacity-50" }`}
                             draggable={true}
-                            onDragStart={(e) => onDragStart(e, item)}
+                            onDragStart={() => onDragStart(item)}
                             onDragEnd={onDragEnd}
-                            onDragLeave={onDragLeave}
                             onDragOver={(e) => onDragOver(e, item)}
-                            onDrop={(e) => onDrop(e, item)}
                         >
                             <div className="relative group">
                                 <MediaCard className="aspect-square cursor-pointer" src={item.src} alt="" />

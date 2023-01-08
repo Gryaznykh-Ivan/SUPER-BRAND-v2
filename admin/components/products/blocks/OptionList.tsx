@@ -1,34 +1,77 @@
-import { Reorder, useDragControls } from 'framer-motion'
 import Link from 'next/link'
-import React, { MouseEventHandler, useState } from 'react'
+import React, { useState } from 'react'
 import Input from '../../inputs/Input'
-import Item from '../../framer/reorder/Item'
+
+interface Item {
+    id: string;
+    title: string
+}
 
 export default function OptionList() {
-    const controls = useDragControls()
-    const [items, setItems] = useState(["Размер", "Цвет", "Материал"])
+    const [selected, setSelected] = useState<Item | null>(null)
+    const [items, setItems] = useState<Item[]>([{ id: "123", title: "Размер" }, { id: "321", title: "Цвет" }, { id: "132", title: "Материал" }])
 
     const onOptionRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
     }
 
+    const onDragStart = (e: React.DragEvent) => {
+        if (selected === null) return e.preventDefault()
+    }
+
+    const onDragEnd = (e: React.DragEvent) => {
+        setSelected(null)
+    }
+
+    const onDragOver = (e: React.DragEvent, item: Item) => {
+        e.preventDefault();
+
+        if (item.id === selected?.id) return
+
+        setItems(prev => prev.map(current => {
+            if (selected === null) return current
+
+            if (current.id === item.id) {
+                return selected
+            }
+
+            if (current.id === selected.id) {
+                return item
+            }
+
+            return current
+        }))
+    }
+
     return (
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Названия вариантов</h2>
-            <Reorder.Group className="border-b-[1px] divide-y-[1px]" axis="y" values={items} onReorder={setItems}>
+            <div className="border-b-[1px] divide-y-[1px]" >
                 {items.map((item) => (
-                    <Item key={item} value={item}>
+                    <div
+                        key={item.id}
+                        className={selected?.id === item.id ? "opacity-30" : ""}
+                        draggable="true"
+                        onDragStart={onDragStart}
+                        onDragEnd={onDragEnd}
+                        onDragOver={(e) => onDragOver(e, item)}
+                    >
                         <div className="flex-1 flex items-center justify-between pr-2 py-2 bg-white">
-                            <Input type="text" onChange={() => { }} placeholder="option1" value={item} />
+                            <div className="p-3 cursor-pointer" onMouseDown={() => setSelected(item)} onMouseUp={() => setSelected(null)}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5V5.01M12 12V12.01M12 19V19.01M12 6C11.7348 6 11.4804 5.89464 11.2929 5.70711C11.1054 5.51957 11 5.26522 11 5C11 4.73478 11.1054 4.48043 11.2929 4.29289C11.4804 4.10536 11.7348 4 12 4C12.2652 4 12.5196 4.10536 12.7071 4.29289C12.8946 4.48043 13 4.73478 13 5C13 5.26522 12.8946 5.51957 12.7071 5.70711C12.5196 5.89464 12.2652 6 12 6ZM12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13ZM12 20C11.7348 20 11.4804 19.8946 11.2929 19.7071C11.1054 19.5196 11 19.2652 11 19C11 18.7348 11.1054 18.4804 11.2929 18.2929C11.4804 18.1054 11.7348 18 12 18C12.2652 18 12.5196 18.1054 12.7071 18.2929C12.8946 18.4804 13 18.7348 13 19C13 19.2652 12.8946 19.5196 12.7071 19.7071C12.5196 19.8946 12.2652 20 12 20Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
+                            <Input type="text" onChange={() => { }} placeholder="option1" value={item.title} />
                             <button className="m-1 p-2 rounded-md hover:bg-gray-100" onClick={onOptionRemove}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10 11V17M14 11V17M4 7H20M19 7L18.133 19.142C18.0971 19.6466 17.8713 20.1188 17.5011 20.4636C17.1309 20.8083 16.6439 21 16.138 21H7.862C7.35614 21 6.86907 20.8083 6.49889 20.4636C6.1287 20.1188 5.90292 19.6466 5.867 19.142L5 7H19ZM15 7V4C15 3.73478 14.8946 3.48043 14.7071 3.29289C14.5196 3.10536 14.2652 3 14 3H10C9.73478 3 9.48043 3.10536 9.29289 3.29289C9.10536 3.48043 9 3.73478 9 4V7H15Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
                         </div>
-                    </Item>
+                    </div>
                 ))}
-            </Reorder.Group>
+            </div>
             <div className="space-y-4 p-2 border-b-[1px]">
                 <Link href="/products/example/variants/new" className="flex p-2 text-blue-800 rounded-md">
                     <svg className="stroke-blue-800" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
