@@ -40,31 +40,37 @@ function Index() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/products/example1") }>
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push("/products/example1")}>
                                         <td className="px-3 py-2">
                                             <Image width={80} height={48} src={`/assets/images/air-force0.jpg`} className="" alt="" />
                                         </td>
                                         <td className="font-medium px-3 py-2">1906R "White Gold"</td>
-                                        <td className="px-3 py-2">Active</td>
-                                        <td className="px-3 py-2">50 offers</td>
+                                        <td className="px-3 py-2">
+                                            <span className="bg-green-600 px-2 py-1 rounded-xl text-white text-sm">Active</span>
+                                        </td>
+                                        <td className="px-3 py-2">200 офферов</td>
                                         <td className="px-3 py-2">Air Force</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/products/example2") }>
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push("/products/example2")}>
                                         <td className="px-3 py-2">
                                             <Image width={80} height={48} src={`/assets/images/air-force1.jpg`} className="" alt="" />
                                         </td>
                                         <td className="font-medium px-3 py-2">1906R "White Gold"</td>
-                                        <td className="px-3 py-2">Active</td>
-                                        <td className="px-3 py-2">50 offers</td>
+                                        <td className="px-3 py-2">
+                                            <span className="bg-green-600 px-2 py-1 rounded-xl text-white text-sm">Active</span>
+                                        </td>
+                                        <td className="px-3 py-2">205 офферов</td>
                                         <td className="px-3 py-2">Air Force</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={ () => router.push("/products/example3") }>
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push("/products/example3")}>
                                         <td className="px-3 py-2">
                                             <Image width={80} height={48} src={`/assets/images/air-force0.jpg`} className="" alt="" />
                                         </td>
                                         <td className="font-medium px-3 py-2">574 YURT "Salehe Bembury - Universal Communication Workwear White"</td>
-                                        <td className="px-3 py-2">Active</td>
-                                        <td className="px-3 py-2">50 offers</td>
+                                        <td className="px-3 py-2">
+                                            <span className="bg-gray-400 px-2 py-1 rounded-xl text-white text-sm">Draft</span>
+                                        </td>
+                                        <td className="px-3 py-2">20 офферов</td>
                                         <td className="px-3 py-2">Air Force</td>
                                     </tr>
                                 </tbody>

@@ -3,11 +3,12 @@ import React from 'react'
 
 
 import MainLayout from '../../components/layouts/Main'
-import EditinalInfo from '../../components/products/blocks/EditinalInfo'
+import OrganizationInfo from '../../components/products/blocks/OrganizationInfo'
 import GeneralInfo from '../../components/products/blocks/GeneralInfo'
 import Media from '../../components/media/blocks/Media'
 import SeoTags from '../../components/products/blocks/SeoTags'
 import Status from '../../components/products/blocks/Status'
+import OptionList from '../../components/products/blocks/OptionList'
 
 function New() {
     return (
@@ -24,12 +25,12 @@ function New() {
                 <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
                     <div className="flex-1 space-y-4">
                         <GeneralInfo />
-                        <Media />
                         <SeoTags />
+                        <OptionList />
                     </div>
                     <div className="space-y-4 lg:w-80">
                         <Status />
-                        <EditinalInfo />
+                        <OrganizationInfo />
                     </div>
                 </div>
                 <div className="flex justify-between">

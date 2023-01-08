@@ -7,9 +7,9 @@ import GeneralInfo from '../../../components/products/blocks/GeneralInfo'
 import Media from '../../../components/media/blocks/Media'
 import SeoTags from '../../../components/products/blocks/SeoTags'
 import Status from '../../../components/products/blocks/Status'
-import EditinalInfo from '../../../components/products/blocks/EditinalInfo'
+import OrganizationInfo from '../../../components/products/blocks/OrganizationInfo'
 import VariantList from '../../../components/variants/blocks/VariantList'
-import OptionList from '../../../components/variants/blocks/OptionList'
+import OptionList from '../../../components/products/blocks/OptionList'
 
 function Index() {
     const router = useRouter()
@@ -44,7 +44,7 @@ function Index() {
                     </div>
                     <div className="space-y-4 lg:w-80">
                         <Status />
-                        <EditinalInfo />
+                        <OrganizationInfo />
                         <VariantList isAddNew={ true } />
                     </div>
                 </div>

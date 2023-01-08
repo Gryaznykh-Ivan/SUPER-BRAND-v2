@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch", "fullTextIndex"]
+    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount"]
 }
 
 datasource db {
@@ -223,8 +223,7 @@ model Collection {
     title       String    @unique
     description String
     products    Product[]
-    image       Image?     @relation(fields: [imageId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-    imageId     String?
+    images      Image[]
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
 }
@@ -238,13 +237,15 @@ model Product {
     metaTitle        String
     metaDescription  String
     available        Boolean           @default(false)
-    images           ProductImage[]
+    images           Image[]
     collections      Collection[]
     variants         Variant[]
     productIsFavored FavoriteProduct[]
     productOptions   ProductOption[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
+
+    @@fulltext([title, vendor])
 }
 
 model ProductOption {
@@ -257,24 +258,25 @@ model ProductOption {
     updatedAt DateTime @updatedAt
 }
 
-model ProductImage {
-    id        String   @id @default(cuid())
-    name      String
-    path      String
-    src       String
-    alt       String
-    position  Int
-    product   Product? @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-    productId String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Image {
+    id           String      @id @default(cuid())
+    name         String
+    src          String
+    alt          String
+    position     Int
+    product      Product?    @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    productId    String?
+    collection   Collection? @relation(fields: [collectionId], references: [id])
+    collectionId String?
+    variant      Variant?    @relation(fields: [variantId], references: [id])
+    variantId    String?
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt
 }
 
 model Variant {
     id             String         @id @default(cuid())
     title          String
-    price          Int
-    compareAtPrice Int?
     option1        String
     option2        String?
     option3        String?
@@ -282,24 +284,11 @@ model Variant {
     barcode        String?
     product        Product        @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId      String
-    image          Image?          @relation(fields: [imageId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-    imageId        String?
+    images         Image[]
     offers         Offer[]
     orders         OrderProduct[]
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
-}
-
-model Image {
-    id          String       @id @default(cuid())
-    name        String
-    path        String
-    src         String
-    alt         String
-    variants    Variant[]
-    collections Collection[]
-    createdAt   DateTime     @default(now())
-    updatedAt   DateTime     @updatedAt
 }
 
 model Offer {

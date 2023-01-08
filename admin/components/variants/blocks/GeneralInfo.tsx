@@ -23,16 +23,6 @@ export default function GeneralInfo() {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col">
-                            <label htmlFor="SKU" className="text-sm text-gray-600 mb-1">Цена</label>
-                            <Input type="text" id="SKU" placeholder="Цена" onChange={() => { }} />
-                        </div>
-                        <div className="flex flex-col">
-                            <label htmlFor="barcode" className="text-sm text-gray-600 mb-1">Цена до скидки</label>
-                            <Input type="text" id="barcode" placeholder="Цена до скидки" onChange={() => { }} />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col">
                             <label htmlFor="SKU" className="text-sm text-gray-600 mb-1">SKU</label>
                             <Input type="text" id="SKU" placeholder="SKU" onChange={() => { }} />
                         </div>

@@ -1,20 +1,52 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { ConnectCollectionDto, DisconnectCollectionDto } from "./collections.dto";
+import { ConnectImagesDto } from "./images.dto";
 
 export class UpdateProductDto {
     @IsOptional()
+    @IsString()
+    title: string;
+    
+    @IsOptional()
+    @IsString()
+    handle: string;
+
+    @IsOptional()
+    @IsString()
+    description: string;
+
+    @IsOptional()
+    @IsString()
+    metaTitle: string;
+
+    @IsOptional()
+    @IsString()
+    metaDescription: string;
+
+    @IsOptional()
     @IsBoolean()
-    readonly available: boolean;
+    available: boolean;
 
     @IsOptional()
     @IsString()
-    readonly description: string;
-
-
-    @IsOptional()
-    @IsString()
-    readonly name: string;
+    vendor: string;
 
     @IsOptional()
-    @IsString()
-    readonly vendor: string;
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ConnectCollectionDto)
+    connectCollections: ConnectCollectionDto[]
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => DisconnectCollectionDto)
+    disconnectCollections: DisconnectCollectionDto[]
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ConnectImagesDto)
+    connectImages: ConnectImagesDto[]
 }

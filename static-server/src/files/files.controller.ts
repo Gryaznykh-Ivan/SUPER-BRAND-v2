@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { Body, Controller, Delete, Get, Header, Param, Post, Res, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Header, Param, ParseIntPipe, Post, Query, Res, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { DeleteFileDto } from './dto/deleteFile.dto';
 import { FilesService } from './files.service';
@@ -10,26 +10,29 @@ export class FilesController {
         private filesService: FilesService
     ) { }
 
-    @Get('static/:url(*)')
+    @Get('static/:folders(*/*/*)/:name')
     static(
         @Res({ passthrough: true }) res: Response,
-        @Param('url') url: string
+        @Param('folders') folders: string,
+        @Param('name') name: string,
+        @Query('w') width: string
     ) {
-        return this.filesService.static(res, url)
+        return this.filesService.static(res, folders, name, width)
     }
 
     @Post('upload')
     @UseInterceptors(FilesInterceptor('files'))
     upload(
-        @UploadedFiles() files: Express.Multer.File[]
+        @UploadedFiles() files: Express.Multer.File[],
+        @Query('q', new DefaultValuePipe(80), ParseIntPipe) q: number
     ) {
-        return this.filesService.upload(files)
+        return this.filesService.upload(files, q)
     }
 
     @Delete('delete')
     delete(
-        @Body() file: DeleteFileDto
+        @Body() data: DeleteFileDto
     ) {
-        return this.filesService.delete(file)
+        return this.filesService.delete(data)
     }
 }

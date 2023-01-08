@@ -1,12 +1,15 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class UpdateImageDto {
+    @IsOptional()
     @IsString()
-    readonly src: string;
+    src: string;
 
+    @IsOptional()
     @IsString()
-    readonly alt: string;
+    alt: string;
 
+    @IsOptional()
     @IsNumber()
-    readonly position: number;
+    position: number;
 }

@@ -77,7 +77,7 @@ export class UserService {
                 }
             },
             skip: skip,
-            take: limit,
+            take: limit > 20 ? 20 : limit,
             orderBy: [{
                 createdAt: 'desc'
             }]
