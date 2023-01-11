@@ -229,6 +229,16 @@ export type CitiesSuggestionRequest = {
     region?: string;
 }
 
+export type CollectionsSuggestionResponse = IResponse<ICollection[]>
+export type CollectionsSuggestionRequest = {
+    q: string;
+    ids?: string[];
+}
+
+export type VendorsSuggestionResponse = IResponse<string[]>
+export type VendorsSuggestionRequest = {
+    q: string;
+}
 
 
 
@@ -239,7 +249,7 @@ export type ProductSearchRequest = {
     q?: string;
     limit?: number;
     skip?: number;
-    available?: boolean;
+    available?: string;
 }
 
 export type ProductGetByIdResponse = IResponse<IProduct>

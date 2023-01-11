@@ -12,7 +12,6 @@ export default function MediaCard({ className, src, alt }: IProps) {
     const [popup, setPopup] = useState(false)
 
     const onPopupOpen = () => {
-        console.log(123)
         setPopup(true)
     }
 

@@ -1,7 +1,7 @@
 import * as FormData from 'form-data';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { OfferStatus } from '@prisma/client';
+import { OfferStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateProductnDto } from './dto/createProduct.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
@@ -69,8 +69,6 @@ export class ProductService {
 
 
     async getProductsBySearch(q: string, limit: number, skip: number, available: boolean) {
-        console.log(available)
-
         const products = await this.prisma.product.findMany({
             where: {
                 title: {
@@ -147,6 +145,12 @@ export class ProductService {
             metaDescription: data.metaDescription
         }
 
+        createProductQuery.handle = this.getSlug(createProductQuery.handle === undefined ? createProductQuery.handle : createProductQuery.title)
+
+        if (createProductQuery.metaTitle === undefined) {
+            createProductQuery.metaTitle = createProductQuery.title
+        }
+
         if (data.connectCollections !== undefined) {
             Object.assign(createProductQuery, {
                 collections: {
@@ -165,6 +169,12 @@ export class ProductService {
                 data: product.id
             }
         } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === 'P2002') {
+                    throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
+                }
+            }
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -449,6 +459,10 @@ export class ProductService {
             metaDescription: data.metaDescription
         }
 
+        if (updateProductQuery.handle !== undefined) {
+            updateProductQuery.handle = this.getSlug(updateProductQuery.handle)
+        }
+
         if (data.connectCollections !== undefined || data.disconnectCollections !== undefined) {
             Object.assign(updateProductQuery, {
                 collections: {
@@ -470,6 +484,12 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === 'P2002') {
+                    throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
+                }
+            }
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -486,5 +506,9 @@ export class ProductService {
         } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+    private getSlug(string: string) {
+        return string.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '')
     }
 }

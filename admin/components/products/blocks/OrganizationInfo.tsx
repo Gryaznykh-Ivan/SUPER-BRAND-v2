@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ICollection, ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
 import CollectionsSmartInput from '../../inputs/CollectionsSmartInput'
 import Input from '../../inputs/Input'
+import VendorsSmartInput from '../../inputs/VendorsSmartInput';
 
 interface IProps {
     vendor: string | null;
@@ -60,7 +61,7 @@ export default function OrganizationInfo({ onChange, ...data }: IProps) {
             <div className="space-y-4 p-5">
                 <div className="flex flex-col">
                     <label htmlFor="vendor" className="text-sm text-gray-600 mb-1">Производитель</label>
-                    <Input type="text" id="vendor" placeholder="Производитель" name="vendor" value={state.vendor} onChange={onInputChange} />
+                    <VendorsSmartInput id="vendor" placeholder="Производитель" name="vendor" value={state.vendor} onChange={onInputChange} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="collection" className="text-sm text-gray-600 mb-1">Коллекция</label>

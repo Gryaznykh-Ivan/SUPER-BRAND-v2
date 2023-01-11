@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import ImageLoader from '../../components/image/ImageLoader'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
+import NavLink from '../../components/navigation/NavLink'
 import { useLazyGetProductsBySearchQuery } from '../../services/productService'
 import { useLazyGetUsersBySearchQuery } from '../../services/userService'
 import { IErrorResponse } from '../../types/api'
@@ -19,15 +20,20 @@ function Index() {
     const [query, setQuery] = useState({
         q: "",
         limit: itemPerPage,
-        skip: 0
+        skip: 0,
+        available: router.query.available as string ?? undefined
     })
+
+    useEffect(() => {
+        setQuery(prev => ({ ...prev, available: router.query.available as string ?? undefined }))
+    }, [router.query.available])
 
     useEffect(() => {
         getProductBySearch(query)
     }, [query])
 
     const onSearch = (q: string) => {
-        setQuery({ q, limit: itemPerPage, skip: 0 })
+        setQuery(prev => ({ ...prev, limit: itemPerPage, skip: 0 }))
     }
 
     const onNextPage = () => {
@@ -53,8 +59,9 @@ function Index() {
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
                     <div className="flex space-x-2 border-b-[1px]">
-                        <Link href="#" className="relative p-3 before:absolute hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]">Все</Link>
-                        <Link href="#" className="relative p-3 text-gray-400 hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]">Неактивные</Link>
+                        <NavLink href="/products" query={{ available: undefined }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Все</NavLink>
+                        <NavLink href="/products?available=true" query={{ available: "true" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
+                        <NavLink href="/products?available=false" query={{ available: "false" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Неактивные</NavLink>
                     </div>
                     <div className="py-4 space-y-4">
                         <div className="">
@@ -70,13 +77,13 @@ function Index() {
                                 </div>
                             }
                             {isFetching &&
-                                <div className="animate-pulse space-y-2">
-                                    <div className="bg-gray-300 rounded-lg h-8"></div>
-                                    <div className="bg-gray-300 rounded-lg h-8"></div>
-                                    <div className="bg-gray-300 rounded-lg h-8"></div>
+                                <div className="flex justify-center absolute bg-white border-gray-100 border-2 inset-x-0 p-5 shadow-md z-10 rounded-md ">
+                                    <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 3.99999V8.99999H4.582M4.582 8.99999C5.24585 7.35812 6.43568 5.9829 7.96503 5.08985C9.49438 4.1968 11.2768 3.8364 13.033 4.06513C14.7891 4.29386 16.4198 5.09878 17.6694 6.35377C18.919 7.60875 19.7168 9.24285 19.938 11M4.582 8.99999H9M20 20V15H19.419M19.419 15C18.7542 16.6409 17.564 18.015 16.0348 18.9073C14.5056 19.7995 12.7237 20.1595 10.9681 19.9309C9.21246 19.7022 7.5822 18.8979 6.33253 17.6437C5.08287 16.3896 4.28435 14.7564 4.062 13M19.419 15H15" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
                                 </div>
                             }
-                            {!isFetching && data?.data &&
+                            {data?.data &&
                                 <table className="table-auto block max-w-0 md:table md:w-full md:max-w-none">
                                     <thead>
                                         <tr className="border-b-[1px] text-sm">
@@ -107,7 +114,7 @@ function Index() {
                                                             :
                                                             <div className="absolute inset-0 flex items-center justify-center">
                                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M11.9999 9V11M11.9999 15H12.0099M5.07192 19H18.9279C20.4679 19 21.4299 17.333 20.6599 16L13.7319 4C12.9619 2.667 11.0379 2.667 10.2679 4L3.33992 16C2.56992 17.333 3.53192 19 5.07192 19Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                                    <path d="M4 16L8.586 11.414C8.96106 11.0391 9.46967 10.8284 10 10.8284C10.5303 10.8284 11.0389 11.0391 11.414 11.414L16 16M14 14L15.586 12.414C15.9611 12.0391 16.4697 11.8284 17 11.8284C17.5303 11.8284 18.0389 12.0391 18.414 12.414L20 14M14 8H14.01M6 20H18C18.5304 20 19.0391 19.7893 19.4142 19.4142C19.7893 19.0391 20 18.5304 20 18V6C20 5.46957 19.7893 4.96086 19.4142 4.58579C19.0391 4.21071 18.5304 4 18 4H6C5.46957 4 4.96086 4.21071 4.58579 4.58579C4.21071 4.96086 4 5.46957 4 6V18C4 18.5304 4.21071 19.0391 4.58579 19.4142C4.96086 19.7893 5.46957 20 6 20Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                                                 </svg>
                                                             </div>
                                                         }

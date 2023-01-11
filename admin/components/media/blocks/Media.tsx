@@ -54,8 +54,6 @@ export default function Media() {
 
         if (item.id === selected?.id) return
         
-        console.log(items)
-        
         setItems(prev => prev.map((current, index) => {
             if (selected !== null) {
                 if (current.id === item.id) {

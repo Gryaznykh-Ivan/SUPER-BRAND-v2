@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
 import useDebounce from '../../hooks/useDebounce';
-import { useLazyCitiesQuery, useLazyCountriesQuery, useLazyRegionsQuery } from '../../services/suggestionService';
+import { useLazyCitiesQuery, useLazyCollectionsQuery, useLazyCountriesQuery, useLazyRegionsQuery } from '../../services/suggestionService';
 import { ICollection } from '../../types/api';
 import Input from './Input';
 
@@ -20,17 +20,14 @@ export default function CollectionsSmartInput({ onChange, placeholder, className
     const [state, setState] = useState("")
     const debounced = useDebounce(state)
 
-    // const [suggest, { isFetching, isSuccess, data }] = useLazyCitiesQuery()
-
-    const isFetching = false;
-    const isSuccess = true;
-    const data = {
-        data: [{ id: "1234", title: "test" }, { id: "1", title: "test 2" }]
-    }
+    const [suggest, { isFetching, isSuccess, data }] = useLazyCollectionsQuery()
 
     useEffect(() => {
         if (focus) {
-
+            suggest({
+                q: debounced,
+                ids: collections.length > 0 ? collections.map(collection => collection.id) : undefined
+            })
         }
     }, [debounced, focus])
 

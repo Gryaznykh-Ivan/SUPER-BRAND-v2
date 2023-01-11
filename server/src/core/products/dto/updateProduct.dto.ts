@@ -1,14 +1,18 @@
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 import { ConnectCollectionDto, DisconnectCollectionDto } from "./collections.dto";
 
 export class UpdateProductDto {
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
     title: string;
-    
-    @IsOptional()
+
+    @IsNotEmpty()
     @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
     handle: string;
 
     @IsOptional()

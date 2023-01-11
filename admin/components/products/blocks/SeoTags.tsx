@@ -18,6 +18,10 @@ export default function SeoTags({ onChange, ...data }: IProps) {
     })
 
     useEffect(() => {
+        setState(prev => ({ ...prev, handle: data.handle ?? "" }))
+    }, [data.handle])
+
+    useEffect(() => {
         const localState = Object.entries(state)
         const changes = localState.map(([key, value]) => {
             if (data[key as keyof typeof data] === null && value === "") {

@@ -7,6 +7,50 @@ export class SuggestionService {
         private readonly prisma: PrismaService,
     ) { }
 
+    async vendors(q: string) {
+        const vendors = await this.prisma.product.findMany({
+            distinct: ["vendor"],
+            where: {
+                vendor: {
+                    search: q ? `${q}*` : undefined,
+                    not: null
+                },
+            },
+            select: {
+                vendor: true
+            },
+            take: 5
+        })
+
+        return {
+            success: true,
+            data: vendors.map(({ vendor }) => vendor).filter(c => c !== null)
+        }
+    }
+
+    async collections(q: string, ids: string[]) {
+        const collections = await this.prisma.collection.findMany({
+            where: {
+                title: {
+                    search: q ? `${q}*` : undefined,
+                },
+                id: {
+                    notIn: ids
+                }
+            },
+            select: {
+                id: true,
+                title: true
+            },
+            take: 5
+        })
+
+        return {
+            success: true,
+            data: collections
+        }
+    }
+
     async countries(q: string) {
         const countries = await this.prisma.country.findMany({
             where: {
