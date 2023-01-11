@@ -71,15 +71,8 @@ function Index() {
                             {isFetching &&
                                 <div className="animate-pulse space-y-2">
                                     <div className="bg-gray-300 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
-                                    <div className="bg-gray-200 rounded-lg h-8"></div>
+                                    <div className="bg-gray-300 rounded-lg h-8"></div>
+                                    <div className="bg-gray-300 rounded-lg h-8"></div>
                                 </div>
                             }
                             {!isFetching && data?.data &&

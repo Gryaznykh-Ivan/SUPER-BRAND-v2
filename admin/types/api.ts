@@ -57,9 +57,45 @@ export interface IUser {
     permissions: IUserPermission[];
 }
 
+export interface IImage {
+    id: string;
+    alt: string;
+    src: string;
+    position: string;
+}
 
+export interface IProductOption {
+    id: string;
+    title: string;
+    position: number;
+}
 
+export interface ICollection {
+    id: string;
+    title: string;
+}
 
+export interface IProductSearch {
+    id: string;
+    image: IImage | null;
+    title: string;
+    available: boolean;
+    vendor: string;
+    offersCount: number;
+}
+
+export interface IProduct {
+    title: string;
+    available: boolean;
+    handle: string;
+    description: string | null;
+    metaTitle: string | null;
+    metaDescription: string | null;
+    vendor: string | null;
+    images: IImage[];
+    collections: ICollection[];
+    productOptions: IProductOption[];
+}
 
 
 // AuthService
@@ -191,4 +227,94 @@ export type CitiesSuggestionResponse = IResponse<string[]>
 export type CitiesSuggestionRequest = {
     q: string;
     region?: string;
+}
+
+
+
+
+// productService
+
+export type ProductSearchResponse = IResponse<IProductSearch[]>
+export type ProductSearchRequest = {
+    q?: string;
+    limit?: number;
+    skip?: number;
+    available?: boolean;
+}
+
+export type ProductGetByIdResponse = IResponse<IProduct>
+export type ProductGetByIdRequest = {
+    productId: string
+}
+
+export type ProductCreateResponse = IResponse<string>
+export type ProductCreateRequest = {
+    title?: string;
+    handle?: string;
+    available?: boolean;
+    description?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    vendor?: string | null;
+    connectCollections?: Pick<ICollection, "id">[];
+}
+
+export type ProductUpdateResponse = IResponse<void>
+export type ProductUpdateRequest = Partial<{
+    productId: string
+    title?: string;
+    handle?: string;
+    available?: boolean;
+    description?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    vendor?: string | null;
+    connectCollections?: Pick<ICollection, "id">[];
+    disconnectCollections?: Pick<ICollection, "id">[];
+}>
+
+export type ProductDeleteResponse = IResponse<void>
+export type ProductDeleteRequest = {
+    productId: string;
+}
+
+export type ProductUploadImagesResponse = IResponse<void>
+export type ProductUploadImagesRequest = {
+    productId: string;
+    images: File[];
+}
+
+export type ProductUpdateImageResponse = IResponse<void>
+export type ProductUpdateImageRequest = {
+    productId: string;
+    imageId: string;
+    src?: string;
+    alt?: string;
+    position?: number;
+}
+
+export type ProductRemoveImageResponse = IResponse<void>
+export type ProductRemoveImageRequest = {
+    productId: string;
+    imageId: string;
+}
+
+export type ProductCreateOptionResponse = IResponse<void>
+export type ProductCreateOptionRequest = {
+    productId: string;
+    title: string;
+}
+
+export type ProductUpdateOptionResponse = IResponse<void>
+export type ProductUpdateOptionRequest = {
+    productId: string;
+    optionId: string;
+    title?: string;
+    position?: number;
+}
+
+export type ProductRemoveOptionResponse = IResponse<void>
+export type ProductRemoveOptionRequest = {
+    productId: string;
+    optionId: string;
 }

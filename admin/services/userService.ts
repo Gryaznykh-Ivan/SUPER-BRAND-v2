@@ -31,14 +31,13 @@ export const userService = api.injectEndpoints({
                 method: "PUT",
                 body: rest
             }),
-            invalidatesTags: ["USERS", "USER"]
+            invalidatesTags: ["USER"]
         }),
         deleteUser: builder.mutation<UserDeleteResponse, UserDeleteRequest>({
             query: ({ userId }) => ({
                 url: `users/${ userId }`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["USERS", "USER"]
         }),
     })
 })

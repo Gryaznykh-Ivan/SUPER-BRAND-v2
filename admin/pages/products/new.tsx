@@ -1,16 +1,52 @@
 import Link from 'next/link'
-import React from 'react'
-
+import React, { useEffect, useMemo, useState } from 'react'
 
 import MainLayout from '../../components/layouts/Main'
 import OrganizationInfo from '../../components/products/blocks/OrganizationInfo'
 import GeneralInfo from '../../components/products/blocks/GeneralInfo'
-import Media from '../../components/media/blocks/Media'
 import SeoTags from '../../components/products/blocks/SeoTags'
 import Status from '../../components/products/blocks/Status'
-import OptionList from '../../components/products/blocks/OptionList'
+import { useRouter } from 'next/router'
+import { useCreateProductMutation } from '../../services/productService'
+import { toast } from 'react-toastify'
+import { IErrorResponse, ProductCreateRequest, ProductUpdateRequest } from '../../types/api'
 
 function New() {
+    const router = useRouter()
+
+    const [createProduct, { isSuccess: isCreateProductSuccess, isError: isCreateProductError, error: createProductError, data }] = useCreateProductMutation()
+
+    const [changes, setChanges] = useState<ProductCreateRequest>({})
+    const onCollectChanges = (obj: ProductCreateRequest) => {
+        setChanges(prev => ({ ...prev, ...obj }))
+
+    }
+
+    useEffect(() => {
+        if (isCreateProductSuccess) {
+            setTimeout(() => toast.success("Продукт создан"), 100)
+        }
+
+        if (isCreateProductError) {
+            if (createProductError && "status" in createProductError) {
+                toast.error((createProductError.data as IErrorResponse).message)
+            } else {
+                toast.error("Произошла неизвесная ошибка")
+            }
+        }
+    }, [isCreateProductSuccess, isCreateProductError])
+
+    const onSaveChanges = async () => {
+        const result = await createProduct(changes).unwrap()
+        if (result.success === true) {
+            router.push('/products/' + result.data)
+        }
+    }
+
+    const mustBeSaved = useMemo(() => {
+        return Object.values(changes).some(c => c !== undefined)
+    }, [changes])
+
     return (
         <MainLayout>
             <div className="px-6 my-4 max-w-5xl mx-auto">
@@ -24,19 +60,34 @@ function New() {
                 </div>
                 <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
                     <div className="flex-1 space-y-4">
-                        <GeneralInfo />
-                        <SeoTags />
-                        <OptionList />
+                        <GeneralInfo
+                            title={null}
+                            description={null}
+                            onChange={onCollectChanges}
+                        />
+                        <SeoTags
+                            metaTitle={null}
+                            metaDescription={null}
+                            handle={null}
+                            onChange={onCollectChanges}
+                        />
                     </div>
                     <div className="space-y-4 lg:w-80">
-                        <Status />
-                        <OrganizationInfo />
+                        <Status
+                            available={false}
+                            onChange={onCollectChanges}
+                        />
+                        <OrganizationInfo
+                            vendor={null}
+                            collections={[]}
+                            onChange={onCollectChanges}
+                        />
                     </div>
                 </div>
                 <div className="flex justify-between">
                     <div className=""></div>
                     <div className="flex justify-end">
-                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</button>
+                        <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={onSaveChanges}>Создать</button>
                     </div>
                 </div>
             </div>

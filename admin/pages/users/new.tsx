@@ -37,9 +37,9 @@ export default function New() {
     }, [isCreateUserSuccess, isCreateUserError])
 
     const onSaveChanges = async () => {
-        const user = await createUser(changes).unwrap()
-        if (user) {
-            router.push('/users/' + user.data)
+        const result = await createUser(changes).unwrap()
+        if (result.success === true) {
+            router.push('/users/' + result.data)
         }
     }
 

@@ -1,7 +1,6 @@
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsOptional, IsString, ValidateNested } from "class-validator";
+import { ArrayMaxSize, IsArray, IsBoolean, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
 import { ConnectCollectionDto } from "./collections.dto";
-import { ConnectImagesDto } from "./images.dto";
 
 export class CreateProductnDto {
 
@@ -36,10 +35,4 @@ export class CreateProductnDto {
     @ValidateNested({ each: true })
     @Type(() => ConnectCollectionDto)
     connectCollections: ConnectCollectionDto[]
-
-    @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => ConnectImagesDto)
-    connectImages: ConnectImagesDto[]
 }

@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount"]
+    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount", "interactiveTransactions"]
 }
 
 datasource db {
@@ -232,10 +232,10 @@ model Product {
     id               String            @id @default(cuid())
     handle           String            @unique
     title            String
-    vendor           String
-    description      String
-    metaTitle        String
-    metaDescription  String
+    vendor           String?
+    description      String?
+    metaTitle        String?
+    metaDescription  String?
     available        Boolean           @default(false)
     images           Image[]
     collections      Collection[]
@@ -251,6 +251,7 @@ model Product {
 model ProductOption {
     id        String   @id @default(cuid())
     title     String
+    option    Int
     position  Int
     product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
@@ -275,20 +276,22 @@ model Image {
 }
 
 model Variant {
-    id             String         @id @default(cuid())
-    title          String
-    option1        String
-    option2        String?
-    option3        String?
-    SKU            String?
-    barcode        String?
-    product        Product        @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    productId      String
-    images         Image[]
-    offers         Offer[]
-    orders         OrderProduct[]
-    createdAt      DateTime       @default(now())
-    updatedAt      DateTime       @updatedAt
+    id        String         @id @default(cuid())
+    title     String
+    option0   String?
+    option1   String?
+    option2   String?
+    SKU       String?
+    barcode   String?
+    product   Product        @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    productId String
+    images    Image[]
+    offers    Offer[]
+    orders    OrderProduct[]
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+
+    @@unique([option0, option1, option2])
 }
 
 model Offer {

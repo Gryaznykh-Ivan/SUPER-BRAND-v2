@@ -53,9 +53,11 @@ export default function Index() {
         }
     }, [isDeleteUserSuccess, isDeleteUserError])
 
-    const onSaveChanges = () => {
-        updateUser({ userId: router.query.userId as string, ...changes })
-        setChanges({})
+    const onSaveChanges = async () => {
+        const result = await updateUser({ userId: router.query.userId as string, ...changes }).unwrap()
+        if (result.success === true) {
+            setChanges({})
+        }
     }
 
     const mustBeSaved = useMemo(() => {
@@ -142,9 +144,9 @@ export default function Index() {
                                 />
                             </div>
                         </div>
-                        <div className="flex justify-between">
+                        <div className={`flex justify-between rounded-md ${mustBeSaved && "sticky left-10 right-0 bottom-4 bg-gray-800 p-4 transition-colors duration-200"}`}>
                             <div className="">
-                                <button className="border-red-700 border-[1px] text-red-700 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={onUserDelete}>Удалить</button>
+                                <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={onUserDelete}>Удалить</button>
                             </div>
                             <div className="flex justify-end">
                                 <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={onSaveChanges}>Сохранить</button>

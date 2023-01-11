@@ -1,7 +1,6 @@
 import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
 import { ConnectCollectionDto, DisconnectCollectionDto } from "./collections.dto";
-import { ConnectImagesDto } from "./images.dto";
 
 export class UpdateProductDto {
     @IsOptional()
@@ -43,10 +42,4 @@ export class UpdateProductDto {
     @ValidateNested({ each: true })
     @Type(() => DisconnectCollectionDto)
     disconnectCollections: DisconnectCollectionDto[]
-
-    @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => ConnectImagesDto)
-    connectImages: ConnectImagesDto[]
 }
