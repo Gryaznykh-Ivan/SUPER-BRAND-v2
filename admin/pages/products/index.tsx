@@ -25,7 +25,7 @@ function Index() {
     })
 
     useEffect(() => {
-        setQuery(prev => ({ ...prev, available: router.query.available as string ?? undefined }))
+        setQuery(prev => ({ ...prev, limit: itemPerPage, skip: 0, available: router.query.available as string ?? undefined }))
     }, [router.query.available])
 
     useEffect(() => {
@@ -33,7 +33,7 @@ function Index() {
     }, [query])
 
     const onSearch = (q: string) => {
-        setQuery(prev => ({ ...prev, limit: itemPerPage, skip: 0 }))
+        setQuery(prev => ({ ...prev, q, limit: itemPerPage, skip: 0 }))
     }
 
     const onNextPage = () => {

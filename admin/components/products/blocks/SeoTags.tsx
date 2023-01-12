@@ -62,6 +62,7 @@ export default function SeoTags({ onChange, ...data }: IProps) {
                 <div className="flex flex-col">
                     <label htmlFor="handle" className="text-sm text-gray-600 mb-1">URL ручка</label>
                     <Input type="text" id="handle" placeholder="URL ручка" name="handle" value={ state.handle } onChange={onInputChange} />
+                    <div className="text-gray-400 text-sm mt-1">Доступ к товару по предыдущей ссылке будет потерен, что плохо для SEO</div>
                 </div>
             </div>
         </div>
