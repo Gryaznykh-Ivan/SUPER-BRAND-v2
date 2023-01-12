@@ -1,13 +1,28 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Modal from '../../portals/Modal'
 import Input from '../../inputs/Input';
+import { IImage } from '../../../types/api';
+import ImageLoader from '../../image/ImageLoader';
 
 interface IProps {
+    image: IImage;
+    onDelete: (id: string) => void;
+    onUpdate: (image: IImage) => void;
     onClose: () => void;
 }
 
-export default function MediaSetting({ onClose }: IProps) {
+export default function MediaSetting({ image, onClose, onUpdate, onDelete }: IProps) {
+    const [state, setState] = useState(image)
+
+    const mustBeSaved = useMemo(() => {
+        return Object.entries(state).some(c => c[1] !== image[c[0] as keyof IImage])
+    }, [state])
+
+
+    const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    }
 
     return (
         <Modal>
@@ -23,24 +38,32 @@ export default function MediaSetting({ onClose }: IProps) {
                     </div>
                     <div className="p-5 border-b-[1px] space-y-4">
                         <div className="relative w-full aspect-5/3">
-                            <Image fill src="/assets/images/2.jpg" className="object-contain w-full" alt="" />
+                            <Image
+                                loader={ImageLoader}
+                                className="object-contain"
+                                fill
+                                sizes="1000px"
+                                src={image.src}
+                                alt={image.alt}
+                                draggable={false}
+                            />
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="source" className="text-sm text-gray-600 mb-1">Media source</label>
-                            <Input type="text" id="source" placeholder="Media source" onChange={() => { }} />
+                            <Input type="text" id="source" placeholder="Media source" name="src" value={state.src} onChange={onInputChange} />
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="alt" className="text-sm text-gray-600 mb-1">Media alt</label>
-                            <Input type="text" id="alt" placeholder="Media alt" onChange={() => { }} />
+                            <Input type="text" id="alt" placeholder="Media alt" name="alt" value={state.alt} onChange={onInputChange} />
                         </div>
                     </div>
                     <div className="p-5">
                         <div className="flex justify-between">
                             <div className="">
-                                <button className="border-red-700 border-[1px] text-red-700 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white">Удалить</button>
+                                <button className="border-red-700 border-[1px] text-red-700 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={() => onDelete(state.id)}>Удалить</button>
                             </div>
                             <div className="flex justify-end">
-                                <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Сохранить</button>
+                                <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={ () => onUpdate(state) }>Сохранить</button>
                             </div>
                         </div>
                     </div>

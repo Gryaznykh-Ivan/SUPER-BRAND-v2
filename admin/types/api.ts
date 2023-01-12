@@ -61,7 +61,7 @@ export interface IImage {
     id: string;
     alt: string;
     src: string;
-    position: string;
+    position: number;
 }
 
 export interface IProductOption {
@@ -85,6 +85,7 @@ export interface IProductSearch {
 }
 
 export interface IProduct {
+    id: string;
     title: string;
     available: boolean;
     handle: string;
@@ -291,7 +292,7 @@ export type ProductDeleteRequest = {
 export type ProductUploadImagesResponse = IResponse<void>
 export type ProductUploadImagesRequest = {
     productId: string;
-    images: File[];
+    formData: FormData;
 }
 
 export type ProductUpdateImageResponse = IResponse<void>

@@ -40,10 +40,10 @@ export const productService = api.injectEndpoints({
             }),
         }),
         uploadImages: builder.mutation<ProductUploadImagesResponse, ProductUploadImagesRequest>({
-            query: ({ productId, ...rest }) => ({
+            query: ({ productId, formData }) => ({
                 url: `products/${productId}/uploadImages`,
                 method: "POST",
-                body: rest
+                body: formData
             }),
             invalidatesTags: ["PRODUCT"]
         }),

@@ -1,5 +1,4 @@
-import { Optional } from "@nestjs/common";
-import { IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 
 export class CreateOptionDto {
@@ -9,12 +8,12 @@ export class CreateOptionDto {
 }
 
 export class UpdateOptionDto {
-    @Optional()
+    @IsOptional()
     @IsNotEmpty()
     @IsString()
     title: string;
 
-    @Optional()
+    @IsOptional()
     @IsInt()
     position: number;
 }

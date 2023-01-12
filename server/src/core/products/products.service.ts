@@ -20,6 +20,7 @@ export class ProductService {
         const product = await this.prisma.product.findUnique({
             where: { id: productId },
             select: {
+                id: true,
                 title: true,
                 description: true,
                 available: true,
@@ -293,7 +294,7 @@ export class ProductService {
 
     async removeImage(imageId: string) {
         try {
-            const result = await this.prisma.$transaction(async tx => {
+            await this.prisma.$transaction(async tx => {
                 const removedImage = await tx.image.delete({
                     where: { id: imageId },
                     select: {
@@ -301,23 +302,30 @@ export class ProductService {
                     }
                 })
 
-                const images = await this.prisma.image.findMany({
+                const images = await tx.image.findMany({
                     where: { productId: removedImage.productId },
                     select: { id: true },
                     orderBy: [{ position: 'asc' }]
                 })
 
-                await this.prisma.image.updateMany({
-                    data: images.map((image, index) => ({ id: image.id, position: index }))
-                })
-
-                return true
+                for (const [index, image] of Object.entries(images)) {
+                    console.log(index, image)
+                    await tx.image.update({
+                        where: {
+                            id: image.id
+                        },
+                        data: {
+                            position: +index
+                        }
+                    })
+                }
             })
 
             return {
-                success: result,
+                success: true,
             }
         } catch (e) {
+            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -425,9 +433,17 @@ export class ProductService {
                     orderBy: [{ position: 'asc' }]
                 })
 
-                await tx.productOption.updateMany({
-                    data: options.map((option, index) => ({ id: option.id, position: index }))
-                })
+
+                for (const [index, option] of Object.entries(options)) {
+                    await tx.productOption.update({
+                        where: {
+                            id: option.id
+                        },
+                        data: {
+                            position: +index
+                        }
+                    })
+                }
 
                 await tx.variant.updateMany({
                     where: {
@@ -443,6 +459,7 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
+            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

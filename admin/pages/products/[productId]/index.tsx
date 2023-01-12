@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import MainLayout from '../../../components/layouts/Main'
 import Link from 'next/link'
 import GeneralInfo from '../../../components/products/blocks/GeneralInfo'
-import Media from '../../../components/media/blocks/Media'
 import SeoTags from '../../../components/products/blocks/SeoTags'
 import Status from '../../../components/products/blocks/Status'
 import OrganizationInfo from '../../../components/products/blocks/OrganizationInfo'
@@ -13,6 +12,7 @@ import OptionList from '../../../components/products/blocks/OptionList'
 import { useDeleteProductMutation, useGetProductByIdQuery, useUpdateProductMutation } from '../../../services/productService'
 import { IErrorResponse, ProductUpdateRequest } from '../../../types/api'
 import { toast } from 'react-toastify'
+import Media from '../../../components/products/blocks/Media'
 
 function Index() {
     const router = useRouter()
@@ -119,8 +119,14 @@ function Index() {
                                     description={data.data.description}
                                     onChange={onCollectChanges}
                                 />
-                                <Media />
-                                <OptionList />
+                                <Media
+                                    productId={ data.data.id }
+                                    images={data.data.images}
+                                />
+                                <OptionList
+                                    productId={ data.data.id }
+                                    options={data.data.productOptions}
+                                />
                                 <SeoTags
                                     metaTitle={data.data.metaTitle}
                                     metaDescription={data.data.metaDescription}

@@ -7,26 +7,7 @@ interface Item {
     alt: string;
     src: string;
     position: number;
-    file?: File;
 }
-
-// {
-//     id: "1",
-//     src: "/assets/images/1.jpg",
-//     position: 1,
-// }, {
-//     id: "2",
-//     src: "/assets/images/2.jpg",
-//     position: 2,
-// }, {
-//     id: "3",
-//     src: "/assets/images/3.jpg",
-//     position: 3,
-// }, {
-//     id: "4",
-//     src: "/assets/images/4.jpg",
-//     position: 4,
-// }
 
 interface IProps {
 
@@ -37,8 +18,23 @@ export default function Media() {
     const [items, setItems] = useState<Item[]>([{
         id: "1",
         src: "/assets/images/1.jpg",
-        alt: "123",
-        position: 1
+        position: 0,
+        alt: ""
+    }, {
+        id: "2",
+        src: "/assets/images/2.jpg",
+        position: 1,
+        alt: ""
+    }, {
+        id: "3",
+        src: "/assets/images/3.jpg",
+        position: 2,
+        alt: ""
+    }, {
+        id: "4",
+        src: "/assets/images/4.jpg",
+        position: 3,
+        alt: ""
     }])
 
     const onDragStart = (item: Item) => {
@@ -49,40 +45,65 @@ export default function Media() {
         setSelected(null)
     }
 
-    const onDragOver = (e: React.DragEvent, item: Item) => {
+    const onDragOver = (e: React.DragEvent, item: Item, index: number) => {
         e.preventDefault();
 
-        if (item.id === selected?.id) return
-        
-        setItems(prev => prev.map((current, index) => {
-            if (selected !== null) {
+        if (selected === null) return
+        if (item.id === selected.id) return
+
+        if (index !== selected.position) {
+            const sortedItems = [...items].sort((a, b) => a.position - b.position)
+            const mappedItems = sortedItems.map((current) => {
                 if (current.id === item.id) {
-                    return { ...selected, position: index }
+                    return selected
                 }
 
                 if (current.id === selected.id) {
-                    return { ...item, position: index }
+                    return item
                 }
-            }
 
-            return { ...current, position: index }
-        }))
+                return current
+            })
 
+            setItems(mappedItems)
+        } else {
+            setItems([{
+                id: "1",
+                src: "/assets/images/1.jpg",
+                position: 0,
+                alt: ""
+            }, {
+                id: "2",
+                src: "/assets/images/2.jpg",
+                position: 1,
+                alt: ""
+            }, {
+                id: "3",
+                src: "/assets/images/3.jpg",
+                position: 2,
+                alt: ""
+            }, {
+                id: "4",
+                src: "/assets/images/4.jpg",
+                position: 3,
+                alt: ""
+            }])
+        }
     }
 
     const onFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setItems(prev =>
-            ([
-                ...prev,
-                ...Array.from(e.target.files || []).map((file, i) => ({
-                    id: `new${Date.now()}${i}`,
-                    alt: "",
-                    src: URL.createObjectURL(file),
-                    position: -1,
-                    file: file
-                }))
-            ]).map((c, i) => ({ ...c, position: i }))
-        )
+        // setItems(prev =>
+        //     ([
+        //         ...prev,
+        //         ...Array.from(e.target.files || []).map((file, i) => ({
+        //             id: `new${Date.now()}${i}`,
+        //             alt: "",
+        //             src: URL.createObjectURL(file),
+        //             position: -1,
+        //             file: file
+        //         }))
+        //     ]).map((c, i) => ({ ...c, position: i }))
+        // )
     }
 
     return (
@@ -96,7 +117,7 @@ export default function Media() {
                             draggable={true}
                             onDragStart={() => onDragStart(item)}
                             onDragEnd={onDragEnd}
-                            onDragOver={(e) => onDragOver(e, item)}
+                            onDragOver={(e) => onDragOver(e, item, index)}
                         >
                             <div className="relative group">
                                 <MediaCard className="aspect-square cursor-pointer" src={item.src} alt="" />

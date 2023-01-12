@@ -101,13 +101,14 @@ function Index() {
                                                 className="border-b-[1px] hover:bg-gray-100 cursor-pointer"
                                                 onClick={() => router.push(`/products/${product.id}`)}
                                             >
-                                                <td className="py-2">
-                                                    <div className="relative w-20 aspect-5/3">
+                                                <td className="py-2 px-1">
+                                                    <div className="relative w-20 aspect-5/3 rounded overflow-hidden">
                                                         {product.image !== null ?
                                                             <Image
+                                                                className="object-contain"
                                                                 loader={ImageLoader}
                                                                 fill
-                                                                sizes="(min-width: 80em) 30vw, 47vw"
+                                                                sizes="200px"
                                                                 src={product.image.src}
                                                                 alt={product.image.alt}
                                                             />
