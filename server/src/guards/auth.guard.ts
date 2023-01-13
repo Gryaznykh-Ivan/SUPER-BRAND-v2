@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
             throw new HttpException("Ваша роль не соответствует требованиям", HttpStatus.FORBIDDEN)
         }
 
-        if (permissions.length !== 0 && permissions.some(permission => request.user.permissions.includes(permission)) === false) {
+        if (permissions.length !== 0 && permissions.every(permission => request.user.permissions.includes(permission)) === false) {
             throw new HttpException("У вас нет прав на действие", HttpStatus.FORBIDDEN)
         }
 

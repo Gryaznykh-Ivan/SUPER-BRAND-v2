@@ -70,9 +70,43 @@ export interface IProductOption {
     position: number;
 }
 
+export interface IOption {
+    id: string;
+    title: string;
+    position: number;
+    option: number;
+}
+
 export interface ICollection {
     id: string;
     title: string;
+}
+
+export interface IVariantSearch {
+    id: string;
+    option0: string;
+    option1: string;
+    option2: string;
+    barcode: string;
+    SKU: string;
+    price: number;
+    image: IImage | null;
+}
+
+export interface IVariants {
+    variants: IVariantSearch[];
+    options: IOption[];
+}
+
+export interface IVariant {
+    id: string;
+    option0: string;
+    option1: string;
+    option2: string;
+    barcode: string;
+    SKU: string;
+    options: IOption[];
+    images: IImage[];
 }
 
 export interface IProductSearch {
@@ -157,8 +191,8 @@ export type UserCreateRequest = {
 }
 
 export type UserUpdateResponse = IResponse<void>
-export type UserUpdateRequest = Partial<{
-    userId: string;
+export type UserUpdateRequest = {
+    userId?: string;
     email?: string | null;
     phone?: string | null;
     lastName?: string | null;
@@ -177,7 +211,7 @@ export type UserUpdateRequest = Partial<{
     createAddresses?: Omit<IUserAddress, "id">[];
     updateAddresses?: IUserAddress[];
     deleteAddresses?: string[];
-}>
+}
 
 export type UserAddAddressResponse = IResponse<void>
 export type UserAddAddressRequest = {
@@ -271,8 +305,8 @@ export type ProductCreateRequest = {
 }
 
 export type ProductUpdateResponse = IResponse<void>
-export type ProductUpdateRequest = Partial<{
-    productId: string
+export type ProductUpdateRequest = {
+    productId?: string
     title?: string;
     handle?: string;
     available?: boolean;
@@ -282,7 +316,7 @@ export type ProductUpdateRequest = Partial<{
     vendor?: string | null;
     connectCollections?: Pick<ICollection, "id">[];
     disconnectCollections?: Pick<ICollection, "id">[];
-}>
+}
 
 export type ProductDeleteResponse = IResponse<void>
 export type ProductDeleteRequest = {
@@ -329,3 +363,69 @@ export type ProductRemoveOptionRequest = {
     productId: string;
     optionId: string;
 }
+
+
+
+// variantService
+
+export type VariantGetAllResponse = IResponse<IVariants>
+export type VariantGetAllRequest = {
+    productId: string
+}
+
+export type VariantGetOptionsResponse = IResponse<IOption[]>
+export type VariantGetOptionsRequest = {
+    productId: string
+}
+
+export type VariantGetByIdResponse = IResponse<IVariant>
+export type VariantGetByIdRequest = {
+    variantId: string
+}
+
+export type VariantCreateResponse = IResponse<string>
+export type VariantCreateRequest = {
+    productId?: string;
+    option0?: string | null;
+    option1?: string | null;
+    option2?: string | null;
+    barcode?: string | null;
+    SKU?: string | null;
+}
+
+export type VariantUpdateResponse = IResponse<void>
+export type VariantUpdateRequest = {
+    variantId?: string;
+    option0?: string | null;
+    option1?: string | null;
+    option2?: string | null;
+    barcode?: string | null;
+    SKU?: string | null;
+}
+
+export type VariantDeleteResponse = IResponse<void>
+export type VariantDeleteRequest = {
+    variantId: string;
+}
+
+export type VariantUploadImagesResponse = IResponse<void>
+export type VariantUploadImagesRequest = {
+    variantId: string;
+    formData: FormData;
+}
+
+export type VariantUpdateImageResponse = IResponse<void>
+export type VariantUpdateImageRequest = {
+    variantId: string;
+    imageId: string;
+    src?: string;
+    alt?: string;
+    position?: number;
+}
+
+export type VariantRemoveImageResponse = IResponse<void>
+export type VariantRemoveImageRequest = {
+    variantId: string;
+    imageId: string;
+}
+

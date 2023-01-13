@@ -2,7 +2,7 @@ import { Type } from "class-transformer";
 import { ArrayMaxSize, IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
 import { ConnectCollectionDto } from "./collections.dto";
 
-export class CreateProductnDto {
+export class CreateProductDto {
     @IsNotEmpty()
     @IsString()
     title: string;

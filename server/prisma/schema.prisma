@@ -280,7 +280,6 @@ model Image {
 
 model Variant {
     id        String         @id @default(cuid())
-    title     String
     option0   String?
     option1   String?
     option2   String?

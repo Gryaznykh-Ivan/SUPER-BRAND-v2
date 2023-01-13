@@ -51,7 +51,7 @@ const baseQueryWithLogic: BaseQueryFn<
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: baseQueryWithLogic,
-    tagTypes: ["USER", "USERS", "PRODUCT", "PRODUCTS"],
+    tagTypes: ["USER", "USERS", "PRODUCT", "PRODUCTS", "VARIANTS", "VARIANT", "OPTIONS"],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {
             return action.payload[reducerPath];

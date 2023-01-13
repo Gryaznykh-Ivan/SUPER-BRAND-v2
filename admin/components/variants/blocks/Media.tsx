@@ -1,22 +1,22 @@
 import Image from 'next/image'
 import React, { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify';
-import { useRemoveProductImageMutation, useUpdateProductImageMutation, useUploadProductImagesMutation } from '../../../services/productService';
+import { useRemoveVariantImageMutation, useUpdateVariantImageMutation, useUploadVariantImagesMutation } from '../../../services/variantService';
 import { IErrorResponse, IImage } from '../../../types/api';
 import MediaCard from '../../media/cards/MediaCard';
 
 interface IProps {
-    productId: string;
+    variantId: string;
     images: IImage[];
 }
 
-export default function Media({ productId, images }: IProps) {
+export default function Media({ variantId, images }: IProps) {
     const [selected, setSelected] = useState<IImage | null>(null)
     const [items, setItems] = useState<IImage[]>(images)
 
-    const [uploadImages, { isSuccess: isUploadImagesSuccess, isError: isUploadImagesError, error: uploadImageError }] = useUploadProductImagesMutation()
-    const [updateImage, { isSuccess: isUpdateImageSuccess, isError: isUpdateImageError, error: updateImageError }] = useUpdateProductImageMutation()
-    const [removeImage, { isSuccess: isRemoveImageSuccess, isError: isRemoveImageError, error: removeImageError }] = useRemoveProductImageMutation()
+    const [uploadImages, { isSuccess: isUploadImagesSuccess, isError: isUploadImagesError, error: uploadImageError }] = useUploadVariantImagesMutation()
+    const [updateImage, { isSuccess: isUpdateImageSuccess, isError: isUpdateImageError, error: updateImageError }] = useUpdateVariantImageMutation()
+    const [removeImage, { isSuccess: isRemoveImageSuccess, isError: isRemoveImageError, error: removeImageError }] = useRemoveVariantImageMutation()
 
     useEffect(() => {
         setItems(images)
@@ -75,7 +75,7 @@ export default function Media({ productId, images }: IProps) {
 
         const currentPosition = items.findIndex(c => c.id === selected.id);
         if (selected.position !== currentPosition) {
-            await updateImage({ productId, imageId: selected.id, position: currentPosition })
+            await updateImage({ variantId, imageId: selected.id, position: currentPosition })
         }
 
         setSelected(null)
@@ -116,15 +116,15 @@ export default function Media({ productId, images }: IProps) {
             formData.append('images', file)
         }
 
-        await uploadImages({ productId, formData: formData })
+        await uploadImages({ variantId, formData: formData })
     }
 
     const onUpdateImage = async (image: IImage) => {
-        await updateImage({ productId, imageId: image.id, src: image.src, alt: image.alt })
+        await updateImage({ variantId, imageId: image.id, src: image.src, alt: image.alt })
     }
 
     const onDeleteImage = async (id: string) => {
-        await removeImage({ productId, imageId: id })
+        await removeImage({ variantId, imageId: id })
     }
 
     return (

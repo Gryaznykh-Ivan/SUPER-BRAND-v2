@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { OfferStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateProductnDto } from './dto/createProduct.dto';
+import { CreateProductDto } from './dto/createProduct.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
 import { firstValueFrom } from 'rxjs';
@@ -135,7 +135,7 @@ export class ProductService {
         }
     }
 
-    async createProduct(data: CreateProductnDto) {
+    async createProduct(data: CreateProductDto) {
         const createProductQuery = {
             title: data.title,
             description: data.description,
@@ -309,7 +309,6 @@ export class ProductService {
                 })
 
                 for (const [index, image] of Object.entries(images)) {
-                    console.log(index, image)
                     await tx.image.update({
                         where: {
                             id: image.id
@@ -325,7 +324,6 @@ export class ProductService {
                 success: true,
             }
         } catch (e) {
-            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

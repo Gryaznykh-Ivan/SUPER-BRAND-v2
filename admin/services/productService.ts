@@ -39,7 +39,7 @@ export const productService = api.injectEndpoints({
                 method: "DELETE"
             }),
         }),
-        uploadImages: builder.mutation<ProductUploadImagesResponse, ProductUploadImagesRequest>({
+        uploadProductImages: builder.mutation<ProductUploadImagesResponse, ProductUploadImagesRequest>({
             query: ({ productId, formData }) => ({
                 url: `products/${productId}/uploadImages`,
                 method: "POST",
@@ -47,7 +47,7 @@ export const productService = api.injectEndpoints({
             }),
             invalidatesTags: ["PRODUCT"]
         }),
-        updateImage: builder.mutation<ProductUpdateImageResponse, ProductUpdateImageRequest>({
+        updateProductImage: builder.mutation<ProductUpdateImageResponse, ProductUpdateImageRequest>({
             query: ({ productId, imageId, ...rest }) => ({
                 url: `products/${productId}/updateImage/${imageId}`,
                 method: "PUT",
@@ -55,7 +55,7 @@ export const productService = api.injectEndpoints({
             }),
             invalidatesTags: ["PRODUCT"]
         }),
-        removeImage: builder.mutation<ProductRemoveImageResponse, ProductRemoveImageRequest>({
+        removeProductImage: builder.mutation<ProductRemoveImageResponse, ProductRemoveImageRequest>({
             query: ({ productId, imageId }) => ({
                 url: `products/${productId}/removeImage/${imageId}`,
                 method: "DELETE"
@@ -68,7 +68,7 @@ export const productService = api.injectEndpoints({
                 method: "POST",
                 body: rest
             }),
-            invalidatesTags: ["PRODUCT"]
+            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS"]
         }),
         updateOption: builder.mutation<ProductUpdateOptionResponse, ProductUpdateOptionRequest>({
             query: ({ productId, optionId, ...rest }) => ({
@@ -76,14 +76,14 @@ export const productService = api.injectEndpoints({
                 method: "PUT",
                 body: rest
             }),
-            invalidatesTags: ["PRODUCT"]
+            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS"]
         }),
         removeOption: builder.mutation<ProductRemoveOptionResponse, ProductRemoveOptionRequest>({
             query: ({ productId, optionId }) => ({
                 url: `products/${productId}/removeOption/${optionId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["PRODUCT"]
+            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS"]
         })
     })
 })
@@ -94,9 +94,9 @@ export const {
     useCreateOptionMutation,
     useCreateProductMutation,
     useDeleteProductMutation,
-    useRemoveImageMutation,
-    useUploadImagesMutation,
-    useUpdateImageMutation,
+    useRemoveProductImageMutation,
+    useUploadProductImagesMutation,
+    useUpdateProductImageMutation,
     useUpdateOptionMutation,
     useRemoveOptionMutation,
     useUpdateProductMutation

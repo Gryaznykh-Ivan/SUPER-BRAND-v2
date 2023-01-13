@@ -1,9 +1,10 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { Right, Role } from '@prisma/client';
 import { Auth } from 'src/decorators/auth.decorator';
 import { Token } from 'src/decorators/token.decorator';
 import { ParseBooleanPipe } from 'src/pipes/parse-boolean.pipe';
-import { CreateProductnDto } from './dto/createProduct.dto';
+import { CreateProductDto } from './dto/createProduct.dto';
 import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
@@ -17,6 +18,7 @@ export class ProductController {
     ) { }
 
     @Get('search')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
     getProductsBySearch(
         @Query('q') q: string,
         @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
@@ -27,6 +29,7 @@ export class ProductController {
     }
 
     @Get(':productId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
     getProductById(
         @Param('productId') productId: string
     ) {
@@ -35,15 +38,15 @@ export class ProductController {
 
 
     @Post('create')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_CREATE])
     createProduct(
-        @Body() data: CreateProductnDto
+        @Body() data: CreateProductDto
     ) {
         return this.productService.createProduct(data)
     }
 
     @Post(':productId/uploadImages')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE, Right.MEDIA_UPLOAD])
     @UseInterceptors(FilesInterceptor('images'))
     uploadImages(
         @Param('productId') productId: string,
@@ -54,7 +57,7 @@ export class ProductController {
     }
 
     @Put(':productId/updateImage/:imageId')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
     updateImage(
         @Param('productId') productId: string,
         @Param('imageId') imageId: string,
@@ -64,7 +67,7 @@ export class ProductController {
     }
 
     @Delete(':productId/removeImage/:imageId')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE, Right.MEDIA_DELETE])
     removeImage(
         @Param('imageId') imageId: string,
     ) {
@@ -72,7 +75,7 @@ export class ProductController {
     }
 
     @Post(':productId/createOption')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
     createOption(
         @Param('productId') productId: string,
         @Body() data: CreateOptionDto
@@ -81,7 +84,7 @@ export class ProductController {
     }
 
     @Put(':productId/updateOption/:optionId')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
     updateOption(
         @Param('productId') productId: string,
         @Param('optionId') optionId: string,
@@ -91,7 +94,7 @@ export class ProductController {
     }
 
     @Delete(':productId/removeOption/:optionId')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
     removeOption(
         @Param('optionId') optionId: string,
     ) {
@@ -99,7 +102,7 @@ export class ProductController {
     }
 
     @Put(':productId')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
     updateProduct(
         @Param('productId') productId: string,
         @Body() data: UpdateProductDto
@@ -108,7 +111,7 @@ export class ProductController {
     }
 
     @Delete(':productId')
-    @Auth()
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_DELETE])
     removeProduct(
         @Param('productId') productId: string,
     ) {

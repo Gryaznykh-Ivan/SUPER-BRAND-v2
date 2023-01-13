@@ -104,7 +104,7 @@ function Index() {
                                 <h1 className="text-xl font-medium">{data.data.title}</h1>
                             </div>
                             <div className="flex justify-end">
-                                <Link href="http://google.com" className="hover:bg-gray-300 p-2 text-gray-700 font-medium rounded-md">
+                                <Link href={`http://sb.com/${data.data.handle}`} target="_blank" className="hover:bg-gray-300 p-2 text-gray-700 font-medium rounded-md">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7956 9 12 9C11.2044 9 10.4413 9.31607 9.87868 9.87868C9.31607 10.4413 9 11.2044 9 12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         <path d="M2.45801 12C3.73201 7.943 7.52301 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.52301 19 3.73201 16.057 2.45801 12Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -120,11 +120,11 @@ function Index() {
                                     onChange={onCollectChanges}
                                 />
                                 <Media
-                                    productId={ data.data.id }
+                                    productId={data.data.id}
                                     images={data.data.images}
                                 />
                                 <OptionList
-                                    productId={ data.data.id }
+                                    productId={data.data.id}
                                     options={data.data.productOptions}
                                 />
                                 <SeoTags
@@ -144,7 +144,9 @@ function Index() {
                                     collections={data.data.collections}
                                     onChange={onCollectChanges}
                                 />
-                                <VariantList isAddNew={true} />
+                                <VariantList
+                                    productId={data.data.id}
+                                />
                             </div>
                         </div>
                         <div className={`flex justify-between rounded-md ${mustBeSaved && "sticky left-10 right-0 bottom-4 bg-gray-800 p-4 transition-colors duration-200"}`}>
