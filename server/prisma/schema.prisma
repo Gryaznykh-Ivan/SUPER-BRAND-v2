@@ -243,7 +243,7 @@ model Product {
     collections      Collection[]
     variants         Variant[]
     productIsFavored FavoriteProduct[]
-    productOptions   ProductOption[]
+    options          Option[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
 
@@ -251,15 +251,29 @@ model Product {
     @@fulltext([vendor])
 }
 
-model ProductOption {
-    id        String   @id @default(cuid())
+model Option {
+    id        String        @id @default(cuid())
     title     String
     option    Int
     position  Int
-    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    values    OptionValue[]
+    product   Product       @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+
+    @@unique([productId, title])
+}
+
+model OptionValue {
+    id        String   @id @default(cuid())
+    title     String
+    option    Option   @relation(fields: [optionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    optionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@unique([optionId, title])
 }
 
 model Image {
@@ -280,11 +294,11 @@ model Image {
 
 model Variant {
     id        String         @id @default(cuid())
+    SKU       String?
+    barcode   String?
     option0   String?
     option1   String?
     option2   String?
-    SKU       String?
-    barcode   String?
     product   Product        @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
     images    Image[]
@@ -292,8 +306,6 @@ model Variant {
     orders    OrderProduct[]
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
-
-    @@unique([option0, option1, option2])
 }
 
 model Offer {

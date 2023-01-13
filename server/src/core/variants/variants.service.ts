@@ -17,7 +17,7 @@ export class VariantService {
     ) { }
 
     async getVariants(productId: string) {
-        const options = await this.prisma.productOption.findMany({
+        const options = await this.prisma.option.findMany({
             where: { productId },
             select: {
                 id: true,
@@ -83,7 +83,7 @@ export class VariantService {
     }
 
     async getOptions(productId: string) {
-        const options = await this.prisma.productOption.findMany({
+        const options = await this.prisma.option.findMany({
             where: { productId },
             select: {
                 id: true,
@@ -123,7 +123,7 @@ export class VariantService {
                 },
                 product: {
                     select: {
-                        productOptions: {
+                        options: {
                             select: {
                                 id: true,
                                 title: true,
@@ -149,7 +149,7 @@ export class VariantService {
             barcode: variant.barcode,
             SKU: variant.SKU,
             images: variant.images,
-            options: variant.product.productOptions
+            options: variant.product.options
         }
 
         return {
@@ -159,6 +159,43 @@ export class VariantService {
     }
 
     async createVariant(data: CreateVariantDto) {
+        const existVariant = await this.prisma.variant.findFirst({
+            where: {
+                option0: data.option0,
+                option1: data.option1,
+                option2: data.option2,
+                productId: data.productId
+            },
+        })
+
+        if (existVariant !== null) {
+            throw new HttpException("Вариант должен быть уникальным", HttpStatus.BAD_REQUEST)
+        }
+
+        // проверка на соответствие опциям
+        const availableOptionValues = await this.prisma.option.findMany({
+            where: { productId: data.productId },
+            select: {
+                title: true,
+                option: true,
+                values: {
+                    select: {
+                        title: true
+                    }
+                }
+            }
+        })
+
+        for (let i = 0; i < 3; i++) {
+            if (data[`option${i}`] !== undefined) {
+                const option = availableOptionValues.find(c => c.option === i)
+
+                if (option === undefined || option.values.some(c => c.title === data[`option${i}`]) === false) {
+                    throw new HttpException(`${option.title} не соответствует опциям`, HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+
         const createVariantQuery = {
             option0: data.option0,
             option1: data.option1,
@@ -167,7 +204,6 @@ export class VariantService {
             barcode: data.barcode,
             productId: data.productId
         }
-
 
         try {
             const variant = await this.prisma.variant.create({
@@ -179,12 +215,6 @@ export class VariantService {
                 data: variant.id
             }
         } catch (e) {
-            if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                if (e.code === 'P2002') {
-                    throw new HttpException("Такой вариант уже существует", HttpStatus.BAD_REQUEST)
-                }
-            }
-
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -343,6 +373,38 @@ export class VariantService {
 
 
     async updateVariant(variantId: string, data: UpdateVariantDto) {
+        // проверка на соответствие опциям
+        const availableOptionValues = await this.prisma.option.findMany({
+            where: {
+                product: {
+                    variants: {
+                        some: {
+                            id: variantId
+                        }
+                    }
+                }
+            },
+            select: {
+                title: true,
+                option: true,
+                values: {
+                    select: {
+                        title: true
+                    }
+                }
+            }
+        })
+
+        for (let i = 0; i < 3; i++) {
+            if (data[`option${i}`] !== undefined) {
+                const option = availableOptionValues.find(c => c.option === i)
+
+                if (option === undefined || option.values.some(c => c.title === data[`option${i}`]) === false) {
+                    throw new HttpException(`${option.title} не соответствует опциям`, HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+
         const updateVariantQuery = {
             option0: data.option0,
             option1: data.option1,
@@ -351,26 +413,40 @@ export class VariantService {
             barcode: data.barcode,
         }
 
-
         try {
-            await this.prisma.variant.update({
-                where: {
-                    id: variantId
-                },
-                data: updateVariantQuery
+            await this.prisma.$transaction(async tx => {
+                const variant = await tx.variant.update({
+                    where: {
+                        id: variantId
+                    },
+                    data: updateVariantQuery,
+                    select: {
+                        option0: true,
+                        option1: true,
+                        option2: true
+                    }
+                })
+
+                const existCheck = await tx.variant.findMany({
+                    where: {
+                        option0: variant.option0,
+                        option1: variant.option1,
+                        option2: variant.option2,
+                    },
+                    take: 2
+                })
+
+                if (existCheck.length > 1) {
+                    throw new Error()
+                }
             })
+
 
             return {
                 success: true
             }
         } catch (e) {
-            if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                if (e.code === 'P2002') {
-                    throw new HttpException("Такой вариант уже существует", HttpStatus.BAD_REQUEST)
-                }
-            }
-
-            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException("Вариант должен быть уникальным", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

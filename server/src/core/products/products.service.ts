@@ -45,11 +45,17 @@ export class ProductService {
                         title: true
                     }
                 },
-                productOptions: {
+                options: {
                     select: {
                         id: true,
                         title: true,
-                        position: true
+                        position: true,
+                        values: {
+                            select: {
+                                id: true,
+                                title: true,
+                            }
+                        }
                     },
                     orderBy: {
                         position: 'asc'
@@ -330,7 +336,7 @@ export class ProductService {
 
 
     async createOption(productId: string, data: CreateOptionDto) {
-        const options = await this.prisma.productOption.findMany({
+        const options = await this.prisma.option.findMany({
             where: { productId },
             select: { option: true },
             orderBy: [{ option: 'asc' }]
@@ -349,37 +355,175 @@ export class ProductService {
         }
 
         try {
-            await this.prisma.productOption.create({
-                data: {
-                    title: data.title,
-                    option: optionNumber,
-                    position: options.length,
-                    productId: productId
-                }
+            await this.prisma.$transaction(async tx => {
+                const option = await tx.option.create({
+                    data: {
+                        title: data.title,
+                        option: optionNumber,
+                        position: options.length,
+                        productId: productId,
+                        values: {
+                            create: {
+                                title: "NEW"
+                            }
+                        }
+                    }
+                })
+
+                await tx.variant.updateMany({
+                    where: { [`option${option.option}`]: null, productId },
+                    data: {
+                        [`option${option.option}`]: "NEW"
+                    }
+                })
             })
 
             return {
                 success: true
             }
         } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === 'P2002') {
+                    throw new HttpException("Такая опция уже существует", HttpStatus.BAD_REQUEST)
+                }
+            }
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
     async updateOption(productId: string, optionId: string, data: UpdateOptionDto) {
-        try {
-            if (data.title !== undefined) {
-                await this.prisma.productOption.update({
-                    where: { id: optionId },
-                    data: {
-                        title: data.title,
-                    }
-                })
-            }
+        const OptionUpdateQuery = {
+            title: data.title
+        }
 
-            if (data.position !== undefined) {
-                await this.prisma.$transaction(async tx => {
-                    const current = await tx.productOption.findFirst({
+        if (data.createOptionValues !== undefined) {
+            Object.assign(OptionUpdateQuery, {
+                values: {
+                    createMany: {
+                        data: data.createOptionValues
+                    }
+                }
+            })
+        }
+
+        try {
+            await this.prisma.$transaction(async tx => {
+                await tx.option.update({
+                    where: { id: optionId },
+                    data: OptionUpdateQuery
+                })
+
+                if (data.updateOptionValues !== undefined || data.deleteOptionValues !== undefined) {
+                    for (const { id, title } of data.updateOptionValues ?? []) {
+                        const optionValue = await tx.optionValue.findFirst({
+                            where: { id },
+                            select: {
+                                title: true,
+                                option: {
+                                    select: {
+                                        option: true
+                                    }
+                                }
+                            }
+                        })
+
+                        await tx.optionValue.update({
+                            where: { id },
+                            data: {
+                                title
+                            }
+                        })
+
+                        await tx.variant.updateMany({
+                            where: { [`option${optionValue.option.option}`]: optionValue.title },
+                            data: {
+                                [`option${optionValue.option.option}`]: title
+                            }
+                        })
+                    }
+
+                    for (const id of data.deleteOptionValues ?? []) {
+                        const deletedOptionValue = await tx.optionValue.delete({
+                            where: { id },
+                            select: {
+                                title: true,
+                                option: {
+                                    select: {
+                                        option: true
+                                    }
+                                }
+                            }
+                        })
+
+                        await tx.variant.deleteMany({
+                            where: { [`option${deletedOptionValue.option.option}`]: deletedOptionValue.title },
+                        })
+                    }
+                }
+
+                if (data.createOptionValues !== undefined && data.createOptionValues.length !== 0) {
+                    // const allOptions = await tx.option.findMany({
+                    //     where: {
+                    //         productId
+                    //     },
+                    //     select: {
+                    //         option: true,
+                    //         values: {
+                    //             select: {
+                    //                 title: true
+                    //             }
+                    //         },
+                    //     },
+                    //     orderBy: [{ option: 'asc' }]
+                    // })
+
+                    // // проверка количества вариантов
+                    // const variantsQuantity = allOptions.reduce((a, c) => {
+                    //     return a * c.values.length
+                    // }, 1)
+
+                    // if (variantsQuantity > 100) {
+                    //     throw new HttpException("Максимальное количество вариантов 100", HttpStatus.BAD_REQUEST)
+                    // }
+
+                    // const allVariant = []
+                    // for (const [key, option] of Object.entries(allOptions)) {
+                    //     const index = +key
+                    //     for (const optionValue of option.values) {
+                    //         if (allVariant[index] === undefined) {
+                    //             allVariant[index] = []
+                    //         }
+
+                    //         if (index > 0) {
+                    //             for (let i = 0; i < allVariant[index - 1].length; i++) {
+                    //                 if (Array.isArray(allVariant[index - 1][i]) === true) {
+                    //                     allVariant[index].push([...allVariant[index - 1][i], optionValue.title])
+                    //                 } else {
+                    //                     allVariant[index].push([allVariant[index - 1][i], optionValue.title])
+                    //                 }
+                    //             }
+                    //         } else {
+                    //             allVariant[index].push(optionValue.title)
+                    //         }
+                    //     }
+                    // }
+
+                    // console.log(allVariant)
+
+                    // await tx.variant.createMany({
+                    //     data: allVariant.at(-1).map(v => ({
+                    //         productId,
+                    //         option0: v[0],
+                    //         option1: v[1],
+                    //         option2: v[2],
+                    //     })),
+                    //     skipDuplicates: true
+                    // })
+                }
+
+                if (data.position !== undefined) {
+                    const current = await tx.option.findFirst({
                         where: {
                             id: optionId
                         },
@@ -389,7 +533,7 @@ export class ProductService {
                         }
                     })
 
-                    await tx.productOption.updateMany({
+                    await tx.option.updateMany({
                         where: {
                             productId,
                             position: data.position
@@ -399,7 +543,7 @@ export class ProductService {
                         }
                     })
 
-                    await tx.productOption.update({
+                    await tx.option.update({
                         where: {
                             id: optionId
                         },
@@ -407,57 +551,65 @@ export class ProductService {
                             position: data.position
                         }
                     })
-                })
-            }
+                }
+            })
 
             return {
                 success: true,
             }
         } catch (e) {
-            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+            console.log(e)
+            throw new HttpException("Произошла ошибка на стороне сервера. Возможно вы превысили лимит в 100 вариантов", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
     async removeOption(optionId: string) {
         try {
             await this.prisma.$transaction(async tx => {
-                const option = await tx.productOption.delete({
+                const option = await tx.option.delete({
                     where: { id: optionId }
                 })
 
-                const options = await tx.productOption.findMany({
+                const options = await tx.option.findMany({
                     where: { productId: option.productId },
                     select: { id: true },
                     orderBy: [{ position: 'asc' }]
                 })
 
+                if (options.length !== 0) {
+                    for (const [index, option] of Object.entries(options)) {
+                        await tx.option.update({
+                            where: {
+                                id: option.id
+                            },
+                            data: {
+                                position: +index
+                            }
+                        })
+                    }
 
-                for (const [index, option] of Object.entries(options)) {
-                    await tx.productOption.update({
+                    await tx.variant.updateMany({
                         where: {
-                            id: option.id
+                            productId: option.productId
                         },
                         data: {
-                            position: +index
+                            [`option${option.option}`]: null
+                        }
+                    })
+                } else {
+                    await tx.variant.deleteMany({
+                        where: {
+                            productId: option.productId
                         }
                     })
                 }
 
-                await tx.variant.updateMany({
-                    where: {
-                        productId: option.productId
-                    },
-                    data: {
-                        [`option${option.option}`]: null
-                    }
-                })
             })
 
             return {
                 success: true
             }
         } catch (e) {
-            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

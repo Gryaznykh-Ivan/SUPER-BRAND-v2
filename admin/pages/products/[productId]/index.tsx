@@ -125,7 +125,7 @@ function Index() {
                                 />
                                 <OptionList
                                     productId={data.data.id}
-                                    options={data.data.productOptions}
+                                    options={data.data.options}
                                 />
                                 <SeoTags
                                     metaTitle={data.data.metaTitle}

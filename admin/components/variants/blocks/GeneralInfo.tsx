@@ -23,7 +23,6 @@ export default function GeneralInfo({ onChange, options, ...data }: IProps) {
     })
 
     useEffect(() => {
-        console.log(data)
         setState({
             option0: data.option0 ?? "",
             option1: data.option1 ?? "",
@@ -36,8 +35,14 @@ export default function GeneralInfo({ onChange, options, ...data }: IProps) {
     useEffect(() => {
         const localState = Object.entries(state)
         const changes = localState.map(([key, value]) => {
-            if (key.startsWith("option") && options.find(c => `option${c.option}` === key) === undefined) {
-                return [key, undefined]
+            if (key.startsWith("option")) {
+                if (options.find(c => `option${c.option}` === key) === undefined) {
+                    return [key, undefined]
+                }
+
+                if (value === "") {
+                    return [key, null]
+                }
             }
 
             if (data[key as keyof typeof data] === null && value === "") {
@@ -55,6 +60,7 @@ export default function GeneralInfo({ onChange, options, ...data }: IProps) {
             return [key, value]
         })
 
+        
         onChange(Object.fromEntries(changes))
     }, [state])
 

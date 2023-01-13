@@ -68,6 +68,10 @@ export interface IProductOption {
     id: string;
     title: string;
     position: number;
+    values: {
+        id: string;
+        title: string;
+    }[]
 }
 
 export interface IOption {
@@ -129,7 +133,7 @@ export interface IProduct {
     vendor: string | null;
     images: IImage[];
     collections: ICollection[];
-    productOptions: IProductOption[];
+    options: IProductOption[];
 }
 
 
@@ -356,6 +360,9 @@ export type ProductUpdateOptionRequest = {
     optionId: string;
     title?: string;
     position?: number;
+    createOptionValues?: Pick<IProductOption, "title">[];
+    updateOptionValues?: Pick<IProductOption, "title" | "id">[];
+    deleteOptionValues?: string[];
 }
 
 export type ProductRemoveOptionResponse = IResponse<void>

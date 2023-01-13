@@ -84,9 +84,9 @@ function New() {
                             <div className="flex-1 space-y-4">
                                 <GeneralInfo
                                     options={ data.data }
-                                    option0={""}
-                                    option1={""}
-                                    option2={""}
+                                    option0={null}
+                                    option1={null}
+                                    option2={null}
                                     barcode={null}
                                     SKU={null}
                                     onChange={onCollectChanges}
