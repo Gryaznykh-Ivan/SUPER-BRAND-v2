@@ -41,7 +41,6 @@ export default function Index() {
                     </div>
                     <div className="space-y-4 lg:w-80">
                         <Status />
-                        <CollectionImage />
                     </div>
                 </div>
                 <div className="flex justify-between">

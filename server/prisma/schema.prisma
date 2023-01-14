@@ -219,13 +219,17 @@ model FavoriteProduct {
 }
 
 model Collection {
-    id          String    @id @default(cuid())
-    title       String    @unique
-    description String?
-    products    Product[]
-    images      Image[]
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
+    id              String    @id @default(cuid())
+    title           String    @unique
+    description     String?
+    metaTitle       String?
+    metaDescription String?
+    handle          String    @unique
+    available       Boolean   @default(false)
+    products        Product[]
+    images          Image[]
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
 
     @@fulltext([title])
 }

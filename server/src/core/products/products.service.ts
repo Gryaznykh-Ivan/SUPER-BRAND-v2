@@ -8,12 +8,14 @@ import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
 import { firstValueFrom } from 'rxjs';
 import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
+import { UrlService } from 'src/utils/urls/urls.service';
 
 @Injectable()
 export class ProductService {
     constructor(
         private prisma: PrismaService,
-        private http: HttpService
+        private http: HttpService,
+        private url: UrlService
     ) { }
 
     async getProductById(productId: string) {
@@ -152,7 +154,7 @@ export class ProductService {
             metaDescription: data.metaDescription
         }
 
-        createProductQuery.handle = this.getSlug(createProductQuery.handle === undefined ? createProductQuery.handle : createProductQuery.title)
+        createProductQuery.handle = this.url.getSlug(createProductQuery.handle === undefined ? createProductQuery.handle : createProductQuery.title)
 
         if (createProductQuery.metaTitle === undefined) {
             createProductQuery.metaTitle = createProductQuery.title
@@ -627,7 +629,7 @@ export class ProductService {
         }
 
         if (updateProductQuery.handle !== undefined) {
-            updateProductQuery.handle = this.getSlug(updateProductQuery.handle)
+            updateProductQuery.handle = this.url.getSlug(updateProductQuery.handle)
         }
 
         if (data.connectCollections !== undefined || data.disconnectCollections !== undefined) {
@@ -673,9 +675,5 @@ export class ProductService {
         } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
-    }
-
-    private getSlug(string: string) {
-        return string.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '')
     }
 }
