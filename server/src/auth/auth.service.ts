@@ -2,7 +2,7 @@ import { Response } from 'express'
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { NotifierService } from 'src/notifier/notifier.service';
+import { NotifierService } from 'src/utils/notifier/notifier.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SendCodeDto } from './dto/sendCode.dto';
 import { v4 as uuid } from 'uuid'
