@@ -17,7 +17,7 @@ export class CollectionController {
     ) { }
 
     @Get('search')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_READ])
     getCollectionsBySearch(
         @Query('q') q: string,
         @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
@@ -27,7 +27,7 @@ export class CollectionController {
     }
 
     @Get(':collectionId/getProducts')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_READ])
     getCollectionProducts(
         @Param('collectionId') collectionId: string,
         @Query('q') q: string,
@@ -38,7 +38,7 @@ export class CollectionController {
     }
 
     @Get(':collectionId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_READ])
     getCollectionById(
         @Param('collectionId') collectionId: string
     ) {
@@ -47,7 +47,7 @@ export class CollectionController {
 
 
     @Post('create')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_CREATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_CREATE])
     createCollection(
         @Body() data: CreateCollectionDto
     ) {
@@ -55,7 +55,7 @@ export class CollectionController {
     }
 
     @Post(':collectionId/uploadImages')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE, Right.MEDIA_UPLOAD])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE, Right.MEDIA_UPLOAD])
     @UseInterceptors(FilesInterceptor('images'))
     uploadImages(
         @Param('collectionId') collectionId: string,
@@ -66,7 +66,7 @@ export class CollectionController {
     }
 
     @Put(':collectionId/updateImage/:imageId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE])
     updateImage(
         @Param('collectionId') collectionId: string,
         @Param('imageId') imageId: string,
@@ -76,7 +76,7 @@ export class CollectionController {
     }
 
     @Delete(':collectionId/removeImage/:imageId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE, Right.MEDIA_DELETE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE, Right.MEDIA_DELETE])
     removeImage(
         @Param('imageId') imageId: string,
     ) {
@@ -84,7 +84,7 @@ export class CollectionController {
     }
 
     @Put(':collectionId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE])
     updateCollection(
         @Param('collectionId') collectionId: string,
         @Body() data: UpdateCollectionDto
@@ -93,7 +93,7 @@ export class CollectionController {
     }
 
     @Delete(':collectionId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_DELETE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_DELETE])
     removeCollection(
         @Param('collectionId') collectionId: string,
     ) {
