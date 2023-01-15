@@ -39,10 +39,6 @@ function New() {
     const onSaveChanges = async () => {
         const createProductData = changes
 
-        if (createProductData.handle === undefined) {
-            createProductData.handle = createProductData.title?.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '')
-        }
-
         const result = await createProduct(createProductData).unwrap()
         if (result.success === true) {
             router.push('/products/' + result.data)
@@ -50,7 +46,6 @@ function New() {
     }
 
     const mustBeSaved = useMemo(() => {
-        console.log(changes)
         return Object.values(changes).some(c => c !== undefined)
     }, [changes])
 

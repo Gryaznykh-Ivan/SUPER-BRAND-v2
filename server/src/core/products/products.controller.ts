@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Put, Query, UploadedFiles, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Right, Role } from '@prisma/client';
 import { Auth } from 'src/decorators/auth.decorator';
@@ -6,6 +6,7 @@ import { Token } from 'src/decorators/token.decorator';
 import { ParseBooleanPipe } from 'src/pipes/parse-boolean.pipe';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
+import { SearchProductDto } from './dto/searchProduct.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
 import { ProductService } from './products.service';
@@ -20,12 +21,9 @@ export class ProductController {
     @Get('search')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
     getProductsBySearch(
-        @Query('q') q: string,
-        @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
-        @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-        @Query('available', ParseBooleanPipe) available?: boolean
+        @Query(new ValidationPipe({ transform: true })) data: SearchProductDto
     ) {
-        return this.productService.getProductsBySearch(q, limit, skip, available)
+        return this.productService.getProductsBySearch(data)
     }
 
     @Get(':productId')

@@ -84,6 +84,18 @@ export interface IOption {
 export interface ICollection {
     id: string;
     title: string;
+    handle: string;
+    description: string | null;
+    metaTitle: string | null;
+    metaDescription: string | null;
+    images: IImage[];
+}
+
+export interface ICollectionSearch {
+    id: string;
+    title: string;
+    productsCount: number;
+    createdAt: Date
 }
 
 export interface IVariantSearch {
@@ -122,6 +134,13 @@ export interface IProductSearch {
     offersCount: number;
 }
 
+export interface ICollectionProduct {
+    id: string;
+    title: string;
+    image: IImage | null;
+    available: boolean;
+}
+
 export interface IProduct {
     id: string;
     title: string;
@@ -132,7 +151,7 @@ export interface IProduct {
     metaDescription: string | null;
     vendor: string | null;
     images: IImage[];
-    collections: ICollection[];
+    collections: Pick<ICollection, "id" | "title">[];
     options: IProductOption[];
 }
 
@@ -268,7 +287,7 @@ export type CitiesSuggestionRequest = {
     region?: string;
 }
 
-export type CollectionsSuggestionResponse = IResponse<ICollection[]>
+export type CollectionsSuggestionResponse = IResponse<Pick<ICollection, "id" | "title">[]>
 export type CollectionsSuggestionRequest = {
     q: string;
     ids?: string[];
@@ -289,6 +308,7 @@ export type ProductSearchRequest = {
     limit?: number;
     skip?: number;
     available?: string;
+    notInCollectionId?: string;
 }
 
 export type ProductGetByIdResponse = IResponse<IProduct>
@@ -436,3 +456,78 @@ export type VariantRemoveImageRequest = {
     imageId: string;
 }
 
+
+
+// collectionService
+
+export type CollectionSearchResponse = IResponse<ICollectionSearch[]>
+export type CollectionSearchRequest = {
+    q?: string;
+    limit?: number;
+    skip?: number;
+}
+
+export type CollectionGetProductsResponse = IResponse<ICollectionProduct[]>
+export type CollectionGetProductsRequest = {
+    collectionId: string
+    q?: string;
+    limit?: number;
+    skip?: number;
+}
+
+export type CollectionGetByIdResponse = IResponse<ICollection>
+export type CollectionGetByIdRequest = {
+    collectionId: string
+}
+
+export type CollectionCreateResponse = IResponse<string>
+export type CollectionCreateRequest = {
+    title?: string;
+    handle?: string;
+    available?: boolean;
+    description?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    vendor?: string | null;
+    connectProducts?: Pick<IProduct, "id">[];
+}
+
+export type CollectionUpdateResponse = IResponse<void>
+export type CollectionUpdateRequest = {
+    collectionId?: string
+    title?: string;
+    handle?: string;
+    available?: boolean;
+    description?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    vendor?: string | null;
+    connectProducts?: Pick<IProduct, "id">[];
+    disconnectProducts?: Pick<IProduct, "id">[];
+}
+
+export type CollectionDeleteResponse = IResponse<void>
+export type CollectionDeleteRequest = {
+    collectionId: string;
+}
+
+export type CollectionUploadImagesResponse = IResponse<void>
+export type CollectionUploadImagesRequest = {
+    collectionId: string;
+    formData: FormData;
+}
+
+export type CollectionUpdateImageResponse = IResponse<void>
+export type CollectionUpdateImageRequest = {
+    collectionId: string;
+    imageId: string;
+    src?: string;
+    alt?: string;
+    position?: number;
+}
+
+export type CollectionRemoveImageResponse = IResponse<void>
+export type CollectionRemoveImageRequest = {
+    collectionId: string;
+    imageId: string;
+}

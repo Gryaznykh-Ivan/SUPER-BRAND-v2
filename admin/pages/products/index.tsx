@@ -8,7 +8,6 @@ import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import NavLink from '../../components/navigation/NavLink'
 import { useLazyGetProductsBySearchQuery } from '../../services/productService'
-import { useLazyGetUsersBySearchQuery } from '../../services/userService'
 import { IErrorResponse } from '../../types/api'
 
 
@@ -88,10 +87,10 @@ function Index() {
                                     <thead>
                                         <tr className="border-b-[1px] text-sm">
                                             <th className="font-medium text-gray-500 text-start px-3 py-2 min-w-[80px] w-20"></th>
-                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Продукт</th>
-                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-40">Статус</th>
-                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-40">Наличие</th>
-                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-40">Производитель</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2 min-w-[200px]">Продукт</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-32">Статус</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-32">Наличие</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-32">Производитель</th>
                                         </tr>
                                     </thead>
                                     <tbody>

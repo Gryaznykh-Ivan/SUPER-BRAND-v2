@@ -93,7 +93,7 @@ function Index() {
                                         {data.data.map(user => (
                                             <tr
                                                 key={user.id}
-                                                className="border-b-[1px] hover:bg-gray-100 cursor-pointer"
+                                                className="border-b-[1px] hover:bg-gray-100 cursor-pointer whitespace-nowrap"
                                                 onClick={() => router.push(`/users/${user.id}`)}
                                             >
                                                 <td className="px-3 py-2 font-medium">{user.fullName}</td>

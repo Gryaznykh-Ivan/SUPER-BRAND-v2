@@ -1,15 +1,54 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Modal from '../../portals/Modal'
 import SearchInput from '../../inputs/SearchInput';
+import { useLazyGetProductsBySearchQuery } from '../../../services/productService';
+import { useRouter } from 'next/router';
 
 interface IProps {
     title: string;
+    collectionId: string;
     onClose: () => void;
 }
 
-export default function SelectProducts({ title, onClose }: IProps) {
+export default function SelectProducts({ title, collectionId, onClose }: IProps) {
+    const router = useRouter()
+    const itemPerPage = 20
+
+    const [getProductBySearch, { isError, isFetching, data, error }] = useLazyGetProductsBySearchQuery();
+    const [query, setQuery] = useState({
+        q: "",
+        limit: itemPerPage,
+        skip: 0,
+        notInCollectionId: collectionId
+    })
+
+    useEffect(() => {
+        setQuery(prev => ({ ...prev, limit: itemPerPage, skip: 0, notInCollectionId: collectionId }))
+    }, [router.query.available])
+
+    useEffect(() => {
+        getProductBySearch(query)
+    }, [query])
+
+    const onSearch = (q: string) => {
+        setQuery(prev => ({ ...prev, q, limit: itemPerPage, skip: 0 }))
+    }
+
+    const onNextPage = () => {
+        if (data?.data.length !== itemPerPage) return
+
+        setQuery(prev => ({ ...prev, skip: prev.skip + prev.limit }))
+    }
+
+    const onPrevPage = () => {
+        if (query.skip === 0) return
+
+        setQuery(prev => ({ ...prev, skip: prev.skip - prev.limit }))
+    }
+
+
     return (
         <Modal>
             <div className="fixed inset-0 bg-black bg-opacity-20 z-30 flex items-center justify-center" onClick={onClose}>

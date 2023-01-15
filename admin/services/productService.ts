@@ -31,7 +31,7 @@ export const productService = api.injectEndpoints({
                 method: "PUT",
                 body: rest
             }),
-            invalidatesTags: ["PRODUCT"]
+            invalidatesTags: ["PRODUCT", "COLLECTION"]
         }),
         deleteProduct: builder.mutation<ProductDeleteResponse, ProductDeleteRequest>({
             query: ({ productId }) => ({

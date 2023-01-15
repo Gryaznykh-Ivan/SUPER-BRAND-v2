@@ -9,6 +9,7 @@ import { UpdateProductDto } from './dto/updateProduct.dto';
 import { firstValueFrom } from 'rxjs';
 import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
 import { UrlService } from 'src/utils/urls/urls.service';
+import { SearchProductDto } from './dto/searchProduct.dto';
 
 @Injectable()
 export class ProductService {
@@ -77,17 +78,29 @@ export class ProductService {
     }
 
 
-    async getProductsBySearch(q: string, limit: number, skip: number, available: boolean) {
-        const products = await this.prisma.product.findMany({
-            where: {
-                title: {
-                    search: q ? `${q}*` : undefined,
-                },
-                vendor: {
-                    search: q ? `${q}*` : undefined,
-                },
-                available: available
+    async getProductsBySearch(data: SearchProductDto) {
+        const whereQuery = {
+            title: {
+                search: data.q ? `${data.q}*` : undefined,
             },
+            vendor: {
+                search: data.q ? `${data.q}*` : undefined,
+            },
+            available: data.available,
+        }
+
+        if (data.notInCollectionId !== undefined) {
+            Object.assign(whereQuery, {
+                collections: {
+                    none: {
+                        id: data.notInCollectionId
+                    }
+                }
+            })
+        }
+
+        const products = await this.prisma.product.findMany({
+            where: whereQuery,
             select: {
                 id: true,
                 images: {
@@ -119,8 +132,8 @@ export class ProductService {
                     }
                 }
             },
-            skip: skip,
-            take: limit > 20 ? 20 : limit,
+            skip: data.skip,
+            take: data.limit,
             orderBy: [{
                 createdAt: 'desc'
             }]
@@ -154,7 +167,7 @@ export class ProductService {
             metaDescription: data.metaDescription
         }
 
-        createProductQuery.handle = this.url.getSlug(createProductQuery.handle === undefined ? createProductQuery.handle : createProductQuery.title)
+        createProductQuery.handle = this.url.getSlug(createProductQuery.handle === undefined ? createProductQuery.title : createProductQuery.handle)
 
         if (createProductQuery.metaTitle === undefined) {
             createProductQuery.metaTitle = createProductQuery.title
@@ -178,6 +191,7 @@ export class ProductService {
                 data: product.id
             }
         } catch (e) {
+            console.log(e)
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
@@ -249,18 +263,18 @@ export class ProductService {
 
     async updateImage(productId: string, imageId: string, data: UpdateImageDto) {
         try {
-            if (data.src !== undefined || data.alt !== undefined) {
-                await this.prisma.image.update({
-                    where: { id: imageId },
-                    data: {
-                        src: data.src,
-                        alt: data.alt
-                    }
-                })
-            }
+            await this.prisma.$transaction(async tx => {
+                if (data.src !== undefined || data.alt !== undefined) {
+                    await tx.image.update({
+                        where: { id: imageId },
+                        data: {
+                            src: data.src,
+                            alt: data.alt
+                        }
+                    })
+                }
 
-            if (data.position !== undefined) {
-                await this.prisma.$transaction(async tx => {
+                if (data.position !== undefined) {
                     const current = await tx.image.findFirst({
                         where: {
                             id: imageId
@@ -289,8 +303,8 @@ export class ProductService {
                             position: data.position
                         }
                     })
-                })
-            }
+                }
+            })
 
             return {
                 success: true,

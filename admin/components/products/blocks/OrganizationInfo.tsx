@@ -6,7 +6,7 @@ import VendorsSmartInput from '../../inputs/VendorsSmartInput';
 
 interface IProps {
     vendor: string | null;
-    collections: ICollection[];
+    collections: Pick<ICollection, "id" | "title">[];
     onChange: (obj: ProductCreateRequest | ProductUpdateRequest) => void;
 }
 
@@ -51,7 +51,7 @@ export default function OrganizationInfo({ onChange, ...data }: IProps) {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
-    const onCollectionsChange = (collections: ICollection[]) => {
+    const onCollectionsChange = (collections: Pick<ICollection, "id" | "title">[]) => {
         setCollections(collections)
     }
 

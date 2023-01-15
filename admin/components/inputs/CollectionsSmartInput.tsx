@@ -9,9 +9,9 @@ interface IProps {
     className?: string;
     id?: string;
     name?: string;
-    collections: ICollection[];
+    collections: Pick<ICollection, "id" | "title">[];
     placeholder: string;
-    onChange: (e: ICollection[]) => void;
+    onChange: (e: Pick<ICollection, "id" | "title">[]) => void;
 }
 
 export default function CollectionsSmartInput({ onChange, placeholder, className, collections, id, name }: IProps) {
@@ -34,7 +34,7 @@ export default function CollectionsSmartInput({ onChange, placeholder, className
     const onFocus = () => setFocus(true)
     const onBlur = () => setFocus(false)
 
-    const onSelect = (collection: ICollection) => {
+    const onSelect = (collection: Pick<ICollection, "id" | "title">) => {
         setState("")
 
         if (collections.some(c => c.id === collection.id) === false) {
