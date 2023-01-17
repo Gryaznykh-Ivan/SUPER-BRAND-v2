@@ -317,6 +317,8 @@ model Offer {
     price             Int
     compareAtPrice    Int?
     offersPrice       Int
+    comment           String?
+    tag               String?
     status            OfferStatus      @default(OFFERED)
     variant           Variant          @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
     variantId         String

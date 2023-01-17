@@ -2,12 +2,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
-import CollectionImage from '../../../components/collections/blocks/CollectionImage'
 import GeneralInfo from '../../../components/collections/blocks/GeneralInfo'
 import CollectionProducts from '../../../components/collections/blocks/CollectionProducts'
 import Products from '../../../components/collections/blocks/CollectionProducts'
 import SeoTags from '../../../components/collections/blocks/SeoTags'
-import Status from '../../../components/collections/blocks/Status'
 import MainLayout from '../../../components/layouts/Main'
 import { CollectionUpdateRequest, IErrorResponse } from '../../../types/api'
 import { useDeleteCollectionMutation, useGetCollectionByIdQuery, useUpdateCollectionMutation } from '../../../services/collectionService'
@@ -63,7 +61,6 @@ export default function Index() {
     }
 
     const mustBeSaved = useMemo(() => {
-        console.log(changes)
         return Object.values(changes).some(c => c !== undefined)
     }, [changes])
 

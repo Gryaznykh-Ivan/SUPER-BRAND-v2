@@ -102,7 +102,7 @@ function Index() {
                                                 <td className="px-3 py-2">{user.location}</td>
                                                 <td className="px-3 py-2">{user.ordersCount}</td>
                                                 <td className="px-3 py-2">{user.offersCount}</td>
-                                                <td className="px-3 py-2 max-w-[100px] text-sm">{user.comment}</td>
+                                                <td className="px-3 py-2 max-w-[100px] text-sm text-ellipsis overflow-hidden">{user.comment}</td>
                                                 <td className="px-3 py-2">{new Date(user.createdAt).toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" })}</td>
                                             </tr>
                                         ))}

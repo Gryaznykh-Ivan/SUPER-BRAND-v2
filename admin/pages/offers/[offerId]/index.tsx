@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 import MainLayout from '../../../components/layouts/Main'
+import Comment from '../../../components/offers/blocks/Comment'
 import DeliveryProfile from '../../../components/offers/blocks/DeliveryProfile'
 import PickVariant from '../../../components/offers/blocks/PickVariant'
 import Prices from '../../../components/offers/blocks/Prices'
-import Provider from '../../../components/offers/blocks/Client'
+import Provider from '../../../components/offers/blocks/Provider'
 import Status from '../../../components/offers/blocks/Status'
-import Client from '../../../components/offers/blocks/Client'
 
 
 
@@ -35,11 +35,12 @@ function New() {
                     <div className="flex-1 space-y-4">
                         <PickVariant />
                         <Prices />
+                        <Comment />
                     </div>
                     <div className="space-y-4 lg:w-80">
                         <Status />
                         <DeliveryProfile />
-                        <Client />
+                        <Provider />
                     </div>
                 </div>
                 <div className="flex justify-between">
