@@ -22,6 +22,17 @@ export interface IUserSearch {
     createdAt: Date;
 }
 
+
+export interface IOfferSearch {
+    id: string;
+    product: string;
+    variant: string;
+    price: number | null;
+    offerPrice: number | null;
+    status: string;
+    user: string | null;
+}
+
 export interface IUserAddress {
     id: string;
     country: string;
@@ -55,6 +66,20 @@ export interface IUser {
     updatedAt: Date;
     addresses: IUserAddress[];
     permissions: IUserPermission[];
+}
+
+export interface IOffer {
+    id: string;
+    product: string;
+    variant: string;
+    variantId: string;
+    price: number | null;
+    compareAtPrice: number | null;
+    offerPrice: number | null;
+    comment: string | null;
+    deliveryProfileId: string | null;
+    status: string;
+    userId: string | null;
 }
 
 export interface IImage {
@@ -530,4 +555,54 @@ export type CollectionRemoveImageResponse = IResponse<void>
 export type CollectionRemoveImageRequest = {
     collectionId: string;
     imageId: string;
+}
+
+
+
+
+
+
+// offerService
+
+export type OfferSearchResponse = IResponse<IOfferSearch[]>
+export type OfferSearchRequest = {
+    q?: string;
+    limit?: number;
+    skip?: number;
+    status?: string;
+}
+
+export type OfferGetByIdResponse = IResponse<IOffer>
+export type OfferGetByIdRequest = {
+    offerId: string
+}
+
+export type OfferCreateResponse = IResponse<string>
+export type OfferCreateRequest = {
+    variantId?: string;
+    price?: number | null;
+    compareAtPrice?: number | null;
+    offerPrice?: number | null;
+    comment?: string | null;
+    deliveryProfileId?: string | null;
+    status?: string;
+    userId?: string | null;
+}
+
+export type OfferUpdateResponse = IResponse<void>
+export type OfferUpdateRequest = {
+    offerId?: string;
+    variantId?: string;
+    price?: number | null;
+    compareAtPrice?: number | null;
+    offerPrice?: number | null;
+    comment?: string | null;
+    deliveryProfileId?: string | null;
+    status?: string;
+    userId?: string | null;
+}
+
+export type OfferDeleteResponse = IResponse<void>
+export type OfferDeleteRequest = {
+    offerId: string;
 }

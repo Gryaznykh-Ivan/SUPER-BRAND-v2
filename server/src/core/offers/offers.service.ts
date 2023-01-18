@@ -45,13 +45,6 @@ export class OfferService {
                 comment: true,
                 status: true,
                 deliveryProfileId: true,
-                user: {
-                    select: {
-                        fullName: true,
-                        email: true,
-                        phone: true
-                    }
-                },
                 userId: true
             }
         })
@@ -71,7 +64,6 @@ export class OfferService {
             comment: offer.comment,
             deliveryProfileId: offer.deliveryProfileId,
             status: offer.status,
-            user: offer.user,
             userId: offer.userId
         }
 
@@ -114,7 +106,8 @@ export class OfferService {
                             }
                         }
                     }
-                ]
+                ],
+                status: data.status
             },
             select: {
                 id: true,
@@ -164,7 +157,7 @@ export class OfferService {
 
         return {
             success: true,
-            data: offers
+            data: result
         }
     }
 
