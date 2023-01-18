@@ -121,7 +121,7 @@ export default function CollectionProducts({ onChange, collectionId, connectProd
                     <>
                         {data.data.map((product, index) =>
                             <div key={product.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
-                                <div className="">{index + 1}.</div>
+                                <div className="">{query.skip + index + 1}.</div>
                                 <div className="relative w-12 aspect-square border-[1px] rounded-md">
                                     {product.image !== null ?
                                         <Image
@@ -171,6 +171,10 @@ export default function CollectionProducts({ onChange, collectionId, connectProd
                                 )}
                             </div>
                         )}
+                        {connectProducts !== undefined && connectProducts.length !== 0 &&
+                            <div className="flex justify-center items-center h-10 font-medium bg-red-50">Добавлено несохраненных товаров: { connectProducts.length }</div>
+                        }
+
                     </>
                 }
                 <div className="flex items-center justify-center py-3 w-full space-x-1">

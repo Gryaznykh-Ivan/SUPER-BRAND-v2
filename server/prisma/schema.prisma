@@ -103,6 +103,7 @@ model User {
     createdAt            DateTime          @default(now())
     updatedAt            DateTime          @updatedAt
 
+    @@fulltext([fullName])
     @@fulltext([fullName, email, phone])
 }
 
@@ -310,6 +311,8 @@ model Variant {
     orders    OrderProduct[]
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
+
+    @@fulltext([option0, option1, option2])
 }
 
 model Offer {

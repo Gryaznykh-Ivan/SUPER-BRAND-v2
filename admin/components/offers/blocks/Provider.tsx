@@ -29,7 +29,7 @@ export default function Provider() {
                 <button className="absolute top-3 right-3 p-1.5 rounded-md hover:bg-gray-200">
                     <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15.6569 4.34315L10 10ZM10 10L4.34315 15.6569ZM10 10L15.6569 15.6569ZM10 10L4.34315 4.34315Z" fill="#D9D9D9" />
-                        <path d="M15.6569 4.34315L10 10M10 10L4.34315 15.6569M10 10L15.6569 15.6569M10 10L4.34315 4.34315" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M15.6569 4.34315L10 10M10 10L4.34315 15.6569M10 10L15.6569 15.6569M10 10L4.34315 4.34315" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
             </div>

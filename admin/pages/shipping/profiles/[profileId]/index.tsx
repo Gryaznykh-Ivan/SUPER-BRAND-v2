@@ -8,7 +8,7 @@ import ProfileShipping from '../../../../components/shipping/blocks/ProfileShipp
 export default function index() {
     return (
         <MainLayout>
-            <div className="px-6 my-4 max-w-4xl mx-auto">
+            <div className="px-6 my-4 max-w-5xl mx-auto">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <Link href="/shipping" className="p-2 font-bold border-[1px] border-gray-400 rounded-md">

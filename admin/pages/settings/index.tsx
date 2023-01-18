@@ -7,7 +7,7 @@ import MainLayout from '../../components/layouts/Main'
 function Index() {
     return (
         <MainLayout>
-            <div>Тут будут логи парсера и ошибок на сайте</div>
+            <div></div>
         </MainLayout>
     )
 }

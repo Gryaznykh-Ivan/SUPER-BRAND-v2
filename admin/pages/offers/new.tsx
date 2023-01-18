@@ -11,6 +11,8 @@ import Status from '../../components/offers/blocks/Status'
 import DeliveryProfile from '../../components/offers/blocks/DeliveryProfile'
 import Prices from '../../components/offers/blocks/Prices'
 import PickVariant from '../../components/offers/blocks/PickVariant'
+import Provider from '../../components/offers/blocks/Provider'
+import Comment from '../../components/offers/blocks/Comment'
 
 function New() {
 
@@ -29,16 +31,18 @@ function New() {
                     <div className="flex-1 space-y-4">
                         <PickVariant />
                         <Prices />
+                        <Comment />
                     </div>
                     <div className="space-y-4 lg:w-80">
                         <Status />
                         <DeliveryProfile />
+                        <Provider />
                     </div>
                 </div>
                 <div className="flex justify-between">
                     <div className=""></div>
                     <div className="flex justify-end">
-                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать оффер</button>
+                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</button>
                     </div>
                 </div>
             </div>
