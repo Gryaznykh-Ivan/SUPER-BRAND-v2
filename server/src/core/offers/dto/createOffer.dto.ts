@@ -13,7 +13,7 @@ export class CreateOfferDto {
 
     @IsInt()
     @Min(0)
-    offersPrice: number;
+    offerPrice: number;
 
     @IsOptional()
     @IsInt()
@@ -34,5 +34,5 @@ export class CreateOfferDto {
 
     @IsOptional()
     @IsString()
-    providerId: string;
+    userId: string;
 }

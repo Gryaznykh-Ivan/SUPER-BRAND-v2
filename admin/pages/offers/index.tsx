@@ -2,9 +2,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import RouterSearchInput from '../../components/inputs/RouterSearchInput'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import NavLink from '../../components/navigation/NavLink'
+import Status from '../../components/offers/cards/Status'
 import { useLazyGetOffersBySearchQuery } from '../../services/offerService'
 import { IErrorResponse } from '../../types/api'
 
@@ -63,7 +65,7 @@ function Index() {
                     </div>
                     <div className="py-4 space-y-4">
                         <div className="">
-                            <SearchInput placeholder="Поиск" onChange={() => { }} />
+                            <SearchInput placeholder="Поиск" onChange={onSearch} />
                         </div>
                         <div className="relative block overflow-x-auto">
                             {isError &&
@@ -106,7 +108,7 @@ function Index() {
                                                 <td className="px-3 py-2">{offer.user}</td>
                                                 <td className="px-3 py-2">{offer.offerPrice}₽</td>
                                                 <td className="px-3 py-2">{offer.price}₽</td>
-                                                <td className="px-3 py-2">{offer.status}</td>
+                                                <td className="px-3 py-2"><Status status={offer.status} /></td>
                                             </tr>
                                         ))}
                                     </tbody>

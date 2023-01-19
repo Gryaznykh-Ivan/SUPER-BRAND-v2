@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFiles, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Right, Role } from '@prisma/client';
 import { Auth } from 'src/decorators/auth.decorator';
 import { Token } from 'src/decorators/token.decorator';
 import { CreateVariantDto } from './dto/createVariant.dto';
+import { SearchVariantDto } from './dto/searchVariant.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateVariantDto } from './dto/updateVariant.dto';
 import { VariantService } from './variants.service';
@@ -14,6 +15,25 @@ export class VariantController {
     constructor(
         private readonly variantService: VariantService
     ) { }
+
+
+    @Get('search')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
+    getVariantsBySearch(
+        @Query(new ValidationPipe({ transform: true })) data: SearchVariantDto
+    ) {
+        return this.variantService.getVariantsBySearch(data)
+    }
+
+
+
+    @Get('getPreview/:variantId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])
+    getPreview(
+        @Param('variantId') variantId: string
+    ) {
+        return this.variantService.getPreview(variantId)
+    }
 
     @Get('getAll/:productId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_READ])

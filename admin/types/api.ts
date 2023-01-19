@@ -1,4 +1,4 @@
-import { Right, Role } from "./store";
+import { OfferStatus, Right, Role } from "./store";
 
 export interface IResponse<T> {
     success: boolean;
@@ -22,6 +22,11 @@ export interface IUserSearch {
     createdAt: Date;
 }
 
+export interface IDeliveryProfile {
+    id: string;
+    title: string;
+}
+
 
 export interface IOfferSearch {
     id: string;
@@ -29,7 +34,7 @@ export interface IOfferSearch {
     variant: string;
     price: number | null;
     offerPrice: number | null;
-    status: string;
+    status: OfferStatus;
     user: string | null;
 }
 
@@ -70,15 +75,13 @@ export interface IUser {
 
 export interface IOffer {
     id: string;
-    product: string;
-    variant: string;
     variantId: string;
     price: number | null;
     compareAtPrice: number | null;
     offerPrice: number | null;
     comment: string | null;
     deliveryProfileId: string | null;
-    status: string;
+    status: OfferStatus;
     userId: string | null;
 }
 
@@ -125,18 +128,27 @@ export interface ICollectionSearch {
 
 export interface IVariantSearch {
     id: string;
-    option0: string;
-    option1: string;
-    option2: string;
-    barcode: string;
-    SKU: string;
+    image: IImage | null;
+    title: string;
+    variants: {
+        id: string;
+        title: string;
+    }[];
+}
+
+export interface IVariantPreview {
+    id: string;
+    title: string;
     price: number;
     image: IImage | null;
 }
 
-export interface IVariants {
-    variants: IVariantSearch[];
-    options: IOption[];
+export interface IOfferVariantPreview {
+    id: string;
+    product: string;
+    productId: string;
+    variant: string;
+    image: IImage | null;
 }
 
 export interface IVariant {
@@ -323,6 +335,9 @@ export type VendorsSuggestionRequest = {
     q: string;
 }
 
+export type DeliveryProfilesSuggestionResponse = IResponse<Pick<IDeliveryProfile, "id" | "title">[]>
+export type DeliveryProfilesSuggestionRequest = void;
+
 
 
 // productService
@@ -420,9 +435,21 @@ export type ProductRemoveOptionRequest = {
 
 // variantService
 
-export type VariantGetAllResponse = IResponse<IVariants>
+export type VariantSearchResponse = IResponse<IVariantSearch[]>
+export type VariantSearchRequest = {
+    q?: string;
+    limit?: number;
+    skip?: number;
+}
+
+export type VariantGetAllResponse = IResponse<IVariantPreview[]>
 export type VariantGetAllRequest = {
     productId: string
+}
+
+export type VariantGetPreviewResponse = IResponse<IOfferVariantPreview>
+export type VariantGetPreviewRequest = {
+    variantId: string
 }
 
 export type VariantGetOptionsResponse = IResponse<IOption[]>

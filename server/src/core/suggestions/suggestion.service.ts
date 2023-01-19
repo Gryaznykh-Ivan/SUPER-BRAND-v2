@@ -5,7 +5,22 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SuggestionService {
     constructor(
         private readonly prisma: PrismaService,
-    ) { }
+        ) { }
+        
+    async deliveryProfiles() {
+        const deliveryProfiles = await this.prisma.deliveryProfile.findMany({
+            where: {},
+            select: {
+                id: true,
+                title: true,
+            }
+        })
+
+        return {
+            success: true,
+            data: deliveryProfiles
+        }
+    }
 
     async vendors(q: string) {
         const vendors = await this.prisma.product.findMany({

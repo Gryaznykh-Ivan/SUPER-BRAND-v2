@@ -16,8 +16,6 @@ export default function VariantList({ productId, createNewVariant = true }: IPro
 
     const { isError, error, isLoading, data } = useGetVariantsQuery({ productId })
 
-    if (data?.data.options.length === 0) return <></>
-
     return (
         <div className="rounded-md bg-white shadow-sm overflow-hidden">
             <h2 className="font-semibold p-5 border-b-[1px]">Варианты</h2>
@@ -39,7 +37,7 @@ export default function VariantList({ productId, createNewVariant = true }: IPro
                         </svg>
                     </div>
                 }
-                {createNewVariant === false && isLoading === false && data?.data.variants.length === 0 &&
+                {createNewVariant === false && isLoading === false && data?.data.length === 0 &&
                     <div className="flex justify-center bg-white p-5">
                         Вариантов пока нет
                     </div>
@@ -47,7 +45,7 @@ export default function VariantList({ productId, createNewVariant = true }: IPro
                 {!isLoading && data?.data &&
                     <>
                         {
-                            data.data.variants.map(variant => (
+                            data.data.map(variant => (
                                 <Link key={variant.id} href={`/products/${productId}/variants/${variant.id}`} className="flex justify-between pl-2 pr-4 py-3 hover:bg-gray-200">
                                     <div className="flex">
                                         <div className="relative w-10 aspect-5/3 rounded-sm overflow-hidden mr-3">
@@ -68,7 +66,7 @@ export default function VariantList({ productId, createNewVariant = true }: IPro
                                                 </div>
                                             }
                                         </div>
-                                        <span className="font-medium">{data.data.options.map(({ option }) => variant[`option${option}` as keyof typeof variant]).join(" | ")}</span>
+                                        <span className="font-medium">{variant.title}</span>
                                     </div>
                                     <div className="text-end text-gray-500">
                                         <div className="">{variant.price === 0 ? "Пусто" : `от ${variant.price}`}</div>

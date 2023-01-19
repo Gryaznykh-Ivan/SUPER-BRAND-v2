@@ -17,7 +17,7 @@ export class UpdateOfferDto {
     @IsOptional()
     @IsInt()
     @Min(0)
-    offersPrice: number;
+    offerPrice: number;
 
     @IsOptional()
     @IsInt()
@@ -38,5 +38,5 @@ export class UpdateOfferDto {
 
     @IsOptional()
     @IsString()
-    providerId: string;
+    userId: string;
 }

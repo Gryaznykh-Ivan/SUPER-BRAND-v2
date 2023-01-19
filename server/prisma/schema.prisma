@@ -311,22 +311,20 @@ model Variant {
     orders    OrderProduct[]
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
-
-    @@fulltext([option0, option1, option2])
 }
 
 model Offer {
     id                String           @id @default(cuid())
     price             Int
     compareAtPrice    Int?
-    offersPrice       Int
+    offerPrice        Int
     comment           String?
     tag               String?
     status            OfferStatus      @default(OFFERED)
     variant           Variant          @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
     variantId         String
-    user              User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    userId            String
+    user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId            String?
     order             OrderProduct?
     deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     deliveryProfileId String?

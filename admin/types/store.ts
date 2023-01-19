@@ -9,6 +9,7 @@ export type Right =
 
 
 export type Role = 'ADMIN' | 'MANAGER' | 'GUEST' | 'CUSTOMER'
+export type OfferStatus = "OFFERED" | "ACCEPTED" | "DECLINED" | "ACTIVE" | "SOLD"
 
 export interface IJwtDecode {
     id: string;

@@ -1,12 +1,13 @@
 import * as FormData from 'form-data';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { OfferStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { firstValueFrom } from 'rxjs';
 import { CreateVariantDto } from './dto/createVariant.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateVariantDto } from './dto/updateVariant.dto';
+import { SearchVariantDto } from './dto/searchVariant.dto';
 
 
 @Injectable()
@@ -16,18 +17,75 @@ export class VariantService {
         private http: HttpService
     ) { }
 
-    async getVariants(productId: string) {
-        const options = await this.prisma.option.findMany({
-            where: { productId },
+
+    async getVariantsBySearch(data: SearchVariantDto) {
+        const variants = await this.prisma.product.findMany({
+            where: {
+                title: {
+                    search: data.q ? `${data.q}*` : undefined,
+                },
+                vendor: {
+                    search: data.q ? `${data.q}*` : undefined,
+                },
+                variants: {
+                    some: {}
+                }
+            },
             select: {
                 id: true,
+                images: {
+                    select: {
+                        id: true,
+                        alt: true,
+                        src: true,
+                        position: true
+                    },
+                    orderBy: {
+                        position: 'asc'
+                    },
+                    take: 1
+                },
                 title: true,
-                option: true,
-                position: true
+                variants: {
+                    select: {
+                        id: true,
+                        option0: true,
+                        option1: true,
+                        option2: true,
+                    }
+                },
+                options: {
+                    select: {
+                        title: true,
+                        option: true,
+                    },
+                    orderBy: [{ position: 'asc' }]
+                },
             },
-            orderBy: [{ position: 'asc' }]
+            skip: data.skip,
+            take: data.limit,
+            orderBy: [{
+                createdAt: 'desc'
+            }],
         })
 
+        const result = variants.map(product => ({
+            id: product.id,
+            image: product.images[0] ?? null,
+            title: product.title,
+            variants: product.variants.map(variant => ({
+                id: variant.id,
+                title: product.options.map((option) => variant[`option${option.option}`]).join(' | ')
+            }))
+        }))
+
+        return {
+            success: true,
+            data: result
+        }
+    }
+
+    async getVariants(productId: string) {
         const variants = await this.prisma.variant.findMany({
             where: {
                 productId: productId
@@ -38,6 +96,9 @@ export class VariantService {
                 option1: true,
                 option2: true,
                 offers: {
+                    where: {
+                        status: OfferStatus.ACTIVE
+                    },
                     select: {
                         price: true
                     },
@@ -55,26 +116,29 @@ export class VariantService {
                         position: 'asc'
                     },
                     take: 1
+                },
+                product: {
+                    select: {
+                        options: {
+                            select: {
+                                id: true,
+                                title: true,
+                                option: true,
+                                position: true
+                            },
+                            orderBy: [{ position: 'asc' }]
+                        }
+                    }
                 }
-            },
-            orderBy: [
-                { option0: 'asc' },
-                { option1: 'asc' },
-                { option2: 'asc' },
-            ]
+            }
         })
 
-        const result = {
-            options: options,
-            variants: variants.map(variant => ({
-                id: variant.id,
-                option0: variant.option0,
-                option1: variant.option1,
-                option2: variant.option2,
-                price: variant.offers[0]?.price ?? 0,
-                image: variant.images[0] ?? null
-            }))
-        }
+        const result = variants.map(variant => ({
+            id: variant.id,
+            title: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
+            price: variant.offers[0]?.price ?? 0,
+            image: variant.images[0] ?? null
+        }))
 
         return {
             success: true,
@@ -97,6 +161,74 @@ export class VariantService {
         return {
             success: true,
             data: options
+        }
+    }
+
+    async getPreview(variantId: string) {
+        const variant = await this.prisma.variant.findUnique({
+            where: { id: variantId },
+            select: {
+                id: true,
+                option0: true,
+                option1: true,
+                option2: true,
+                images: {
+                    select: {
+                        id: true,
+                        src: true,
+                        alt: true,
+                        position: true,
+                    },
+                    orderBy: {
+                        position: 'asc'
+                    },
+                    take: 1
+                },
+                product: {
+                    select: {
+                        id: true,
+                        images: {
+                            select: {
+                                id: true,
+                                src: true,
+                                alt: true,
+                                position: true,
+                            },
+                            orderBy: {
+                                position: 'asc'
+                            },
+                            take: 1
+                        },
+                        title: true,
+                        options: {
+                            select: {
+                                id: true,
+                                title: true,
+                                option: true,
+                                position: true
+                            },
+                            orderBy: [{ position: 'asc' }]
+                        }
+                    }
+                }
+            }
+        })
+
+        if (variant === null) {
+            throw new HttpException("Вариант не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        const result = {
+            id: variant.id,
+            product: variant.product.title,
+            productId: variant.product.id,
+            image: variant.images[0] ?? variant.product.images[0] ?? null,
+            variant: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
+        }
+
+        return {
+            success: true,
+            data: result
         }
     }
 

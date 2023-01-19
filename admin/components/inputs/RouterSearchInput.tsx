@@ -5,17 +5,28 @@ import useDebounce from '../../hooks/useDebounce';
 interface IProps {
     className?: string;
     placeholder: string;
-    onChange: (q: string) => void
 }
 
-export default function SearchInput({ className, placeholder = "", onChange }: IProps) {
+export default function RouterSearchInput({ className, placeholder = "" }: IProps) {
     const router = useRouter()
     const [q, setQ] = useState<string>("");
     const debounced = useDebounce(q)
 
     useEffect(() => {
-        onChange(debounced)
+        console.log(debounced)
+        if (debounced === "") {
+            delete router.query.q;
+            router.push({ query: router.query })
+        } else {
+            router.push({ query: { ...router.query, q: debounced } })
+        }
     }, [debounced])
+
+    useEffect(() => {
+        if (router.query.q === undefined) {
+            setQ("")
+        }
+    }, [router.query.q])
 
     return (
         <div className="relative w-full">

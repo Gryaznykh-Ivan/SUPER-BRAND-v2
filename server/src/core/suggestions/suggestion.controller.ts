@@ -44,4 +44,9 @@ export class SuggestionController {
     ) {
         return this.suggestionService.vendors(q)
     }
+
+    @Get('deliveryProfiles')
+    profiles() {
+        return this.suggestionService.deliveryProfiles()
+    }
 }

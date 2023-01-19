@@ -1,14 +1,28 @@
 import { api } from "../store/api";
-import { VariantCreateRequest, VariantCreateResponse, VariantDeleteRequest, VariantDeleteResponse, VariantGetAllRequest, VariantGetAllResponse, VariantGetByIdRequest, VariantGetByIdResponse, VariantGetOptionsRequest, VariantGetOptionsResponse, VariantRemoveImageRequest, VariantRemoveImageResponse, VariantUpdateImageRequest, VariantUpdateImageResponse, VariantUpdateRequest, VariantUpdateResponse, VariantUploadImagesRequest, VariantUploadImagesResponse } from "../types/api";
+import { VariantCreateRequest, VariantCreateResponse, VariantDeleteRequest, VariantDeleteResponse, VariantGetAllRequest, VariantGetAllResponse, VariantGetByIdRequest, VariantGetByIdResponse, VariantGetOptionsRequest, VariantGetOptionsResponse, VariantGetPreviewRequest, VariantGetPreviewResponse, VariantRemoveImageRequest, VariantRemoveImageResponse, VariantSearchRequest, VariantSearchResponse, VariantUpdateImageRequest, VariantUpdateImageResponse, VariantUpdateRequest, VariantUpdateResponse, VariantUploadImagesRequest, VariantUploadImagesResponse } from "../types/api";
 
 export const variantService = api.injectEndpoints({
     endpoints: builder => ({
+        getVariantsBySearch: builder.query<VariantSearchResponse, VariantSearchRequest>({
+            query: credentials => ({
+                url: "variants/search",
+                method: "GET",
+                params: credentials
+            }),
+            providesTags: ["VARIANTS"]
+        }),
         getVariants: builder.query<VariantGetAllResponse, VariantGetAllRequest>({
             query: ({ productId }) => ({
                 url: `variants/getAll/${productId}`,
                 method: "GET",
             }),
             providesTags: ["VARIANTS"]
+        }),
+        getVariantPreview: builder.query<VariantGetPreviewResponse, VariantGetPreviewRequest>({
+            query: ({ variantId }) => ({
+                url: `variants/getPreview/${variantId}`,
+                method: "GET",
+            })
         }),
         getVariantOptions: builder.query<VariantGetOptionsResponse, VariantGetOptionsRequest>({
             query: ({ productId }) => ({
@@ -75,6 +89,8 @@ export const variantService = api.injectEndpoints({
 
 export const {
     useGetVariantsQuery,
+    useLazyGetVariantsBySearchQuery,
+    useLazyGetVariantPreviewQuery,
     useGetVariantOptionsQuery,
     useGetVariantByIdQuery,
     useCreateVariantMutation,

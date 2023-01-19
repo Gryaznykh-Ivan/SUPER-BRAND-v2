@@ -1,12 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { OfferCreateRequest } from '../../../types/api';
 import Select from '../../inputs/Select'
 
-export default function Status() {
+interface IProps {
+    status: string;
+    onChange: (obj: OfferCreateRequest) => void;
+}
+
+
+export default function Status({ onChange, ...data }: IProps) {
+    const [state, setState] = useState({
+        status: data.status,
+    })
+
+    useEffect(() => {
+        const localState = Object.entries(state)
+        const changes = localState.map(([key, value]) => {
+            if (data[key as keyof typeof data] === value) {
+                return [key, undefined]
+            }
+
+            return [key, value]
+        })
+
+        onChange(Object.fromEntries(changes))
+    }, [state])
+
+    const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    }
+
     return (
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Статус</h2>
             <div className="space-y-4 p-5">
-                <Select options={{ active: "active", draft: "inactive" }} onChange={() => { }} />
+                <Select
+                    options={{
+                        OFFERED: "Предложено",
+                        ACCEPTED: "Ожидает принятия",
+                        DECLINED: "Отклонено",
+                        ACTIVE: "Активно",
+                        SOLD: "Продано",
+                    }}
+                    name="status"
+                    value={state.status}
+                    onChange={onInputChange}
+                />
             </div>
         </div>
     )

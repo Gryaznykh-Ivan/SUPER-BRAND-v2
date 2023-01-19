@@ -32,7 +32,20 @@ export class OfferService {
                                     select: {
                                         title: true,
                                         option: true,
-                                    }
+                                    },
+                                    orderBy: [{ position: 'asc' }]
+                                },
+                                images: {
+                                    select: {
+                                        id: true,
+                                        alt: true,
+                                        src: true,
+                                        position: true
+                                    },
+                                    orderBy: {
+                                        position: 'asc'
+                                    },
+                                    take: 1
                                 }
                             }
                         }
@@ -41,7 +54,7 @@ export class OfferService {
                 variantId: true,
                 price: true,
                 compareAtPrice: true,
-                offersPrice: true,
+                offerPrice: true,
                 comment: true,
                 status: true,
                 deliveryProfileId: true,
@@ -55,12 +68,10 @@ export class OfferService {
 
         const result = {
             id: offer.id,
-            product: offer.variant.product.title,
-            variant: offer.variant.product.options.map((option) => offer.variant[`option${option.option}`]).join(' | '),
             variantId: offer.variantId,
             price: offer.price,
             compareAtPrice: offer.compareAtPrice,
-            offerPrice: offer.offersPrice,
+            offerPrice: offer.offerPrice,
             comment: offer.comment,
             deliveryProfileId: offer.deliveryProfileId,
             status: offer.status,
@@ -80,19 +91,6 @@ export class OfferService {
                     {
                         user: {
                             fullName: {
-                                search: data.q ? `${data.q}*` : undefined,
-                            }
-                        }
-                    },
-                    {
-                        variant: {
-                            option0: {
-                                search: data.q ? `${data.q}*` : undefined,
-                            },
-                            option1: {
-                                search: data.q ? `${data.q}*` : undefined,
-                            },
-                            option2: {
                                 search: data.q ? `${data.q}*` : undefined,
                             }
                         }
@@ -123,14 +121,15 @@ export class OfferService {
                                     select: {
                                         title: true,
                                         option: true,
-                                    }
+                                    },
+                                    orderBy: [{ position: 'asc' }]
                                 }
                             }
                         }
                     }
                 },
                 price: true,
-                offersPrice: true,
+                offerPrice: true,
                 status: true,
                 user: {
                     select: {
@@ -150,9 +149,9 @@ export class OfferService {
             product: offer.variant.product.title,
             variant: offer.variant.product.options.map((option) => offer.variant[`option${option.option}`]).join(' | '),
             price: offer.price,
-            offerPrice: offer.offersPrice,
+            offerPrice: offer.offerPrice,
             status: offer.status,
-            user: offer.user.fullName,
+            user: offer.user?.fullName ?? null,
         }))
 
         return {
@@ -164,10 +163,10 @@ export class OfferService {
     async createOffer(data: CreateOfferDto) {
         const createOfferQuery = {
             variantId: data.variantId,
-            userId: data.providerId,
+            userId: data.userId,
             status: data.status,
             price: data.price,
-            offersPrice: data.offersPrice,
+            offerPrice: data.offerPrice,
             deliveryProfileId: data.deliveryProfileId,
             compareAtPrice: data.compareAtPrice,
             comment: data.comment,
@@ -190,10 +189,10 @@ export class OfferService {
     async updateOffer(offerId: string, data: UpdateOfferDto) {
         const updateOfferQuery = {
             variantId: data.variantId,
-            userId: data.providerId,
+            userId: data.userId,
             status: data.status,
             price: data.price,
-            offersPrice: data.offersPrice,
+            offerPrice: data.offerPrice,
             deliveryProfileId: data.deliveryProfileId,
             compareAtPrice: data.compareAtPrice,
             comment: data.comment,

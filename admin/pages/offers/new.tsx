@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 
 import MainLayout from '../../components/layouts/Main'
@@ -13,8 +13,49 @@ import Prices from '../../components/offers/blocks/Prices'
 import PickVariant from '../../components/offers/blocks/PickVariant'
 import Provider from '../../components/offers/blocks/Provider'
 import Comment from '../../components/offers/blocks/Comment'
+import { IErrorResponse, OfferCreateRequest } from '../../types/api'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
+import { useCreateOfferMutation } from '../../services/offerService'
 
 function New() {
+    const router = useRouter()
+
+    const [createOffer, { isSuccess: isCreateOfferSuccess, isError: isCreateOfferError, error: createOfferError, data }] = useCreateOfferMutation()
+
+    const [changes, setChanges] = useState<OfferCreateRequest>({})
+    const onCollectChanges = (obj: OfferCreateRequest) => {
+        console.log(obj)
+        setChanges(prev => ({ ...prev, ...obj }))
+    }
+
+    useEffect(() => {
+        if (isCreateOfferSuccess) {
+            setTimeout(() => toast.success("Оффер создан"), 100)
+        }
+
+        if (isCreateOfferError) {
+            if (createOfferError && "status" in createOfferError) {
+                toast.error((createOfferError.data as IErrorResponse).message)
+            } else {
+                toast.error("Произошла неизвесная ошибка")
+            }
+        }
+    }, [isCreateOfferSuccess, isCreateOfferError])
+
+    const onSaveChanges = async () => {
+        const createOfferData = changes
+
+        const result = await createOffer(createOfferData).unwrap()
+        if (result.success === true) {
+            router.push('/offers/' + result.data)
+        }
+    }
+
+    const mustBeSaved = useMemo(() => {
+        return Object.values(changes).some(c => c !== undefined)
+    }, [changes])
+
 
     return (
         <MainLayout>
@@ -29,20 +70,40 @@ function New() {
                 </div>
                 <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
                     <div className="flex-1 space-y-4">
-                        <PickVariant />
-                        <Prices />
-                        <Comment />
+                        <PickVariant
+                            variantId={null}
+                            onChange={onCollectChanges}
+                        />
+                        <Prices
+                            price={null}
+                            compareAtPrice={null}
+                            offerPrice={null}
+                            onChange={onCollectChanges}
+                        />
+                        <Comment
+                            comment={null}
+                            onChange={onCollectChanges}
+                        />
                     </div>
                     <div className="space-y-4 lg:w-80">
-                        <Status />
-                        <DeliveryProfile />
-                        <Provider />
+                        <Status
+                            status={"OFFERED"}
+                            onChange={onCollectChanges}
+                        />
+                        <DeliveryProfile
+                            deliveryProfileId={null}
+                            onChange={onCollectChanges}
+                        />
+                        <Provider
+                            providerId={null}
+                            onChange={onCollectChanges}
+                        />
                     </div>
                 </div>
                 <div className="flex justify-between">
                     <div className=""></div>
                     <div className="flex justify-end">
-                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</button>
+                        <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={onSaveChanges}>Создать</button>
                     </div>
                 </div>
             </div>

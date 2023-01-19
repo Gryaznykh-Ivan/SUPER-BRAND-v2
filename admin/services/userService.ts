@@ -44,6 +44,7 @@ export const userService = api.injectEndpoints({
 
 export const {
     useLazyGetUsersBySearchQuery,
+    useLazyGetUserByIdQuery,
     useGetUserByIdQuery,
     useCreateUserMutation,
     useUpdateUserMutation,
