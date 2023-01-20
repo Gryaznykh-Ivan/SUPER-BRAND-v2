@@ -19,7 +19,7 @@ const statuses = {
         text: "Отклонено"
     },
     "ACTIVE": {
-        className: "bg-green-500",
+        className: "bg-green-600",
         text: "Активно"
     },
     "SOLD": {

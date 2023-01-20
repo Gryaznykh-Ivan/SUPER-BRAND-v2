@@ -59,8 +59,8 @@ function Index() {
                 <div className="mt-4 px-4 bg-white rounded-md">
                     <div className="flex space-x-2 border-b-[1px]">
                         <NavLink href="/products" query={{ available: undefined }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Все</NavLink>
-                        <NavLink href="/products?available=true" query={{ available: "true" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
-                        <NavLink href="/products?available=false" query={{ available: "false" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Неактивные</NavLink>
+                        <NavLink href="/products" query={{ available: "true" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
+                        <NavLink href="/products" query={{ available: "false" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Неактивные</NavLink>
                     </div>
                     <div className="py-4 space-y-4">
                         <div className="">
@@ -122,7 +122,7 @@ function Index() {
                                                 </td>
                                                 <td className="font-medium px-3 py-2">{product.title}</td>
                                                 <td className="px-3 py-2">
-                                                    <span className={`${product.available ? "bg-green-600" : "bg-gray-400"} px-2 py-1 rounded-xl text-white text-sm`}>{product.available ? "Active" : "Draft"}</span>
+                                                    <span className={`${product.available ? "bg-green-600" : "bg-gray-400"} px-2 py-1 rounded-md text-white text-sm`}>{product.available ? "Active" : "Draft"}</span>
                                                 </td>
                                                 <td className="px-3 py-2">{product.offersCount} офферов</td>
                                                 <td className="px-3 py-2">{product.vendor}</td>

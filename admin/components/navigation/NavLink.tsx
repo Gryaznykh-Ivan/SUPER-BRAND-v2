@@ -16,7 +16,7 @@ export default function NavLink({ href, children, query, className }: IProps) {
     let isActive = href === "/"
         ? router.pathname === href
         : router.pathname.indexOf(href.split("?")[0]) !== -1
-    
+
     if (query !== undefined) {
         if (Object.entries(query).some(c => router.query[c[0]] !== c[1])) {
             isActive = false
@@ -24,6 +24,9 @@ export default function NavLink({ href, children, query, className }: IProps) {
     }
 
     return (
-        <Link href={href} className={className({ isActive })}>{children}</Link>
+        <Link
+            className={className({ isActive })}
+            href={{ pathname: href, query: query !== undefined ? Object.fromEntries(Object.entries({ ...router.query, ...query }).filter(c => c[1] !== undefined)) : {} }}
+        >{children}</Link>
     )
 }

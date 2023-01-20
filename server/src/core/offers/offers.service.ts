@@ -97,6 +97,13 @@ export class OfferService {
                     },
                     {
                         variant: {
+                            option0: data.q?.match(/option0:'.+'/g)?.[0]?.split("'").at(-2) ?? undefined,
+                            option1: data.q?.match(/option1:'.+'/g)?.[0]?.split("'").at(-2) ?? undefined,
+                            option2: data.q?.match(/option2:'.+'/g)?.[0]?.split("'").at(-2) ?? undefined,
+                        }
+                    },
+                    {
+                        variant: {
                             product: {
                                 title: {
                                     search: data.q ? `${data.q}*` : undefined,

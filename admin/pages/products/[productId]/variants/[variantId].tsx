@@ -93,20 +93,18 @@ function Variant() {
                     <>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <Link href={ `/products/${ router.query.productId }` } className="p-2 font-bold border-[1px] border-gray-400 rounded-md">
+                                <Link href={`/products/${router.query.productId}`} className="p-2 font-bold border-[1px] border-gray-400 rounded-md">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </Link>
-                                <h1 className="text-xl font-medium">{ data.data.options.map(({ option }) => data.data[`option${option}` as keyof typeof data.data]).join(" | ") }</h1>
+                                <h1 className="text-xl font-medium">{data.data.options.map(({ option }) => data.data[`option${option}` as keyof typeof data.data]).join(" | ")}</h1>
                             </div>
                             <div className="flex justify-end">
-                                <Link href="http://google.com" target={'_blank'} className="flex space-x-2 hover:bg-gray-300 p-2 text-gray-700 font-medium rounded-md">
+                                <Link href={`/offers?q=${ data.data.options.map(({ option }) => `option${option}:'${data.data[`option${option}` as keyof typeof data.data]}'`).join(" ") }`} className="flex space-x-2 hover:bg-gray-300 p-2 text-gray-700 font-medium rounded-md">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7956 9 12 9C11.2044 9 10.4413 9.31607 9.87868 9.87868C9.31607 10.4413 9 11.2044 9 12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M2.45801 12C3.73201 7.943 7.52301 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.52301 19 3.73201 16.057 2.45801 12Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15M9 5C9 5.53043 9.21071 6.03914 9.58579 6.41421C9.96086 6.78929 10.4696 7 11 7H13C13.5304 7 14.0391 6.78929 14.4142 6.41421C14.7893 6.03914 15 5.53043 15 5M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                    <div className="">Офферы</div>
                                 </Link>
                             </div>
                         </div>

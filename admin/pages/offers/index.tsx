@@ -7,12 +7,14 @@ import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import NavLink from '../../components/navigation/NavLink'
 import Status from '../../components/offers/cards/Status'
+import useDidMount from '../../hooks/useDidMount'
 import { useLazyGetOffersBySearchQuery } from '../../services/offerService'
 import { IErrorResponse } from '../../types/api'
 
 
 function Index() {
     const router = useRouter()
+    const didMount = useDidMount()
     const itemPerPage = 20
 
     const [getOfferBySearch, { isError, isFetching, data, error }] = useLazyGetOffersBySearchQuery();
@@ -24,16 +26,14 @@ function Index() {
     })
 
     useEffect(() => {
-        setQuery(prev => ({ ...prev, limit: itemPerPage, skip: 0, status: router.query.status as string ?? undefined }))
-    }, [router.query.status])
+        setQuery(prev => ({ ...prev, limit: itemPerPage, skip: 0, status: router.query.status as string ?? undefined, q: router.query.q as string ?? undefined }))
+    }, [router.query.status, router.query.q])
 
     useEffect(() => {
-        getOfferBySearch(query)
+        if (didMount === true) {
+            getOfferBySearch(query)
+        }
     }, [query])
-
-    const onSearch = (q: string) => {
-        setQuery(prev => ({ ...prev, q, limit: itemPerPage, skip: 0 }))
-    }
 
     const onNextPage = () => {
         if (data?.data.length !== itemPerPage) return
@@ -58,14 +58,14 @@ function Index() {
                 <div className="mt-4 px-4 bg-white rounded-md">
                     <div className="flex space-x-2 border-b-[1px]">
                         <NavLink href="/offers" query={{ status: undefined }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Все</NavLink>
-                        <NavLink href="/offers?status=OFFERED" query={{ status: "OFFERED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Предложенные</NavLink>
-                        <NavLink href="/offers?status=ACCEPTED" query={{ status: "ACCEPTED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Нужно принять</NavLink>
-                        <NavLink href="/offers?status=ACTIVE" query={{ status: "ACTIVE" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
-                        <NavLink href="/offers?status=SOLD" query={{ status: "SOLD" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Проданные</NavLink>
+                        <NavLink href="/offers" query={{ status: "OFFERED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Предложенные</NavLink>
+                        <NavLink href="/offers" query={{ status: "ACCEPTED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Нужно принять</NavLink>
+                        <NavLink href="/offers" query={{ status: "ACTIVE" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
+                        <NavLink href="/offers" query={{ status: "SOLD" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Проданные</NavLink>
                     </div>
                     <div className="py-4 space-y-4">
                         <div className="">
-                            <SearchInput placeholder="Поиск" onChange={onSearch} />
+                            <RouterSearchInput placeholder="Поиск" />
                         </div>
                         <div className="relative block overflow-x-auto">
                             {isError &&

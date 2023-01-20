@@ -9,14 +9,15 @@ interface IProps {
 
 export default function RouterSearchInput({ className, placeholder = "" }: IProps) {
     const router = useRouter()
-    const [q, setQ] = useState<string>("");
+    const [q, setQ] = useState<string>(router.query.q as string ?? "");
     const debounced = useDebounce(q)
 
     useEffect(() => {
-        console.log(debounced)
         if (debounced === "") {
-            delete router.query.q;
-            router.push({ query: router.query })
+            if (router.query.q !== undefined) {
+                delete router.query.q;
+                router.push({ query: router.query })
+            }
         } else {
             router.push({ query: { ...router.query, q: debounced } })
         }
