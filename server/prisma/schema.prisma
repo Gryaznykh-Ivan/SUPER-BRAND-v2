@@ -336,6 +336,7 @@ model Offer {
 model DeliveryProfile {
     id        String         @id @default(cuid())
     title     String
+    handle    String?        @default(cuid())
     offers    Offer[]
     zones     DeliveryZone[]
     createdAt DateTime       @default(now())

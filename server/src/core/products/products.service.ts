@@ -575,7 +575,7 @@ export class ProductService {
             }
         } catch (e) {
             console.log(e)
-            throw new HttpException("Произошла ошибка на стороне сервера. Возможно вы превысили лимит в 100 вариантов", HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

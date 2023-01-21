@@ -1,4 +1,5 @@
-import { Controller, DefaultValuePipe, Get, Param, ParseArrayPipe, Query } from '@nestjs/common';
+import { Controller, DefaultValuePipe, Get, Param, ParseArrayPipe, Query, ValidationPipe } from '@nestjs/common';
+import { SearchDto } from './dto/search.dto';
 import { SuggestionService } from './suggestion.service';
 
 @Controller('suggestions')
@@ -28,6 +29,13 @@ export class SuggestionController {
         @Query('region') region?: string
     ) {
         return this.suggestionService.cities(q, region)
+    }
+
+    @Get('deliveryZones')
+    deliveryZones(
+        @Query(new ValidationPipe({ transform: true })) data: SearchDto,
+    ) {
+        return this.suggestionService.deliveryZones(data)
     }
 
     @Get('collections')

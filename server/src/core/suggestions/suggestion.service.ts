@@ -1,24 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { SearchDto } from './dto/search.dto';
 
 @Injectable()
 export class SuggestionService {
+
     constructor(
         private readonly prisma: PrismaService,
-        ) { }
-        
+    ) { }
+
     async deliveryProfiles() {
         const deliveryProfiles = await this.prisma.deliveryProfile.findMany({
             where: {},
             select: {
                 id: true,
                 title: true,
+                handle: true
             }
         })
 
         return {
             success: true,
-            data: deliveryProfiles
+            data: deliveryProfiles.map(profile => ({ id: profile.handle, title: profile.title }))
         }
     }
 
@@ -40,6 +43,31 @@ export class SuggestionService {
         return {
             success: true,
             data: vendors.map(({ vendor }) => vendor).filter(c => c !== null)
+        }
+    }
+
+    async deliveryZones(data: SearchDto) {
+        const regions = await this.prisma.region.findMany({
+            where: {
+                title: {
+                    search: data.q ? `${data.q}*` : undefined,
+                }
+            },
+            select: {
+                title: true,
+                country: {
+                    select: {
+                        title: true
+                    }
+                }
+            },
+            take: data.limit,
+            skip: data.skip
+        })
+
+        return {
+            success: true,
+            data: regions.map(region => ({ country: region.country.title, region: region.title }))
         }
     }
 

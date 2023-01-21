@@ -29,17 +29,75 @@ export default function SelectRegion({ title, onClose }: IProps) {
                             </div>
                         </div>
                         <div className="divide-y-[1px] max-h-96 overflow-y-auto">
-                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                            <div className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
                                 <input type="checkbox" name="" id="test" className="rounded" />
-                                <div className="text-sm flex-1">Москва</div>
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Москва</div>
+                                </div>
                             </div>
                             <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
                                 <input type="checkbox" name="" id="test" className="rounded" />
-                                <div className="text-sm flex-1">Санкт-Петербург</div>
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Санкт-Петербург</div>
+                                </div>
                             </div>
                             <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
                                 <input type="checkbox" name="" id="test" className="rounded" />
-                                <div className="text-sm flex-1">Тюменская область</div>
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                                <input type="checkbox" name="" id="test" className="rounded" />
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                                <input type="checkbox" name="" id="test" className="rounded" />
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                                <input type="checkbox" name="" id="test" className="rounded" />
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                                <input type="checkbox" name="" id="test" className="rounded" />
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                                <input type="checkbox" name="" id="test" className="rounded" />
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                                <input type="checkbox" name="" id="test" className="rounded" />
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center px-5 py-4 space-x-4 hover:bg-gray-100">
+                                <input type="checkbox" name="" id="test" className="rounded" />
+                                <div className="text-sm flex-1">
+                                    <div className="text-gray-500">Россия</div>
+                                    <div className="">Тюменская область</div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -10,6 +10,12 @@ export interface IErrorResponse {
     statusCode: number;
 }
 
+export interface IDeliveryOption {
+    title: string;
+    duration: number;
+    price: number;
+}
+
 export interface IUserSearch {
     id: string;
     fullName: string | null;
@@ -25,6 +31,8 @@ export interface IUserSearch {
 export interface IDeliveryProfile {
     id: string;
     title: string;
+    zonesCount: number;
+    offersCount: number;
 }
 
 
@@ -632,4 +640,53 @@ export type OfferUpdateRequest = {
 export type OfferDeleteResponse = IResponse<void>
 export type OfferDeleteRequest = {
     offerId: string;
+}
+
+
+
+
+
+
+// shippingService
+
+export type DeliveryProfileGetAllResponse = IResponse<IDeliveryProfile[]>
+export type DeliveryProfileGetAllRequest = void
+
+export type DeliveryProfileCreateResponse = IResponse<string>
+export type DeliveryProfileCreateRequest = {
+    title?: string;
+}
+
+export type DeliveryProfileUpdateResponse = IResponse<void>
+export type DeliveryProfileUpdateRequest = {
+    profileId?: string;
+    connectOffers?: Pick<IOffer, "id">[];
+    disconnectOffers?: Pick<IOffer, "id">[];
+}
+
+export type DeliveryProfileDeleteResponse = IResponse<void>
+export type DeliveryProfileDeleteRequest = {
+    profileId: string;
+}
+
+export type DeliveryZoneCreateResponse = IResponse<void>
+export type DeliveryZoneCreateRequest = {
+    profileId: string;
+    country?: string;
+    region?: string;
+}
+
+export type DeliveryZoneUpdateResponse = IResponse<void>
+export type DeliveryZoneUpdateRequest = {
+    profileId: string;
+    zoneId: string;
+    createDeliveryOptions?: IDeliveryOption[];
+    updateDeliveryOptions?: (IDeliveryOption & { id: string })[];
+    deleteDeliveryOptions?: string[];
+}
+
+export type DeliveryZoneDeleteResponse = IResponse<void>
+export type DeliveryZoneDeleteRequest = {
+    profileId: string;
+    zoneId: string;
 }
