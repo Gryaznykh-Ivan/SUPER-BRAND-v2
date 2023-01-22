@@ -91,7 +91,7 @@ function New() {
                             onChange={onCollectChanges}
                         />
                         <DeliveryProfile
-                            deliveryProfileId={null}
+                            deliveryProfileId={"default"}
                             onChange={onCollectChanges}
                         />
                         <Provider

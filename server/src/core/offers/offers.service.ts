@@ -112,7 +112,11 @@ export class OfferService {
                         }
                     }
                 ],
-                status: data.status
+                status: data.status,
+                deliveryProfileId: {
+                    equals: data.deliveryProfileId,
+                    not: data.notDeliveryProfileId
+                }
             },
             select: {
                 id: true,
@@ -174,7 +178,7 @@ export class OfferService {
             status: data.status,
             price: data.price,
             offerPrice: data.offerPrice,
-            deliveryProfileId: data.deliveryProfileId,
+            deliveryProfileId: data.deliveryProfileId ?? "default", // дефолтный профиль
             compareAtPrice: data.compareAtPrice,
             comment: data.comment,
         }

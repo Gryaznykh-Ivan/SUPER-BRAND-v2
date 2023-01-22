@@ -24,4 +24,12 @@ export class SearchOfferDto {
     @IsOptional()
     @IsEnum(OfferStatus, { each: true })
     status: OfferStatus;
+
+    @IsOptional()
+    @IsString()
+    deliveryProfileId: string;
+
+    @IsOptional()
+    @IsString()
+    notDeliveryProfileId: string;
 }

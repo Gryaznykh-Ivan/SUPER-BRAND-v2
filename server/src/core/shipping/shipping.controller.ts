@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { Right, Role } from '@prisma/client';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CreateProfileDto } from './dto/createProfile.dto';
 import { CreateDeliveryOptionDto, CreateDeliveryZoneDto, UpdateDeliveryOptionDto, UpdateDeliveryZoneDto } from './dto/delivery.dto';
+import { SearchZoneDto } from './dto/searchZone.dto';
 import { UpdateProfileDto } from './dto/updateProfile.dto';
 import { ShippingService } from './shipping.service';
 
@@ -24,6 +25,15 @@ export class ShippingController {
         @Param('profileId') profileId: string
     ) {
         return this.productService.getProfileById(profileId)
+    }
+
+    @Get(':profileId/getDeliveryZones')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.SHIPPING_READ])
+    getDeliveryZones(
+        @Param('profileId') profileId: string,
+        @Query(new ValidationPipe({ transform: true })) data: SearchZoneDto
+    ) {
+        return this.productService.getDeliveryZones(profileId, data)
     }
 
 

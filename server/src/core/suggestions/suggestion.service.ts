@@ -15,13 +15,15 @@ export class SuggestionService {
             select: {
                 id: true,
                 title: true,
-                handle: true
+            },
+            orderBy: {
+                createdAt: 'asc'
             }
         })
 
         return {
             success: true,
-            data: deliveryProfiles.map(profile => ({ id: profile.handle, title: profile.title }))
+            data: deliveryProfiles.map(profile => ({ id: profile.id, title: profile.title }))
         }
     }
 

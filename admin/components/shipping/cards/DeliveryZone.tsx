@@ -1,16 +1,25 @@
 import React from 'react'
+import { IDeliveryOption } from '../../../types/api';
 import Input from '../../inputs/Input'
 
-export default function DeliveryOption() {
+interface IProps {
+    id: string;
+    country: string;
+    region: string;
+    options: IDeliveryOption[];
+    onRemoveDeliveryZone: (zoneId: string) => void;
+}
+
+export default function DeliveryZone({ country, id, options, region, onRemoveDeliveryZone }: IProps) {
     return (
         <div className="">
             <div className="flex justify-between px-5 pt-5">
                 <div className="">
-                    <div className="font-medium">Московская область</div>
-                    <div className="text-gray-500 text-sm">Россия</div>
+                    <div className="font-medium">{region}</div>
+                    <div className="text-gray-500 text-sm">{country}</div>
                 </div>
                 <div className="">
-                    <button className="text-sm py-2 px-3 border-[1px] border-gray-300 hover:bg-gray-100 rounded-md font-medium" >Удалить зону</button>
+                    <button className="text-sm py-2 px-3 border-[1px] border-gray-300 hover:bg-gray-100 rounded-md font-medium" onClick={() => onRemoveDeliveryZone(id)}>Удалить зону</button>
                 </div>
             </div>
             <div className="mt-4 px-5 pb-5">

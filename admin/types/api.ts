@@ -11,9 +11,17 @@ export interface IErrorResponse {
 }
 
 export interface IDeliveryOption {
+    id: string;
     title: string;
     duration: number;
     price: number;
+}
+
+export interface IDeliveryZone {
+    id: string;
+    country: string;
+    region: string;
+    options: IDeliveryOption[]
 }
 
 export interface IUserSearch {
@@ -28,11 +36,16 @@ export interface IUserSearch {
     createdAt: Date;
 }
 
-export interface IDeliveryProfile {
+export interface IDeliveryProfilePreview {
     id: string;
     title: string;
     zonesCount: number;
     offersCount: number;
+}
+
+export interface IDeliveryProfile {
+    id: string;
+    title: string;
 }
 
 
@@ -346,6 +359,13 @@ export type VendorsSuggestionRequest = {
 export type DeliveryProfilesSuggestionResponse = IResponse<Pick<IDeliveryProfile, "id" | "title">[]>
 export type DeliveryProfilesSuggestionRequest = void;
 
+export type deliveryZonesSuggestionResponse = IResponse<Pick<IDeliveryZone, "country" | "region">[]>
+export type DeliveryZonesSuggestionRequest = {
+    q?: string;
+    limit?: number;
+    skip?: number;
+};
+
 
 
 // productService
@@ -605,6 +625,8 @@ export type OfferSearchRequest = {
     limit?: number;
     skip?: number;
     status?: string;
+    deliveryProfileId?: string;
+    notDeliveryProfileId?: string;
 }
 
 export type OfferGetByIdResponse = IResponse<IOffer>
@@ -619,7 +641,7 @@ export type OfferCreateRequest = {
     compareAtPrice?: number | null;
     offerPrice?: number | null;
     comment?: string | null;
-    deliveryProfileId?: string | null;
+    deliveryProfileId?: string;
     status?: string;
     userId?: string | null;
 }
@@ -632,7 +654,7 @@ export type OfferUpdateRequest = {
     compareAtPrice?: number | null;
     offerPrice?: number | null;
     comment?: string | null;
-    deliveryProfileId?: string | null;
+    deliveryProfileId?: string;
     status?: string;
     userId?: string | null;
 }
@@ -649,12 +671,25 @@ export type OfferDeleteRequest = {
 
 // shippingService
 
-export type DeliveryProfileGetAllResponse = IResponse<IDeliveryProfile[]>
+export type DeliveryProfileGetAllResponse = IResponse<IDeliveryProfilePreview[]>
 export type DeliveryProfileGetAllRequest = void
+
+export type DeliveryProfileGetDeliveryZonesResponse = IResponse<IDeliveryZone[]>
+export type DeliveryProfileGetDeliveryZonesRequest = {
+    profileId: string;
+    q?: string;
+    limit?: number;
+    skip?: number;
+}
+
+export type DeliveryProfileGetByIdResponse = IResponse<IDeliveryProfile>
+export type DeliveryProfileGetByIdRequest = {
+    profileId: string;
+}
 
 export type DeliveryProfileCreateResponse = IResponse<string>
 export type DeliveryProfileCreateRequest = {
-    title?: string;
+    title: string;
 }
 
 export type DeliveryProfileUpdateResponse = IResponse<void>
@@ -680,8 +715,8 @@ export type DeliveryZoneUpdateResponse = IResponse<void>
 export type DeliveryZoneUpdateRequest = {
     profileId: string;
     zoneId: string;
-    createDeliveryOptions?: IDeliveryOption[];
-    updateDeliveryOptions?: (IDeliveryOption & { id: string })[];
+    createDeliveryOptions?: Omit<IDeliveryOption, "id">[];
+    updateDeliveryOptions?: IDeliveryOption[];
     deleteDeliveryOptions?: string[];
 }
 

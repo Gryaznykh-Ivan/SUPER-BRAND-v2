@@ -32,8 +32,9 @@ export class UpdateOfferDto {
     @IsEnum(OfferStatus, { each: true })
     status: OfferStatus;
 
-    @IsOptional()
     @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
     deliveryProfileId: string;
 
     @IsOptional()

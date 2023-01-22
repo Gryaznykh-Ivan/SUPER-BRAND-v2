@@ -335,8 +335,7 @@ model Offer {
 
 model DeliveryProfile {
     id        String         @id @default(cuid())
-    title     String
-    handle    String?        @default(cuid())
+    title     String         @unique
     offers    Offer[]
     zones     DeliveryZone[]
     createdAt DateTime       @default(now())
@@ -354,6 +353,7 @@ model DeliveryZone {
     updatedAt         DateTime         @updatedAt
 
     @@unique([deliveryProfileId, country, region])
+    @@fulltext([country, region])
 }
 
 model DeliveryOption {

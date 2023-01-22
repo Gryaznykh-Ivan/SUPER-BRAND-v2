@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
+import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, DeliveryZonesSuggestionRequest, deliveryZonesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
 
 export const suggestionService = api.injectEndpoints({
     endpoints: builder => ({
@@ -42,6 +42,14 @@ export const suggestionService = api.injectEndpoints({
             query: () => ({
                 url: "suggestions/deliveryProfiles",
                 method: "GET"
+            }),
+            providesTags: ["DELIVERY_PROFILES"]
+        }),
+        deliveryZones: builder.query<deliveryZonesSuggestionResponse, DeliveryZonesSuggestionRequest>({
+            query: (credentials) => ({
+                url: "suggestions/deliveryZones",
+                method: "GET",
+                params: credentials
             })
         })
     })
@@ -50,6 +58,7 @@ export const suggestionService = api.injectEndpoints({
 export const {
     useDeliveryProfilesQuery,
     useLazyCitiesQuery,
+    useLazyDeliveryZonesQuery,
     useLazyCountriesQuery,
     useLazyRegionsQuery,
     useLazyCollectionsQuery,

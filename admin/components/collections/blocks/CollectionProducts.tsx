@@ -95,7 +95,7 @@ export default function CollectionProducts({ onChange, collectionId, connectProd
             <div className="flex space-x-4 p-5 border-b-[1px]">
                 <SearchInput className="" placeholder="Поиск по коллекции" onChange={onSearch} />
             </div>
-            <div className="divide-y-[1px]">
+            <div className="divide-y-[1px] max-h-96 overflow-y-auto">
                 {isError &&
                     <div className="flex flex-col items-center py-5">
                         <div className="text-2xl font-bold text-red-600">Что-то пошло не так</div>
@@ -117,7 +117,7 @@ export default function CollectionProducts({ onChange, collectionId, connectProd
                         Ничего не найдено
                     </div>
                 }
-                {!isFetching && data?.data &&
+                {data?.data &&
                     <>
                         {data.data.map((product, index) =>
                             <div key={product.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
@@ -171,24 +171,23 @@ export default function CollectionProducts({ onChange, collectionId, connectProd
                                 )}
                             </div>
                         )}
-                        {connectProducts !== undefined && connectProducts.length !== 0 &&
-                            <div className="flex justify-center items-center h-10 font-medium bg-red-50">Добавлено несохраненных товаров: { connectProducts.length }</div>
-                        }
-
                     </>
                 }
-                <div className="flex items-center justify-center py-3 w-full space-x-1">
-                    <button className={`p-2 font-bold border-[1px] rounded-md ${query.skip === 0 && "bg-gray-100 cursor-not-allowed"}`} onClick={onPrevPage} disabled={query.skip === 0}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-                    <button className={`p-2 font-bold border-[1px] rounded-md ${data?.data.length !== itemPerPage && "bg-gray-100 cursor-not-allowed"}`} onClick={onNextPage} disabled={data?.data.length !== itemPerPage}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-                </div>
+            </div>
+            {connectProducts !== undefined && connectProducts.length !== 0 &&
+                <div className="flex justify-center items-center h-10 font-medium bg-red-50 border-t-[1px]">Добавлено несохраненных товаров: {connectProducts.length}</div>
+            }
+            <div className="flex items-center justify-center py-3 w-full space-x-1 border-t-[1px]">
+                <button className={`p-2 font-bold border-[1px] rounded-md ${query.skip === 0 && "bg-gray-100 cursor-not-allowed"}`} onClick={onPrevPage} disabled={query.skip === 0}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </button>
+                <button className={`p-2 font-bold border-[1px] rounded-md ${data?.data.length !== itemPerPage && "bg-gray-100 cursor-not-allowed"}`} onClick={onNextPage} disabled={data?.data.length !== itemPerPage}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </button>
             </div>
             {popup && <SelectProducts title="Добавить товары в коллекцию" collectionId={collectionId} connectProducts={connectProducts} onAddProduct={onAddProduct} onClose={onPopupClose} />}
         </div>

@@ -24,7 +24,7 @@ export const offerService = api.injectEndpoints({
                 method: "POST",
                 body: credentials
             }),
-            invalidatesTags: ["VARIANTS"]
+            invalidatesTags: ["VARIANTS", "DELIVERY_PROFILES"]
         }),
         updateOffer: builder.mutation<OfferUpdateResponse, OfferUpdateRequest>({
             query: ({ offerId, ...rest }) => ({
@@ -32,7 +32,7 @@ export const offerService = api.injectEndpoints({
                 method: "PUT",
                 body: rest
             }),
-            invalidatesTags: ["OFFER", "VARIANTS"]
+            invalidatesTags: ["OFFER", "VARIANTS", "DELIVERY_PROFILES"]
         }),
         deleteOffer: builder.mutation<OfferDeleteResponse, OfferDeleteRequest>({
             query: ({ offerId }) => ({

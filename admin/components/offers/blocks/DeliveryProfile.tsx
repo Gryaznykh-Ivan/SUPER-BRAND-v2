@@ -5,18 +5,18 @@ import { OfferCreateRequest } from '../../../types/api';
 import Select from '../../inputs/Select'
 
 interface IProps {
-    deliveryProfileId: string | null;
+    deliveryProfileId: string;
     onChange: (obj: OfferCreateRequest) => void;
 }
 
 export default function DeliveryProfile({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
-        deliveryProfileId: data.deliveryProfileId ?? undefined,
+        deliveryProfileId: data.deliveryProfileId ?? "default",
     })
 
     const { data: deliveryProfiles } = useDeliveryProfilesQuery()
     const profiles = useMemo(() => {
-        const p: Record<any, string> = { null: "Общий" }
+        const p: Record<any, string> = {}
 
         deliveryProfiles?.data.forEach((profile) => {
             p[profile.id] = profile.title

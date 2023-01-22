@@ -2,7 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProfileDto } from './dto/createProfile.dto';
-import { CreateDeliveryOptionDto, CreateDeliveryZoneDto, UpdateDeliveryOptionDto, UpdateDeliveryZoneDto } from './dto/delivery.dto';
+import { CreateDeliveryZoneDto, UpdateDeliveryZoneDto } from './dto/delivery.dto';
+import { SearchZoneDto } from './dto/searchZone.dto';
 import { UpdateProfileDto } from './dto/updateProfile.dto';
 
 @Injectable()
@@ -16,7 +17,6 @@ export class ShippingService {
             select: {
                 id: true,
                 title: true,
-                handle: true,
                 _count: {
                     select: {
                         offers: true,
@@ -25,14 +25,13 @@ export class ShippingService {
                 }
             },
             orderBy: [{
-                createdAt: 'desc'
+                createdAt: 'asc'
             }]
         })
 
         const result = profiles.map(profile => ({
-            id: true,
-            title: true,
-            handle: true,
+            id: profile.id,
+            title: profile.title,
             offersCount: profile._count.offers,
             zonesCount: profile._count.zones,
         }))
@@ -43,8 +42,56 @@ export class ShippingService {
         }
     }
 
+    async getDeliveryZones(profileId: string, data: SearchZoneDto) {
+        const zones = await this.prisma.deliveryZone.findMany({
+            where: {
+                deliveryProfileId: profileId,
+                country: {
+                    search: data.q ? `${data.q}*` : undefined,
+                },
+                region: {
+                    search: data.q ? `${data.q}*` : undefined,
+                },
+            },
+            select: {
+                id: true,
+                country: true,
+                region: true,
+                options: {
+                    select: {
+                        id: true,
+                        title: true,
+                        duration: true,
+                        price: true,
+                    }
+                }
+            },
+            skip: data.skip,
+            take: data.limit,
+            orderBy: [{
+                createdAt: 'desc'
+            }]
+        })
+
+        return {
+            success: true,
+            data: zones
+        }
+    }
+
     async getProfileById(profileId: string) {
-        throw new Error('Method not implemented.');
+        const profile = await this.prisma.deliveryProfile.findUnique({
+            where: { id: profileId },
+            select: {
+                id: true,
+                title: true
+            }
+        })
+
+        return {
+            success: true,
+            data: profile
+        }
     }
 
     async createProfile(data: CreateProfileDto) {
@@ -153,21 +200,33 @@ export class ShippingService {
             title: data.title
         }
 
-        if (data.connectOffers !== undefined || data.disconnectOffers !== undefined) {
+        if (data.connectOffers !== undefined) {
             Object.assign(updateDeliveryProfileQuery, {
                 offers: {
-                    disconnect: data.disconnectOffers ?? [],
                     connect: data.connectOffers ?? [],
                 }
             })
         }
 
         try {
-            await this.prisma.deliveryProfile.update({
-                where: {
-                    id: profileId
-                },
-                data: updateDeliveryProfileQuery
+            await this.prisma.$transaction(async tx => {
+                await tx.deliveryProfile.update({
+                    where: {
+                        id: profileId
+                    },
+                    data: updateDeliveryProfileQuery
+                })
+
+                await tx.deliveryProfile.update({
+                    where: {
+                        id: "default"
+                    },
+                    data: {
+                        offers: {
+                            connect: data.disconnectOffers ?? []
+                        }
+                    }
+                })
             })
 
             return {
@@ -199,15 +258,22 @@ export class ShippingService {
     }
 
     async removeProfile(profileId: string) {
+        if (profileId === "default") {
+            throw new HttpException(`Удалить дефолтный профиль невозможно`, HttpStatus.BAD_REQUEST)
+        }
+
         try {
             await this.prisma.deliveryProfile.delete({
-                where: { id: profileId }
+                where: {
+                    id: profileId,
+                }
             })
 
             return {
                 success: true
             }
         } catch (e) {
+            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
