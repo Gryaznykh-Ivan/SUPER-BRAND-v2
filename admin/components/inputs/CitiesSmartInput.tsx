@@ -24,7 +24,7 @@ export default function CitiesSmartInput({ onChange, value, placeholder, classNa
 
     useEffect(() => {
         if (focus) {
-            suggest({ q: debounced.replaceAll("-", " "), region: region })
+            suggest({ q: debounced.replace(/[+\-<>()~*\"@]+/g, ' '), region: region })
         }
     }, [debounced, focus])
 

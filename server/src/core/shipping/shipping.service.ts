@@ -151,7 +151,7 @@ export class ShippingService {
         if (data.createDeliveryOptions !== undefined || data.deleteDeliveryOptions !== undefined) {
             Object.assign(updateDeliveryZoneQuery, {
                 options: {
-                    deleteMany: data.deleteDeliveryOptions ?? [],
+                    deleteMany: data.deleteDeliveryOptions?.map(id => ({ id })) ?? [],
                     createMany: {
                         data: data.createDeliveryOptions ?? [],
                     }
@@ -184,6 +184,7 @@ export class ShippingService {
                 success: true
             }
         } catch (e) {
+            console.log(e)
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Профиль с таким title уже существует", HttpStatus.BAD_REQUEST)

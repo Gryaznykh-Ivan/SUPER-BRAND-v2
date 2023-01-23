@@ -54,7 +54,7 @@ export class ShippingController {
         return this.productService.createDeliveryZone(profileId, data)
     }
 
-    @Post(':profileId/updateDeliveryZone/:zoneId')
+    @Put(':profileId/updateDeliveryZone/:zoneId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.SHIPPING_UPDATE])
     updateDeliveryZone(
         @Param('profileId') profileId: string,

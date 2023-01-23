@@ -6,7 +6,7 @@ import SelectOffers from '../popups/SelectOffers'
 import DeliveryDeliveryZone from '../cards/DeliveryZone'
 import SelectRegion from '../popups/SelectRegion'
 import { useCreateDeliveryZoneMutation, useDeleteDeliveryZoneMutation, useLazyGetDeliveryZonesQuery, useUpdateDeliveryZoneMutation } from '../../../services/shippingService'
-import { IDeliveryZone, IErrorResponse } from '../../../types/api'
+import { DeliveryZoneUpdateRequest, IDeliveryZone, IErrorResponse } from '../../../types/api'
 import DeliveryZone from '../cards/DeliveryZone'
 import { toast } from 'react-toastify'
 
@@ -43,7 +43,7 @@ export default function ProfileShipping({ profileId }: IProps) {
     }, [data])
 
     useEffect(() => {
-        getDeliveryZones({ ...query, profileId, q: query.q.replaceAll("-", " ") })
+        getDeliveryZones({ ...query, profileId, q: query.q.replace(/[+\-<>()~*\"@]+/g, ' ') })
     }, [query])
 
 
@@ -110,6 +110,10 @@ export default function ProfileShipping({ profileId }: IProps) {
         removeDeliveryZone({ profileId, zoneId })
     }
 
+    const onUpdateDeliveryZone = (zoneId: string, data: Omit<DeliveryZoneUpdateRequest, "profileId" | "zoneId">) => {
+        updateDeliveryZone({ profileId, zoneId, ...data })
+    }
+
     return (
         <div className="relative rounded-md bg-white shadow-sm">
             <div className="flex justify-between items-center p-3 border-b-[1px]">
@@ -152,6 +156,7 @@ export default function ProfileShipping({ profileId }: IProps) {
                         country={zone.country}
                         region={zone.region}
                         options={zone.options}
+                        onChange={onUpdateDeliveryZone}
                         onRemoveDeliveryZone={onRemoveDeliveryZone}
                     />
                 )}
