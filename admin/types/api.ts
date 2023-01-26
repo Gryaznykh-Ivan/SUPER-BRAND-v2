@@ -57,6 +57,8 @@ export interface IOfferSearch {
     offerPrice: number | null;
     status: OfferStatus;
     user: string | null;
+    image: IImage;
+    deliveryProfile: IDeliveryProfile;
 }
 
 export interface IUserAddress {

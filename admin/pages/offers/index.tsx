@@ -1,7 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import ImageLoader from '../../components/image/ImageLoader'
 import RouterSearchInput from '../../components/inputs/RouterSearchInput'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
@@ -56,14 +58,16 @@ function Index() {
                     </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
-                    <div className="flex space-x-2 border-b-[1px]">
-                        <NavLink href="/offers" query={{ status: undefined }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Все</NavLink>
-                        <NavLink href="/offers" query={{ status: "OFFERED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Предложенные</NavLink>
-                        <NavLink href="/offers" query={{ status: "ACCEPTED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Нужно принять</NavLink>
-                        <NavLink href="/offers" query={{ status: "ACTIVE" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
-                        <NavLink href="/offers" query={{ status: "SOLD" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Проданные</NavLink>
+                    <div className="relative flex h-16 py-3 overflow-x-auto overflow-y-hidden pb-[17px] mb-[-17px]">
+                        <div className="absolute whitespace-nowrap space-x-2 pb-2 border-b-[1px] md:left-0 md:right-0">
+                            <NavLink href="/offers" query={{ status: undefined }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Все</NavLink>
+                            <NavLink href="/offers" query={{ status: "OFFERED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Предложенные</NavLink>
+                            <NavLink href="/offers" query={{ status: "ACCEPTED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Нужно принять</NavLink>
+                            <NavLink href="/offers" query={{ status: "ACTIVE" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
+                            <NavLink href="/offers" query={{ status: "SOLD" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Проданные</NavLink>
+                        </div>
                     </div>
-                    <div className="py-4 space-y-4">
+                    <div className="pb-4 space-y-4 mt-4">
                         <div className="">
                             <RouterSearchInput placeholder="Поиск" />
                         </div>
@@ -88,6 +92,7 @@ function Index() {
                                 <table className="table-auto block max-w-0 lg:table lg:w-full lg:max-w-none">
                                     <thead>
                                         <tr className="border-b-[1px] text-sm">
+                                            <th className=""></th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Продукт</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Вариант</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Поставщик</th>
@@ -103,6 +108,26 @@ function Index() {
                                                 className="border-b-[1px] hover:bg-gray-100 cursor-pointer"
                                                 onClick={() => router.push(`/offers/${offer.id}`)}
                                             >
+                                                <td className="py-2 flex justify-center">
+                                                    <div className="relative w-12 aspect-square border-[1px] rounded-md">
+                                                        {offer.image !== null ?
+                                                            <Image
+                                                                className="object-contain"
+                                                                loader={ImageLoader}
+                                                                fill
+                                                                sizes="200px"
+                                                                src={offer.image.src}
+                                                                alt={offer.image.alt}
+                                                            />
+                                                            :
+                                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M4 16L8.586 11.414C8.96106 11.0391 9.46967 10.8284 10 10.8284C10.5303 10.8284 11.0389 11.0391 11.414 11.414L16 16M14 14L15.586 12.414C15.9611 12.0391 16.4697 11.8284 17 11.8284C17.5303 11.8284 18.0389 12.0391 18.414 12.414L20 14M14 8H14.01M6 20H18C18.5304 20 19.0391 19.7893 19.4142 19.4142C19.7893 19.0391 20 18.5304 20 18V6C20 5.46957 19.7893 4.96086 19.4142 4.58579C19.0391 4.21071 18.5304 4 18 4H6C5.46957 4 4.96086 4.21071 4.58579 4.58579C4.21071 4.96086 4 5.46957 4 6V18C4 18.5304 4.21071 19.0391 4.58579 19.4142C4.96086 19.7893 5.46957 20 6 20Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                                </svg>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </td>
                                                 <td className="px-3 py-2">{offer.product}</td>
                                                 <td className="px-3 py-2">{offer.variant}</td>
                                                 <td className="px-3 py-2">{offer.user}</td>

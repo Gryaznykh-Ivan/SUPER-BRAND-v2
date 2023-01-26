@@ -7,6 +7,7 @@ import { useLazyGetProductsBySearchQuery } from '../../../services/productServic
 import { useRouter } from 'next/router';
 import { CollectionCreateRequest, CollectionUpdateRequest, ICollectionProduct, IErrorResponse, IProduct } from '../../../types/api';
 import ImageLoader from '../../image/ImageLoader';
+import Status from '../../products/cards/Status';
 
 interface IProps {
     collectionId?: string;
@@ -114,7 +115,7 @@ export default function SelectProducts({ title, collectionId, connectProducts, o
                                         </div>
                                         <div className="text-sm flex-1">{product.title}</div>
                                         <div className="">
-                                            <span className={`${product.available ? "bg-green-600" : "bg-gray-400"} px-2 py-1 rounded-xl text-white text-sm`}>{product.available ? "Active" : "Draft"}</span>
+                                            <Status available={product.available} />
                                         </div>
                                     </label>
                                 )}

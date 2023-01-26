@@ -7,6 +7,7 @@ import ImageLoader from '../../components/image/ImageLoader'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import NavLink from '../../components/navigation/NavLink'
+import Status from '../../components/products/cards/Status'
 import { useLazyGetProductsBySearchQuery } from '../../services/productService'
 import { IErrorResponse } from '../../types/api'
 
@@ -57,12 +58,14 @@ function Index() {
                     </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
-                    <div className="flex space-x-2 border-b-[1px]">
-                        <NavLink href="/products" query={{ available: undefined }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Все</NavLink>
-                        <NavLink href="/products" query={{ available: "true" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
-                        <NavLink href="/products" query={{ available: "false" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Неактивные</NavLink>
+                    <div className="relative flex h-16 py-3 overflow-x-auto overflow-y-hidden pb-[17px] mb-[-17px]">
+                        <div className="absolute whitespace-nowrap space-x-2 pb-2 border-b-[1px] left-0 right-0">
+                            <NavLink href="/products" query={{ available: undefined }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Все</NavLink>
+                            <NavLink href="/products" query={{ available: "true" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
+                            <NavLink href="/products" query={{ available: "false" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Неактивные</NavLink>
+                        </div>
                     </div>
-                    <div className="py-4 space-y-4">
+                    <div className="pb-4 space-y-4 mt-4">
                         <div className="">
                             <SearchInput placeholder="Поиск" onChange={onSearch} />
                         </div>
@@ -100,8 +103,8 @@ function Index() {
                                                 className="border-b-[1px] hover:bg-gray-100 cursor-pointer"
                                                 onClick={() => router.push(`/products/${product.id}`)}
                                             >
-                                                <td className="py-2 px-1">
-                                                    <div className="relative w-20 aspect-5/3 rounded overflow-hidden">
+                                                <td className="py-2 px-1 flex justify-center">
+                                                    <div className="relative w-12 aspect-square border-[1px] rounded-md">
                                                         {product.image !== null ?
                                                             <Image
                                                                 className="object-contain"
@@ -122,7 +125,7 @@ function Index() {
                                                 </td>
                                                 <td className="font-medium px-3 py-2">{product.title}</td>
                                                 <td className="px-3 py-2">
-                                                    <span className={`${product.available ? "bg-green-600" : "bg-gray-400"} px-2 py-1 rounded-md text-white text-sm`}>{product.available ? "Active" : "Draft"}</span>
+                                                    <Status available={ product.available } />
                                                 </td>
                                                 <td className="px-3 py-2">{product.offersCount} офферов</td>
                                                 <td className="px-3 py-2">{product.vendor}</td>

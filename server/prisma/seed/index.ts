@@ -10,6 +10,10 @@ const seed = async () => {
 
     console.log("2) Countries data filling")
     await countries()
+
+
+    console.log("3) DeliveryProfiles data filling")
+    await deliveryProfiles()
 }
 
 const managers = async () => {
@@ -78,6 +82,15 @@ const countries = async () => {
             }
         })
     }
+}
+
+const deliveryProfiles = async () => {
+    await prisma.deliveryProfile.create({
+        data: {
+            id: "default",
+            title: "Товары с долгой доставкой"
+        }
+    })
 }
 
 seed().then(async () => {

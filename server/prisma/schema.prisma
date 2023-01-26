@@ -151,7 +151,7 @@ model Address {
 }
 
 model Order {
-    id             String         @id @default(cuid())
+    id             Int            @id @default(autoincrement())
     paymentStatus  PaymentStatus
     totalPrice     Int
     totalShiping   Int
@@ -174,7 +174,7 @@ model Timeline {
     id        String   @id @default(cuid())
     message   String
     order     Order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    orderId   String
+    orderId   Int
     createdAt DateTime @default(now())
 }
 
@@ -188,7 +188,7 @@ model Fulfillment {
     shippingDuration Int
     orderProduct     OrderProduct[]
     order            Order             @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    orderId          String
+    orderId          Int
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
 }
@@ -197,7 +197,7 @@ model OrderProduct {
     id            String       @id @default(cuid())
     price         Int
     order         Order        @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    orderId       String
+    orderId       Int
     variant       Variant      @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
     variantId     String
     offer         Offer        @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Restrict)

@@ -5,7 +5,7 @@ interface IProps {
     status: OfferStatus;
 }
 
-const statuses = {
+const OfferStatuses = {
     "OFFERED": {
         className: "bg-gray-400",
         text: "Предложено"
@@ -20,7 +20,7 @@ const statuses = {
     },
     "ACTIVE": {
         className: "bg-green-600",
-        text: "Активно"
+        text: "Активный"
     },
     "SOLD": {
         className: "bg-red-500",
@@ -31,6 +31,6 @@ const statuses = {
 
 export default function Status({ status }: IProps) {
     return (
-        <span className={`${statuses[status].className} text-white px-2 py-1 rounded-md text-sm`}>{statuses[status].text}</span>
+        <span className={`${OfferStatuses[status].className} text-white px-2 py-1 rounded-md text-sm whitespace-nowrap`}>{OfferStatuses[status].text}</span>
     )
 }

@@ -52,10 +52,12 @@ function Index() {
                     </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
-                    <div className="flex space-x-2 border-b-[1px]">
-                        <Link href="#" className="relative p-3 before:absolute hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]">Все</Link>
+                    <div className="relative flex h-16 py-3 overflow-x-auto overflow-y-hidden pb-[17px] mb-[-17px]">
+                        <div className="absolute whitespace-nowrap space-x-2 pb-2 border-b-[1px] left-0 right-0">
+                            <Link href="/users" className="relative p-3 before:absolute hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]">Все</Link>
+                        </div>
                     </div>
-                    <div className="py-4 space-y-4">
+                    <div className="pb-4 space-y-4 mt-4">
                         <div className="">
                             <SearchInput placeholder="Поиск" onChange={onSearch} />
                         </div>

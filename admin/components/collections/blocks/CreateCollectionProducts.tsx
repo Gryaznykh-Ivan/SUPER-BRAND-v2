@@ -8,6 +8,7 @@ import ImageLoader from '../../image/ImageLoader';
 import { useLazyGetCollectionProductsQuery } from '../../../services/collectionService';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Status from '../../products/cards/Status';
 
 interface IProps {
     connectProducts: Pick<IProduct, "id">[] | undefined;
@@ -86,7 +87,7 @@ export default function CollectionProducts({ onChange, connectProducts }: IProps
                             <Link className="text-sm hover:underline" href={`/products/${product.id}`}>{product.title}</Link>
                         </div>
                         <div className="">
-                            <span className={`${product.available ? "bg-green-600" : "bg-gray-400"} px-2 py-1 rounded-xl text-white text-sm`}>{product.available ? "Active" : "Draft"}</span>
+                            <Status available={product.available} />
                         </div>
                         <button className="p-2 rounded-md hover:bg-gray-200" onClick={() => onRemoveProduct(product)}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
