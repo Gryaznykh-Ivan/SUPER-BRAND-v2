@@ -398,6 +398,7 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
+            console.log(e)
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Такая опция уже существует", HttpStatus.BAD_REQUEST)
@@ -478,66 +479,6 @@ export class ProductService {
                     }
                 }
 
-                if (data.createOptionValues !== undefined && data.createOptionValues.length !== 0) {
-                    // const allOptions = await tx.option.findMany({
-                    //     where: {
-                    //         productId
-                    //     },
-                    //     select: {
-                    //         option: true,
-                    //         values: {
-                    //             select: {
-                    //                 title: true
-                    //             }
-                    //         },
-                    //     },
-                    //     orderBy: [{ option: 'asc' }]
-                    // })
-
-                    // // проверка количества вариантов
-                    // const variantsQuantity = allOptions.reduce((a, c) => {
-                    //     return a * c.values.length
-                    // }, 1)
-
-                    // if (variantsQuantity > 100) {
-                    //     throw new HttpException("Максимальное количество вариантов 100", HttpStatus.BAD_REQUEST)
-                    // }
-
-                    // const allVariant = []
-                    // for (const [key, option] of Object.entries(allOptions)) {
-                    //     const index = +key
-                    //     for (const optionValue of option.values) {
-                    //         if (allVariant[index] === undefined) {
-                    //             allVariant[index] = []
-                    //         }
-
-                    //         if (index > 0) {
-                    //             for (let i = 0; i < allVariant[index - 1].length; i++) {
-                    //                 if (Array.isArray(allVariant[index - 1][i]) === true) {
-                    //                     allVariant[index].push([...allVariant[index - 1][i], optionValue.title])
-                    //                 } else {
-                    //                     allVariant[index].push([allVariant[index - 1][i], optionValue.title])
-                    //                 }
-                    //             }
-                    //         } else {
-                    //             allVariant[index].push(optionValue.title)
-                    //         }
-                    //     }
-                    // }
-
-                    // console.log(allVariant)
-
-                    // await tx.variant.createMany({
-                    //     data: allVariant.at(-1).map(v => ({
-                    //         productId,
-                    //         option0: v[0],
-                    //         option1: v[1],
-                    //         option2: v[2],
-                    //     })),
-                    //     skipDuplicates: true
-                    // })
-                }
-
                 if (data.position !== undefined) {
                     const current = await tx.option.findFirst({
                         where: {
@@ -568,13 +509,59 @@ export class ProductService {
                         }
                     })
                 }
+
+                const newOptions = await tx.option.findMany({
+                    where: { productId: productId },
+                    select: {
+                        option: true,
+                        values: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
+                    },
+                    orderBy: { position: 'asc' }
+                })
+
+
+                const values = newOptions.map(option => option.values.map(value => ({ ...value, option: option.option })))
+                const combinations = this.getCombinations(values)
+
+                for (const combination of combinations) {
+                    const variant = await tx.variant.findFirst({
+                        where: {
+                            productId: productId,
+                            option0: combination.find(c => c.option === 0)?.title ?? null,
+                            option1: combination.find(c => c.option === 1)?.title ?? null,
+                            option2: combination.find(c => c.option === 2)?.title ?? null
+                        }
+                    })
+
+                    if (variant !== null) continue
+
+                    await tx.variant.create({
+                        data: {
+                            productId: productId,
+                            option0: combination.find(c => c.option === 0)?.title ?? null,
+                            option1: combination.find(c => c.option === 1)?.title ?? null,
+                            option2: combination.find(c => c.option === 2)?.title ?? null
+                        }
+                    })
+                }
             })
 
             return {
-                success: true,
+                success: true
             }
         } catch (e) {
             console.log(e)
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === 'P2003') {
+                    throw new HttpException("Невозможно удалить варианты у которых есть офферы. Начните с удаления офферов у варианта, который хотите стереть", HttpStatus.BAD_REQUEST)
+                }
+            }
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -583,49 +570,88 @@ export class ProductService {
         try {
             await this.prisma.$transaction(async tx => {
                 const option = await tx.option.delete({
-                    where: { id: optionId }
+                    where: { id: optionId },
+                    select: {
+                        productId: true,
+                        option: true,
+                        values: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
+                    }
                 })
 
                 const options = await tx.option.findMany({
                     where: { productId: option.productId },
-                    select: { id: true },
-                    orderBy: [{ position: 'asc' }]
+                    select: {
+                        id: true,
+                        option: true,
+                        values: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
+                    },
+                    orderBy: { position: 'asc' }
                 })
 
-                if (options.length !== 0) {
-                    for (const [index, option] of Object.entries(options)) {
-                        await tx.option.update({
-                            where: {
-                                id: option.id
-                            },
-                            data: {
-                                position: +index
-                            }
-                        })
-                    }
-
-                    await tx.variant.updateMany({
+                for (const [index, option] of Object.entries(options)) {
+                    await tx.option.update({
                         where: {
-                            productId: option.productId
+                            id: option.id
                         },
                         data: {
-                            [`option${option.option}`]: null
-                        }
-                    })
-                } else {
-                    await tx.variant.deleteMany({
-                        where: {
-                            productId: option.productId
+                            position: +index
                         }
                     })
                 }
 
+                await tx.variant.deleteMany({
+                    where: { productId: option.productId },
+                })
+
+                if (options.length !== 0) {
+                    const values = options.map(option => option.values.map(value => ({ ...value, option: option.option })))
+                    const combinations = this.getCombinations(values)
+
+                    for (const combination of combinations) {
+                        const variant = await tx.variant.findFirst({
+                            where: {
+                                productId: option.productId,
+                                option0: combination.find(c => c.option === 0)?.title ?? null,
+                                option1: combination.find(c => c.option === 1)?.title ?? null,
+                                option2: combination.find(c => c.option === 2)?.title ?? null
+                            }
+                        })
+
+                        if (variant !== null) continue
+
+                        await tx.variant.create({
+                            data: {
+                                productId: option.productId,
+                                option0: combination.find(c => c.option === 0)?.title ?? null,
+                                option1: combination.find(c => c.option === 1)?.title ?? null,
+                                option2: combination.find(c => c.option === 2)?.title ?? null
+                            }
+                        })
+                    }
+                }
             })
 
             return {
                 success: true
             }
         } catch (e) {
+            console.log(e)
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === 'P2003') {
+                    throw new HttpException("Невозможно удалить варианты у которых есть офферы. Начните с удаления офферов у варианта, который хотите стереть", HttpStatus.BAD_REQUEST)
+                }
+            }
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -689,5 +715,14 @@ export class ProductService {
         } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+
+    private getCombinations = (arrays) => {
+        return arrays.reduce((result, array) => {
+            return result.reduce((newResult, combination) => {
+                return newResult.concat(array.map(num => [...combination, num]));
+            }, []);
+        }, [[]]);
     }
 }

@@ -146,6 +146,7 @@ function Index() {
                                 />
                                 <VariantList
                                     productId={data.data.id}
+                                    isOptionsExist={data.data.options.length !== 0}
                                 />
                             </div>
                         </div>

@@ -17,10 +17,15 @@ export default function OptionList({ productId, options }: IProps) {
     const [state, setState] = useState({
         newOption: ""
     })
-
+    
     const [createOption, { isSuccess: isCreateOptionSuccess, isError: isCreateOptionError, error: createOptionError }] = useCreateOptionMutation()
     const [updateOption, { isSuccess: isUpdateOptionSuccess, isError: isUpdateOptionError, error: updateOptionError }] = useUpdateOptionMutation()
     const [removeOption, { isSuccess: isRemoveOptionSuccess, isError: isRemoveOptionError, error: removeOptionError }] = useRemoveOptionMutation()
+    
+    
+    useEffect(() => {
+        setItems(options)
+    }, [options])
 
     useEffect(() => {
         if (isCreateOptionSuccess) {
@@ -64,9 +69,6 @@ export default function OptionList({ productId, options }: IProps) {
         }
     }, [isRemoveOptionSuccess, isRemoveOptionError])
 
-    useEffect(() => {
-        setItems(options)
-    }, [options])
 
     const onDragStart = (e: React.DragEvent) => {
         if (selected === null) return e.preventDefault()
@@ -140,8 +142,14 @@ export default function OptionList({ productId, options }: IProps) {
         await updateOption({ productId, optionId: item.id, title: item.title })
     }
 
-    const onOptionValuesUpdate = async (id: string, data: Pick<ProductUpdateOptionRequest, "createOptionValues" | "deleteOptionValues" | "updateOptionValues">) => {
-        await updateOption({ productId, optionId: id, ...data })
+    const onOptionValuesUpdate = async (id: string, data: Pick<ProductUpdateOptionRequest, "createOptionValues" | "deleteOptionValues" | "updateOptionValues">): Promise<boolean> => {
+        try {
+            await updateOption({ productId, optionId: id, ...data }).unwrap()
+
+            return true
+        } catch (e) {
+            return false
+        }
     }
 
     const onOptionRemove = async (id: string) => {

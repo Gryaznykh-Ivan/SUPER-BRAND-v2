@@ -9,12 +9,15 @@ import ImageLoader from '../../image/ImageLoader';
 interface IProps {
     productId: string;
     createNewVariant?: boolean;
+    isOptionsExist?: boolean;
 }
 
-export default function VariantList({ productId, createNewVariant = true }: IProps) {
+export default function VariantList({ productId, createNewVariant = true, isOptionsExist = true }: IProps) {
     const router = useRouter()
 
     const { isError, error, isLoading, data } = useGetVariantsQuery({ productId })
+
+    if (isOptionsExist === false) return <></>
 
     return (
         <div className="rounded-md bg-white shadow-sm overflow-hidden">
@@ -42,7 +45,7 @@ export default function VariantList({ productId, createNewVariant = true }: IPro
                         Вариантов пока нет
                     </div>
                 }
-                {!isLoading && data?.data &&
+                {isLoading === false && data?.data &&
                     <>
                         {
                             data.data.map(variant => (

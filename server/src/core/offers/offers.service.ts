@@ -85,9 +85,9 @@ export class OfferService {
                     },
                     {
                         variant: {
-                            option0: data.q?.match(/option0:'.+'/g)?.[0]?.split("'").at(-2) ?? undefined,
-                            option1: data.q?.match(/option1:'.+'/g)?.[0]?.split("'").at(-2) ?? undefined,
-                            option2: data.q?.match(/option2:'.+'/g)?.[0]?.split("'").at(-2) ?? undefined,
+                            option0: this.getOptonValue(data.q, "option0"),
+                            option1: this.getOptonValue(data.q, "option1"),
+                            option2: this.getOptonValue(data.q, "option2"),
                         }
                     },
                     {
@@ -257,5 +257,19 @@ export class OfferService {
         } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+    private getOptonValue(q: string | undefined, option: string) {
+        if (typeof q !== 'string') return undefined
+        if (q.length === 0) return undefined
+
+        const regex = new RegExp(option + ":'([^']+)'");
+        const match = regex.exec(q);
+
+        if (match) {
+            return match[1];
+        }
+
+        return undefined;
     }
 }

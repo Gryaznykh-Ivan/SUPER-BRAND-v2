@@ -130,7 +130,12 @@ export class VariantService {
                         }
                     }
                 }
-            }
+            },
+            orderBy: [
+                { option0: 'asc' },
+                { option1: 'asc' },
+                { option2: 'asc' },
+            ]
         })
 
         const result = variants.map(variant => ({
