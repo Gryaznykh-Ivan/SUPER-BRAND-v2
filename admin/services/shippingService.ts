@@ -39,7 +39,7 @@ export const shippingService = api.injectEndpoints({
                 method: "POST",
                 body: rest
             }),
-            invalidatesTags: ["DELIVERY_ZONES"]
+            invalidatesTags: ["DELIVERY_ZONES", "DELIVERY_PROFILES"]
         }),
         updateDeliveryProfile: builder.mutation<DeliveryProfileUpdateResponse, DeliveryProfileUpdateRequest>({
             query: ({ profileId, ...rest }) => ({
@@ -62,7 +62,7 @@ export const shippingService = api.injectEndpoints({
                 url: `shipping/${profileId}/removeDeliveryZone/${zoneId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["DELIVERY_ZONES"]
+            invalidatesTags: ["DELIVERY_ZONES", "DELIVERY_PROFILES"]
         }),
         deleteDeliveryProfile: builder.mutation<DeliveryProfileDeleteResponse, DeliveryProfileDeleteRequest>({
             query: ({ profileId }) => ({
