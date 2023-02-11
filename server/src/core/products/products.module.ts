@@ -2,12 +2,13 @@ import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaModule } from "src/prisma/prisma.module";
+import { FilesModule } from "src/utils/files/files.module";
 import { UrlModule } from "src/utils/urls/urls.module";
 import { ProductController } from "./products.controller";
 import { ProductService } from "./products.service";
 
 @Module({
-    imports: [PrismaModule, HttpModule, UrlModule],
+    imports: [PrismaModule, HttpModule, UrlModule, FilesModule],
     controllers: [ProductController],
     providers: [JwtService, ProductService]
 })

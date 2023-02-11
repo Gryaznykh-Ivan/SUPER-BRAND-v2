@@ -283,7 +283,7 @@ model OptionValue {
 
 model Image {
     id           String      @id @default(cuid())
-    name         String
+    path         String
     src          String
     alt          String
     position     Int

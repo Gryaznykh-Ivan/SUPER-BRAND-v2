@@ -49,9 +49,8 @@ export class ProductController {
     uploadImages(
         @Param('productId') productId: string,
         @UploadedFiles() images: Express.Multer.File[],
-        @Token() token: string
     ) {
-        return this.productService.uploadImages(productId, images, token)
+        return this.productService.uploadImages(productId, images)
     }
 
     @Put(':productId/updateImage/:imageId')

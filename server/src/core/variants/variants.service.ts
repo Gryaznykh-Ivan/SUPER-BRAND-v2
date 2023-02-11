@@ -8,13 +8,14 @@ import { CreateVariantDto } from './dto/createVariant.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateVariantDto } from './dto/updateVariant.dto';
 import { SearchVariantDto } from './dto/searchVariant.dto';
+import { FilesService } from 'src/utils/files/files.service';
 
 
 @Injectable()
 export class VariantService {
     constructor(
         private prisma: PrismaService,
-        private http: HttpService
+        private files: FilesService,
     ) { }
 
 
@@ -374,19 +375,8 @@ export class VariantService {
         }
 
         try {
-            const formData = new FormData();
-            for (const image of images) {
-                formData.append('files', image.buffer, { filename: image.originalname });
-            }
-
-            const headers = {
-                ...formData.getHeaders(),
-                "Content-Length": formData.getLengthSync(),
-                "authorization": token
-            };
-
-            const result = await firstValueFrom(this.http.post("http://static.sb.com/upload", formData, { headers }));
-            if (result.data.success !== true) {
+            const result = await this.files.upload(images, 100);
+            if (result.success !== true) {
                 throw new HttpException("Загрузить картинки не удалось", HttpStatus.INTERNAL_SERVER_ERROR)
             }
 
@@ -397,9 +387,9 @@ export class VariantService {
             })
 
             const startPosition = lastImage !== null ? lastImage.position + 1 : 0
-            const createImagesQuery = result.data.data.map((image, index) => ({
-                name: image.name,
-                src: image.url,
+            const createImagesQuery = result.data.map((image, index) => ({
+                path: image.path,
+                src: image.src,
                 alt: variant.product.title,
                 position: startPosition + index,
                 variantId: variantId
@@ -417,7 +407,6 @@ export class VariantService {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-
 
     async updateImage(variantId: string, imageId: string, data: UpdateImageDto) {
         try {
@@ -478,9 +467,12 @@ export class VariantService {
                 const removedImage = await tx.image.delete({
                     where: { id: imageId },
                     select: {
-                        variantId: true
+                        variantId: true,
+                        path: true,
                     }
                 })
+
+                await this.files.delete({ paths: [removedImage.path] })
 
                 const images = await tx.image.findMany({
                     where: { variantId: removedImage.variantId },
@@ -589,9 +581,18 @@ export class VariantService {
 
     async removeVariant(variantId: string) {
         try {
-            await this.prisma.variant.delete({
-                where: { id: variantId }
+            const variant = await this.prisma.variant.delete({
+                where: { id: variantId },
+                select: {
+                    images: {
+                        select: {
+                            path: true
+                        }
+                    }
+                }
             })
+
+            await this.files.delete({ paths: variant.images.map(image => image.path) })
 
             return {
                 success: true

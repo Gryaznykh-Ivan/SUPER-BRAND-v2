@@ -8,13 +8,14 @@ import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateCollectionDto } from './dto/updateCollection.dto';
 import { firstValueFrom } from 'rxjs';
 import { UrlService } from 'src/utils/urls/urls.service';
+import { FilesService } from 'src/utils/files/files.service';
 
 @Injectable()
 export class CollectionService {
     constructor(
         private prisma: PrismaService,
-        private http: HttpService,
-        private url: UrlService
+        private url: UrlService,
+        private files: FilesService
     ) { }
 
     async getCollectionById(collectionId: string) {
@@ -202,19 +203,8 @@ export class CollectionService {
         }
 
         try {
-            const formData = new FormData();
-            for (const image of images) {
-                formData.append('files', image.buffer, { filename: image.originalname });
-            }
-
-            const headers = {
-                ...formData.getHeaders(),
-                "Content-Length": formData.getLengthSync(),
-                "authorization": token
-            };
-
-            const result = await firstValueFrom(this.http.post("http://static.sb.com/upload", formData, { headers }));
-            if (result.data.success !== true) {
+            const result = await this.files.upload(images, 100);
+            if (result.success !== true) {
                 throw new HttpException("Загрузить картинки не удалось", HttpStatus.INTERNAL_SERVER_ERROR)
             }
 
@@ -225,9 +215,9 @@ export class CollectionService {
             })
 
             const startPosition = lastImage !== null ? lastImage.position + 1 : 0
-            const createImagesQuery = result.data.data.map((image, index) => ({
-                name: image.name,
-                src: image.url,
+            const createImagesQuery = result.data.map((image, index) => ({
+                path: image.path,
+                src: image.src,
                 alt: collection.title,
                 position: startPosition + index,
                 collectionId: collectionId
@@ -305,9 +295,12 @@ export class CollectionService {
                 const removedImage = await tx.image.delete({
                     where: { id: imageId },
                     select: {
-                        collectionId: true
+                        collectionId: true,
+                        path: true
                     }
                 })
+
+                await this.files.delete({ paths: [removedImage.path] })
 
                 const images = await tx.image.findMany({
                     where: { collectionId: removedImage.collectionId },
@@ -381,9 +374,18 @@ export class CollectionService {
 
     async removeCollection(collectionId: string) {
         try {
-            await this.prisma.collection.delete({
-                where: { id: collectionId }
+            const collection = await this.prisma.collection.delete({
+                where: { id: collectionId },
+                select: {
+                    images: {
+                        select: {
+                            path: true
+                        }
+                    }
+                }
             })
+
+            await this.files.delete({ paths: collection.images.map(image => image.path) })
 
             return {
                 success: true

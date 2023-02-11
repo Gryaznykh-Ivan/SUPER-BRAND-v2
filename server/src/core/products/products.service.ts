@@ -10,13 +10,15 @@ import { firstValueFrom } from 'rxjs';
 import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
 import { UrlService } from 'src/utils/urls/urls.service';
 import { SearchProductDto } from './dto/searchProduct.dto';
+import { FilesService } from 'src/utils/files/files.service';
 
 @Injectable()
 export class ProductService {
     constructor(
         private prisma: PrismaService,
         private http: HttpService,
-        private url: UrlService
+        private url: UrlService,
+        private files: FilesService
     ) { }
 
     async getProductById(productId: string) {
@@ -203,7 +205,7 @@ export class ProductService {
     }
 
 
-    async uploadImages(productId: string, images: Express.Multer.File[], token: string) {
+    async uploadImages(productId: string, images: Express.Multer.File[]) {
         const product = await this.prisma.product.findFirst({
             where: { id: productId },
             select: {
@@ -216,19 +218,8 @@ export class ProductService {
         }
 
         try {
-            const formData = new FormData();
-            for (const image of images) {
-                formData.append('files', image.buffer, { filename: image.originalname });
-            }
-
-            const headers = {
-                ...formData.getHeaders(),
-                "Content-Length": formData.getLengthSync(),
-                "authorization": token
-            };
-
-            const result = await firstValueFrom(this.http.post("http://static.sb.com/upload", formData, { headers }));
-            if (result.data.success !== true) {
+            const result = await this.files.upload(images, 100);
+            if (result.success !== true) {
                 throw new HttpException("Загрузить картинки не удалось", HttpStatus.INTERNAL_SERVER_ERROR)
             }
 
@@ -239,9 +230,9 @@ export class ProductService {
             })
 
             const startPosition = lastImage !== null ? lastImage.position + 1 : 0
-            const createImagesQuery = result.data.data.map((image, index) => ({
-                name: image.name,
-                src: image.url,
+            const createImagesQuery = result.data.map((image, index) => ({
+                path: image.path,
+                src: image.src,
                 alt: product.title,
                 position: startPosition + index,
                 productId: productId
@@ -320,9 +311,12 @@ export class ProductService {
                 const removedImage = await tx.image.delete({
                     where: { id: imageId },
                     select: {
-                        productId: true
+                        productId: true,
+                        path: true
                     }
                 })
+
+                await this.files.delete({ paths: [removedImage.path] })
 
                 const images = await tx.image.findMany({
                     where: { productId: removedImage.productId },
@@ -705,23 +699,54 @@ export class ProductService {
 
     async removeProduct(productId: string) {
         try {
-            await this.prisma.product.delete({
-                where: { id: productId }
+            const product = await this.prisma.product.delete({
+                where: { id: productId },
+                select: {
+                    images: {
+                        select: {
+                            path: true
+                        }
+                    },
+                    variants: {
+                        select: {
+                            images: {
+                                select: {
+                                    path: true
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+
+            await this.files.delete({
+                paths: [
+                    ...product.images.map(image => image.path),
+                    ...product.variants.reduce((a, c) => {
+                        a.push(...c.images.map(image => image.path))
+                        return a
+                    }, [])
+                ]
             })
 
             return {
                 success: true
             }
         } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === 'P2003') {
+                    throw new HttpException("У этого продукта есть офферы. Начните с удаления офферов", HttpStatus.BAD_REQUEST)
+                }
+            }
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
-
-    private getCombinations = (arrays) => {
-        return arrays.reduce((result, array) => {
-            return result.reduce((newResult, combination) => {
-                return newResult.concat(array.map(num => [...combination, num]));
+    private getCombinations = (arrays: any) => {
+        return arrays.reduce((result: any, array: any) => {
+            return result.reduce((newResult: any, combination: any) => {
+                return newResult.concat(array.map((num: any) => [...combination, num]));
             }, []);
         }, [[]]);
     }
