@@ -14,7 +14,7 @@ export interface IDeliveryOption {
     id: string;
     title: string;
     duration: number;
-    price: number;
+    price: string;
 }
 
 export interface IDeliveryZone {
@@ -53,8 +53,8 @@ export interface IOfferSearch {
     id: string;
     product: string;
     variant: string;
-    price: number | null;
-    offerPrice: number | null;
+    price: string | null;
+    offerPrice: string | null;
     status: OfferStatus;
     user: string | null;
     image: IImage;
@@ -99,9 +99,9 @@ export interface IUser {
 export interface IOffer {
     id: string;
     variantId: string;
-    price: number | null;
-    compareAtPrice: number | null;
-    offerPrice: number | null;
+    price: string | null;
+    compareAtPrice: string | null;
+    offerPrice: string | null;
     comment: string | null;
     deliveryProfileId: string | null;
     status: OfferStatus;
@@ -162,7 +162,7 @@ export interface IVariantSearch {
 export interface IVariantPreview {
     id: string;
     title: string;
-    price: number;
+    price: string;
     image: IImage | null;
 }
 
@@ -639,9 +639,9 @@ export type OfferGetByIdRequest = {
 export type OfferCreateResponse = IResponse<string>
 export type OfferCreateRequest = {
     variantId?: string;
-    price?: number | null;
-    compareAtPrice?: number | null;
-    offerPrice?: number | null;
+    price?: string | null;
+    compareAtPrice?: string | null;
+    offerPrice?: string | null;
     comment?: string | null;
     deliveryProfileId?: string;
     status?: string;
@@ -652,9 +652,9 @@ export type OfferUpdateResponse = IResponse<void>
 export type OfferUpdateRequest = {
     offerId?: string;
     variantId?: string;
-    price?: number | null;
-    compareAtPrice?: number | null;
-    offerPrice?: number | null;
+    price?: string | null;
+    compareAtPrice?: string | null;
+    offerPrice?: string | null;
     comment?: string | null;
     deliveryProfileId?: string;
     status?: string;

@@ -32,7 +32,11 @@ export default function DeliveryZone({ country, id, options, region, onChange, o
     }, [options])
 
     const onOptionValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = (["price", "duration"]).includes(e.target.name) ? Number(e.target.value.replace(/[^0-9]/g, "")) : e.target.value;
+        const value = e.target.name === "duration" || e.target.name === "price"
+            ? e.target.name === "duration"
+                ? Number(e.target.value.replace(/[^0-9]/g, ""))
+                : e.target.value.replace(/[^0-9.]/g, "")
+            : e.target.value;
 
         setState(prev => ({ ...prev, values: state.values.map(c => c.id === e.target.id ? { ...c, [e.target.name]: value } : c) }))
         setState(prev => {
@@ -89,7 +93,7 @@ export default function DeliveryZone({ country, id, options, region, onChange, o
                     id: `new${Date.now()}`,
                     title: prev.newOptionTitle,
                     duration: Number(prev.newOptionDuration),
-                    price: Number(prev.newOptionPrice)
+                    price: prev.newOptionPrice
                 }
             ]
         }))

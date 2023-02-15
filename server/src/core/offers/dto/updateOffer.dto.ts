@@ -1,6 +1,6 @@
 import { OfferStatus } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Min, NotEquals, ValidateIf, ValidateNested } from "class-validator";
+import { IsArray, IsDecimal, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Min, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 
 export class UpdateOfferDto {
     @IsNotEmpty()
@@ -10,18 +10,15 @@ export class UpdateOfferDto {
     variantId: string;
 
     @IsOptional()
-    @IsInt()
-    @Min(0)
+    @IsDecimal()
     price: number;
 
     @IsOptional()
-    @IsInt()
-    @Min(0)
+    @IsDecimal()
     offerPrice: number;
 
     @IsOptional()
-    @IsInt()
-    @Min(0)
+    @IsDecimal()
     compareAtPrice: number;
 
     @IsOptional()

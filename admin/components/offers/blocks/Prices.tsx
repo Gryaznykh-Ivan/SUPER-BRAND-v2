@@ -31,14 +31,14 @@ export default function Prices({ onChange, ...data }: IProps) {
                 return [key, undefined]
             }
 
-            return [key, Number(value)]
+            return [key, value]
         })
 
         onChange(Object.fromEntries(changes))
     }, [state])
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setState(prev => ({ ...prev, [e.target.name]: e.target.value.replace(/[^0-9]/g, "") }))
+        setState(prev => ({ ...prev, [e.target.name]: e.target.value.replace(/[^0-9.]/g, "") }))
     }
 
     return (

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Router, useRouter } from 'next/router'
 import React from 'react'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
@@ -6,13 +7,15 @@ import NavLink from '../../components/navigation/NavLink'
 
 
 function Index() {
+    const router = useRouter()
+
     return (
         <MainLayout>
             <div className="px-6 my-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-medium">Заказы</h1>
                     <div className="">
-                        <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</button>
+                        <Link href="/orders/new" className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</Link>
                     </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
@@ -44,7 +47,7 @@ function Index() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push(`/orders/${1}`)}>
                                         <td className="px-3 py-2 font-medium">№3</td>
                                         <td className="px-3 py-2">27.11.2022 14:32</td>
                                         <td className="px-3 py-2">Мария Алексеевна</td>
@@ -54,7 +57,7 @@ function Index() {
                                         <td className="px-3 py-2">2</td>
                                         <td className="px-3 py-2">Доставка почтовой службой</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push(`/orders/${2}`)}>
                                         <td className="px-3 py-2 font-medium">№2</td>
                                         <td className="px-3 py-2">26.11.2022 14:32</td>
                                         <td className="px-3 py-2">Евгений Алексеевна</td>
@@ -64,7 +67,7 @@ function Index() {
                                         <td className="px-3 py-2">3</td>
                                         <td className="px-3 py-2">Доставка почтовой службой</td>
                                     </tr>
-                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer">
+                                    <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push(`/orders/${3}`)}>
                                         <td className="px-3 py-2 font-medium">№1</td>
                                         <td className="px-3 py-2">26.11.2022 14:32</td>
                                         <td className="px-3 py-2">Илья Алексеевна</td>

@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString, Min, NotEquals, ValidateIf, ValidateNested } from "class-validator";
+import { IsArray, IsDecimal, IsInt, IsNotEmpty, IsOptional, IsString, Min, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 
 
 export class CreateDeliveryOptionDto {
@@ -11,8 +11,7 @@ export class CreateDeliveryOptionDto {
     @Min(0)
     duration: string;
 
-    @IsInt()
-    @Min(0)
+    @IsDecimal()
     price: number;
 }
 
@@ -33,8 +32,7 @@ export class UpdateDeliveryOptionDto {
     @ValidateIf((object, value) => value !== undefined)
     duration: number;
 
-    @IsInt()
-    @Min(0)
+    @IsDecimal()
     @NotEquals(null)
     @ValidateIf((object, value) => value !== undefined)
     price: number;
