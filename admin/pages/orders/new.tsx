@@ -6,9 +6,10 @@ import MainLayout from '../../components/layouts/Main'
 import { useRouter } from 'next/router'
 import OrderProducts from '../../components/orders/blocks/OrderProducts'
 import PickDelivery from '../../components/orders/blocks/PickDelivery'
-import PaymentMethod from '../../components/orders/blocks/PaymentMethod'
+import Payment from '../../components/orders/blocks/Payment'
 import Customer from '../../components/orders/blocks/Customer'
 import Address from '../../components/orders/blocks/Address'
+import Service from '../../components/orders/blocks/Service'
 
 function New() {
     const router = useRouter()
@@ -34,10 +35,10 @@ function New() {
                         <OrderProducts
                             onChange={() => { }}
                         />
-                        <PickDelivery
+                        <Service
                             onChange={() => { }}
                         />
-                        <PaymentMethod
+                        <Payment
                             onChange={() => { }}
                         />
                     </div>

@@ -54,6 +54,7 @@ enum OfferStatus {
 
 enum Service {
     SHIPPING
+    DISCOUNT
 }
 
 enum Currency {
@@ -172,7 +173,6 @@ model Order {
     id             Int            @id @default(autoincrement())
     paymentStatus  PaymentStatus  @default(UNPAID)
     orderStatus    OrderStatus    @default(UNFULFILLED)
-    discount       Decimal        @db.Decimal(9, 2)
     subtotalPrice  Decimal        @db.Decimal(9, 2)
     totalPrice     Decimal        @db.Decimal(9, 2)
     mailingCountry String
@@ -180,6 +180,7 @@ model Order {
     mailingRegion  String
     mailingAddress String
     comment        String?
+    note           String?
     invoices       Invoice[]
     services       OrderService[]
     products       OrderProduct[]

@@ -7,10 +7,12 @@ import MainLayout from '../../../components/layouts/Main'
 import FulfillmentProducts from '../../../components/orders/blocks/FulfillmentProducts'
 import PickDelivery from '../../../components/orders/blocks/PickDelivery'
 import Customer from '../../../components/orders/blocks/Customer'
-import PaymentMethod from '../../../components/orders/blocks/PaymentMethod'
+import PaymentMethod from '../../../components/orders/blocks/Payment'
 import Address from '../../../components/orders/blocks/Address'
 import Fulfillment from '../../../components/orders/blocks/Fulfillment'
 import Service from '../../../components/orders/blocks/Service'
+import Note from '../../../components/orders/blocks/Note'
+import Timeline from '../../../components/orders/blocks/Timeline'
 
 
 function Index() {
@@ -45,21 +47,19 @@ function Index() {
                         </Link>
                     </div>
                 </div>
-                <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
+                <div className="my-4 flex flex-col space-y-4 pb-4 lg:flex-row lg:space-x-4 lg:space-y-0 border-b-[1px]">
                     <div className="flex-1 space-y-4">
                         <FulfillmentProducts
                             onChange={() => { }}
                         />
                         <Fulfillment />
-                        <PickDelivery
-                            onChange={() => { }}
-                        />
                         <Service
                             onChange={() => { }}
                         />
                         <PaymentMethod
                             onChange={() => { }}
                         />
+                        <Timeline />
                     </div>
                     <div className="space-y-4 lg:w-80">
                         <Customer
@@ -70,12 +70,15 @@ function Index() {
                             addresses={[]}
                             onChange={() => { }}
                         />
+                        <Note />
                     </div>
                 </div>
-                <div className="flex justify-between">
-                    <div className=""></div>
+                <div className={`flex justify-between rounded-md ${mustBeSaved && "sticky left-10 right-0 bottom-4 bg-gray-800 p-4 transition-colors duration-200"}`}>
+                    <div className="">
+
+                    </div>
                     <div className="flex justify-end">
-                        <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved}>Создать</button>
+                        <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved}>Сохранить</button>
                     </div>
                 </div>
             </div>

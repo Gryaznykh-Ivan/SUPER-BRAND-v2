@@ -37,7 +37,7 @@ export default function Fulfillment() {
                 </div>
             </div>
             <div className="p-3 flex justify-end space-x-2">
-                <button className="bg-gray-400 px-4 py-2 text-white font-medium rounded-md">Изменить</button>
+                <Link href={ `/orders/${ router.query.orderId }/example` } className="border-gray-400 border-[1px] px-4 py-2 font-medium rounded-md text-sm">Изменить</Link>
             </div>
         </div>
     )

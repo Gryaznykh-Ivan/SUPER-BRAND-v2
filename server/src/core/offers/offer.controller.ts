@@ -5,7 +5,7 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { Token } from 'src/decorators/token.decorator';
 import { CreateOfferDto } from './dto/createOffer.dto';
 import { UpdateOfferDto } from './dto/updateOffer.dto';
-import { OfferService } from './offers.service';
+import { OfferService } from './offer.service';
 import { ParseBooleanPipe } from 'src/pipes/parse-boolean.pipe';
 import { SearchOfferDto } from './dto/searchOffer.dto';
 

@@ -9,7 +9,7 @@ import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
 import { SearchProductDto } from './dto/searchProduct.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
-import { ProductService } from './products.service';
+import { ProductService } from './product.service';
 
 @Controller('products')
 export class ProductController {

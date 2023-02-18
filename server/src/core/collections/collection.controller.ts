@@ -6,7 +6,7 @@ import { Token } from 'src/decorators/token.decorator';
 import { CreateCollectionDto } from './dto/createCollection.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateCollectionDto } from './dto/updateCollection.dto';
-import { CollectionService } from './collections.service';
+import { CollectionService } from './collection.service';
 import { ParseBooleanPipe } from 'src/pipes/parse-boolean.pipe';
 
 @Controller('collections')

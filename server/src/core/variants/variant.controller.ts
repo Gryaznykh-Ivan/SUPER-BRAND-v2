@@ -7,7 +7,7 @@ import { CreateVariantDto } from './dto/createVariant.dto';
 import { SearchVariantDto } from './dto/searchVariant.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateVariantDto } from './dto/updateVariant.dto';
-import { VariantService } from './variants.service';
+import { VariantService } from './variant.service';
 
 @Controller('variants')
 export class VariantController {

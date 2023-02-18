@@ -3,8 +3,8 @@ import { Module } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaModule } from "src/prisma/prisma.module";
 import { UrlModule } from "src/utils/urls/urls.module";
-import { OfferController } from "./offers.controller";
-import { OfferService } from "./offers.service";
+import { OfferController } from "./offer.controller";
+import { OfferService } from "./offer.service";
 
 @Module({
     imports: [PrismaModule],

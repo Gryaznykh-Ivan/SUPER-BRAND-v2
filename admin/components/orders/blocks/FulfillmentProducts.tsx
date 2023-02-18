@@ -76,7 +76,7 @@ export default function FulfillmentProducts({ onChange }: IProps) {
                 </label>
             </div>
             <div className="p-3 flex justify-end">
-                <button className="bg-green-600 px-4 py-2 text-white font-medium rounded-md">Отправить</button>
+                <button className="bg-green-600 px-4 py-2 text-white font-medium rounded-md text-sm">Отправить</button>
             </div>
             {popup && <SelectOffers title="Добавить оффер к заказу" connectOffers={[]} onAddOffer={() => { }} onClose={onPopupClose} />}
         </div>

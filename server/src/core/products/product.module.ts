@@ -4,8 +4,8 @@ import { JwtService } from "@nestjs/jwt";
 import { PrismaModule } from "src/prisma/prisma.module";
 import { FilesModule } from "src/utils/files/files.module";
 import { UrlModule } from "src/utils/urls/urls.module";
-import { ProductController } from "./products.controller";
-import { ProductService } from "./products.service";
+import { ProductController } from "./product.controller";
+import { ProductService } from "./product.service";
 
 @Module({
     imports: [PrismaModule, HttpModule, UrlModule, FilesModule],

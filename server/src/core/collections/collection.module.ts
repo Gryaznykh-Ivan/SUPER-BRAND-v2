@@ -4,8 +4,8 @@ import { JwtService } from "@nestjs/jwt";
 import { PrismaModule } from "src/prisma/prisma.module";
 import { FilesModule } from "src/utils/files/files.module";
 import { UrlModule } from "src/utils/urls/urls.module";
-import { CollectionController } from "./collections.controller";
-import { CollectionService } from "./collections.service";
+import { CollectionController } from "./collection.controller";
+import { CollectionService } from "./collection.service";
 
 @Module({
     imports: [PrismaModule, FilesModule, UrlModule],
