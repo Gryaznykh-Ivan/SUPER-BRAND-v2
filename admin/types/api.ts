@@ -69,6 +69,13 @@ export interface IUserAddress {
     address: string;
 }
 
+export interface IOrderAddress {
+    mailingCountry: String;
+    mailingCity:    String;
+    mailingRegion:  String;
+    mailingAddress: String;
+}
+
 export interface IUserPermission {
     id: string;
     right: Right;

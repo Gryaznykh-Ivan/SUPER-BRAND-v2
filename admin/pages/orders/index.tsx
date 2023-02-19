@@ -43,7 +43,7 @@ function Index() {
                                         <th className="font-medium text-gray-500 text-start px-3 py-2">Статус оплаты</th>
                                         <th className="font-medium text-gray-500 text-start px-3 py-2">Статус доставки</th>
                                         <th className="font-medium text-gray-500 text-start px-3 py-2">Продукты</th>
-                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Доставка</th>
+                                        <th className="font-medium text-gray-500 text-start px-3 py-2">Услуги</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,7 +55,7 @@ function Index() {
                                         <td className="px-3 py-2">Оплачен</td>
                                         <td className="px-3 py-2">Неотправлен</td>
                                         <td className="px-3 py-2">2</td>
-                                        <td className="px-3 py-2">Доставка почтовой службой</td>
+                                        <td className="px-3 py-2">1</td>
                                     </tr>
                                     <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push(`/orders/${2}`)}>
                                         <td className="px-3 py-2 font-medium">№2</td>
@@ -65,7 +65,7 @@ function Index() {
                                         <td className="px-3 py-2">Оплачен</td>
                                         <td className="px-3 py-2">Неотправлен</td>
                                         <td className="px-3 py-2">3</td>
-                                        <td className="px-3 py-2">Доставка почтовой службой</td>
+                                        <td className="px-3 py-2">2</td>
                                     </tr>
                                     <tr className="border-b-[1px] hover:bg-gray-100 cursor-pointer" onClick={() => router.push(`/orders/${3}`)}>
                                         <td className="px-3 py-2 font-medium">№1</td>
@@ -75,7 +75,7 @@ function Index() {
                                         <td className="px-3 py-2">Оплачен</td>
                                         <td className="px-3 py-2">Неотправлен</td>
                                         <td className="px-3 py-2">1</td>
-                                        <td className="px-3 py-2">Доставка почтовой службой</td>
+                                        <td className="px-3 py-2">2</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -62,6 +62,7 @@ function Index() {
                         <Timeline />
                     </div>
                     <div className="space-y-4 lg:w-80">
+                        <Note />
                         <Customer
                             userId={null}
                             onChange={() => { }}
@@ -70,7 +71,6 @@ function Index() {
                             addresses={[]}
                             onChange={() => { }}
                         />
-                        <Note />
                     </div>
                 </div>
                 <div className={`flex justify-between rounded-md ${mustBeSaved && "sticky left-10 right-0 bottom-4 bg-gray-800 p-4 transition-colors duration-200"}`}>

@@ -10,6 +10,7 @@ import Payment from '../../components/orders/blocks/Payment'
 import Customer from '../../components/orders/blocks/Customer'
 import Address from '../../components/orders/blocks/Address'
 import Service from '../../components/orders/blocks/Service'
+import Note from '../../components/orders/blocks/Note'
 
 function New() {
     const router = useRouter()
@@ -43,6 +44,7 @@ function New() {
                         />
                     </div>
                     <div className="space-y-4 lg:w-80">
+                        <Note />
                         <Customer
                             userId={null}
                             onChange={() => { }}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { IUserAddress } from '../../../types/api';
 import ManageAddress from '../../users/popups/ManageAddress';
+import AddAddress from '../popups/AddAddress';
 
 interface IProps {
     addresses: IUserAddress[];
@@ -46,7 +47,7 @@ export default function Address({ addresses, onChange }: IProps) {
                     <span className="ml-2">Добавить адрес</span>
                 </button>
             </div>
-            {popup && <ManageAddress title="Добавить адресс" isDeletable={false} onDone={onNewAddress} onClose={onPopupClose} />}
+            {popup && <AddAddress title="Добавить адресс" onDone={onNewAddress} onClose={onPopupClose} />}
         </div>
     )
 }

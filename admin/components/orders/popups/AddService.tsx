@@ -37,8 +37,8 @@ export default function AddService({ title, onClose }: IProps) {
                                 <label htmlFor="serviceType" className="text-sm">Тип</label>
                                 <Select id="serviceType" options={{ DELIVERY: "Доставка", DISCOUNT: "Скидка" }} onChange={() => { }} />
                             </div>
-                            {/* <PickDelivery /> */}
-                            <div className="mt-2 space-y-2">
+                            <PickDelivery />
+                            {/* <div className="mt-2 space-y-2">
                                 <div className="">
                                     <label htmlFor="description" className="text-sm">Описание</label>
                                     <Input type="text" placeholder="Описание" id="description" onChange={() => { }} />
@@ -47,7 +47,7 @@ export default function AddService({ title, onClose }: IProps) {
                                     <label htmlFor="discount" className="text-sm">Цена</label>
                                     <Input type="text" placeholder="Цена" id="discount" onChange={() => { }} />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="p-5 border-t-[1px]">

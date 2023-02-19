@@ -78,6 +78,7 @@ enum PaymentStatus {
     UNPAID
     PARTIALLY_PAID
     NEED_TO_RETURN
+    PARTIALLY_REFUNDED
     REFUNDED
     PAID
 }
@@ -171,15 +172,14 @@ model Address {
 
 model Order {
     id             Int            @id @default(autoincrement())
-    paymentStatus  PaymentStatus  @default(UNPAID)
     orderStatus    OrderStatus    @default(UNFULFILLED)
+    paymentStatus  PaymentStatus  @default(UNPAID)
     subtotalPrice  Decimal        @db.Decimal(9, 2)
     totalPrice     Decimal        @db.Decimal(9, 2)
     mailingCountry String
     mailingCity    String
     mailingRegion  String
     mailingAddress String
-    comment        String?
     note           String?
     invoices       Invoice[]
     services       OrderService[]
@@ -215,7 +215,7 @@ model OrderService {
 
 model Timeline {
     id        String   @id @default(cuid())
-    message   String
+    message   String   @db.Text
     order     Order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId   Int
     user      User?    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
@@ -224,15 +224,15 @@ model Timeline {
 }
 
 model Fulfillment {
-    id           String            @id @default(cuid())
-    title        String
-    status       FulfillmentStatus
-    tracking     String
-    orderProduct OrderProduct[]
-    order        Order             @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    orderId      Int
-    createdAt    DateTime          @default(now())
-    updatedAt    DateTime          @updatedAt
+    id        String            @id @default(cuid())
+    status    FulfillmentStatus
+    tracking  String
+    carrier   String
+    products  OrderProduct[]
+    order     Order             @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId   Int
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @updatedAt
 }
 
 model OrderProduct {
@@ -363,11 +363,11 @@ model Offer {
     comment           String?
     tag               String?
     status            OfferStatus      @default(OFFERED)
+    order             OrderProduct?
     variant           Variant          @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     variantId         String
     user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId            String?
-    order             OrderProduct?
     deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     deliveryProfileId String?
     cartProduct       CartProduct[]
