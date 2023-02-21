@@ -10,6 +10,10 @@ export type Right =
 
 export type Role = 'ADMIN' | 'MANAGER' | 'GUEST' | 'CUSTOMER'
 export type OfferStatus = "OFFERED" | "ACCEPTED" | "DECLINED" | "ACTIVE" | "SOLD"
+export type PaymentStatus = "UNPAID" | "PARTIALLY_PAID" | "NEED_TO_RETURN" | "REFUNDED" | "PAID"
+export type OrderStatus = "FULFILLED" | "PARTIALLY_FULFILLED" | "UNFULFILLED" | "CANCELED"
+export type FulfillmentStatus = "SENT" | "DELIVERED"
+export type Service = "SHIPPING" | "DISCOUNT"
 
 export interface IJwtDecode {
     id: string;

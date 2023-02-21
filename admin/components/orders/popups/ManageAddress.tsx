@@ -12,16 +12,20 @@ import CitiesSmartInput from '../../inputs/CitiesSmartInput';
 
 interface IProps {
     title: string;
+    mailingCountry: string;
+    mailingCity: string;
+    mailingRegion: string;
+    mailingAddress: string;
     onClose: () => void;
     onDone: (obj: IOrderAddress) => void;
 }
 
-export default function AddAddress({ title, onClose, onDone }: IProps) {
+export default function ManageAddress({ title, onClose, onDone, ...data }: IProps) {
     const [state, setState] = useState({
-        mailingCountry: "",
-        mailingRegion: "",
-        mailingCity: "",
-        mailingAddress: "",
+        mailingCountry: data.mailingCountry ?? "",
+        mailingCity: data.mailingCity ?? "",
+        mailingRegion: data.mailingRegion ?? "",
+        mailingAddress: data.mailingAddress ?? ""
     })
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

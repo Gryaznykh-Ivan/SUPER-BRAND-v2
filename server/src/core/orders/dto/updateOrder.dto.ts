@@ -2,7 +2,7 @@
 import { Type } from "class-transformer";
 import { ArrayMaxSize, IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 import { ConnectOfferDto, DisconnectOfferDto } from "./offer.dto";
-import { ServiceDto } from "./service.dto";
+import { DeleteServices, ServiceDto } from "./service.dto";
 
 export class UpdateOrderDto {
     @IsNotEmpty()
@@ -46,18 +46,22 @@ export class UpdateOrderDto {
     createServices: ServiceDto[]
 
     @IsOptional()
-    @IsString({ each: true })
-    deleteServices: string[]
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ConnectOfferDto)
+    createOffers: ConnectOfferDto[]
+
 
     @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => ConnectOfferDto)
-    connectOffers: ConnectOfferDto[]
+    @Type(() => DeleteServices)
+    deleteServices: DeleteServices[]
+
 
     @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => DisconnectOfferDto)
-    disconnectOffers: DisconnectOfferDto[]
+    deleteOffers: DisconnectOfferDto[]
 }

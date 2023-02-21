@@ -1,4 +1,4 @@
-import { OfferStatus, Right, Role } from "./store";
+import { FulfillmentStatus, OfferStatus, OrderStatus, PaymentStatus, Right, Role, Service } from "./store";
 
 export interface IResponse<T> {
     success: boolean;
@@ -70,10 +70,10 @@ export interface IUserAddress {
 }
 
 export interface IOrderAddress {
-    mailingCountry: String;
-    mailingCity:    String;
-    mailingRegion:  String;
-    mailingAddress: String;
+    mailingCountry: string;
+    mailingCity: string;
+    mailingRegion: string;
+    mailingAddress: string;
 }
 
 export interface IUserPermission {
@@ -221,6 +221,63 @@ export interface IProduct {
     collections: Pick<ICollection, "id" | "title">[];
     options: IProductOption[];
 }
+
+export interface IOrderSearch {
+    id: number;
+    createdAt: Date;
+    user: string;
+    totalPrice: string;
+    paymentStatus: PaymentStatus;
+    orderStatus: OrderStatus;
+    productsCount: number;
+    servicesCount: number;
+}
+
+export interface IOrderProduct {
+    id: string;
+    product: string;
+    variant: string;
+    image: string | null;
+    deliveryProfile: string;
+    price: string;
+}
+
+export interface IFulfillment {
+    id: string;
+    products: IOrderProduct[];
+    status: FulfillmentStatus;
+}
+
+export interface IService {
+    id: string;
+    type: Service;
+    description: string | null;
+    price: string;
+}
+
+export interface IOrder {
+    id: number;
+    note: string;
+    userId: string;
+    mailingAddress: string;
+    mailingCity: string;
+    mailingCountry: string;
+    mailingRegion: string;
+    totalPrice: string;
+    subtotalPrice: string;
+    paymentStatus: PaymentStatus;
+    orderStatus: PaymentStatus;
+    products: IOrderProduct[];
+    fulfillments: IFulfillment[];
+    services: IService[];
+    paid: number;
+}
+
+
+
+
+
+
 
 
 // AuthService
@@ -733,4 +790,48 @@ export type DeliveryZoneDeleteResponse = IResponse<void>
 export type DeliveryZoneDeleteRequest = {
     profileId: string;
     zoneId: string;
+}
+
+
+// orderService
+
+export type OrderSearchResponse = IResponse<IOrderSearch[]>
+export type OrderSearchRequest = {
+    q?: string;
+    limit?: number;
+    skip?: number;
+    paymentStatus?: string;
+    orderStatus?: string;
+}
+
+export type OrderGetByIdResponse = IResponse<IOrder>
+export type OrderGetByIdRequest = {
+    orderId: string
+}
+
+export type OrderCreateResponse = IResponse<string>
+export type OrderCreateRequest = {
+    userId?: string;
+    mailingCountry?: string;
+    mailingCity?: string;
+    mailingRegion?: string;
+    mailingAddress?: string;
+    note?: string | null;
+    services?: Omit<IService, "id">;
+    offers?: Pick<IOffer, "id">;
+}
+
+export type OrderUpdateResponse = IResponse<void>
+export type OrderUpdateRequest = {
+    orderId: string;
+    userId?: string;
+    mailingCountry?: string;
+    mailingCity?: string;
+    mailingRegion?: string;
+    mailingAddress?: string;
+    note?: string | null;
+    createServices?: Omit<IService, "id">;
+    createOffers?: Pick<IOffer, "id">;
+    deleteServices?: Pick<IService, "id">;
+    deleteOffers?: Pick<IOffer, "id">;
 }

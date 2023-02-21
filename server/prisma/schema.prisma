@@ -78,7 +78,6 @@ enum PaymentStatus {
     UNPAID
     PARTIALLY_PAID
     NEED_TO_RETURN
-    PARTIALLY_REFUNDED
     REFUNDED
     PAID
 }
@@ -207,7 +206,7 @@ model Invoice {
 model OrderService {
     id          String  @id @default(cuid())
     type        Service @default(SHIPPING)
-    description String
+    description String?
     price       Decimal @db.Decimal(9, 2)
     order       Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId     Int
@@ -215,7 +214,8 @@ model OrderService {
 
 model Timeline {
     id        String   @id @default(cuid())
-    message   String   @db.Text
+    title     String
+    message   String?  @db.Text
     order     Order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId   Int
     user      User?    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)

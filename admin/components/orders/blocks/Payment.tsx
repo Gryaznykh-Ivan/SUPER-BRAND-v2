@@ -6,10 +6,10 @@ import Link from 'next/link';
 
 
 interface IProps {
-    onChange: (obj: any) => void;
+    
 }
 
-export default function Payment({ onChange }: IProps) {
+export default function Payment({  }: IProps) {
     const router = useRouter()
 
     return (

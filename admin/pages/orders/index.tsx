@@ -15,7 +15,7 @@ function Index() {
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-medium">Заказы</h1>
                     <div className="">
-                        <Link href="/orders/new" className="bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</Link>
+                        <Link href="/orders/new" className="block bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</Link>
                     </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">

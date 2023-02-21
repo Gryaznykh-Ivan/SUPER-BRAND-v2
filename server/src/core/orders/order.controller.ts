@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { Right, Role } from '@prisma/client';
 import { Auth } from 'src/decorators/auth.decorator';
+import { User } from 'src/decorators/user.decorator';
+import { IUser } from 'src/interfaces/user.interface';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
@@ -32,25 +34,19 @@ export class OrderController {
     @Post('create')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_CREATE])
     createOrder(
-        @Body() data: CreateOrderDto
+        @Body() data: CreateOrderDto,
+        @User() self: IUser
     ) {
-        return this.orderService.createOrder(data)
+        return this.orderService.createOrder(data, self)
     }
 
     @Put(':orderId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
     updateOrder(
         @Param('orderId', ParseIntPipe) orderId: number,
-        @Body() data: UpdateOrderDto
+        @Body() data: UpdateOrderDto,
+        @User() self: IUser
     ) {
-        return this.orderService.updateOrder(orderId, data)
-    }
-
-    @Delete(':orderId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_DELETE])
-    removeOrder(
-        @Param('orderId', ParseIntPipe) orderId: number
-    ) {
-        return this.orderService.removeOrder(orderId)
+        return this.orderService.updateOrder(orderId, data, self)
     }
 }

@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InvoiceStatus } from '@prisma/client';
+import { InvoiceStatus, OfferStatus, OrderStatus, PaymentStatus, Prisma } from '@prisma/client';
+import { IUser } from 'src/interfaces/user.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
@@ -289,15 +290,235 @@ export class OrderService {
         }
     }
 
-    async createOrder(data: CreateOrderDto) {
-        throw new Error('Method not implemented.');
+    async createOrder(data: CreateOrderDto, self: IUser) {
+        const createOrderQuery = {
+            mailingCountry: data.mailingCountry,
+            mailingCity: data.mailingCity,
+            mailingRegion: data.mailingRegion,
+            mailingAddress: data.mailingAddress,
+            note: data.note,
+            userId: data.userId,
+            services: {
+                createMany: {
+                    data: data.services
+                }
+            },
+            timeline: {
+                createMany: {
+                    data: [{
+                        title: "Заказ создан",
+                        userId: self.id
+                    }]
+                }
+            }
+        }
+
+        try {
+            const order = await this.prisma.$transaction(async tx => {
+                const offers = await tx.offer.findMany({
+                    where: {
+                        id: {
+                            in: data.offers.map(offer => offer.id)
+                        },
+                        status: OfferStatus.ACTIVE
+                    },
+                    select: {
+                        id: true,
+                        price: true,
+                        variantId: true,
+                    }
+                })
+
+                if (offers.length !== data.offers.length) {
+                    throw new HttpException("Часть товаров не доступна к покупке", HttpStatus.BAD_REQUEST)
+                }
+
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: offers.map(offer => offer.id)
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.SOLD
+                    }
+                })
+
+                const subtotalProducts = offers.reduce((a, c) => a + Number(c.price), 0)
+                const subtotalService = data.services.reduce((a, c) => a + Number(c.price), 0)
+
+                return await tx.order.create({
+                    data: {
+                        ...createOrderQuery,
+                        subtotalPrice: subtotalProducts,
+                        totalPrice: subtotalProducts + subtotalService,
+                        products: {
+                            createMany: {
+                                data: offers.map(offer => ({
+                                    offerId: offer.id,
+                                    price: offer.price,
+                                    variantId: offer.variantId
+                                }))
+                            }
+                        }
+                    }
+                })
+            })
+
+            return {
+                success: true,
+                data: order.id
+            }
+        } catch (e) {
+            console.log(e)
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
-    async updateOrder(orderId: number, data: UpdateOrderDto) {
-        throw new Error('Method not implemented.');
-    }
+    async updateOrder(orderId: number, data: UpdateOrderDto, self: IUser) {
+        const updateOrderQuery = {
+            mailingCountry: data.mailingCountry,
+            mailingCity: data.mailingCity,
+            mailingRegion: data.mailingRegion,
+            mailingAddress: data.mailingAddress,
+            note: data.note,
+            userId: data.userId,
+            timeline: {
+                create: {
+                    title: "Заказ обновлен",
+                    message: `Обновленные поля:\n${Object.keys(data).join("\n")}`,
+                    userId: self.id,
+                }
+            }
+        }
 
-    async removeOrder(orderId: number) {
-        throw new Error('Method not implemented.');
+        if (data.deleteServices !== undefined || data.createServices !== undefined) {
+            Object.assign(updateOrderQuery, {
+                services: {
+                    deleteMany: data.deleteServices ?? [],
+                    createMany: {
+                        data: data.createServices ?? []
+                    }
+                }
+            })
+        }
+
+        if (data.deleteOffers !== undefined || data.createOffers !== undefined) {
+            const offers = await this.prisma.offer.findMany({
+                where: {
+                    id: {
+                        in: data.createOffers.map(offer => offer.id)
+                    },
+                    status: OfferStatus.ACTIVE
+                },
+                select: {
+                    id: true,
+                    price: true,
+                    variantId: true,
+                }
+            })
+
+            if (offers.length !== data.createOffers.length) {
+                throw new HttpException("Часть товаров не доступна к покупке", HttpStatus.BAD_REQUEST)
+            }
+
+            Object.assign(updateOrderQuery, {
+                products: {
+                    deleteMany: data.deleteOffers ?? [],
+                    createMany: {
+                        data: offers.map(offer => ({
+                            offerId: offer.id,
+                            price: offer.price,
+                            variantId: offer.variantId
+                        }))
+                    }
+                }
+            })
+        }
+
+        try {
+            await this.prisma.$transaction(async tx => {
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: data.createOffers.map(offer => offer.id)
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.SOLD
+                    }
+                })
+
+                await tx.offer.updateMany({
+                    where: {
+                        order: {
+                            id: {
+                                in: data.deleteOffers.map(offer => offer.id)
+                            }
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.ACTIVE
+                    }
+                })
+
+                const order = await tx.order.update({
+                    where: {
+                        id: orderId
+                    },
+                    data: updateOrderQuery,
+                    select: {
+                        id: true,
+                        totalPrice: true,
+                        products: {
+                            select: {
+                                id: true,
+                                price: true,
+                            }
+                        },
+                        services: {
+                            select: {
+                                id: true,
+                                price: true
+                            }
+                        },
+                        invoices: {
+                            select: {
+                                id: true,
+                                amount: true
+                            }
+                        }
+                    }
+                })
+
+                const subtotalProducts = order.products.reduce((a, c) => a + Number(c.price), 0)
+                const subtotalService = order.services.reduce((a, c) => a + Number(c.price), 0)
+                const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
+
+                await tx.order.update({
+                    where: {
+                        id: orderId
+                    },
+                    data: {
+                        subtotalPrice: subtotalProducts,
+                        totalPrice: subtotalProducts + subtotalService,
+                        paymentStatus: subtotalProducts + subtotalService === totalPaid
+                            ? PaymentStatus.PAID
+                            : subtotalProducts + subtotalService > totalPaid
+                                ? PaymentStatus.PARTIALLY_PAID
+                                : PaymentStatus.NEED_TO_RETURN
+                    }
+                })
+            })
+
+            return {
+                success: true
+            }
+        } catch (e) {
+            console.log(e)
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 }
