@@ -32,7 +32,8 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
     }
 
     const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setState(prev => ({ ...prev, [e.target.name]: e.target.value.replace(/[^0-9.]/g, "") }))
+        const price = e.target.value.replace(/[^0-9.]/g, "")
+        setState(prev => ({ ...prev, [e.target.name]: price.length !== 0 ? `-${price}` : "" }))
     }
 
     const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -87,8 +88,8 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
                                         <Input type="text" placeholder="Описание" name="description" id="description" value={state.description} onChange={onInputChange} />
                                     </div>
                                     <div className="">
-                                        <label htmlFor="discount" className="text-sm">Цена</label>
-                                        <Input type="text" placeholder="Цена" name="price" id="price" value={state.price} onChange={onPriceChange} />
+                                        <label htmlFor="discount" className="text-sm">Величина скидки</label>
+                                        <Input type="text" placeholder="Величина скидки" name="price" id="price" value={state.price} onChange={onPriceChange} />
                                     </div>
                                 </div>
                             }
