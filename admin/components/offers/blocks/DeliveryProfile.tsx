@@ -5,7 +5,7 @@ import { OfferCreateRequest } from '../../../types/api';
 import Select from '../../inputs/Select'
 
 interface IProps {
-    deliveryProfileId: string;
+    deliveryProfileId: string | null;
     onChange: (obj: OfferCreateRequest) => void;
 }
 

@@ -67,9 +67,12 @@ function New() {
                 <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
                     <div className="flex-1 space-y-4">
                         <OrderProducts
+                            offers={null}
                             onChange={onCollectChanges}
                         />
                         <Service
+                            services={[]}
+                            region={changes.mailingRegion ?? null}
                             onChange={onCollectChanges}
                         />
                         <Payment
@@ -90,6 +93,7 @@ function New() {
                             mailingCity={null}
                             mailingCountry={null}
                             mailingRegion={null}
+                            userId={changes.userId || null}
                             onChange={onCollectChanges}
                         />
                     </div>

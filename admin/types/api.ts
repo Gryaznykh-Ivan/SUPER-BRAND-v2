@@ -318,6 +318,11 @@ export type UserGetByIdRequest = {
     userId: string
 }
 
+export type UserGetAddressesResponse = IResponse<IUserAddress[]>
+export type UserGetAddressesRequest = {
+    userId: string
+}
+
 export type UserCreateResponse = IResponse<void>
 export type UserCreateRequest = {
     email?: string | null;
@@ -424,6 +429,12 @@ export type VendorsSuggestionRequest = {
 
 export type DeliveryProfilesSuggestionResponse = IResponse<Pick<IDeliveryProfile, "id" | "title">[]>
 export type DeliveryProfilesSuggestionRequest = void;
+
+export type DeliveryOptionsSuggestionResponse = IResponse<IDeliveryOption[]>
+export type DeliveryOptionsSuggestionRequest = {
+    region: string;
+    deliveryProfileId: string;
+};
 
 export type deliveryZonesSuggestionResponse = IResponse<Pick<IDeliveryZone, "country" | "region">[]>
 export type DeliveryZonesSuggestionRequest = {
@@ -817,8 +828,8 @@ export type OrderCreateRequest = {
     mailingRegion?: string;
     mailingAddress?: string;
     note?: string | null;
-    services?: Omit<IService, "id">;
-    offers?: Pick<IOffer, "id">;
+    services?: Omit<IService, "id">[];
+    offers?: Pick<IOffer, "id">[];
 }
 
 export type OrderUpdateResponse = IResponse<void>
@@ -830,8 +841,8 @@ export type OrderUpdateRequest = {
     mailingRegion?: string;
     mailingAddress?: string;
     note?: string | null;
-    createServices?: Omit<IService, "id">;
-    createOffers?: Pick<IOffer, "id">;
-    deleteServices?: Pick<IService, "id">;
-    deleteOffers?: Pick<IOffer, "id">;
+    createServices?: Omit<IService, "id">[];
+    createOffers?: Pick<IOffer, "id">[];
+    deleteServices?: Pick<IService, "id">[];
+    deleteOffers?: Pick<IOffer, "id">[];
 }

@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, DeliveryZonesSuggestionRequest, deliveryZonesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
+import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryOptionsSuggestionRequest, DeliveryOptionsSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, DeliveryZonesSuggestionRequest, deliveryZonesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
 
 export const suggestionService = api.injectEndpoints({
     endpoints: builder => ({
@@ -51,7 +51,14 @@ export const suggestionService = api.injectEndpoints({
                 method: "GET",
                 params: credentials
             })
-        })
+        }),
+        deliveryOptions: builder.query<DeliveryOptionsSuggestionResponse, DeliveryOptionsSuggestionRequest>({
+            query: (credentials) => ({
+                url: "suggestions/deliveryOptions",
+                method: "GET",
+                params: credentials
+            })
+        }),
     })
 })
 
@@ -63,4 +70,5 @@ export const {
     useLazyRegionsQuery,
     useLazyCollectionsQuery,
     useLazyVendorsQuery,
+    useLazyDeliveryOptionsQuery
 } = suggestionService

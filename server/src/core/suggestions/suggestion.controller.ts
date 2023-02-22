@@ -54,7 +54,15 @@ export class SuggestionController {
     }
 
     @Get('deliveryProfiles')
-    profiles() {
+    deliveryProfiles() {
         return this.suggestionService.deliveryProfiles()
+    }
+
+    @Get('deliveryOptions')
+    deliveryOptions(
+        @Query('deliveryProfileId') deliveryProfileId: string,
+        @Query('region') region: string
+    ) {
+        return this.suggestionService.deliveryOptions(deliveryProfileId, region)
     }
 }

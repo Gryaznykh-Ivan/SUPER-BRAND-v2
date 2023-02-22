@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { UserAddAddressRequest, UserAddAddressResponse, UserAddPermissionRequest, UserAddPermissionResponse, UserCreateRequest, UserCreateResponse, UserDeleteRequest, UserDeleteResponse, UserGetByIdRequest, UserGetByIdResponse, UserRemoveAddressRequest, UserRemoveAddressResponse, UserRemovePermissionRequest, UserRemovePermissionResponse, UserSearchRequest, UserSearchResponse, UserUpdateRequest, UserUpdateResponse } from "../types/api";
+import { UserAddAddressRequest, UserAddAddressResponse, UserAddPermissionRequest, UserAddPermissionResponse, UserCreateRequest, UserCreateResponse, UserDeleteRequest, UserDeleteResponse, UserGetAddressesRequest, UserGetAddressesResponse, UserGetByIdRequest, UserGetByIdResponse, UserRemoveAddressRequest, UserRemoveAddressResponse, UserRemovePermissionRequest, UserRemovePermissionResponse, UserSearchRequest, UserSearchResponse, UserUpdateRequest, UserUpdateResponse } from "../types/api";
 
 export const userService = api.injectEndpoints({
     endpoints: builder => ({
@@ -14,6 +14,13 @@ export const userService = api.injectEndpoints({
         getUserById: builder.query<UserGetByIdResponse, UserGetByIdRequest>({
             query: ({ userId }) => ({
                 url: `users/${ userId }`,
+                method: "GET",
+            }),
+            providesTags: ["USER"]
+        }),
+        getUserAddresses: builder.query<UserGetAddressesResponse, UserGetAddressesRequest>({
+            query: ({ userId }) => ({
+                url: `users/${ userId }/addresses`,
                 method: "GET",
             }),
             providesTags: ["USER"]
@@ -45,6 +52,7 @@ export const userService = api.injectEndpoints({
 export const {
     useLazyGetUsersBySearchQuery,
     useLazyGetUserByIdQuery,
+    useLazyGetUserAddressesQuery,
     useGetUserByIdQuery,
     useCreateUserMutation,
     useUpdateUserMutation,

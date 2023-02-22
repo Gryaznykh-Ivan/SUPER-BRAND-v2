@@ -3,17 +3,17 @@ import { OfferCreateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 
 interface IProps {
-    price: number | null;
-    offerPrice: number | null;
-    compareAtPrice: number | null;
+    price: string | null;
+    offerPrice: string | null;
+    compareAtPrice: string | null;
     onChange: (obj: OfferCreateRequest) => void;
 }
 
 export default function Prices({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
-        price: data.price?.toString() ?? "",
-        offerPrice: data.offerPrice?.toString() ?? "",
-        compareAtPrice: data.compareAtPrice?.toString() ?? "",
+        price: data.price ?? "",
+        offerPrice: data.offerPrice ?? "",
+        compareAtPrice: data.compareAtPrice ?? "",
     })
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export default function Prices({ onChange, ...data }: IProps) {
                 return [key, null]
             }
 
-            if (data[key as keyof typeof data]?.toString() === value) {
+            if (data[key as keyof typeof data] === value) {
                 return [key, undefined]
             }
 

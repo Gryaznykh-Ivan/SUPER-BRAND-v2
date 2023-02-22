@@ -87,7 +87,6 @@ export class OrderService {
                 mailingCountry: true,
                 mailingRegion: true,
                 totalPrice: true,
-                subtotalPrice: true,
                 paymentStatus: true,
                 orderStatus: true,
                 products: {
@@ -96,7 +95,6 @@ export class OrderService {
                     },
                     select: {
                         id: true,
-                        price: true,
                         offer: {
                             select: {
                                 id: true,
@@ -162,7 +160,6 @@ export class OrderService {
                         products: {
                             select: {
                                 id: true,
-                                price: true,
                                 offer: {
                                     select: {
                                         id: true,
@@ -257,7 +254,7 @@ export class OrderService {
             mailingCountry: order.mailingCountry,
             mailingRegion: order.mailingRegion,
             totalPrice: order.totalPrice,
-            subtotalPrice: order.subtotalPrice,
+            subtotalPrice: order.products.map(product => product.offer.price).reduce((a, c) => a + Number(c), 0).toFixed(2),
             paymentStatus: order.paymentStatus,
             orderStatus: order.orderStatus,
             products: order.products.map(product => ({
@@ -266,7 +263,7 @@ export class OrderService {
                 variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
                 image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
                 deliveryProfile: product.offer.deliveryProfile,
-                price: product.price
+                price: product.offer.price
             })),
             fulfillments: order.fulfillments.map(fulfillment => ({
                 id: fulfillment.id,
@@ -276,7 +273,7 @@ export class OrderService {
                     variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
                     image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
                     deliveryProfile: product.offer.deliveryProfile,
-                    price: product.price
+                    price: product.offer.price
                 })),
                 status: fulfillment.status
             })),
@@ -350,7 +347,6 @@ export class OrderService {
                 return await tx.order.create({
                     data: {
                         ...createOrderQuery,
-                        subtotalPrice: subtotalProducts,
                         totalPrice: subtotalProducts + subtotalService,
                         products: {
                             createMany: {
@@ -474,7 +470,12 @@ export class OrderService {
                         products: {
                             select: {
                                 id: true,
-                                price: true,
+                                offer: {
+                                    select: {
+                                        id: true,
+                                        price: true,
+                                    }
+                                }
                             }
                         },
                         services: {
@@ -492,7 +493,7 @@ export class OrderService {
                     }
                 })
 
-                const subtotalProducts = order.products.reduce((a, c) => a + Number(c.price), 0)
+                const subtotalProducts = order.products.map(product => product.offer).reduce((a, c) => a + Number(c.price), 0)
                 const subtotalService = order.services.reduce((a, c) => a + Number(c.price), 0)
                 const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
 
@@ -501,7 +502,6 @@ export class OrderService {
                         id: orderId
                     },
                     data: {
-                        subtotalPrice: subtotalProducts,
                         totalPrice: subtotalProducts + subtotalService,
                         paymentStatus: subtotalProducts + subtotalService === totalPaid
                             ? PaymentStatus.PAID

@@ -31,6 +31,14 @@ export class UserController {
         return this.userService.getUserById(userId)
     }
 
+    @Get(':userId/addresses')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_READ])
+    getUserAddresses(
+        @Param('userId') userId: string
+    ) {
+        return this.userService.getUserAddresses(userId)
+    }
+
     @Post('create')
     @HttpCode(200)
     @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_CREATE])

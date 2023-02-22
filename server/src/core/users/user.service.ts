@@ -102,6 +102,32 @@ export class UserService {
     }
 
 
+    async getUserAddresses(userId: string) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                addresses: {
+                    select: {
+                        id: true,
+                        country: true,
+                        region: true,
+                        city: true,
+                        address: true
+                    }
+                },
+            }
+        })
+
+        if (user === null) {
+            throw new HttpException("Пользователь не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        return {
+            success: true,
+            data: user.addresses
+        }
+    }
+
     async createUser(data: CreateUserDto, self: IUser) {
         if (self.role === Role.MANAGER && (data.role === Role.ADMIN || data.role === Role.MANAGER)) {
             throw new HttpException("Вы не можете создавать менеджеров/администраторов", HttpStatus.FORBIDDEN)

@@ -173,7 +173,6 @@ model Order {
     id             Int            @id @default(autoincrement())
     orderStatus    OrderStatus    @default(UNFULFILLED)
     paymentStatus  PaymentStatus  @default(UNPAID)
-    subtotalPrice  Decimal        @db.Decimal(9, 2)
     totalPrice     Decimal        @db.Decimal(9, 2)
     mailingCountry String
     mailingCity    String
@@ -237,7 +236,6 @@ model Fulfillment {
 
 model OrderProduct {
     id            String       @id @default(cuid())
-    price         Decimal      @db.Decimal(9, 2)
     order         Order        @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId       Int
     variant       Variant      @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: Cascade)

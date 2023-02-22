@@ -84,20 +84,27 @@ export class OfferService {
                         }
                     },
                     {
-                        variant: {
-                            option0: this.getOptonValue(data.q, "option0"),
-                            option1: this.getOptonValue(data.q, "option1"),
-                            option2: this.getOptonValue(data.q, "option2"),
-                        }
-                    },
-                    {
-                        variant: {
-                            product: {
-                                title: {
-                                    search: data.q ? `${data.q}*` : undefined,
+                        AND: [
+                            {
+                                variant: {
+                                    option0: this.getParamValue(data.q, "option0"),
+                                    option1: this.getParamValue(data.q, "option1"),
+                                    option2: this.getParamValue(data.q, "option2"),
+                                    product: {
+                                        id: this.getParamValue(data.q, "productId")
+                                    }
+                                }
+                            },
+                            {
+                                variant: {
+                                    product: {
+                                        title: {
+                                            search: this.getClearSearchQuery(data.q) ? `${this.getClearSearchQuery(data.q)}*` : undefined,
+                                        }
+                                    }
                                 }
                             }
-                        }
+                        ]
                     }
                 ],
                 status: data.status,
@@ -259,11 +266,11 @@ export class OfferService {
         }
     }
 
-    private getOptonValue(q: string | undefined, option: string) {
+    private getParamValue(q: string | undefined, param: string) {
         if (typeof q !== 'string') return undefined
         if (q.length === 0) return undefined
 
-        const regex = new RegExp(option + ":'([^']+)'");
+        const regex = new RegExp(param + ":'([^']+)'");
         const match = regex.exec(q);
 
         if (match) {
@@ -271,5 +278,12 @@ export class OfferService {
         }
 
         return undefined;
+    }
+
+    private getClearSearchQuery(q: string | null) {
+        if (typeof q !== 'string') return undefined
+        if (q.length === 0) return undefined
+
+        return q.replace(/\S+:'([^']+)'/gi, "").trim();
     }
 }

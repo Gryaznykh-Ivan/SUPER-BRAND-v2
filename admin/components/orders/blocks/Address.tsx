@@ -8,6 +8,7 @@ interface IProps {
     mailingCity: string | null;
     mailingRegion: string | null;
     mailingAddress: string | null;
+    userId: string | null;
     onChange: (obj: OrderCreateRequest) => void;
 }
 
@@ -91,6 +92,7 @@ export default function Address({ onChange, ...data }: IProps) {
                 mailingCity={state.mailingCity}
                 mailingRegion={state.mailingRegion}
                 mailingCountry={state.mailingCountry}
+                userId={ data.userId }
                 onDone={onNewAddress}
                 onClose={onPopupClose}
             />}

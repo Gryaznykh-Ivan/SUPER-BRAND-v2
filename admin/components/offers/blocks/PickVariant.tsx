@@ -66,7 +66,7 @@ export default function PickVariant({ onChange, ...data }: IProps) {
                     <div className="">
                         <div className="text-sm text-gray-600">Товар</div>
                         {variant?.data.product ?
-                            <Link href={`/products/${ variant?.data.productId }`} target="_blank" className="font-medium hover:underline">{variant?.data.product}</Link>
+                            <Link href={`/products/${ variant?.data.productId }`} className="font-medium hover:underline">{variant?.data.product}</Link>
                             :
                             <div className="font-medium">Не выбран</div>
                         }

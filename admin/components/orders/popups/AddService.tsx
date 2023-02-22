@@ -1,23 +1,66 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Modal from '../../portals/Modal'
 import SearchInput from '../../inputs/SearchInput';
 import JSXAccordion from '../../accordions/JSXAccordion';
-import { IDeliveryProfile, IErrorResponse, IOffer, IOfferSearch } from '../../../types/api';
+import { IDeliveryProfile, IErrorResponse, IOffer, IOfferSearch, IService } from '../../../types/api';
 import { useLazyGetOffersBySearchQuery } from '../../../services/offerService';
 import ImageLoader from '../../image/ImageLoader';
 import Select from '../../inputs/Select';
 import PickDelivery from '../blocks/PickDelivery';
 import Input from '../../inputs/Input';
+import { toast } from 'react-toastify';
+import { Service } from '../../../types/store';
 
 interface IProps {
     title: string;
+    region: string | null;
     onClose: () => void;
+    onDone: (obj: IService) => void;
 }
 
-export default function AddService({ title, onClose }: IProps) {
+export default function AddService({ title, onClose, onDone, ...data }: IProps) {
+    const [state, setState] = useState<Omit<IService, "id">>({
+        type: "DISCOUNT",
+        description: "",
+        price: ""
+    })
 
+    const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    }
+
+    const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setState(prev => ({ ...prev, [e.target.name]: e.target.value.replace(/[^0-9.]/g, "") }))
+    }
+
+    const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setState(prev => ({
+            ...prev,
+            type: e.target.value as Service,
+            description: "",
+            price: ""
+        }))
+    }
+
+    const onSelectShipping = (service: Omit<IService, "id">) => {
+        setState(prev => ({
+            ...prev,
+            type: service.type,
+            description: service.description,
+            price: service.price
+        }))
+    }
+
+    const onDoneEvent = () => {
+        if (state.price.length === 0) {
+            return toast.error("Вы не указали стоимость")
+        }
+
+        onDone({ ...state, id: `new${Date.now()}` })
+        onClose()
+    }
 
     return (
         <Modal>
@@ -35,25 +78,41 @@ export default function AddService({ title, onClose }: IProps) {
                         <div className="max-h-96 overflow-y-auto p-5">
                             <div className="">
                                 <label htmlFor="serviceType" className="text-sm">Тип</label>
-                                <Select id="serviceType" options={{ DELIVERY: "Доставка", DISCOUNT: "Скидка" }} onChange={() => { }} />
+                                <Select id="serviceType" options={{ SHIPPING: "Доставка", DISCOUNT: "Скидка" }} name="type" value={state.type} onChange={onSelectChange} />
                             </div>
-                            <PickDelivery />
-                            {/* <div className="mt-2 space-y-2">
-                                <div className="">
-                                    <label htmlFor="description" className="text-sm">Описание</label>
-                                    <Input type="text" placeholder="Описание" id="description" onChange={() => { }} />
+                            {state.type === 'DISCOUNT' &&
+                                <div className="mt-2 space-y-2">
+                                    <div className="">
+                                        <label htmlFor="description" className="text-sm">Описание</label>
+                                        <Input type="text" placeholder="Описание" name="description" id="description" value={state.description} onChange={onInputChange} />
+                                    </div>
+                                    <div className="">
+                                        <label htmlFor="discount" className="text-sm">Цена</label>
+                                        <Input type="text" placeholder="Цена" name="price" id="price" value={state.price} onChange={onPriceChange} />
+                                    </div>
                                 </div>
-                                <div className="">
-                                    <label htmlFor="discount" className="text-sm">Цена</label>
-                                    <Input type="text" placeholder="Цена" id="discount" onChange={() => { }} />
-                                </div>
-                            </div> */}
+                            }
+                            {state.type === 'SHIPPING' &&
+                                <>
+                                    {
+                                        data.region === null ?
+                                            <div className="pt-5">
+                                                <div className="text-center text-red-600">Доставка в указанную зону недоступна</div>
+                                            </div>
+                                            :
+                                            <PickDelivery
+                                                region={data.region}
+                                                onSelectShipping={onSelectShipping}
+                                            />
+                                    }
+                                </>
+                            }
                         </div>
                     </div>
                     <div className="p-5 border-t-[1px]">
                         <div className="flex justify-end space-x-4">
                             <button className="border-gray-500 border-[1px] text-gray-800 px-4 py-2 font-medium rounded-md" onClick={onClose}>Отмена</button>
-                            <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md" onClick={onClose}>Готово</button>
+                            <button className="bg-green-700 px-4 py-2 text-white font-medium rounded-md" onClick={onDoneEvent}>Готово</button>
                         </div>
                     </div>
                 </div>

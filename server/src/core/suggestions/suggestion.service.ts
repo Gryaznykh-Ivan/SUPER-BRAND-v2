@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SearchDto } from './dto/search.dto';
 
@@ -73,6 +73,36 @@ export class SuggestionService {
         }
     }
 
+    async deliveryOptions(deliveryProfileId: string, region: string) {
+        const zone = await this.prisma.deliveryZone.findFirst({
+            where: {
+                region: region,
+                deliveryProfileId: deliveryProfileId
+            },
+            select: {
+                options: {
+                    select: {
+                        id: true,
+                        title: true,
+                        duration: true,
+                        price: true
+                    }
+                }
+            }
+        })
+
+        if (zone === null) {
+            throw new HttpException("Доставка в указанную зону недоступна", HttpStatus.BAD_REQUEST)
+        }
+
+        return {
+            success: true,
+            data: zone.options
+        }
+    }
+
+
+
     async collections(q: string, ids: string[]) {
         const collections = await this.prisma.collection.findMany({
             where: {
@@ -124,7 +154,7 @@ export class SuggestionService {
             },
             take: 5
         })
-
+        
         return {
             success: true,
             data: regions.map(region => region.title)
