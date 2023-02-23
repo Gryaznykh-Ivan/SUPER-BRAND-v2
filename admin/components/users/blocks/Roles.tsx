@@ -35,7 +35,17 @@ export default function Roles({ onChange, ...data }: IProps) {
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Роль</h2>
             <div className="space-y-4 p-5">
-                <Select options={{ CUSTOMER: "CUSTOMER", GUEST: "GUEST", MANAGER: "MANAGER", ADMIN: "ADMIN" }} name="role" value={ state.role } onChange={onInputChange} />
+                <Select
+                    options={{
+                        CUSTOMER: { value: "Покупатель", disabled: false },
+                        GUEST: { value: "Гость", disabled: false },
+                        MANAGER: { value: "Менеджер", disabled: false },
+                        ADMIN: { value: "Администратор", disabled: false },
+                    }}
+                    name="role"
+                    value={state.role}
+                    onChange={onInputChange}
+                />
             </div>
         </div>
     )

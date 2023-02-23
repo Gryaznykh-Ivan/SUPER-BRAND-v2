@@ -20,10 +20,10 @@ export default function PickDelivery({ onSelectShipping, region }: IProps) {
 
     const { data: deliveryProfiles } = useDeliveryProfilesQuery()
     const profiles = useMemo(() => {
-        const p: Record<any, string> = {}
+        const p: Record<any, Record<string, string | boolean>> = {}
 
         deliveryProfiles?.data.forEach((profile) => {
-            p[profile.id] = profile.title
+            p[profile.id] = { value: profile.title, disabled: false }
         })
 
         return p

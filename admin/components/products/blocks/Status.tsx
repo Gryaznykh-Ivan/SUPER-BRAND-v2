@@ -33,7 +33,12 @@ export default function Status({ onChange, ...data }: IProps) {
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Статус</h2>
             <div className="space-y-4 p-5">
-                <Select options={{ true: "Active", false: "Draft" }} name="available" value={state.available.toString()} onChange={onInputChange} />
+                <Select
+                    options={{ true: { value: "Активно", disabled: false }, false: { value: "Черновик", disabled: false } }}
+                    name="available"
+                    value={state.available.toString()}
+                    onChange={onInputChange}
+                />
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 import * as FormData from 'form-data';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { OfferStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateOfferDto } from './dto/createOffer.dto';
 import { UpdateOfferDto } from './dto/updateOffer.dto';
@@ -225,6 +225,22 @@ export class OfferService {
     }
 
     async updateOffer(offerId: string, data: UpdateOfferDto) {
+        const offer = await this.prisma.offer.findUnique({
+            where: { id: offerId },
+            select: {
+                id: true,
+                status: true
+            }
+        })
+
+        if (offer === null) {
+            throw new HttpException("Оффер не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        if (offer.status === OfferStatus.SOLD) {
+            throw new HttpException("Редактирование проданных офферов запрещено, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
+        }
+
         const updateOfferQuery = {
             variantId: data.variantId,
             userId: data.userId,
@@ -253,6 +269,22 @@ export class OfferService {
     }
 
     async removeOffer(offerId: string) {
+        const offer = await this.prisma.offer.findUnique({
+            where: { id: offerId },
+            select: {
+                id: true,
+                status: true
+            }
+        })
+
+        if (offer === null) {
+            throw new HttpException("Оффер не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        if (offer.status === OfferStatus.SOLD) {
+            throw new HttpException("Удалить проданый оффер невозможно, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
+        }
+
         try {
             await this.prisma.offer.delete({
                 where: { id: offerId }

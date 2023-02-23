@@ -79,7 +79,16 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
                         <div className="max-h-96 overflow-y-auto p-5">
                             <div className="">
                                 <label htmlFor="serviceType" className="text-sm">Тип</label>
-                                <Select id="serviceType" options={{ SHIPPING: "Доставка", DISCOUNT: "Скидка" }} name="type" value={state.type} onChange={onSelectChange} />
+                                <Select
+                                    id="serviceType"
+                                    options={{
+                                        SHIPPING: { value: "Доставка", disabled: false },
+                                        DISCOUNT: { value: "Скидка", disabled: false }
+                                    }}
+                                    name="type"
+                                    value={state.type}
+                                    onChange={onSelectChange}
+                                />
                             </div>
                             {state.type === 'DISCOUNT' &&
                                 <div className="mt-2 space-y-2">

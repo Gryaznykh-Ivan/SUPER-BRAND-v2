@@ -97,10 +97,10 @@ export default function ManageAddress({ title, onClose, onDone, ...data }: IProp
                                         id="userAddress"
                                         options={
                                             addresses.data.reduce((a, c) => {
-                                                a[c.id] = `${c.country}, р-н ${c.region}, г. ${c.city}, ${c.address}`
+                                                a[c.id] = { value: `${c.country}, р-н ${c.region}, г. ${c.city}, ${c.address}`, disabled: false }
 
                                                 return a
-                                            }, { 0: "Выберите адрес" } as { [key: string]: string })
+                                            }, { 0: { value: "Выберите адрес", disabled: false } } as { [keys: string]: Record<string, string | boolean> })
                                         }
                                         onChange={onSelectChange}
                                     />

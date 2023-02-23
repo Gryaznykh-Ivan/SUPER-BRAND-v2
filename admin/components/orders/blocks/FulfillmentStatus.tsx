@@ -10,11 +10,11 @@ export default function FulfillmentStatus() {
             <div className="p-5">
                 <Select
                     options={{
-                        OFFERED: "Предложено",
-                        ACCEPTED: "Ожидает принятия",
-                        DECLINED: "Отклонено",
-                        ACTIVE: "Активно",
-                        SOLD: "Продано",
+                        OFFERED: { value: "Предложено", disabled: false },
+                        ACCEPTED: { value: "Ожидает принятия", disabled: false },
+                        DECLINED: { value: "Отклонено", disabled: false },
+                        ACTIVE: { value: "Активно", disabled: false },
+                        SOLD: { value: "Продано", disabled: true }
                     }}
                     onChange={() => { }}
                 />

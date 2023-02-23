@@ -36,11 +36,11 @@ export default function Status({ onChange, ...data }: IProps) {
             <div className="space-y-4 p-5">
                 <Select
                     options={{
-                        OFFERED: "Предложено",
-                        ACCEPTED: "Ожидает принятия",
-                        DECLINED: "Отклонено",
-                        ACTIVE: "Активно",
-                        SOLD: "Продано",
+                        OFFERED: { value: "Предложено", disabled: false },
+                        ACCEPTED: { value: "Ожидает принятия", disabled: false },
+                        DECLINED: { value: "Отклонено", disabled: false },
+                        ACTIVE: { value: "Активно", disabled: false },
+                        SOLD: { value: "Продано", disabled: true }
                     }}
                     name="status"
                     value={state.status}
