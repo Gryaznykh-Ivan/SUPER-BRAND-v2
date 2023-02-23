@@ -7,6 +7,7 @@ import { useLazyGetOffersBySearchQuery } from '../../../services/offerService'
 import { DeliveryProfileUpdateRequest, IDeliveryProfile, IErrorResponse, IOfferSearch } from '../../../types/api'
 import { useRouter } from 'next/router'
 import ImageLoader from '../../image/ImageLoader'
+import Link from 'next/link'
 
 
 interface IProps {
@@ -144,7 +145,7 @@ export default function ProfileOffers({ onChange, deliveryProfileId, connectOffe
                                     }
                                 </div>
                                 <div className="flex-1 text-sm py-1">
-                                    <div className="">{offer.product} • {offer.variant}</div>
+                                    <Link href={`/offers/${offer.id}`} className="hover:underline">{offer.product} • {offer.variant}</Link>
                                     <div className="text-gray-500">{offer.user}</div>
                                 </div>
                                 <div className="ml-2">{offer.price}₽</div>

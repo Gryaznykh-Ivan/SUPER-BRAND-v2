@@ -107,7 +107,10 @@ export class OfferService {
                         ]
                     }
                 ],
-                status: data.status,
+                status: {
+                    equals: data.status,
+                    not: data.notStatus
+                },
                 deliveryProfileId: {
                     equals: data.deliveryProfileId,
                     not: data.notDeliveryProfileId

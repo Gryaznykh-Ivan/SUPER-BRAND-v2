@@ -35,6 +35,12 @@ export default function PickDelivery({ onSelectShipping, region }: IProps) {
         getDeliveryOptions({ region, deliveryProfileId: state.deliveryProfileId })
     }, [state.deliveryProfileId])
 
+    useEffect(() => {
+        if (deliveryOptions?.data[0]) {
+            onSelectOption(deliveryOptions.data[0])
+        }
+    }, [deliveryOptions])
+
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
@@ -72,13 +78,13 @@ export default function PickDelivery({ onSelectShipping, region }: IProps) {
             {!isDeliveryOptionsError && deliveryOptions?.data !== undefined && deliveryOptions.data.length !== 0 &&
                 <div className="mt-4 space-y-2">
                     {deliveryOptions.data.map(option =>
-                        <label key={ option.id } className="block border-[1px] rounded-md p-3 text-sm" onClick={ () => onSelectOption(option) }>
+                        <label key={option.id} className="block border-[1px] rounded-md p-3 text-sm" onClick={() => onSelectOption(option)}>
                             <div className="flex items-center">
-                                <input type="checkbox" readOnly name="" checked={ state.selectedOption === option.id } className="rounded" />
-                                <div className="flex-1 ml-3">{ option.title }</div>
+                                <input type="checkbox" readOnly name="" checked={state.selectedOption === option.id} className="rounded" />
+                                <div className="flex-1 ml-3">{option.title}</div>
                                 <div className="flex space-x-4 text-gray-500">
-                                    <div className="">{ option.duration <= 1 ? "В течении дня" : `до ${ option.duration } дней` }</div>
-                                    <div className="">{ option.price }₽</div>
+                                    <div className="">{option.duration <= 1 ? "В течении дня" : `до ${option.duration} дней`}</div>
+                                    <div className="">{Number(option.price) === 0 ? "Бесплатно" : `${option.price}₽`}</div>
                                 </div>
                             </div>
                         </label>

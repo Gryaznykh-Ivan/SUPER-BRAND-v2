@@ -89,7 +89,7 @@ export default function OrderProducts({ onChange, ...data }: IProps) {
                         </button>
                     </div>
                 )}
-                {popup && <SelectOffers title="Добавить оффер к заказу" offers={state} onAddOffer={onAddOffer} onClose={onPopupClose} />}
+                {popup && <SelectOffers title="Добавить продукты" offers={state} onAddOffer={onAddOffer} onClose={onPopupClose} />}
             </div>
         </div>
     )

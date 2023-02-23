@@ -23,7 +23,8 @@ export default function SelectOffers({ title, offers, onAddOffer, onClose }: IPr
     const [query, setQuery] = useState({
         q: "",
         limit: itemPerPage,
-        skip: 0
+        skip: 0,
+        status: "ACTIVE"
     })
 
     const [getOffers, { isError, error, isFetching, data }] = useLazyGetOffersBySearchQuery()

@@ -702,6 +702,7 @@ export type OfferSearchRequest = {
     limit?: number;
     skip?: number;
     status?: string;
+    notStatus?: string;
     deliveryProfileId?: string;
     notDeliveryProfileId?: string;
 }

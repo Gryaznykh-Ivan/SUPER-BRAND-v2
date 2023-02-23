@@ -20,10 +20,13 @@ export class SearchOfferDto {
     @Transform(({ value }) => parseInt(value, 10))
     readonly limit: number;
 
-
     @IsOptional()
     @IsEnum(OfferStatus, { each: true })
     status: OfferStatus;
+
+    @IsOptional()
+    @IsEnum(OfferStatus, { each: true })
+    notStatus: OfferStatus;
 
     @IsOptional()
     @IsString()

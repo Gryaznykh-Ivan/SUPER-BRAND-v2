@@ -26,6 +26,7 @@ export default function SelectOffers({ title, deliveryProfileId, connectOffers, 
         q: "",
         limit: itemPerPage,
         skip: 0,
+        notStatus: "SOLD",
         notDeliveryProfileId: deliveryProfileId
     })
 
