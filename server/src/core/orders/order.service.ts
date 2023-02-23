@@ -14,18 +14,24 @@ export class OrderService {
 
     async getOrdersBySearch(data: SearchOrderDto) {
         const whereQuery = {
-            user: {
-                phone: {
-                    search: data.q ? `${data.q}*` : undefined,
+            OR: [
+                {
+                    user: {
+                        phone: {
+                            search: data.q ? `${data.q}*` : undefined,
+                        },
+                        fullName: {
+                            search: data.q ? `${data.q}*` : undefined,
+                        },
+                        email: {
+                            search: data.q ? `${data.q}*` : undefined,
+                        }
+                    }
                 },
-                fullName: {
-                    search: data.q ? `${data.q}*` : undefined,
-                },
-                email: {
-                    search: data.q ? `${data.q}*` : undefined,
+                {
+                    id: isNaN(Number(data.q)) === false ? Number(data.q) : undefined,
                 }
-            },
-            id: isNaN(Number(data.q)) === false ? Number(data.q) : undefined,
+            ],
             orderStatus: data.orderStatus ? data.orderStatus : undefined,
             paymentStatus: data.paymentStatus ? data.paymentStatus : undefined,
         }
@@ -60,7 +66,7 @@ export class OrderService {
 
         const result = orders.map(order => ({
             id: order.id,
-            customer: order.user.fullName,
+            user: order.user.fullName,
             createdAt: order.createdAt,
             totalPrice: order.totalPrice,
             paymentStatus: order.paymentStatus,
@@ -254,7 +260,6 @@ export class OrderService {
             mailingCountry: order.mailingCountry,
             mailingRegion: order.mailingRegion,
             totalPrice: order.totalPrice,
-            subtotalPrice: order.products.map(product => product.offer.price).reduce((a, c) => a + Number(c), 0).toFixed(2),
             paymentStatus: order.paymentStatus,
             orderStatus: order.orderStatus,
             products: order.products.map(product => ({
@@ -263,7 +268,8 @@ export class OrderService {
                 variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
                 image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
                 deliveryProfile: product.offer.deliveryProfile,
-                price: product.offer.price
+                price: product.offer.price,
+                offerId: product.offer.id
             })),
             fulfillments: order.fulfillments.map(fulfillment => ({
                 id: fulfillment.id,
@@ -273,7 +279,8 @@ export class OrderService {
                     variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
                     image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
                     deliveryProfile: product.offer.deliveryProfile,
-                    price: product.offer.price
+                    price: product.offer.price,
+                    offerId: product.offer.id
                 })),
                 status: fulfillment.status
             })),
@@ -352,7 +359,6 @@ export class OrderService {
                             createMany: {
                                 data: offers.map(offer => ({
                                     offerId: offer.id,
-                                    price: offer.price,
                                     variantId: offer.variantId
                                 }))
                             }
@@ -404,7 +410,7 @@ export class OrderService {
             const offers = await this.prisma.offer.findMany({
                 where: {
                     id: {
-                        in: data.createOffers.map(offer => offer.id)
+                        in: data.createOffers?.map(offer => offer.id) ?? []
                     },
                     status: OfferStatus.ACTIVE
                 },
@@ -415,7 +421,7 @@ export class OrderService {
                 }
             })
 
-            if (offers.length !== data.createOffers.length) {
+            if (data.createOffers !== undefined && offers.length !== data.createOffers.length) {
                 throw new HttpException("Часть товаров не доступна к покупке", HttpStatus.BAD_REQUEST)
             }
 
@@ -425,7 +431,6 @@ export class OrderService {
                     createMany: {
                         data: offers.map(offer => ({
                             offerId: offer.id,
-                            price: offer.price,
                             variantId: offer.variantId
                         }))
                     }
@@ -438,7 +443,7 @@ export class OrderService {
                 await tx.offer.updateMany({
                     where: {
                         id: {
-                            in: data.createOffers.map(offer => offer.id)
+                            in: data.createOffers?.map(offer => offer.id) ?? []
                         }
                     },
                     data: {
@@ -450,7 +455,7 @@ export class OrderService {
                     where: {
                         order: {
                             id: {
-                                in: data.deleteOffers.map(offer => offer.id)
+                                in: data.deleteOffers?.map(offer => offer.id) ?? []
                             }
                         }
                     },
@@ -505,9 +510,11 @@ export class OrderService {
                         totalPrice: subtotalProducts + subtotalService,
                         paymentStatus: subtotalProducts + subtotalService === totalPaid
                             ? PaymentStatus.PAID
-                            : subtotalProducts + subtotalService > totalPaid
-                                ? PaymentStatus.PARTIALLY_PAID
-                                : PaymentStatus.NEED_TO_RETURN
+                            : subtotalProducts + subtotalService < totalPaid
+                                ? PaymentStatus.NEED_TO_RETURN
+                                : totalPaid !== 0
+                                    ? PaymentStatus.PARTIALLY_PAID
+                                    : PaymentStatus.UNPAID
                     }
                 })
             })

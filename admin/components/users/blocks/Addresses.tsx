@@ -28,7 +28,7 @@ export default function Addresses({ addresses, onChange }: IProps) {
 
 
     const onNewAddress = (address: IUserAddress) => {
-        const newAddress = { ...address, id: `new${Date.now()}` }
+        const newAddress = { ...address, id: `new${Math.random()}` }
         setState(prev => ([...prev, newAddress]))
     }
 

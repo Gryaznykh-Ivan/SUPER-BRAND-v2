@@ -59,7 +59,7 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
             return toast.error("Вы не указали стоимость")
         }
 
-        onDone({ ...state, id: `new${Date.now()}` })
+        onDone({ ...state, id: `new${Math.random()}` })
         onClose()
     }
 

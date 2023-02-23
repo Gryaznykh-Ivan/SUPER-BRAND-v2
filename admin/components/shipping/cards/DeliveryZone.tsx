@@ -90,7 +90,7 @@ export default function DeliveryZone({ country, id, options, region, onChange, o
             values: [
                 ...prev.values,
                 {
-                    id: `new${Date.now()}`,
+                    id: `new${Math.random()}`,
                     title: prev.newOptionTitle,
                     duration: Number(prev.newOptionDuration),
                     price: prev.newOptionPrice

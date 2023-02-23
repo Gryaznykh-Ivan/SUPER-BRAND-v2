@@ -1,3 +1,5 @@
+import { IOfferSearch, IOrderProduct, IService } from "./api"
+
 export type Right =
     'ORDER_CREATE' | 'ORDER_READ' | 'ORDER_UPDATE' | 'ORDER_DELETE' |
     'PRODUCT_CREATE' | 'PRODUCT_READ' | 'PRODUCT_UPDATE' | 'PRODUCT_DELETE' |
@@ -28,4 +30,9 @@ export interface IAuthState {
     isAuth: boolean;
     token: string | null;
     payload: IJwtDecode | null;
+}
+
+export interface IOrderState {
+    offers: IOrderProduct[];
+    services: IService[];
 }

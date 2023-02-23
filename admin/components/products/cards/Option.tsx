@@ -55,7 +55,7 @@ export default function Option({ className, item, index, onItemsInputChange, onD
             return toast.error("Такое значение уже создано")
         }
 
-        setState(prev => ({ ...prev, newOptionValue: "", values: [...state.values, { id: `new${Date.now()}`, title: prev.newOptionValue }] }))
+        setState(prev => ({ ...prev, newOptionValue: "", values: [...state.values, { id: `new${Math.random()}`, title: prev.newOptionValue }] }))
     }
 
     const onSave = async () => {

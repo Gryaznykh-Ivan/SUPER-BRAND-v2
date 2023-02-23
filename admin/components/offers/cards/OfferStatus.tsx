@@ -1,8 +1,8 @@
 import React from 'react'
-import { OfferStatus } from '../../../types/store';
+import { OfferStatus as Statuses } from '../../../types/store';
 
 interface IProps {
-    status: OfferStatus;
+    status: Statuses;
 }
 
 const OfferStatuses = {
@@ -29,7 +29,7 @@ const OfferStatuses = {
     
 }
 
-export default function Status({ status }: IProps) {
+export default function OfferStatus({ status }: IProps) {
     return (
         <span className={`${OfferStatuses[status].className} text-white px-2 py-1 rounded-md text-sm whitespace-nowrap`}>{OfferStatuses[status].text}</span>
     )

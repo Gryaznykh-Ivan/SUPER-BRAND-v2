@@ -8,7 +8,7 @@ import RouterSearchInput from '../../components/inputs/RouterSearchInput'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import NavLink from '../../components/navigation/NavLink'
-import Status from '../../components/offers/cards/Status'
+import OfferStatus from '../../components/offers/cards/OfferStatus'
 import useDidMount from '../../hooks/useDidMount'
 import { useLazyGetOffersBySearchQuery } from '../../services/offerService'
 import { IErrorResponse } from '../../types/api'
@@ -133,7 +133,7 @@ function Index() {
                                                 <td className="px-3 py-2">{offer.user}</td>
                                                 <td className="px-3 py-2">{offer.offerPrice}₽</td>
                                                 <td className="px-3 py-2">{offer.price}₽</td>
-                                                <td className="px-3 py-2"><Status status={offer.status} /></td>
+                                                <td className="px-3 py-2"><OfferStatus status={offer.status} /></td>
                                             </tr>
                                         ))}
                                     </tbody>

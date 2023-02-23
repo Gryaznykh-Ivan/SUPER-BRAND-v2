@@ -46,7 +46,12 @@ export class OfferService {
                 comment: true,
                 status: true,
                 deliveryProfileId: true,
-                userId: true
+                userId: true,
+                order: {
+                    select: {
+                        orderId: true
+                    }
+                }
             }
         })
 
@@ -63,7 +68,8 @@ export class OfferService {
             comment: offer.comment,
             deliveryProfileId: offer.deliveryProfileId,
             status: offer.status,
-            userId: offer.userId
+            userId: offer.userId,
+            orderId: offer.order?.orderId ?? null
         }
 
         return {

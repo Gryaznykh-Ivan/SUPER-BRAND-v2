@@ -6,19 +6,26 @@ import MainLayout from '../../components/layouts/Main'
 
 import { useRouter } from 'next/router'
 import OrderProducts from '../../components/orders/blocks/OrderProducts'
-import Payment from '../../components/orders/blocks/Payment'
 import Customer from '../../components/orders/blocks/Customer'
 import Address from '../../components/orders/blocks/Address'
 import Service from '../../components/orders/blocks/Service'
 import Note from '../../components/orders/blocks/Note'
-import { IErrorResponse, OrderCreateRequest } from '../../types/api'
+import { IErrorResponse, IOfferSearch, IService, OrderCreateRequest } from '../../types/api'
 import { toast } from 'react-toastify'
 import { useCreateOrderMutation } from '../../services/orderService'
+import { IOrderState } from '../../types/store'
+import ServiceType from '../../components/orders/cards/ServiceType'
+import Payment from '../../components/orders/blocks/Payment'
 
 function New() {
     const router = useRouter()
 
     const [createOrder, { isSuccess: isCreateOrderSuccess, isError: isCreateOrderError, error: createOrderError, data }] = useCreateOrderMutation()
+
+    const [state, setState] = useState<IOrderState>({
+        offers: [],
+        services: []
+    })
 
     const [changes, setChanges] = useState<OrderCreateRequest>({})
     const onCollectChanges = (obj: OrderCreateRequest) => {
@@ -48,10 +55,19 @@ function New() {
         }
     }
 
+    const onStateChanges = (data: Partial<IOrderState>) => {
+        const result = { ...state, ...data }
+
+        setState(result)
+        onCollectChanges({
+            services: result.services.map(({ id, ...data }) => data),
+            offers: result.offers.map(({ id }) => ({ id }))
+        })
+    }
+
     const mustBeSaved = useMemo(() => {
         return Object.values(changes).some(c => c !== undefined)
     }, [changes])
-
 
     return (
         <MainLayout>
@@ -67,16 +83,17 @@ function New() {
                 <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
                     <div className="flex-1 space-y-4">
                         <OrderProducts
-                            offers={null}
-                            onChange={onCollectChanges}
+                            offers={state.offers}
+                            onChange={onStateChanges}
                         />
                         <Service
-                            services={[]}
+                            services={state.services}
                             region={changes.mailingRegion ?? null}
-                            onChange={onCollectChanges}
+                            onChange={onStateChanges}
                         />
                         <Payment
-
+                            services={state.services}
+                            offers={state.offers}
                         />
                     </div>
                     <div className="space-y-4 lg:w-80">

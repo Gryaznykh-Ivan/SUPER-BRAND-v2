@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Modal from '../../portals/Modal'
 import SearchInput from '../../inputs/SearchInput';
 import JSXAccordion from '../../accordions/JSXAccordion';
-import { IDeliveryProfile, IErrorResponse, IOffer, IOfferSearch } from '../../../types/api';
+import { IDeliveryProfile, IErrorResponse, IOffer, IOfferSearch, IOrderProduct } from '../../../types/api';
 import { useLazyGetOffersBySearchQuery } from '../../../services/offerService';
 import ImageLoader from '../../image/ImageLoader';
 import Link from 'next/link';
@@ -12,14 +12,14 @@ import Link from 'next/link';
 interface IProps {
     title: string;
     offers: Pick<IOffer, "id">[] | null;
-    onAddOffer: (item: IOfferSearch) => void;
+    onAddOffer: (item: IOrderProduct) => void;
     onClose: () => void;
 }
 
 export default function SelectOffers({ title, offers, onAddOffer, onClose }: IProps) {
     const itemPerPage = 20
 
-    const [state, setState] = useState<IOfferSearch[]>([])
+    const [state, setState] = useState<IOrderProduct[]>([])
     const [query, setQuery] = useState({
         q: "",
         limit: itemPerPage,
@@ -31,7 +31,15 @@ export default function SelectOffers({ title, offers, onAddOffer, onClose }: IPr
 
 
     useEffect(() => {
-        const newResult = data?.data ?? []
+        const newResult = data?.data.map(offer => ({
+            id: `new${Math.random()}`,
+            deliveryProfile: offer.deliveryProfile,
+            image: offer.image,
+            product: offer.product,
+            variant: offer.variant,
+            price: offer.price,
+            offerId: offer.id
+        })) ?? []
 
         if (query.skip === 0) {
             setState(newResult)

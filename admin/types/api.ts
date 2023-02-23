@@ -113,6 +113,7 @@ export interface IOffer {
     deliveryProfileId: string | null;
     status: OfferStatus;
     userId: string | null;
+    orderId: string | null;
 }
 
 export interface IImage {
@@ -237,9 +238,10 @@ export interface IOrderProduct {
     id: string;
     product: string;
     variant: string;
-    image: string | null;
-    deliveryProfile: string;
-    price: string;
+    image: IImage;
+    deliveryProfile: IDeliveryProfile;
+    price: string | null;
+    offerId: string;
 }
 
 export interface IFulfillment {
@@ -266,7 +268,7 @@ export interface IOrder {
     totalPrice: string;
     subtotalPrice: string;
     paymentStatus: PaymentStatus;
-    orderStatus: PaymentStatus;
+    orderStatus: OrderStatus;
     products: IOrderProduct[];
     fulfillments: IFulfillment[];
     services: IService[];
@@ -835,7 +837,7 @@ export type OrderCreateRequest = {
 
 export type OrderUpdateResponse = IResponse<void>
 export type OrderUpdateRequest = {
-    orderId: string;
+    orderId?: string;
     userId?: string;
     mailingCountry?: string;
     mailingCity?: string;

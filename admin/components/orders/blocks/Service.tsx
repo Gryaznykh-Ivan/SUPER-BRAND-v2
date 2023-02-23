@@ -5,29 +5,33 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import AddService from '../popups/AddService';
 import ServiceType from '../cards/ServiceType';
+import { IOrderState } from '../../../types/store';
 
 
 interface IProps {
     services: IService[];
     region: string | null;
-    onChange: (obj: OrderCreateRequest) => void;
+    onChange: (obj: Partial<IOrderState>) => void;
 }
 
 export default function Service({ onChange, ...data }: IProps) {
     const router = useRouter()
 
     const [popup, setPopup] = useState(false)
-    const [state, setState] = useState(data.services)
 
     const onPopupOpen = () => setPopup(true)
     const onPopupClose = () => setPopup(false)
 
     const onAddService = (service: IService) => {
-        setState(prev => [...prev, service])
+        const result = [...data.services, service]
+
+        onChange({ services: result })
     }
 
     const onRemoveService = (id: string) => {
-        setState(prev => prev.filter(a => a.id !== id))
+        const result = data.services.filter(a => a.id !== id)
+
+        onChange({ services: result })
     }
 
     return (
@@ -41,9 +45,9 @@ export default function Service({ onChange, ...data }: IProps) {
                     <span className="ml-2">Добавить</span>
                 </button>
             </div>
-            {state.length !== 0 &&
+            {data.services.length !== 0 &&
                 <div className="divide-y-[1px]">
-                    {state.map((service) =>
+                    {data.services.map((service) =>
                         <div key={service.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
                             <div className="flex-1">
                                 <ServiceType type={service.type} />
