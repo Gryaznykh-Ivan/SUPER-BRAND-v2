@@ -20,6 +20,7 @@ interface IProps {
 export default function FulfillmentProducts({ onChange, ...data }: IProps) {
     const router = useRouter()
 
+    // const [state, setState] = useState<string[]>([])
     const [popup, setPopup] = useState(false)
 
     const onPopupOpen = () => setPopup(true)
@@ -50,8 +51,10 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
             </div>
             <div className="divide-y-[1px] overflow-y-auto">
                 {data.offers.map((offer) =>
-                    <label key={offer.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
-                        <input type="checkbox" readOnly name="" className="rounded" />
+                    <label key={offer.id} htmlFor={ offer.id } className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
+                        {offer.id.startsWith("new") === false &&
+                            <input type="checkbox" readOnly name="" id={ offer.id } className="rounded" />
+                        }
                         <div className="relative w-12 aspect-square border-[1px] rounded-md">
                             {offer.image !== null ?
                                 <Image

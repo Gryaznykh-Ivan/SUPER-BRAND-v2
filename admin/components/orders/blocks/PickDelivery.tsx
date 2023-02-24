@@ -78,9 +78,9 @@ export default function PickDelivery({ onSelectShipping, region }: IProps) {
             {!isDeliveryOptionsError && deliveryOptions?.data !== undefined && deliveryOptions.data.length !== 0 &&
                 <div className="mt-4 space-y-2">
                     {deliveryOptions.data.map(option =>
-                        <label key={option.id} className="block border-[1px] rounded-md p-3 text-sm" onClick={() => onSelectOption(option)}>
+                        <label key={option.id} htmlFor={ option.id } className="block border-[1px] rounded-md p-3 text-sm" onClick={() => onSelectOption(option)}>
                             <div className="flex items-center">
-                                <input type="checkbox" readOnly name="" checked={state.selectedOption === option.id} className="rounded" />
+                                <input type="checkbox" id={ option.id } readOnly name="" checked={state.selectedOption === option.id} className="rounded" />
                                 <div className="flex-1 ml-3">{option.title}</div>
                                 <div className="flex space-x-4 text-gray-500">
                                     <div className="">{option.duration <= 1 ? "В течении дня" : `до ${option.duration} дней`}</div>

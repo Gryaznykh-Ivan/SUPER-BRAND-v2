@@ -4,6 +4,7 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { IUser } from 'src/interfaces/user.interface';
 import { CreateOrderDto } from './dto/createOrder.dto';
+import { CreateFulfillmentDto, UpdateFulfillmentDto } from './dto/fulfillment.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
 import { OrderService } from './order.service';
@@ -30,6 +31,14 @@ export class OrderController {
         return this.orderService.getOrderById(orderId)
     }
 
+    @Get(':orderId/:fulfillmentId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_READ])
+    getFulfillmentById(
+        @Param('orderId') fulfillmentId: string
+    ) {
+        return this.orderService.getFulfillmentById(fulfillmentId)
+    }
+
 
     @Post('create')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_CREATE])
@@ -48,5 +57,36 @@ export class OrderController {
         @User() self: IUser
     ) {
         return this.orderService.updateOrder(orderId, data, self)
+    }
+
+    @Post(':orderId/createFulfillment')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
+    createFulfillment(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Body() data: CreateFulfillmentDto,
+        @User() self: IUser
+    ) {
+        return this.orderService.createFulfillment(orderId, data, self)
+    }
+
+    @Put(':orderId/:fulfillmentId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
+    updateFulfillment(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Param('fulfillmentId') fulfillmentId: string,
+        @Body() data: UpdateFulfillmentDto,
+        @User() self: IUser
+    ) {
+        return this.orderService.updateFulfillment(orderId, fulfillmentId, data, self)
+    }
+
+    @Delete(':orderId/:fulfillmentId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
+    removeFulfillment(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Param('fulfillmentId') fulfillmentId: string,
+        @User() self: IUser
+    ) {
+        return this.orderService.removeFulfillment(orderId, fulfillmentId, self)
     }
 }

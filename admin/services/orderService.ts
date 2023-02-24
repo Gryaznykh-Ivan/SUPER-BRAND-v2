@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { OrderCreateRequest, OrderCreateResponse, OrderGetByIdRequest, OrderGetByIdResponse, OrderSearchRequest, OrderSearchResponse,  OrderUpdateRequest, OrderUpdateResponse } from "../types/api";
+import { FulfillmentCreateRequest, FulfillmentCreateResponse, FulfillmentDeleteRequest, FulfillmentDeleteResponse, FulfillmentGetByIdRequest, FulfillmentGetByIdResponse, FulfillmentUpdateRequest, FulfillmentUpdateResponse, OrderCreateRequest, OrderCreateResponse, OrderGetByIdRequest, OrderGetByIdResponse, OrderSearchRequest, OrderSearchResponse,  OrderUpdateRequest, OrderUpdateResponse } from "../types/api";
 
 export const orderService = api.injectEndpoints({
     endpoints: builder => ({
@@ -18,6 +18,13 @@ export const orderService = api.injectEndpoints({
             }),
             providesTags: ["ORDER"]
         }),
+        getFulfillmentById: builder.query<FulfillmentGetByIdResponse, FulfillmentGetByIdRequest>({
+            query: ({ orderId, fulfillmentId }) => ({
+                url: `orders/${orderId}/${ fulfillmentId }`,
+                method: "GET",
+            }),
+            providesTags: ["ORDER"]
+        }),
         createOrder: builder.mutation<OrderCreateResponse, OrderCreateRequest>({
             query: (credentials) => ({
                 url: "orders/create",
@@ -32,6 +39,28 @@ export const orderService = api.injectEndpoints({
                 body: rest
             }),
             invalidatesTags: ["ORDER"]
+        }),
+        createFulfillment: builder.mutation<FulfillmentCreateResponse, FulfillmentCreateRequest>({
+            query: ({ orderId, ...rest }) => ({
+                url: `orders/${orderId}`,
+                method: "POST",
+                body: rest
+            }),
+        }),
+        updateFulfillment: builder.mutation<FulfillmentUpdateResponse, FulfillmentUpdateRequest>({
+            query: ({ orderId, ...rest }) => ({
+                url: `orders/${orderId}`,
+                method: "PUT",
+                body: rest
+            }),
+            invalidatesTags: ["ORDER"]
+        }),
+        deleteFulfillment: builder.mutation<FulfillmentDeleteResponse, FulfillmentDeleteRequest>({
+            query: ({ orderId, fulfillmentId }) => ({
+                url: `orders/${orderId}/${fulfillmentId}`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["ORDER"]
         })
     })
 })
@@ -39,6 +68,10 @@ export const orderService = api.injectEndpoints({
 export const {
     useLazyGetOrdersBySearchQuery,
     useGetOrderByIdQuery,
+    useGetFulfillmentByIdQuery,
     useCreateOrderMutation,
-    useUpdateOrderMutation
+    useUpdateOrderMutation,
+    useCreateFulfillmentMutation,
+    useUpdateFulfillmentMutation,
+    useDeleteFulfillmentMutation,
 } = orderService

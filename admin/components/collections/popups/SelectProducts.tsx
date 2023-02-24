@@ -91,7 +91,7 @@ export default function SelectProducts({ title, collectionId, connectProducts, o
                         {data?.data &&
                             <div className="divide-y-[1px] max-h-96 overflow-y-auto">
                                 {state.map(product =>
-                                    <label key={product.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
+                                    <label key={product.id} htmlFor={ product.id } className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
                                         <div className="">
                                             <input type="checkbox" readOnly id={product.id} name="" className="rounded" checked={connectProducts?.find(c => c.id === product.id) !== undefined} onClick={() => onAddProduct(product)} />
                                         </div>

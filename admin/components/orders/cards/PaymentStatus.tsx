@@ -26,7 +26,6 @@ const PaymentStatuses = {
         className: "bg-red-500",
         text: "Долг"
     },
-    
 }
 
 export default function PaymentStatus({ status }: IProps) {

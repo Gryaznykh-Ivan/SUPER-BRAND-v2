@@ -98,7 +98,7 @@ function Index() {
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Покупатель</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Итог</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Статус оплаты</th>
-                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Статус доставки</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2">Статус исполнения</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Продукты</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Услуги</th>
                                         </tr>

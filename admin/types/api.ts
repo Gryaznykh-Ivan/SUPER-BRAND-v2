@@ -248,6 +248,8 @@ export interface IFulfillment {
     id: string;
     products: IOrderProduct[];
     status: FulfillmentStatus;
+    carrier: string;
+    tracking: string;
 }
 
 export interface IService {
@@ -823,6 +825,12 @@ export type OrderGetByIdRequest = {
     orderId: string
 }
 
+export type FulfillmentGetByIdResponse = IResponse<IFulfillment>
+export type FulfillmentGetByIdRequest = {
+    orderId: string,
+    fulfillmentId: string;
+}
+
 export type OrderCreateResponse = IResponse<string>
 export type OrderCreateRequest = {
     userId?: string;
@@ -848,4 +856,25 @@ export type OrderUpdateRequest = {
     createOffers?: Pick<IOffer, "id">[];
     deleteServices?: Pick<IService, "id">[];
     deleteOffers?: Pick<IOffer, "id">[];
+}
+
+export type FulfillmentCreateResponse = IResponse<string>
+export type FulfillmentCreateRequest = {
+    orderId?: string;
+    offers?: Pick<IOffer, "id">[];
+}
+
+export type FulfillmentUpdateResponse = IResponse<void>
+export type FulfillmentUpdateRequest = {
+    orderId?: string;
+    fulfillmentId?: string;
+    carrier?: string;
+    tracking?: string;
+    status?: FulfillmentStatus;
+}
+
+export type FulfillmentDeleteResponse = IResponse<void>
+export type FulfillmentDeleteRequest = {
+    orderId?: string;
+    fulfillmentId?: string;
 }

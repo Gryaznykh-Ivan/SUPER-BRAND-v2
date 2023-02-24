@@ -116,7 +116,7 @@ export default function SelectVariants({ title, variantId, onVariantChange, onCl
                                         </div>
                                         <div className="divide-y-[1px]">
                                             {product.variants.map(variant => (
-                                                <label key={variant.id} className="flex items-center py-3 space-x-4 hover:bg-gray-100 px-5">
+                                                <label key={variant.id} htmlFor={variant.id} className="flex items-center py-3 space-x-4 hover:bg-gray-100 px-5">
                                                     <div className="">
                                                         <input type="checkbox" readOnly id={variant.id} name="" className="rounded" checked={variantId === variant.id} onClick={() => onVariantChange(variant.id)} />
                                                     </div>

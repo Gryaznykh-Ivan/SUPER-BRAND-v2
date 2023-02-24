@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InvoiceStatus, OfferStatus, OrderStatus, PaymentStatus, Prisma } from '@prisma/client';
+import { FulfillmentStatus, InvoiceStatus, OfferStatus, OrderStatus, PaymentStatus, Prisma } from '@prisma/client';
 import { IUser } from 'src/interfaces/user.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/createOrder.dto';
+import { CreateFulfillmentDto, UpdateFulfillmentDto } from './dto/fulfillment.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
 
@@ -475,12 +476,19 @@ export class OrderService {
                         products: {
                             select: {
                                 id: true,
+                                fulfillmentId: true,
                                 offer: {
                                     select: {
                                         id: true,
                                         price: true,
                                     }
                                 }
+                            }
+                        },
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
                             }
                         },
                         services: {
@@ -508,13 +516,20 @@ export class OrderService {
                     },
                     data: {
                         totalPrice: subtotalProducts + subtotalService,
-                        paymentStatus: subtotalProducts + subtotalService === totalPaid
+                        paymentStatus: subtotalProducts + subtotalService === totalPaid && totalPaid !== 0
                             ? PaymentStatus.PAID
                             : subtotalProducts + subtotalService < totalPaid
                                 ? PaymentStatus.NEED_TO_RETURN
                                 : totalPaid !== 0
                                     ? PaymentStatus.PARTIALLY_PAID
-                                    : PaymentStatus.UNPAID
+                                    : PaymentStatus.UNPAID,
+                        orderStatus: order.products.filter(product => product.fulfillmentId !== null).length !== 0 && order.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                            ? OrderStatus.FULFILLED
+                            : order.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : order.products.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED
                     }
                 })
             })
@@ -525,6 +540,331 @@ export class OrderService {
         } catch (e) {
             console.log(e)
 
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async getFulfillmentById(fulfillmentId: string) {
+        const fulfillment = await this.prisma.fulfillment.findUnique({
+            where: { id: fulfillmentId },
+            select: {
+                id: true,
+                status: true,
+                carrier: true,
+                tracking: true,
+                products: {
+                    select: {
+                        id: true,
+                        offer: {
+                            select: {
+                                id: true,
+                                price: true,
+                                deliveryProfile: {
+                                    select: {
+                                        id: true,
+                                        title: true
+                                    }
+                                },
+                                variant: {
+                                    select: {
+                                        id: true,
+                                        option0: true,
+                                        option1: true,
+                                        option2: true,
+                                        product: {
+                                            select: {
+                                                title: true,
+                                                options: {
+                                                    select: {
+                                                        title: true,
+                                                        option: true,
+                                                    },
+                                                    orderBy: [{ position: 'asc' }]
+                                                },
+                                                images: {
+                                                    select: {
+                                                        id: true,
+                                                        alt: true,
+                                                        src: true,
+                                                        position: true
+                                                    },
+                                                    orderBy: {
+                                                        position: 'asc'
+                                                    },
+                                                    take: 1
+                                                }
+                                            }
+                                        },
+                                        images: {
+                                            select: {
+                                                id: true,
+                                                alt: true,
+                                                src: true,
+                                                position: true
+                                            },
+                                            orderBy: {
+                                                position: 'asc'
+                                            },
+                                            take: 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        if (fulfillment === null) {
+            throw new HttpException("Отправка не найдена", HttpStatus.BAD_REQUEST)
+        }
+
+        const result = {
+            id: fulfillment.id,
+            products: fulfillment.products.map(product => ({
+                id: product.id,
+                product: product.offer.variant.product.title,
+                variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
+                image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
+                deliveryProfile: product.offer.deliveryProfile,
+                price: product.offer.price,
+                offerId: product.offer.id
+            })),
+            status: fulfillment.status,
+            carrier: fulfillment.carrier,
+            tracking: fulfillment.tracking
+        }
+
+        return {
+            success: true,
+            data: result
+        }
+    }
+
+    async createFulfillment(orderId: number, data: CreateFulfillmentDto, self: IUser) {
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+            select: {
+                id: true,
+                products: {
+                    where: {
+                        fulfillmentId: null
+                    },
+                    select: {
+                        id: true,
+                        offerId: true
+                    }
+                }
+            }
+        })
+
+        if (order === null) {
+            throw new HttpException("Заказ не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        if (order.products.every(product => data.offers.some(offer => offer.id === product.offerId))) {
+            throw new HttpException("Часть товаров которые вы ходите отправить не добавлены в заказ либо уже отправлены", HttpStatus.BAD_REQUEST)
+        }
+
+        try {
+            const fulfillment = await this.prisma.$transaction(async tx => {
+                const fulfillment = await tx.fulfillment.create({
+                    data: {
+                        orderId: order.id,
+                        products: {
+                            connect: order.products.map(product => ({ id: product.id }))
+                        }
+                    },
+                    select: {
+                        id: true
+                    }
+                })
+
+                const updatedOrder = await tx.order.findUnique({
+                    where: { id: order.id },
+                    select: {
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
+                            }
+                        },
+                        products: {
+                            select: {
+                                id: true,
+                                fulfillmentId: true
+                            }
+                        }
+                    }
+                })
+
+                await tx.order.update({
+                    where: { id: order.id },
+                    data: {
+                        timeline: {
+                            create: {
+                                title: "Отправка товаров",
+                                message: `Отправка товаров №${fulfillment.id}`,
+                                userId: self.id,
+                            }
+                        },
+                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId !== null).length !== 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                            ? OrderStatus.FULFILLED
+                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : order.products.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED
+                    }
+                })
+
+                return fulfillment
+            })
+
+            return {
+                success: true,
+                data: fulfillment.id
+            }
+        } catch (e) {
+            console.log(e)
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+
+    async updateFulfillment(orderId: number, fulfillmentId: string, data: UpdateFulfillmentDto, self: IUser) {
+        const updateFulfillmentQuery = {
+            tracking: data.tracking,
+            status: data.status,
+            carrier: data.carrier
+        }
+
+        try {
+            await this.prisma.$transaction(async tx => {
+                const fulfillment = await tx.fulfillment.update({
+                    where: { id: fulfillmentId },
+                    data: updateFulfillmentQuery,
+                    select: {
+                        orderId: true
+                    }
+                })
+
+                const updatedOrder = await tx.order.findUnique({
+                    where: { id: fulfillment.orderId },
+                    select: {
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
+                            }
+                        },
+                        products: {
+                            select: {
+                                id: true,
+                                fulfillmentId: true
+                            }
+                        }
+                    }
+                })
+
+                await tx.order.update({
+                    where: { id: fulfillment.orderId },
+                    data: {
+                        timeline: {
+                            create: {
+                                title: "Изменение отправки",
+                                message: `Обновленные поля:\n${Object.keys(data).join("\n")}`,
+                                userId: self.id,
+                            }
+                        },
+                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId !== null).length !== 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                            ? OrderStatus.FULFILLED
+                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : updatedOrder.products.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED
+                    }
+                })
+            })
+
+            return {
+                success: true
+            }
+        } catch (e) {
+            console.log(e)
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+
+    async removeFulfillment(orderId: number, fulfillmentId: string, self: IUser) {
+        const fulfillment = await this.prisma.fulfillment.findFirst({
+            where: {
+                id: fulfillmentId
+            },
+            select: {
+                id: true,
+                orderId: true
+            }
+        })
+
+        if (fulfillment === null) {
+            throw new HttpException("Отправка не найдена", HttpStatus.BAD_REQUEST)
+        }
+
+        try {
+            await this.prisma.$transaction(async tx => {
+                await tx.fulfillment.delete({
+                    where: { id: fulfillment.id }
+                })
+
+                const updatedOrder = await tx.order.findUnique({
+                    where: { id: fulfillment.orderId },
+                    select: {
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
+                            }
+                        },
+                        products: {
+                            select: {
+                                id: true,
+                                fulfillmentId: true
+                            }
+                        }
+                    }
+                })
+
+                await tx.order.update({
+                    where: { id: fulfillment.orderId },
+                    data: {
+                        timeline: {
+                            create: {
+                                title: "Удаление отправки",
+                                message: ``,
+                                userId: self.id,
+                            }
+                        },
+                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId !== null).length !== 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                            ? OrderStatus.FULFILLED
+                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : updatedOrder.products.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED
+                    }
+                })
+            })
+
+            return {
+                success: true
+            }
+        } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

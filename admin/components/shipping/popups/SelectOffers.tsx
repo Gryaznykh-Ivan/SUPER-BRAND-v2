@@ -89,7 +89,7 @@ export default function SelectOffers({ title, deliveryProfileId, connectOffers, 
                         }
                         <div className="divide-y-[1px] max-h-96 overflow-y-auto">
                             {state.map(offer =>
-                                <label key={offer.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
+                                <label key={offer.id} htmlFor={offer.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
                                     <div className="">
                                         <input type="checkbox" readOnly id={offer.id} name="" className="rounded" checked={connectOffers?.find(c => c.id === offer.id) !== undefined} onClick={() => onAddOffer(offer)} />
                                     </div>

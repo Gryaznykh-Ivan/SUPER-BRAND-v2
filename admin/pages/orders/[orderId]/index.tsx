@@ -147,7 +147,7 @@ function Index() {
                                     offers={state.offers}
                                     onChange={onStateChanges}
                                 />
-                                {/* <Fulfillment /> */}
+                                <Fulfillment />
                                 <Service
                                     services={state.services}
                                     region={data.data.mailingRegion}
