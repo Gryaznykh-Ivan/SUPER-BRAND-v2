@@ -42,14 +42,15 @@ export const orderService = api.injectEndpoints({
         }),
         createFulfillment: builder.mutation<FulfillmentCreateResponse, FulfillmentCreateRequest>({
             query: ({ orderId, ...rest }) => ({
-                url: `orders/${orderId}`,
+                url: `orders/${orderId}/createFulfillment`,
                 method: "POST",
                 body: rest
             }),
+            invalidatesTags: ["ORDER"]
         }),
         updateFulfillment: builder.mutation<FulfillmentUpdateResponse, FulfillmentUpdateRequest>({
-            query: ({ orderId, ...rest }) => ({
-                url: `orders/${orderId}`,
+            query: ({ orderId, fulfillmentId, ...rest }) => ({
+                url: `orders/${orderId}/${fulfillmentId}`,
                 method: "PUT",
                 body: rest
             }),

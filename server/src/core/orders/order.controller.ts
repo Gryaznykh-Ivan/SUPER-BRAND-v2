@@ -34,7 +34,7 @@ export class OrderController {
     @Get(':orderId/:fulfillmentId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_READ])
     getFulfillmentById(
-        @Param('orderId') fulfillmentId: string
+        @Param('fulfillmentId') fulfillmentId: string
     ) {
         return this.orderService.getFulfillmentById(fulfillmentId)
     }

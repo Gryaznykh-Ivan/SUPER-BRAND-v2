@@ -523,7 +523,7 @@ export class OrderService {
                                 : totalPaid !== 0
                                     ? PaymentStatus.PARTIALLY_PAID
                                     : PaymentStatus.UNPAID,
-                        orderStatus: order.products.filter(product => product.fulfillmentId !== null).length !== 0 && order.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                        orderStatus: order.products.filter(product => product.fulfillmentId === null).length === 0 && order.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && order.products.length !== 0
                             ? OrderStatus.FULFILLED
                             : order.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
                                 ? OrderStatus.PARTIALLY_FULFILLED
@@ -663,7 +663,7 @@ export class OrderService {
             throw new HttpException("Заказ не найден", HttpStatus.BAD_REQUEST)
         }
 
-        if (order.products.every(product => data.offers.some(offer => offer.id === product.offerId))) {
+        if (data.offers.every(product => order.products.some(offer => offer.offerId === product.id)) === false) {
             throw new HttpException("Часть товаров которые вы ходите отправить не добавлены в заказ либо уже отправлены", HttpStatus.BAD_REQUEST)
         }
 
@@ -673,7 +673,7 @@ export class OrderService {
                     data: {
                         orderId: order.id,
                         products: {
-                            connect: order.products.map(product => ({ id: product.id }))
+                            connect: order.products.filter(product => data.offers.some(offer => offer.id === product.offerId)).map(product => ({ id: product.id }))
                         }
                     },
                     select: {
@@ -709,7 +709,7 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId !== null).length !== 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.products.length !== 0
                             ? OrderStatus.FULFILLED
                             : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
                                 ? OrderStatus.PARTIALLY_FULFILLED
@@ -779,7 +779,7 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId !== null).length !== 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.products.length !== 0
                             ? OrderStatus.FULFILLED
                             : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
                                 ? OrderStatus.PARTIALLY_FULFILLED
@@ -850,7 +850,7 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId !== null).length !== 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.products.length !== 0
                             ? OrderStatus.FULFILLED
                             : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
                                 ? OrderStatus.PARTIALLY_FULFILLED

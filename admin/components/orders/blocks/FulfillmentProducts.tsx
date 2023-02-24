@@ -11,6 +11,8 @@ import Link from 'next/link';
 import Status from '../../products/cards/Status';
 import SelectOffers from '../popups/SelectOffers';
 import { IOrderState } from '../../../types/store';
+import { useCreateFulfillmentMutation } from '../../../services/orderService';
+import { toast } from 'react-toastify';
 
 interface IProps {
     offers: IOrderProduct[];
@@ -20,22 +22,58 @@ interface IProps {
 export default function FulfillmentProducts({ onChange, ...data }: IProps) {
     const router = useRouter()
 
-    // const [state, setState] = useState<string[]>([])
+    const [state, setState] = useState<{ id: string }[]>([])
     const [popup, setPopup] = useState(false)
 
     const onPopupOpen = () => setPopup(true)
     const onPopupClose = () => setPopup(false)
 
+
+    const [createFulfillment, { isSuccess: isCreateFulfillmentSuccess, isError: isCreateFulfillmentError, error: createFulfillmentError }] = useCreateFulfillmentMutation()
+
+    useEffect(() => {
+        if (isCreateFulfillmentSuccess) {
+            toast.success("Отправка создана")
+        }
+
+        if (isCreateFulfillmentError) {
+            if (createFulfillmentError && "status" in createFulfillmentError) {
+                toast.error((createFulfillmentError.data as IErrorResponse).message)
+            } else {
+                toast.error("Произошла неизвесная ошибка")
+            }
+        }
+    }, [isCreateFulfillmentSuccess, isCreateFulfillmentError])
+
     const onToggleOffer = (offer: IOrderProduct) => {
         let result: IOrderProduct[]
 
-        if (data.offers.find(c => c.id === offer.id) !== undefined) {
-            result = data.offers.filter(c => c.id !== offer.id) ?? []
+        if (data.offers.find(c => c.offerId === offer.offerId) !== undefined) {
+            result = data.offers.filter(c => c.offerId !== offer.offerId) ?? []
         } else {
             result = [...data.offers, offer]
         }
 
         onChange({ offers: result })
+    }
+
+    const onToggleFulfillmentOffer = (id: string) => {
+        if (state.find(c => c.id === id) !== undefined) {
+            setState(prev => prev.filter(c => c.id !== id) ?? [])
+        } else {
+            setState(prev => ([...prev, { id }]))
+        }
+    }
+
+    const onCreateFulfillment = async () => {
+        const result = await createFulfillment({
+            orderId: router.query.orderId as string,
+            offers: state
+        }).unwrap()
+
+        if (result.success === true) {
+            setState([])
+        }
     }
 
     return (
@@ -51,9 +89,9 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
             </div>
             <div className="divide-y-[1px] overflow-y-auto">
                 {data.offers.map((offer) =>
-                    <label key={offer.id} htmlFor={ offer.id } className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
+                    <label key={offer.id} htmlFor={offer.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
                         {offer.id.startsWith("new") === false &&
-                            <input type="checkbox" readOnly name="" id={ offer.id } className="rounded" />
+                            <input type="checkbox" readOnly name="" id={offer.id} className="rounded" checked={state.some(c => c.id === offer.offerId) === true} onClick={() => onToggleFulfillmentOffer(offer.offerId)} />
                         }
                         <div className="relative w-12 aspect-square border-[1px] rounded-md">
                             {offer.image !== null ?
@@ -89,9 +127,11 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
                 )}
                 <div className=""></div>
             </div>
-            <div className="p-3 flex justify-end">
-                <button className="bg-green-600 px-4 py-2 text-white font-medium rounded-md text-sm">Отправить</button>
-            </div>
+            {state.length !== 0 &&
+                <div className="p-3 flex justify-end">
+                    <button className="bg-green-600 px-4 py-2 text-white font-medium rounded-md text-sm" onClick={onCreateFulfillment}>Отправить</button>
+                </div>
+            }
             {popup && <SelectOffers title="Добавить продукты" offers={data.offers} onAddOffer={onToggleOffer} onClose={onPopupClose} />}
         </div>
     )

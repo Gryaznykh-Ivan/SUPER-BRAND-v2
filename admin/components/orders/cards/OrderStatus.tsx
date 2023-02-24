@@ -12,7 +12,7 @@ const OrderStatuses = {
     },
     "PARTIALLY_FULFILLED": {
         className: "bg-gray-400",
-        text: "Ожидает принятия"
+        text: "Частично исполнено"
     },
     "UNFULFILLED": {
         className: "bg-gray-400",

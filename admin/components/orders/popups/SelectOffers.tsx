@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 interface IProps {
     title: string;
-    offers: Pick<IOffer, "id">[] | null;
+    offers: IOrderProduct[] | null;
     onAddOffer: (item: IOrderProduct) => void;
     onClose: () => void;
 }
@@ -99,7 +99,7 @@ export default function SelectOffers({ title, offers, onAddOffer, onClose }: IPr
                             {state.map(offer =>
                                 <label key={offer.id} htmlFor={ offer.id } className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
                                     <div className="">
-                                        <input type="checkbox" readOnly id={offer.id} name="" className="rounded" checked={offers?.find(c => c.id === offer.id) !== undefined} onClick={() => onAddOffer(offer)} />
+                                        <input type="checkbox" readOnly id={offer.id} name="" className="rounded" checked={offers?.find(c => c.offerId === offer.offerId) !== undefined} onClick={() => onAddOffer(offer)} />
                                     </div>
                                     <div className="relative w-12 aspect-square border-[1px] rounded-md">
                                         {offer.image !== null ?
