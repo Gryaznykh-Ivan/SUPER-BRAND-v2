@@ -16,7 +16,7 @@ import { FulfillmentUpdateRequest, IErrorResponse } from '../../../../types/api'
 function Index() {
     const router = useRouter()
 
-    const { isError, error, isLoading, data } = useGetFulfillmentByIdQuery({ orderId: router.query.orderId as string, fulfillmentId: router.query.fulfillmentId as string })
+    const { isError, error, isLoading, data } = useGetFulfillmentByIdQuery({ orderId: Number(router.query.orderId as string), fulfillmentId: router.query.fulfillmentId as string })
 
     const [updateFulfillment, { isSuccess: isUpdateFulfillmentSuccess, isError: isUpdateFulfillmentError, error: updateFulfillmentError }] = useUpdateFulfillmentMutation()
     const [deleteFulfillment, { isSuccess: isDeleteFulfillmentSuccess, isError: isDeleteFulfillmentError, error: deleteFulfillmentError }] = useDeleteFulfillmentMutation()
@@ -56,7 +56,7 @@ function Index() {
 
     const onSaveChanges = async () => {
         const result = await updateFulfillment({
-            orderId: router.query.orderId as string,
+            orderId: Number(router.query.orderId as string),
             fulfillmentId: router.query.fulfillmentId as string,
             ...changes
         }).unwrap()
@@ -72,7 +72,7 @@ function Index() {
     const onFulfillmentDelete = async () => {
         const result = await deleteFulfillment({
             fulfillmentId: router.query.fulfillmentId as string,
-            orderId: router.query.orderId as string
+            orderId: Number(router.query.orderId as string)
         }).unwrap();
         if (result.success === true) {
             router.push(`/orders/${router.query.orderId}`)

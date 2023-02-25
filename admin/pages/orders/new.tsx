@@ -61,7 +61,7 @@ function New() {
         setState(result)
         onCollectChanges({
             services: result.services.map(({ id, ...data }) => data),
-            offers: result.offers.map(({ id }) => ({ id }))
+            offers: result.offers.map(({ offerId }) => ({ id: offerId }))
         })
     }
 
@@ -92,8 +92,10 @@ function New() {
                             onChange={onStateChanges}
                         />
                         <Payment
+                            orderId={null}
                             services={state.services}
                             offers={state.offers}
+                            priceDiffrence={ 0 }
                         />
                     </div>
                     <div className="space-y-4 lg:w-80">

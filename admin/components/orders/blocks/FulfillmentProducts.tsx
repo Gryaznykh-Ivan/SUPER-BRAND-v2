@@ -67,7 +67,7 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
 
     const onCreateFulfillment = async () => {
         const result = await createFulfillment({
-            orderId: router.query.orderId as string,
+            orderId: Number(router.query.orderId as string),
             offers: state
         }).unwrap()
 
@@ -90,7 +90,7 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
             <div className="divide-y-[1px] overflow-y-auto">
                 {data.offers.map((offer) =>
                     <label key={offer.id} htmlFor={offer.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
-                        {offer.id.startsWith("new") === false &&
+                        {data.offers.some(offer => offer.id.startsWith("new")) === false &&
                             <input type="checkbox" readOnly name="" id={offer.id} className="rounded" checked={state.some(c => c.id === offer.offerId) === true} onClick={() => onToggleFulfillmentOffer(offer.offerId)} />
                         }
                         <div className="relative w-12 aspect-square border-[1px] rounded-md">
@@ -127,7 +127,7 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
                 )}
                 <div className=""></div>
             </div>
-            {state.length !== 0 &&
+            {state.length !== 0 && data.offers.some(offer => offer.id.startsWith("new")) === false &&
                 <div className="p-3 flex justify-end">
                     <button className="bg-green-600 px-4 py-2 text-white font-medium rounded-md text-sm" onClick={onCreateFulfillment}>Отправить</button>
                 </div>

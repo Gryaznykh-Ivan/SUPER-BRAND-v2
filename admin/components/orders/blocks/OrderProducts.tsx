@@ -29,8 +29,8 @@ export default function OrderProducts({ onChange, ...data }: IProps) {
     const onToggleOffer = (offer: IOrderProduct) => {
         let result: IOrderProduct[]
 
-        if (data.offers.find(c => c.id === offer.id) !== undefined) {
-            result = data.offers.filter(c => c.id !== offer.id) ?? []
+        if (data.offers.find(c => c.offerId === offer.offerId) !== undefined) {
+            result = data.offers.filter(c => c.offerId !== offer.offerId) ?? []
         } else {
             result = [...data.offers, offer]
         }

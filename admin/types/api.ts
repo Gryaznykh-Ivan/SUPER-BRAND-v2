@@ -113,7 +113,7 @@ export interface IOffer {
     deliveryProfileId: string | null;
     status: OfferStatus;
     userId: string | null;
-    orderId: string | null;
+    orderId: number | null;
 }
 
 export interface IImage {
@@ -234,6 +234,14 @@ export interface IOrderSearch {
     servicesCount: number;
 }
 
+export interface ITimeline {
+    id: string;
+    title: string;
+    message: string;
+    user: string;
+    createdAt: Date;
+}
+
 export interface IOrderProduct {
     id: string;
     product: string;
@@ -267,8 +275,7 @@ export interface IOrder {
     mailingCity: string;
     mailingCountry: string;
     mailingRegion: string;
-    totalPrice: string;
-    subtotalPrice: string;
+    totalPrice: number;
     paymentStatus: PaymentStatus;
     orderStatus: OrderStatus;
     products: IOrderProduct[];
@@ -820,14 +827,22 @@ export type OrderSearchRequest = {
     orderStatus?: string;
 }
 
-export type OrderGetByIdResponse = IResponse<IOrder>
-export type OrderGetByIdRequest = {
-    orderId: string
+export type OrderTimelineSearchResponse = IResponse<ITimeline[]>
+export type OrderTimelineSearchRequest = {
+    orderId?: number;
+    q?: string;
+    limit?: number;
+    skip?: number;
 }
 
-export type FulfillmentGetByIdResponse = IResponse<IFulfillment>
-export type FulfillmentGetByIdRequest = {
-    orderId: string,
+export type OrderGetByIdResponse = IResponse<IOrder>
+export type OrderGetByIdRequest = {
+    orderId: number
+}
+
+export type OrderFulfillmentGetByIdResponse = IResponse<IFulfillment>
+export type OrderFulfillmentGetByIdRequest = {
+    orderId: number,
     fulfillmentId: string;
 }
 
@@ -845,7 +860,7 @@ export type OrderCreateRequest = {
 
 export type OrderUpdateResponse = IResponse<void>
 export type OrderUpdateRequest = {
-    orderId?: string;
+    orderId?: number;
     userId?: string;
     mailingCountry?: string;
     mailingCity?: string;
@@ -858,23 +873,28 @@ export type OrderUpdateRequest = {
     deleteOffers?: Pick<IOffer, "id">[];
 }
 
-export type FulfillmentCreateResponse = IResponse<string>
-export type FulfillmentCreateRequest = {
-    orderId?: string;
+export type OrderConfirmPaymentUpdateResponse = IResponse<void>
+export type OrderConfirmPaymentUpdateRequest = {
+    orderId?: number;
+}
+
+export type OrderFulfillmentCreateResponse = IResponse<string>
+export type OrderFulfillmentCreateRequest = {
+    orderId?: number;
     offers?: Pick<IOffer, "id">[];
 }
 
-export type FulfillmentUpdateResponse = IResponse<void>
-export type FulfillmentUpdateRequest = {
-    orderId?: string;
+export type OrderFulfillmentUpdateResponse = IResponse<void>
+export type OrderFulfillmentUpdateRequest = {
+    orderId?: number;
     fulfillmentId?: string;
     carrier?: string;
     tracking?: string;
     status?: FulfillmentStatus;
 }
 
-export type FulfillmentDeleteResponse = IResponse<void>
-export type FulfillmentDeleteRequest = {
-    orderId?: string;
+export type OrderFulfillmentDeleteResponse = IResponse<void>
+export type OrderFulfillmentDeleteRequest = {
+    orderId?: number;
     fulfillmentId?: string;
 }

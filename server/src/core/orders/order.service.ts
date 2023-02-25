@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { CreateFulfillmentDto, UpdateFulfillmentDto } from './dto/fulfillment.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
+import { SearchTimelineDto } from './dto/searchTimeline.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
 
 @Injectable()
@@ -74,6 +75,44 @@ export class OrderService {
             orderStatus: order.orderStatus,
             productsCount: order._count.products,
             servicesCount: order._count.services,
+        }))
+
+        return {
+            success: true,
+            data: result
+        }
+    }
+
+    async getTimelinesBySearch(orderId: number, data: SearchTimelineDto) {
+        const timelines = await this.prisma.timeline.findMany({
+            where: {
+                orderId: orderId
+            },
+            select: {
+                id: true,
+                title: true,
+                message: true,
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true
+                    }
+                },
+                createdAt: true
+            },
+            skip: data.skip,
+            take: data.limit,
+            orderBy: [{
+                createdAt: 'desc'
+            }]
+        })
+
+        const result = timelines.map(timeline => ({
+            id: timeline.id,
+            user: timeline.user?.fullName ?? null,
+            title: timeline.title,
+            message: timeline.message,
+            createdAt: timeline.createdAt
         }))
 
         return {
@@ -260,7 +299,7 @@ export class OrderService {
             mailingCity: order.mailingCity,
             mailingCountry: order.mailingCountry,
             mailingRegion: order.mailingRegion,
-            totalPrice: order.totalPrice,
+            totalPrice: Number(order.totalPrice),
             paymentStatus: order.paymentStatus,
             orderStatus: order.orderStatus,
             products: order.products.map(product => ({
@@ -351,11 +390,12 @@ export class OrderService {
 
                 const subtotalProducts = offers.reduce((a, c) => a + Number(c.price), 0)
                 const subtotalService = data.services.reduce((a, c) => a + Number(c.price), 0)
+                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
 
                 return await tx.order.create({
                     data: {
                         ...createOrderQuery,
-                        totalPrice: subtotalProducts + subtotalService,
+                        totalPrice: totalPrice,
                         products: {
                             createMany: {
                                 data: offers.map(offer => ({
@@ -508,6 +548,7 @@ export class OrderService {
 
                 const subtotalProducts = order.products.map(product => product.offer).reduce((a, c) => a + Number(c.price), 0)
                 const subtotalService = order.services.reduce((a, c) => a + Number(c.price), 0)
+                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
                 const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
 
                 await tx.order.update({
@@ -515,10 +556,10 @@ export class OrderService {
                         id: orderId
                     },
                     data: {
-                        totalPrice: subtotalProducts + subtotalService,
-                        paymentStatus: subtotalProducts + subtotalService === totalPaid && totalPaid !== 0
+                        totalPrice: totalPrice,
+                        paymentStatus: totalPrice === totalPaid && totalPaid !== 0
                             ? PaymentStatus.PAID
-                            : subtotalProducts + subtotalService < totalPaid
+                            : totalPrice < totalPaid
                                 ? PaymentStatus.NEED_TO_RETURN
                                 : totalPaid !== 0
                                     ? PaymentStatus.PARTIALLY_PAID
@@ -865,6 +906,87 @@ export class OrderService {
                 success: true
             }
         } catch (e) {
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async confirmPayment(orderId: number, self: IUser) {
+        try {
+            await this.prisma.$transaction(async tx => {
+                const order = await tx.order.findUnique({
+                    where: {
+                        id: orderId
+                    },
+                    select: {
+                        id: true,
+                        totalPrice: true,
+                        products: {
+                            select: {
+                                id: true,
+                                fulfillmentId: true,
+                                offer: {
+                                    select: {
+                                        id: true,
+                                        price: true,
+                                    }
+                                }
+                            }
+                        },
+                        services: {
+                            select: {
+                                id: true,
+                                price: true
+                            }
+                        },
+                        invoices: {
+                            select: {
+                                id: true,
+                                amount: true
+                            }
+                        }
+                    }
+                })
+
+                const totalPrice = Number(order.totalPrice)
+                const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
+                const priceDifference = totalPrice - totalPaid;
+
+                if (priceDifference === 0) {
+                    throw new HttpException("Невозможно закрыть разницу в счете, так как нет разрыва", HttpStatus.BAD_REQUEST)
+                }
+                
+                await tx.invoice.create({
+                    data: {
+                        orderId: orderId,
+                        status: InvoiceStatus.SUCCEEDED,
+                        amount: priceDifference,
+                        method: priceDifference > 0 ? "Наличные" : "Возврат"
+                    }
+                })
+
+                await tx.order.update({
+                    where: {
+                        id: orderId
+                    },
+                    data: {
+                        paymentStatus: PaymentStatus.PAID,
+                        timeline: {
+                            create: {
+                                title: priceDifference > 0 ? `Заказ оплачен` : `Возврат разрыва`,
+                                message: priceDifference > 0 ? `Заказ отмечен как оплаченный наличными: ${ Math.abs(priceDifference) } руб.` : `Разница была возвращена клиенту: ${ Math.abs(priceDifference) } руб.`,
+                                userId: self.id,
+                            }
+                        },
+                    }
+                })
+            })
+
+            return {
+                success: true
+            }
+        } catch (e) {
+            console.log(e)
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

@@ -25,7 +25,7 @@ function Index() {
     const router = useRouter()
 
 
-    const { isError, error, isLoading, data } = useGetOrderByIdQuery({ orderId: router.query.orderId as string })
+    const { isError, error, isLoading, data } = useGetOrderByIdQuery({ orderId: Number(router.query.orderId as string) })
 
     const [updateOrder, { isSuccess: isUpdateOrderSuccess, isError: isUpdateOrderError, error: updateOrderError }] = useUpdateOrderMutation()
 
@@ -63,7 +63,7 @@ function Index() {
     }, [isUpdateOrderSuccess, isUpdateOrderError])
 
     const onSaveChanges = async () => {
-        const result = await updateOrder({ orderId: router.query.orderId as string, ...changes }).unwrap()
+        const result = await updateOrder({ orderId: Number(router.query.orderId as string), ...changes }).unwrap()
         if (result.success === true) {
             setChanges({})
         }
@@ -128,11 +128,6 @@ function Index() {
                                 <OrderStatus status={data.data.orderStatus} />
                             </div>
                             <div className="flex items-center">
-                                {/* <button className="p-2 font-medium hover:bg-gray-200 rounded-md">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8 4H6C5.46957 4 4.96086 4.21071 4.58579 4.58579C4.21071 4.96086 4 5.46957 4 6V18C4 18.5304 4.21071 19.0391 4.58579 19.4142C4.96086 19.7893 5.46957 20 6 20H18C18.5304 20 19.0391 19.7893 19.4142 19.4142C19.7893 19.0391 20 18.5304 20 18V6C20 5.46957 19.7893 4.96086 19.4142 4.58579C19.0391 4.21071 18.5304 4 18 4H16M12 3V11M12 11L15 8M12 11L9 8M4 13H6.586C6.85119 13.0001 7.10551 13.1055 7.293 13.293L9.707 15.707C9.89449 15.8945 10.1488 15.9999 10.414 16H13.586C13.8512 15.9999 14.1055 15.8945 14.293 15.707L16.707 13.293C16.8945 13.1055 17.1488 13.0001 17.414 13H20" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </button> */}
                                 <Link href="/orders" className="p-2 font-bold hover:bg-gray-200 rounded-md">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7956 9 12 9C11.2044 9 10.4413 9.31607 9.87868 9.87868C9.31607 10.4413 9 11.2044 9 12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -149,8 +144,8 @@ function Index() {
                                 />
                                 {data.data.fulfillments.map(fulfillment =>
                                     <Fulfillment
-                                        key={ fulfillment.id }
-                                        id={ fulfillment.id }
+                                        key={fulfillment.id}
+                                        id={fulfillment.id}
                                         offers={fulfillment.products}
                                         status={fulfillment.status}
                                     />
@@ -161,10 +156,14 @@ function Index() {
                                     onChange={onStateChanges}
                                 />
                                 <Payment
-                                    offers={state.offers}
+                                    orderId={data.data.id}
+                                    offers={[...state.offers, ...data.data.fulfillments.map(fulfillment => fulfillment.products).reduce((a, c) => [...a, ...c], [])]}
                                     services={state.services}
+                                    priceDiffrence={ data.data.totalPrice - data.data.paid }
                                 />
-                                {/* <Timeline /> */}
+                                <Timeline
+                                    orderId={data.data.id}
+                                />
                             </div>
                             <div className="space-y-4 lg:w-80">
                                 <Note

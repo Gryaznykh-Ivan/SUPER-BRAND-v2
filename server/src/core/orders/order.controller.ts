@@ -6,6 +6,7 @@ import { IUser } from 'src/interfaces/user.interface';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { CreateFulfillmentDto, UpdateFulfillmentDto } from './dto/fulfillment.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
+import { SearchTimelineDto } from './dto/searchTimeline.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
 import { OrderService } from './order.service';
 
@@ -21,6 +22,15 @@ export class OrderController {
         @Query(new ValidationPipe({ transform: true })) data: SearchOrderDto
     ) {
         return this.orderService.getOrdersBySearch(data)
+    }
+
+    @Get(':orderId/timeline')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_READ])
+    getTimelinesBySearch(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Query(new ValidationPipe({ transform: true })) data: SearchTimelineDto
+    ) {
+        return this.orderService.getTimelinesBySearch(orderId, data)
     }
 
     @Get(':orderId')
@@ -57,6 +67,15 @@ export class OrderController {
         @User() self: IUser
     ) {
         return this.orderService.updateOrder(orderId, data, self)
+    }
+
+    @Put(':orderId/confirmPayment')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
+    confirmPayment(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @User() self: IUser
+    ) {
+        return this.orderService.confirmPayment(orderId, self)
     }
 
     @Post(':orderId/createFulfillment')

@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { FulfillmentCreateRequest, FulfillmentCreateResponse, FulfillmentDeleteRequest, FulfillmentDeleteResponse, FulfillmentGetByIdRequest, FulfillmentGetByIdResponse, FulfillmentUpdateRequest, FulfillmentUpdateResponse, OrderCreateRequest, OrderCreateResponse, OrderGetByIdRequest, OrderGetByIdResponse, OrderSearchRequest, OrderSearchResponse,  OrderUpdateRequest, OrderUpdateResponse } from "../types/api";
+import { OrderConfirmPaymentUpdateRequest, OrderConfirmPaymentUpdateResponse, OrderCreateRequest, OrderCreateResponse, OrderFulfillmentCreateRequest, OrderFulfillmentCreateResponse, OrderFulfillmentDeleteRequest, OrderFulfillmentDeleteResponse, OrderFulfillmentGetByIdRequest, OrderFulfillmentGetByIdResponse, OrderFulfillmentUpdateRequest, OrderFulfillmentUpdateResponse, OrderGetByIdRequest, OrderGetByIdResponse, OrderSearchRequest, OrderSearchResponse,  OrderTimelineSearchRequest,  OrderTimelineSearchResponse,  OrderUpdateRequest, OrderUpdateResponse } from "../types/api";
 
 export const orderService = api.injectEndpoints({
     endpoints: builder => ({
@@ -11,6 +11,14 @@ export const orderService = api.injectEndpoints({
             }),
             providesTags: ["ORDERS"]
         }),
+        getOrderTimelineBySearch: builder.query<OrderTimelineSearchResponse, OrderTimelineSearchRequest>({
+            query: ({ orderId, ...data }) => ({
+                url: `orders/${ orderId }/timeline`,
+                method: "GET",
+                params: data
+            }),
+            providesTags: ["ORDER"]
+        }),
         getOrderById: builder.query<OrderGetByIdResponse, OrderGetByIdRequest>({
             query: ({ orderId }) => ({
                 url: `orders/${orderId}`,
@@ -18,7 +26,7 @@ export const orderService = api.injectEndpoints({
             }),
             providesTags: ["ORDER"]
         }),
-        getFulfillmentById: builder.query<FulfillmentGetByIdResponse, FulfillmentGetByIdRequest>({
+        getFulfillmentById: builder.query<OrderFulfillmentGetByIdResponse, OrderFulfillmentGetByIdRequest>({
             query: ({ orderId, fulfillmentId }) => ({
                 url: `orders/${orderId}/${ fulfillmentId }`,
                 method: "GET",
@@ -40,7 +48,14 @@ export const orderService = api.injectEndpoints({
             }),
             invalidatesTags: ["ORDER"]
         }),
-        createFulfillment: builder.mutation<FulfillmentCreateResponse, FulfillmentCreateRequest>({
+        confirmPayment: builder.mutation<OrderConfirmPaymentUpdateResponse, OrderConfirmPaymentUpdateRequest>({
+            query: ({ orderId }) => ({
+                url: `orders/${orderId}/confirmPayment`,
+                method: "PUT"
+            }),
+            invalidatesTags: ["ORDER"]
+        }),
+        createFulfillment: builder.mutation<OrderFulfillmentCreateResponse, OrderFulfillmentCreateRequest>({
             query: ({ orderId, ...rest }) => ({
                 url: `orders/${orderId}/createFulfillment`,
                 method: "POST",
@@ -48,7 +63,7 @@ export const orderService = api.injectEndpoints({
             }),
             invalidatesTags: ["ORDER"]
         }),
-        updateFulfillment: builder.mutation<FulfillmentUpdateResponse, FulfillmentUpdateRequest>({
+        updateFulfillment: builder.mutation<OrderFulfillmentUpdateResponse, OrderFulfillmentUpdateRequest>({
             query: ({ orderId, fulfillmentId, ...rest }) => ({
                 url: `orders/${orderId}/${fulfillmentId}`,
                 method: "PUT",
@@ -56,7 +71,7 @@ export const orderService = api.injectEndpoints({
             }),
             invalidatesTags: ["ORDER"]
         }),
-        deleteFulfillment: builder.mutation<FulfillmentDeleteResponse, FulfillmentDeleteRequest>({
+        deleteFulfillment: builder.mutation<OrderFulfillmentDeleteResponse, OrderFulfillmentDeleteRequest>({
             query: ({ orderId, fulfillmentId }) => ({
                 url: `orders/${orderId}/${fulfillmentId}`,
                 method: "DELETE"
@@ -68,6 +83,7 @@ export const orderService = api.injectEndpoints({
 
 export const {
     useLazyGetOrdersBySearchQuery,
+    useLazyGetOrderTimelineBySearchQuery,
     useGetOrderByIdQuery,
     useGetFulfillmentByIdQuery,
     useCreateOrderMutation,
@@ -75,4 +91,5 @@ export const {
     useCreateFulfillmentMutation,
     useUpdateFulfillmentMutation,
     useDeleteFulfillmentMutation,
+    useConfirmPaymentMutation
 } = orderService
