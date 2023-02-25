@@ -72,7 +72,7 @@ export default function VariantList({ productId, createNewVariant = true, isOpti
                                         <span className="font-medium">{variant.title}</span>
                                     </div>
                                     <div className="text-end text-gray-500">
-                                        <div className="">{variant.price === 0 ? "Пусто" : `от ${variant.price}`}</div>
+                                        <div className="">{Number(variant.price) === 0 ? "Пусто" : `от ${variant.price}`}</div>
                                     </div>
                                 </Link>
                             ))

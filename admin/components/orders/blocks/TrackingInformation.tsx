@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { FulfillmentUpdateRequest } from '../../../types/api';
+import { OrderFulfillmentUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 
 interface IProps {
     tracking: string | null;
     carrier: string | null;
-    onChange: (obj: FulfillmentUpdateRequest) => void;
+    onChange: (obj: OrderFulfillmentUpdateRequest) => void;
 }
 
 export default function TrackingInformation({ onChange, ...data }: IProps) {

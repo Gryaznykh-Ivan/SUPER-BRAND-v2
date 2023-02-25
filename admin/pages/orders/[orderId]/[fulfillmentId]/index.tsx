@@ -9,7 +9,7 @@ import TrackingInformation from '../../../../components/orders/blocks/TrackingIn
 import FulfillmentStatus from '../../../../components/orders/blocks/FulfillmentPickStatus'
 import { useDeleteFulfillmentMutation, useGetFulfillmentByIdQuery, useUpdateFulfillmentMutation } from '../../../../services/orderService'
 import { toast } from 'react-toastify'
-import { FulfillmentUpdateRequest, IErrorResponse } from '../../../../types/api'
+import { OrderFulfillmentUpdateRequest, IErrorResponse } from '../../../../types/api'
 
 
 
@@ -21,8 +21,8 @@ function Index() {
     const [updateFulfillment, { isSuccess: isUpdateFulfillmentSuccess, isError: isUpdateFulfillmentError, error: updateFulfillmentError }] = useUpdateFulfillmentMutation()
     const [deleteFulfillment, { isSuccess: isDeleteFulfillmentSuccess, isError: isDeleteFulfillmentError, error: deleteFulfillmentError }] = useDeleteFulfillmentMutation()
 
-    const [changes, setChanges] = useState<FulfillmentUpdateRequest>({})
-    const onCollectChanges = (obj: FulfillmentUpdateRequest) => {
+    const [changes, setChanges] = useState<OrderFulfillmentUpdateRequest>({})
+    const onCollectChanges = (obj: OrderFulfillmentUpdateRequest) => {
         setChanges(prev => ({ ...prev, ...obj }))
     }
 
