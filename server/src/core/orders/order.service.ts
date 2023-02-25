@@ -264,6 +264,9 @@ export class OrderService {
                                 }
                             }
                         }
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
                     }
                 },
                 services: {
@@ -969,7 +972,7 @@ export class OrderService {
                         id: orderId
                     },
                     data: {
-                        paymentStatus: PaymentStatus.PAID,
+                        paymentStatus: totalPrice !== 0 ? PaymentStatus.PAID : PaymentStatus.REFUNDED,
                         timeline: {
                             create: {
                                 title: priceDifference > 0 ? `Заказ оплачен` : `Возврат разрыва`,
