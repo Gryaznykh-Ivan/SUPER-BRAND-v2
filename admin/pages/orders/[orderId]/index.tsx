@@ -159,7 +159,7 @@ function Index() {
                                     orderId={data.data.id}
                                     offers={[...state.offers, ...data.data.fulfillments.map(fulfillment => fulfillment.products).reduce((a, c) => [...a, ...c], [])]}
                                     services={state.services}
-                                    priceDiffrence={ data.data.totalPrice - data.data.paid }
+                                    priceDiffrence={data.data.totalPrice - data.data.paid}
                                 />
                                 <Timeline
                                     orderId={data.data.id}
@@ -186,7 +186,9 @@ function Index() {
                         </div>
                         <div className={`flex justify-between rounded-md ${mustBeSaved && "sticky left-10 right-0 bottom-4 bg-gray-800 p-4 transition-colors duration-200"}`}>
                             <div className="">
-
+                                {mustBeSaved &&
+                                    <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={() => router.reload()}>Отменить</button>
+                                }
                             </div>
                             <div className="flex justify-end">
                                 <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={onSaveChanges}>Сохранить</button>
