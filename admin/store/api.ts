@@ -9,7 +9,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { AppState } from '.';
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: process.env.NODE_ENV === 'production' ? 'https://api.adminsb.space/' : 'http://api.sb.com/',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const state = getState() as AppState

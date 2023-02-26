@@ -5,5 +5,5 @@ interface IProps {
 }
 
 export default function ImageLoader({ src, width }: IProps) {
-    return `https://static.adminsb.space${src}/${width}.jpg`
+    return `${ process.env.NEXT_PUBLIC_STATIC_URL }${src}/${width}.jpg`
 }

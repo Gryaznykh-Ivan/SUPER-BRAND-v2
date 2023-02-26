@@ -3,6 +3,9 @@ services:
   admin:
     build:
       context: ./admin
+    environment:
+      NEXT_PUBLIC_API_URL: https://adminsb.space
+      NEXT_PUBLIC_STATIC_URL: https://static.adminsb.space
     depends_on:
       - db
       - nginx
