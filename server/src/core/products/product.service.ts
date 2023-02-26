@@ -33,6 +33,8 @@ export class ProductService {
                 metaTitle: true,
                 metaDescription: true,
                 vendor: true,
+                SKU: true,
+                barcode: true,
                 images: {
                     select: {
                         id: true,
@@ -159,7 +161,7 @@ export class ProductService {
     }
 
     async createProduct(data: CreateProductDto) {
-        
+
         if ((data.title !== undefined && data.title.length > 255) || (data.metaTitle !== undefined && data.metaTitle.length > 255)) {
             throw new HttpException("Максимальная длина названия 255 символов", HttpStatus.BAD_REQUEST)
         }
@@ -171,7 +173,9 @@ export class ProductService {
             vendor: data.vendor,
             handle: data.handle,
             metaTitle: data.metaTitle,
-            metaDescription: data.metaDescription
+            metaDescription: data.metaDescription,
+            SKU: data.SKU,
+            barcode: data.barcode
         }
 
         createProductQuery.handle = this.url.getSlug(createProductQuery.handle === undefined ? createProductQuery.title : createProductQuery.handle)
@@ -198,7 +202,7 @@ export class ProductService {
                 data: product.id
             }
         } catch (e) {
-            console.log(e)
+
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
@@ -251,7 +255,6 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -397,7 +400,7 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Такая опция уже существует", HttpStatus.BAD_REQUEST)
@@ -509,22 +512,26 @@ export class ProductService {
                     })
                 }
 
-                const newOptions = await tx.option.findMany({
-                    where: { productId: productId },
+                const product = await tx.product.findUnique({
+                    where: { id: productId },
                     select: {
-                        option: true,
-                        values: {
+                        SKU: true,
+                        options: {
                             select: {
-                                id: true,
-                                title: true
-                            }
+                                option: true,
+                                values: {
+                                    select: {
+                                        id: true,
+                                        title: true
+                                    }
+                                }
+                            },
+                            orderBy: { position: 'asc' }
                         }
-                    },
-                    orderBy: { position: 'asc' }
+                    }
                 })
 
-
-                const values = newOptions.map(option => option.values.map(value => ({ ...value, option: option.option })))
+                const values = product.options.map(option => option.values.map(value => ({ ...value, option: option.option })))
                 const combinations = this.getCombinations(values)
 
                 for (const combination of combinations) {
@@ -544,7 +551,8 @@ export class ProductService {
                             productId: productId,
                             option0: combination.find(c => c.option === 0)?.title ?? null,
                             option1: combination.find(c => c.option === 1)?.title ?? null,
-                            option2: combination.find(c => c.option === 2)?.title ?? null
+                            option2: combination.find(c => c.option === 2)?.title ?? null,
+                            SKU: product.SKU
                         }
                     })
                 }
@@ -554,7 +562,6 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2003') {
                     throw new HttpException("Невозможно удалить варианты у которых есть офферы. Начните с удаления офферов у варианта, который хотите стереть", HttpStatus.BAD_REQUEST)
@@ -644,7 +651,7 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2003') {
                     throw new HttpException("Невозможно удалить варианты у которых есть офферы. Начните с удаления офферов у варианта, который хотите стереть", HttpStatus.BAD_REQUEST)
@@ -664,7 +671,9 @@ export class ProductService {
             vendor: data.vendor,
             handle: data.handle,
             metaTitle: data.metaTitle,
-            metaDescription: data.metaDescription
+            metaDescription: data.metaDescription,
+            SKU: data.SKU,
+            barcode: data.barcode
         }
 
         if (updateProductQuery.handle !== undefined) {
@@ -752,10 +761,10 @@ export class ProductService {
         }
     }
 
-    private getCombinations = (arrays: any) => {
-        return arrays.reduce((result: any, array: any) => {
-            return result.reduce((newResult: any, combination: any) => {
-                return newResult.concat(array.map((num: any) => [...combination, num]));
+    private getCombinations = (arrays: { option: number; id: string; title: string; }[][]) => {
+        return arrays.reduce((result: { option: number; id: string; title: string; }[][], array: { option: number; id: string; title: string; }[]) => {
+            return result.reduce((newResult: { option: number; id: string; title: string; }[][], combination: { option: number; id: string; title: string; }[]) => {
+                return newResult.concat(array.map((num: { option: number; id: string; title: string; }) => [...combination, num]));
             }, []);
         }, [[]]);
     }

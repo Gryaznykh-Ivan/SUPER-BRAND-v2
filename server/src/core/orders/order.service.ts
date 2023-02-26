@@ -416,7 +416,7 @@ export class OrderService {
                 data: order.id
             }
         } catch (e) {
-            console.log(e)
+            
 
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -582,7 +582,7 @@ export class OrderService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+            
 
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -771,7 +771,7 @@ export class OrderService {
                 data: fulfillment.id
             }
         } catch (e) {
-            console.log(e)
+            
 
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -838,7 +838,7 @@ export class OrderService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+            
 
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -988,7 +988,7 @@ export class OrderService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+            
 
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }

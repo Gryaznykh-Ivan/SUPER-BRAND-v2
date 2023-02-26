@@ -284,11 +284,13 @@ model Product {
     id               String            @id @default(cuid())
     handle           String            @unique() @db.VarChar(255)
     title            String            @db.VarChar(255)
+    available        Boolean           @default(false)
+    SKU              String?
+    barcode          String?
     vendor           String?
     description      String?           @db.Text
     metaTitle        String?           @db.VarChar(255)
     metaDescription  String?           @db.Text
-    available        Boolean           @default(false)
     images           Image[]
     collections      Collection[]
     variants         Variant[]

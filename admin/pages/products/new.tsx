@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { useCreateProductMutation } from '../../services/productService'
 import { toast } from 'react-toastify'
 import { IErrorResponse, ProductCreateRequest, ProductUpdateRequest } from '../../types/api'
+import Inventory from '../../components/products/blocks/Inventory'
 
 function New() {
     const router = useRouter()
@@ -65,6 +66,11 @@ function New() {
                         <GeneralInfo
                             title={null}
                             description={null}
+                            onChange={onCollectChanges}
+                        />
+                        <Inventory
+                            SKU={null}
+                            barcode={null}
                             onChange={onCollectChanges}
                         />
                         <SeoTags

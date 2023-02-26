@@ -184,7 +184,7 @@ export class ShippingService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+            
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Профиль с таким title уже существует", HttpStatus.BAD_REQUEST)
@@ -274,7 +274,7 @@ export class ShippingService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+            
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

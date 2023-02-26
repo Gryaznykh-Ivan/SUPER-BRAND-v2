@@ -218,6 +218,8 @@ export interface IProduct {
     metaTitle: string | null;
     metaDescription: string | null;
     vendor: string | null;
+    SKU: string | null;
+    barcode: string | null;
     images: IImage[];
     collections: Pick<ICollection, "id" | "title">[];
     options: IProductOption[];

@@ -7,6 +7,7 @@ import GeneralInfo from '../../../components/products/blocks/GeneralInfo'
 import SeoTags from '../../../components/products/blocks/SeoTags'
 import Status from '../../../components/products/blocks/Status'
 import OrganizationInfo from '../../../components/products/blocks/OrganizationInfo'
+import Inventory from '../../../components/products/blocks/Inventory'
 import VariantList from '../../../components/variants/blocks/VariantList'
 import OptionList from '../../../components/products/blocks/OptionList'
 import { useDeleteProductMutation, useGetProductByIdQuery, useUpdateProductMutation } from '../../../services/productService'
@@ -122,6 +123,11 @@ function Index() {
                                 <Media
                                     productId={data.data.id}
                                     images={data.data.images}
+                                />
+                                <Inventory
+                                    SKU={data.data.SKU}
+                                    barcode={data.data.barcode}
+                                    onChange={onCollectChanges}
                                 />
                                 <OptionList
                                     productId={data.data.id}

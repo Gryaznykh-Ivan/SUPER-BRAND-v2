@@ -297,36 +297,46 @@ export class VariantService {
     }
 
     async createVariant(data: CreateVariantDto) {
-        const existVariant = await this.prisma.variant.findFirst({
+        const product = await this.prisma.product.findUnique({
             where: {
-                option0: data.option0,
-                option1: data.option1,
-                option2: data.option2,
-                productId: data.productId
+                id: data.productId,
             },
-        })
-
-        if (existVariant !== null) {
-            throw new HttpException("Вариант должен быть уникальным", HttpStatus.BAD_REQUEST)
-        }
-
-        // проверка на соответствие опциям
-        const availableOptionValues = await this.prisma.option.findMany({
-            where: { productId: data.productId },
             select: {
-                title: true,
-                option: true,
-                values: {
+                SKU: true,
+                barcode: true,
+                variants: {
+                    where: {
+                        option0: data.option0,
+                        option1: data.option1,
+                        option2: data.option2
+                    },
+                    take: 1
+                },
+                options: {
                     select: {
-                        title: true
+                        title: true,
+                        option: true,
+                        values: {
+                            select: {
+                                title: true
+                            }
+                        }
                     }
                 }
             }
         })
 
+        if (product === null) {
+            throw new HttpException("Продукт не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        if (product.variants.length !== 0) {
+            throw new HttpException("Вариант должен быть уникальным", HttpStatus.BAD_REQUEST)
+        }
+
         for (let i = 0; i < 3; i++) {
             if (data[`option${i}`] !== undefined) {
-                const option = availableOptionValues.find(c => c.option === i)
+                const option = product.options.find(c => c.option === i)
 
                 if (option === undefined || option.values.some(c => c.title === data[`option${i}`]) === false) {
                     throw new HttpException(`${option.title} не соответствует опциям`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -338,8 +348,8 @@ export class VariantService {
             option0: data.option0,
             option1: data.option1,
             option2: data.option2,
-            SKU: data.SKU,
-            barcode: data.barcode,
+            SKU: data.SKU || product.SKU,
+            barcode: data.barcode || product.barcode,
             productId: data.productId
         }
 
@@ -403,7 +413,7 @@ export class VariantService {
                 success: true
             }
         } catch (e) {
-            console.log(e)
+            
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -502,8 +512,7 @@ export class VariantService {
 
 
     async updateVariant(variantId: string, data: UpdateVariantDto) {
-        // проверка на соответствие опциям
-        const availableOptionValues = await this.prisma.option.findMany({
+        const options = await this.prisma.option.findMany({
             where: {
                 product: {
                     variants: {
@@ -526,7 +535,7 @@ export class VariantService {
 
         for (let i = 0; i < 3; i++) {
             if (data[`option${i}`] !== undefined) {
-                const option = availableOptionValues.find(c => c.option === i)
+                const option = options.find(c => c.option === i)
 
                 if (option === undefined || option.values.some(c => c.title === data[`option${i}`]) === false) {
                     throw new HttpException(`${option.title} не соответствует опциям`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -566,16 +575,19 @@ export class VariantService {
                 })
 
                 if (existCheck.length > 1) {
-                    throw new Error()
+                    throw new HttpException("Вариант должен быть уникальным", HttpStatus.INTERNAL_SERVER_ERROR)
                 }
             })
-
 
             return {
                 success: true
             }
         } catch (e) {
-            throw new HttpException("Вариант должен быть уникальным", HttpStatus.INTERNAL_SERVER_ERROR)
+            if (e.name === HttpException.name) {
+                throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

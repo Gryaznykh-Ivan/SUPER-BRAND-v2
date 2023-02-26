@@ -32,6 +32,14 @@ export class CreateProductDto {
     vendor: string;
 
     @IsOptional()
+    @IsString()
+    barcode: string;
+
+    @IsOptional()
+    @IsString()
+    SKU: string;
+
+    @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => ConnectCollectionDto)
