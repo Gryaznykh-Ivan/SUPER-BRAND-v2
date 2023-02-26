@@ -46,7 +46,6 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
                 <div className="flex flex-col">
                     <label htmlFor="title" className="text-sm text-gray-600 mb-1">Название продукта</label>
                     <Input type="text" id="title" placeholder="Название продукта" name="title" value={ state.title } onChange={onInputChange} />
-                    <div className="">123</div>
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="description" className="text-sm text-gray-600 mb-1">Описание</label>

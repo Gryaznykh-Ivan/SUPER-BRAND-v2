@@ -211,7 +211,7 @@ model Invoice {
 model OrderService {
     id          String  @id @default(cuid())
     type        Service @default(SHIPPING)
-    description String?
+    description String? @db.Text
     price       Decimal @db.Decimal(9, 2)
     order       Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId     Int
@@ -267,10 +267,10 @@ model FavoriteProduct {
 
 model Collection {
     id              String    @id @default(cuid())
-    title           String
-    description     String?
-    metaTitle       String?
-    metaDescription String?
+    title           String    @db.TinyText
+    description     String?   @db.Text
+    metaTitle       String?   @db.TinyText
+    metaDescription String?   @db.Text
     handle          String    @unique
     products        Product[]
     images          Image[]
@@ -283,11 +283,11 @@ model Collection {
 model Product {
     id               String            @id @default(cuid())
     handle           String            @unique
-    title            String
+    title            String            @db.TinyText
     vendor           String?
-    description      String?
-    metaTitle        String?
-    metaDescription  String?
+    description      String?           @db.Text
+    metaTitle        String?           @db.TinyText
+    metaDescription  String?           @db.Text
     available        Boolean           @default(false)
     images           Image[]
     collections      Collection[]
