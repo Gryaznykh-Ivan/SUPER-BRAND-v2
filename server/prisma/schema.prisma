@@ -219,7 +219,7 @@ model OrderService {
 
 model Timeline {
     id        String   @id @default(cuid())
-    title     String
+    title     String   @db.VarChar(255)
     message   String?  @db.Text
     order     Order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId   Int
@@ -267,11 +267,11 @@ model FavoriteProduct {
 
 model Collection {
     id              String    @id @default(cuid())
-    title           String    @db.TinyText
+    title           String    @db.VarChar(255)
     description     String?   @db.Text
-    metaTitle       String?   @db.TinyText
+    metaTitle       String?   @db.VarChar(255)
     metaDescription String?   @db.Text
-    handle          String    @unique
+    handle          String    @unique() @db.VarChar(255)
     products        Product[]
     images          Image[]
     createdAt       DateTime  @default(now())
@@ -282,11 +282,11 @@ model Collection {
 
 model Product {
     id               String            @id @default(cuid())
-    handle           String            @unique
-    title            String            @db.TinyText
+    handle           String            @unique() @db.VarChar(255)
+    title            String            @db.VarChar(255)
     vendor           String?
     description      String?           @db.Text
-    metaTitle        String?           @db.TinyText
+    metaTitle        String?           @db.VarChar(255)
     metaDescription  String?           @db.Text
     available        Boolean           @default(false)
     images           Image[]

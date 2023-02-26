@@ -159,6 +159,11 @@ export class ProductService {
     }
 
     async createProduct(data: CreateProductDto) {
+        
+        if ((data.title !== undefined && data.title.length > 255) || (data.metaTitle !== undefined && data.metaTitle.length > 255)) {
+            throw new HttpException("Максимальная длина названия 255 символов", HttpStatus.BAD_REQUEST)
+        }
+
         const createProductQuery = {
             title: data.title,
             description: data.description,
@@ -664,6 +669,10 @@ export class ProductService {
 
         if (updateProductQuery.handle !== undefined) {
             updateProductQuery.handle = this.url.getSlug(updateProductQuery.handle)
+        }
+
+        if ((data.title !== undefined && data.title.length > 255) || (data.metaTitle !== undefined && data.metaTitle.length > 255)) {
+            throw new HttpException("Максимальная длина названия 255 символов", HttpStatus.BAD_REQUEST)
         }
 
         if (data.connectCollections !== undefined || data.disconnectCollections !== undefined) {
