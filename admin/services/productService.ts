@@ -24,6 +24,7 @@ export const productService = api.injectEndpoints({
                 method: "POST",
                 body: credentials
             }),
+            invalidatesTags: ["PRODUCTS"]
         }),
         updateProduct: builder.mutation<ProductUpdateResponse, ProductUpdateRequest>({
             query: ({ productId, ...rest }) => ({
@@ -38,6 +39,7 @@ export const productService = api.injectEndpoints({
                 url: `products/${productId}`,
                 method: "DELETE"
             }),
+            invalidatesTags: ["OFFER", "OFFERS"]
         }),
         uploadProductImages: builder.mutation<ProductUploadImagesResponse, ProductUploadImagesRequest>({
             query: ({ productId, formData }) => ({

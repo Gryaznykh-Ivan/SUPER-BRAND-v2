@@ -39,7 +39,7 @@ function Index() {
 
     return (
         <MainLayout>
-            <div className="px-6 my-4 max-w-5xl mx-auto space-y-4">
+            <div className="px-6 my-4 max-w-3xl mx-auto space-y-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-medium">Доставка</h1>
                 </div>

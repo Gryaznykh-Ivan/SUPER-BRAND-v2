@@ -10,6 +10,15 @@ export interface IErrorResponse {
     statusCode: number;
 }
 
+export interface ISetting {
+    id: string;
+    setting: string;
+    title: string;
+    value: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 export interface IDeliveryOption {
     id: string;
     title: string;
@@ -105,7 +114,11 @@ export interface IUser {
 
 export interface IOffer {
     id: string;
-    variantId: string;
+    product: string;
+    variant: string;
+    image: IImage | null;
+    variantId: string | null;
+    productId: string | null;
     price: string | null;
     compareAtPrice: string | null;
     offerPrice: string | null;
@@ -113,7 +126,7 @@ export interface IOffer {
     deliveryProfileId: string | null;
     status: OfferStatus;
     userId: string | null;
-    orderId: number | null;
+    orderId: string | null;
 }
 
 export interface IImage {
@@ -530,6 +543,7 @@ export type ProductCreateOptionResponse = IResponse<void>
 export type ProductCreateOptionRequest = {
     productId: string;
     title: string;
+    createOptionValues: string[];
 }
 
 export type ProductUpdateOptionResponse = IResponse<void>
@@ -899,4 +913,19 @@ export type OrderFulfillmentDeleteResponse = IResponse<void>
 export type OrderFulfillmentDeleteRequest = {
     orderId?: number;
     fulfillmentId?: string;
+}
+
+
+
+// settingService
+
+export type SettingSearchResponse = IResponse<ISetting[]>
+export type SettingSearchRequest = {
+    setting: string;
+}
+
+
+export type SettingUpdateResponse = IResponse<void>
+export type SettingUpdateRequest = {
+    updateSettings: Pick<ISetting, 'setting' | 'title' | 'value'>[]
 }

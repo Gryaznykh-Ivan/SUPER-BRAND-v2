@@ -482,7 +482,7 @@ export class VariantService {
                     }
                 })
 
-                await this.files.delete({ paths: [removedImage.path] })
+                // await this.files.delete({ paths: [removedImage.path] })
 
                 const images = await tx.image.findMany({
                     where: { variantId: removedImage.variantId },
@@ -604,7 +604,7 @@ export class VariantService {
                 }
             })
 
-            await this.files.delete({ paths: variant.images.map(image => image.path) })
+            // await this.files.delete({ paths: variant.images.map(image => image.path) })
 
             return {
                 success: true

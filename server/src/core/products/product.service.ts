@@ -161,7 +161,6 @@ export class ProductService {
     }
 
     async createProduct(data: CreateProductDto) {
-
         if ((data.title !== undefined && data.title.length > 255) || (data.metaTitle !== undefined && data.metaTitle.length > 255)) {
             throw new HttpException("Максимальная длина названия 255 символов", HttpStatus.BAD_REQUEST)
         }
@@ -180,8 +179,32 @@ export class ProductService {
 
         createProductQuery.handle = this.url.getSlug(createProductQuery.handle === undefined ? createProductQuery.title : createProductQuery.handle)
 
-        if (createProductQuery.metaTitle === undefined) {
-            createProductQuery.metaTitle = createProductQuery.title
+        if (createProductQuery.metaTitle === undefined || createProductQuery.metaDescription === undefined) {
+            const snippets = await this.prisma.setting.findMany({ where: { setting: "SEO-SNIPPET" } })
+            const metaTitle = snippets.find(snippet => snippet.title === "title")?.value
+            const metaDescription = snippets.find(snippet => snippet.title === "description")?.value
+
+            if (createProductQuery.metaTitle === undefined) {
+                if (metaTitle !== undefined) {
+                    createProductQuery.metaTitle = metaTitle
+                        .replaceAll("[title]", createProductQuery.title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
+                        .replaceAll("[vendor]", createProductQuery.vendor || "")
+                        .replaceAll("[SKU]", createProductQuery.SKU || "")
+                        .replace(/\s+/g, " ")
+                } else {
+                    createProductQuery.metaTitle = createProductQuery.title
+                }
+            }
+
+            if (createProductQuery.metaDescription === undefined) {
+                if (metaDescription !== undefined) {
+                    createProductQuery.metaDescription = metaDescription
+                        .replaceAll("[title]", createProductQuery.title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
+                        .replaceAll("[vendor]", createProductQuery.vendor || "")
+                        .replaceAll("[SKU]", createProductQuery.SKU || "")
+                        .replace(/\s+/g, " ")
+                }
+            }
         }
 
         if (data.connectCollections !== undefined) {
@@ -324,7 +347,7 @@ export class ProductService {
                     }
                 })
 
-                await this.files.delete({ paths: [removedImage.path] })
+                // await this.files.delete({ paths: [removedImage.path] })
 
                 const images = await tx.image.findMany({
                     where: { productId: removedImage.productId },
@@ -354,19 +377,19 @@ export class ProductService {
 
 
     async createOption(productId: string, data: CreateOptionDto) {
-        const options = await this.prisma.option.findMany({
+        const cOptions = await this.prisma.option.findMany({
             where: { productId },
             select: { option: true },
             orderBy: [{ option: 'asc' }]
         })
 
-        if (options.length >= 3) {
+        if (cOptions.length >= 3) {
             throw new HttpException("Более 3 опций создать невозможно", HttpStatus.BAD_REQUEST)
         }
 
         let optionNumber = 0
         for (let i = 0; i < 3; i++) {
-            if (options[i] !== undefined && options[i].option === i) continue
+            if (cOptions[i] !== undefined && cOptions[i].option === i) continue
 
             optionNumber = i
             break
@@ -378,22 +401,75 @@ export class ProductService {
                     data: {
                         title: data.title,
                         option: optionNumber,
-                        position: options.length,
+                        position: cOptions.length,
                         productId: productId,
                         values: {
-                            create: {
-                                title: "NEW"
+                            createMany: {
+                                data: data.createOptionValues.map(option => ({ title: option }))
+                            }
+                        }
+                    },
+                    select: {
+                        productId: true,
+                        product: {
+                            select: {
+                                SKU: true
                             }
                         }
                     }
                 })
 
-                await tx.variant.updateMany({
-                    where: { [`option${option.option}`]: null, productId },
+
+                // Получаем список оставшихся опций
+                const options = await tx.option.findMany({
+                    where: { productId: option.productId },
+                    select: {
+                        id: true,
+                        option: true,
+                        values: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
+                    },
+                    orderBy: { position: 'asc' }
+                })
+
+
+                // Удаляем все варианты, так как старых вариантов больше нет
+                await tx.variant.deleteMany({
+                    where: { productId: option.productId },
+                })
+
+                // Если остались какие то опции - создаем варианты на основе оставшихся опций
+                if (options.length !== 0) {
+                    const values = options.map(option => option.values.map(value => ({ ...value, option: option.option })))
+                    const combinations = this.getCombinations(values)
+
+                    await tx.variant.createMany({
+                        data: combinations.map(combination => ({
+                            productId: option.productId,
+                            option0: combination.find(c => c.option === 0)?.title ?? null,
+                            option1: combination.find(c => c.option === 1)?.title ?? null,
+                            option2: combination.find(c => c.option === 2)?.title ?? null,
+                            SKU: option.product.SKU
+                        }))
+                    })
+                }
+
+                await tx.offer.updateMany({
+                    where: {
+                        status: {
+                            not: OfferStatus.SOLD
+                        },
+                        variantId: null
+                    },
                     data: {
-                        [`option${option.option}`]: "NEW"
+                        status: OfferStatus.OFFERED
                     }
                 })
+
             })
 
             return {
@@ -403,7 +479,7 @@ export class ProductService {
 
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
-                    throw new HttpException("Такая опция уже существует", HttpStatus.BAD_REQUEST)
+                    throw new HttpException("Опции и знначения опций должны быть унимальными", HttpStatus.BAD_REQUEST)
                 }
             }
 
@@ -428,59 +504,61 @@ export class ProductService {
 
         try {
             await this.prisma.$transaction(async tx => {
+                // Обновляем опцию и сразу создаем значения у опции
                 await tx.option.update({
                     where: { id: optionId },
                     data: OptionUpdateQuery
                 })
 
-                if (data.updateOptionValues !== undefined || data.deleteOptionValues !== undefined) {
-                    for (const { id, title } of data.updateOptionValues ?? []) {
-                        const optionValue = await tx.optionValue.findFirst({
-                            where: { id },
-                            select: {
-                                title: true,
-                                option: {
-                                    select: {
-                                        option: true
-                                    }
+                // обновление названий значений опций
+                for (const { id, title } of data.updateOptionValues ?? []) {
+                    const optionValue = await tx.optionValue.findFirst({
+                        where: { id },
+                        select: {
+                            title: true,
+                            option: {
+                                select: {
+                                    option: true
                                 }
                             }
-                        })
+                        }
+                    })
 
-                        await tx.optionValue.update({
-                            where: { id },
-                            data: {
-                                title
-                            }
-                        })
+                    await tx.optionValue.update({
+                        where: { id },
+                        data: {
+                            title
+                        }
+                    })
 
-                        await tx.variant.updateMany({
-                            where: { [`option${optionValue.option.option}`]: optionValue.title },
-                            data: {
-                                [`option${optionValue.option.option}`]: title
-                            }
-                        })
-                    }
-
-                    for (const id of data.deleteOptionValues ?? []) {
-                        const deletedOptionValue = await tx.optionValue.delete({
-                            where: { id },
-                            select: {
-                                title: true,
-                                option: {
-                                    select: {
-                                        option: true
-                                    }
-                                }
-                            }
-                        })
-
-                        await tx.variant.deleteMany({
-                            where: { [`option${deletedOptionValue.option.option}`]: deletedOptionValue.title },
-                        })
-                    }
+                    await tx.variant.updateMany({
+                        where: { [`option${optionValue.option.option}`]: optionValue.title, productId },
+                        data: {
+                            [`option${optionValue.option.option}`]: title,
+                        }
+                    })
                 }
 
+                // удаление значений опций
+                for (const id of data.deleteOptionValues ?? []) {
+                    const deletedOptionValue = await tx.optionValue.delete({
+                        where: { id },
+                        select: {
+                            title: true,
+                            option: {
+                                select: {
+                                    option: true
+                                }
+                            }
+                        }
+                    })
+
+                    await tx.variant.deleteMany({
+                        where: { [`option${deletedOptionValue.option.option}`]: deletedOptionValue.title, productId },
+                    })
+                }
+
+                // swap позиции у опций
                 if (data.position !== undefined) {
                     const current = await tx.option.findFirst({
                         where: {
@@ -512,6 +590,8 @@ export class ProductService {
                     })
                 }
 
+
+                // Далее синхронизация опций и вариантов. Создаем варианты в соответствии с опциями
                 const product = await tx.product.findUnique({
                     where: { id: productId },
                     select: {
@@ -531,31 +611,41 @@ export class ProductService {
                     }
                 })
 
+                const variantToCreate = []
                 const values = product.options.map(option => option.values.map(value => ({ ...value, option: option.option })))
                 const combinations = this.getCombinations(values)
+                const allProductVariants = await tx.variant.findMany({
+                    where: {
+                        productId: productId
+                    },
+                    select: {
+                        option0: true,
+                        option1: true,
+                        option2: true
+                    }
+                })
 
                 for (const combination of combinations) {
-                    const variant = await tx.variant.findFirst({
-                        where: {
-                            productId: productId,
-                            option0: combination.find(c => c.option === 0)?.title ?? null,
-                            option1: combination.find(c => c.option === 1)?.title ?? null,
-                            option2: combination.find(c => c.option === 2)?.title ?? null
-                        }
-                    })
+                    const variant = allProductVariants.find(variant =>
+                        variant.option0 === (combination.find(c => c.option === 0)?.title ?? null) &&
+                        variant.option1 === (combination.find(c => c.option === 1)?.title ?? null) &&
+                        variant.option2 === (combination.find(c => c.option === 2)?.title ?? null)
+                    )
 
-                    if (variant !== null) continue
+                    if (variant !== undefined) continue
 
-                    await tx.variant.create({
-                        data: {
-                            productId: productId,
-                            option0: combination.find(c => c.option === 0)?.title ?? null,
-                            option1: combination.find(c => c.option === 1)?.title ?? null,
-                            option2: combination.find(c => c.option === 2)?.title ?? null,
-                            SKU: product.SKU
-                        }
+                    variantToCreate.push({
+                        productId: productId,
+                        option0: combination.find(c => c.option === 0)?.title ?? null,
+                        option1: combination.find(c => c.option === 1)?.title ?? null,
+                        option2: combination.find(c => c.option === 2)?.title ?? null,
+                        SKU: product.SKU
                     })
                 }
+
+                await tx.variant.createMany({
+                    data: variantToCreate
+                })
             })
 
             return {
@@ -563,8 +653,8 @@ export class ProductService {
             }
         } catch (e) {
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                if (e.code === 'P2003') {
-                    throw new HttpException("Невозможно удалить варианты у которых есть офферы. Начните с удаления офферов у варианта, который хотите стереть", HttpStatus.BAD_REQUEST)
+                if (e.code === 'P2002') {
+                    throw new HttpException("Опции и знначения опций должны быть унимальными", HttpStatus.BAD_REQUEST)
                 }
             }
 
@@ -575,6 +665,7 @@ export class ProductService {
     async removeOption(optionId: string) {
         try {
             await this.prisma.$transaction(async tx => {
+                // Удаление опции
                 const option = await tx.option.delete({
                     where: { id: optionId },
                     select: {
@@ -585,10 +676,16 @@ export class ProductService {
                                 id: true,
                                 title: true
                             }
+                        },
+                        product: {
+                            select: {
+                                SKU: true
+                            }
                         }
                     }
                 })
 
+                // Получаем список оставшихся опций
                 const options = await tx.option.findMany({
                     where: { productId: option.productId },
                     select: {
@@ -604,6 +701,7 @@ export class ProductService {
                     orderBy: { position: 'asc' }
                 })
 
+                // Меняем позиции. Tеперь они начинаются с 0
                 for (const [index, option] of Object.entries(options)) {
                     await tx.option.update({
                         where: {
@@ -615,49 +713,44 @@ export class ProductService {
                     })
                 }
 
+                // Удаляем все варианты, так как старых вариантов больше нет
                 await tx.variant.deleteMany({
                     where: { productId: option.productId },
                 })
 
+                // Если остались какие то опции - создаем варианты на основе оставшихся опций
                 if (options.length !== 0) {
                     const values = options.map(option => option.values.map(value => ({ ...value, option: option.option })))
                     const combinations = this.getCombinations(values)
 
-                    for (const combination of combinations) {
-                        const variant = await tx.variant.findFirst({
-                            where: {
-                                productId: option.productId,
-                                option0: combination.find(c => c.option === 0)?.title ?? null,
-                                option1: combination.find(c => c.option === 1)?.title ?? null,
-                                option2: combination.find(c => c.option === 2)?.title ?? null
-                            }
-                        })
-
-                        if (variant !== null) continue
-
-                        await tx.variant.create({
-                            data: {
-                                productId: option.productId,
-                                option0: combination.find(c => c.option === 0)?.title ?? null,
-                                option1: combination.find(c => c.option === 1)?.title ?? null,
-                                option2: combination.find(c => c.option === 2)?.title ?? null
-                            }
-                        })
-                    }
+                    await tx.variant.createMany({
+                        data: combinations.map(combination => ({
+                            productId: option.productId,
+                            option0: combination.find(c => c.option === 0)?.title ?? null,
+                            option1: combination.find(c => c.option === 1)?.title ?? null,
+                            option2: combination.find(c => c.option === 2)?.title ?? null,
+                            SKU: option.product.SKU
+                        }))
+                    })
                 }
+
+                await tx.offer.updateMany({
+                    where: {
+                        status: {
+                            not: OfferStatus.SOLD
+                        },
+                        variantId: null
+                    },
+                    data: {
+                        status: OfferStatus.OFFERED
+                    }
+                })
             })
 
             return {
                 success: true
             }
         } catch (e) {
-
-            if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                if (e.code === 'P2003') {
-                    throw new HttpException("Невозможно удалить варианты у которых есть офферы. Начните с удаления офферов у варианта, который хотите стереть", HttpStatus.BAD_REQUEST)
-                }
-            }
-
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -694,17 +787,82 @@ export class ProductService {
         }
 
         try {
-            await this.prisma.product.update({
-                where: {
-                    id: productId
-                },
-                data: updateProductQuery
+            await this.prisma.$transaction(async tx => {
+                // обновляем снипет если title, SKU или vendor был изменен
+                if (
+                    (updateProductQuery.metaTitle === undefined || updateProductQuery.metaDescription === undefined) &&
+                    (updateProductQuery.title !== undefined || updateProductQuery.vendor !== undefined || updateProductQuery.SKU !== undefined)
+                ) {
+                    const snippets = await tx.setting.findMany({ where: { setting: "SEO-SNIPPET" } })
+                    const metaTitle = snippets.find(snippet => snippet.title === "title")?.value
+                    const metaDescription = snippets.find(snippet => snippet.title === "description")?.value
+
+                    const productSnippetInfo = await tx.product.findUnique({
+                        where: { id: productId },
+                        select: {
+                            SKU: true,
+                            title: true,
+                            vendor: true
+                        }
+                    })
+
+                    const title = updateProductQuery.title || productSnippetInfo.title
+                    const vendor = updateProductQuery.vendor || productSnippetInfo.vendor
+                    const SKU = updateProductQuery.SKU || productSnippetInfo.SKU
+
+                    if (updateProductQuery.metaTitle === undefined) {
+                        if (metaTitle !== undefined) {
+                            updateProductQuery.metaTitle = metaTitle
+                                .replaceAll("[title]", title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
+                                .replaceAll("[vendor]", vendor || "")
+                                .replaceAll("[SKU]", SKU || "")
+                                .replace(/\s+/g, " ")
+                        } else {
+                            updateProductQuery.metaTitle = productSnippetInfo.title
+                        }
+                    }
+
+                    if (updateProductQuery.metaDescription === undefined) {
+                        if (metaDescription !== undefined) {
+                            updateProductQuery.metaDescription = metaDescription
+                                .replaceAll("[title]", title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
+                                .replaceAll("[vendor]", vendor || "")
+                                .replaceAll("[SKU]", SKU || "")
+                                .replace(/\s+/g, " ")
+                        }
+                    }
+                }
+
+                await tx.product.update({
+                    where: {
+                        id: productId
+                    },
+                    data: updateProductQuery
+                })
+
+
+                // Обновляем название офферов
+                await tx.offer.updateMany({
+                    where: {
+                        status: {
+                            not: OfferStatus.SOLD
+                        },
+                        variant: {
+                            productId
+                        }
+                    },
+                    data: {
+                        productTitle: data.title
+                    }
+                })
+
             })
 
             return {
                 success: true
             }
         } catch (e) {
+            console.log(e)
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
@@ -737,15 +895,15 @@ export class ProductService {
                 }
             })
 
-            await this.files.delete({
-                paths: [
-                    ...product.images.map(image => image.path),
-                    ...product.variants.reduce((a, c) => {
-                        a.push(...c.images.map(image => image.path))
-                        return a
-                    }, [])
-                ]
-            })
+            // await this.files.delete({
+            //     paths: [
+            //         ...product.images.map(image => image.path),
+            //         ...product.variants.reduce((a, c) => {
+            //             a.push(...c.images.map(image => image.path))
+            //             return a
+            //         }, [])
+            //     ]
+            // })
 
             return {
                 success: true

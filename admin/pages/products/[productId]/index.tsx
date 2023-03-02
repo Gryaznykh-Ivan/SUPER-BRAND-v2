@@ -18,7 +18,7 @@ import Media from '../../../components/products/blocks/Media'
 function Index() {
     const router = useRouter()
 
-    const { isError, error, isLoading, data } = useGetProductByIdQuery({ productId: router.query.productId as string })
+    const { isError, error, isLoading, data, refetch } = useGetProductByIdQuery({ productId: router.query.productId as string })
 
     const [updateProduct, { isSuccess: isUpdateProductSuccess, isError: isUpdateProductError, error: updateProductError }] = useUpdateProductMutation()
     const [deleteProduct, { isSuccess: isDeleteProductSuccess, isError: isDeleteProductError, error: deleteProductError }] = useDeleteProductMutation()
@@ -124,14 +124,14 @@ function Index() {
                                     productId={data.data.id}
                                     images={data.data.images}
                                 />
+                                <OptionList
+                                    productId={data.data.id}
+                                    options={data.data.options}
+                                />
                                 <Inventory
                                     SKU={data.data.SKU}
                                     barcode={data.data.barcode}
                                     onChange={onCollectChanges}
-                                />
-                                <OptionList
-                                    productId={data.data.id}
-                                    options={data.data.options}
                                 />
                                 <SeoTags
                                     metaTitle={data.data.metaTitle}

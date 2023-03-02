@@ -71,7 +71,12 @@ function New() {
                 <div className="my-4 flex flex-col space-y-4 pb-4 border-b-[1px] lg:flex-row lg:space-x-4 lg:space-y-0">
                     <div className="flex-1 space-y-4">
                         <PickVariant
+                            product={null}
+                            variant={null}
+                            image={null}
                             variantId={null}
+                            productId={null}
+                            creatingPreview={ true }
                             onChange={onCollectChanges}
                         />
                         <Prices

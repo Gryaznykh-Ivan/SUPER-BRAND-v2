@@ -68,7 +68,8 @@ export const api = createApi({
         "OFFERS",
         "DELIVERY_PROFILE",
         "DELIVERY_PROFILES",
-        "DELIVERY_ZONES"
+        "DELIVERY_ZONES",
+        "SETTING"
     ],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {

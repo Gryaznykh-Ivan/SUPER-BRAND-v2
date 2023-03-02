@@ -3,55 +3,68 @@ import Image from 'next/image'
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { useLazyGetVariantPreviewQuery } from '../../../services/variantService';
-import { OfferCreateRequest } from '../../../types/api';
+import { IImage, OfferCreateRequest } from '../../../types/api';
 import ImageLoader from '../../image/ImageLoader'
 import SelectVariants from '../../products/popups/SelectVariants'
 
 
 interface IProps {
+    product: string | null;
+    variant: string | null;
+    image: IImage | null;
     variantId: string | null;
+    productId: string | null;
+    creatingPreview?: boolean;
     onChange: (obj: OfferCreateRequest) => void;
 }
 
-export default function PickVariant({ onChange, ...data }: IProps) {
-    const [state, setState] = useState(data.variantId)
+export default function PickVariant({ onChange, creatingPreview = false, ...data }: IProps) {
+    const [state, setState] = useState({
+        product: data.product,
+        variant: data.variant,
+        image: data.image,
+        variantId: data.variantId,
+        productId: data.productId,
+    })
     const [popup, setPopup] = useState(false)
 
     const onPopupOpen = () => setPopup(true)
     const onPopupClose = () => setPopup(false)
 
-    const [getPreview, { data: variant }] = useLazyGetVariantPreviewQuery()
-
-    useEffect(() => {
-        if (data.variantId !== null) {
-            getPreview({ variantId: data.variantId })
-        }
-    }, [data.variantId])
+    const [getPreview] = useLazyGetVariantPreviewQuery()
 
     const onVariantChange = async (id: string) => {
-        setState(id)
+        setState(prev => ({ ...prev, variantId: id }))
     }
 
     const onDone = async () => {
-        if (state === null) return
+        if (state.variantId === null) return
 
-        const variant = await getPreview({ variantId: state }).unwrap()
+        const variant = await getPreview({ variantId: state.variantId }).unwrap()
         if (variant.success === true) {
-            onChange({ variantId: data.variantId !== state ? state : undefined })
+            setState(prev => ({
+                ...prev,
+                product: variant.data.product,
+                variant: variant.data.variant,
+                image: variant.data.image,
+                productId: variant.data.productId
+            }))
+
+            onChange({ variantId: data.variantId !== state.variantId ? state.variantId : undefined })
         }
     }
 
     return (
         <div className="flex rounded-md bg-white shadow-sm p-5 space-x-4 flex-col md:flex-row">
-            <div className={`relative w-64 aspect-5/3 border-[1px] rounded-md border-gray-400 mx-auto`}>
-                {variant?.data.image ?
+            <div className={`relative w-64 aspect-5/3 border-[1px] rounded-md border-gray-400 mx-auto overflow-hidden`}>
+                {state.image ?
                     <Image
                         className="object-contain"
                         loader={ImageLoader}
                         fill
                         sizes="200px"
-                        src={variant?.data.image.src}
-                        alt={variant?.data.image.alt}
+                        src={state.image.src}
+                        alt={state.image.alt}
                     />
                     :
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -65,24 +78,27 @@ export default function PickVariant({ onChange, ...data }: IProps) {
                 <div className="space-y-2 flex-1">
                     <div className="">
                         <div className="text-sm text-gray-600">Товар</div>
-                        {variant?.data.product ?
-                            <Link href={`/products/${ variant?.data.productId }`} className="font-medium hover:underline">{variant?.data.product}</Link>
+                        {state.product ?
+                            <Link href={state.productId ? `/products/${state.productId}` : "#"}  className="font-medium hover:underline">{state.product}</Link>
                             :
                             <div className="font-medium">Не выбран</div>
                         }
                     </div>
                     <div className="">
                         <div className="text-sm text-gray-600">Вариант</div>
-                        {variant?.data.variant ?
-                            <div className="font-medium">{variant?.data.variant}</div>
+                        {state.variant ?
+                            <div className="font-medium">{state.variant}</div>
                             :
                             <div className="font-medium">Не выбран</div>
                         }
                     </div>
                 </div>
+                {state.variantId === null && creatingPreview === false &&
+                    <div className="text-xs mb-2 text-red-600">Покупатели не увидят этот оффер, так как этот товар не представлен в магазине</div>
+                }
                 <button className="border-blue-700 border-[1px] text-blue-700 px-4 py-2 font-medium rounded-md hover:bg-blue-700 hover:text-white justify-items-end" onClick={onPopupOpen}>Выбрать</button>
             </div>
-            {popup && <SelectVariants title="Выбор варианта" variantId={state} onVariantChange={onVariantChange} onClose={onPopupClose} onDone={onDone} />}
+            {popup && <SelectVariants title="Выбор варианта" variantId={state.variantId} onVariantChange={onVariantChange} onClose={onPopupClose} onDone={onDone} />}
         </div>
     )
 }

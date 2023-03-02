@@ -3,6 +3,7 @@ import { CollectionModule } from './collections/collection.module';
 import { OfferModule } from './offers/offer.module';
 import { OrderModule } from './orders/order.module';
 import { ProductModule } from './products/product.module';
+import { SettingModule } from './settings/setting.module';
 import { ShippingModule } from './shipping/shipping.module';
 import { SuggestionModule } from './suggestions/suggestion.module';
 import { UserModule } from './users/user.module';
@@ -18,6 +19,7 @@ import { VariantModule } from './variants/variant.module';
         ShippingModule,
         SuggestionModule,
         OrderModule,
+        SettingModule
     ],
 })
 export class CoreModule { }

@@ -18,8 +18,13 @@ export default function SeoTags({ onChange, ...data }: IProps) {
     })
 
     useEffect(() => {
-        setState(prev => ({ ...prev, handle: data.handle ?? "" }))
-    }, [data.handle])
+        setState(prev => ({
+            ...prev,
+            handle: data.handle ?? "",
+            metaTitle: data.metaTitle ?? "",
+            metaDescription: data.metaDescription ?? "",
+        }))
+    }, [data.handle, data.metaDescription, data.metaTitle])
 
     useEffect(() => {
         const localState = Object.entries(state)

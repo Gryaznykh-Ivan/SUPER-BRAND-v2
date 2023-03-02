@@ -16,6 +16,13 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
     })
 
     useEffect(() => {
+        setState({
+            title: data.title ?? "",
+            description: data.description ?? "",
+        })
+    }, [data.title, data.description])
+
+    useEffect(() => {
         const localState = Object.entries(state)
         const changes = localState.map(([key, value]) => {
             if (data[key as keyof typeof data] === null && value === "") {

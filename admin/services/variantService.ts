@@ -59,7 +59,7 @@ export const variantService = api.injectEndpoints({
                 url: `variants/${variantId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["VARIANTS"]
+            invalidatesTags: ["VARIANTS", "OFFERS", "OFFER"]
         }),
         uploadVariantImages: builder.mutation<VariantUploadImagesResponse, VariantUploadImagesRequest>({
             query: ({ variantId, formData }) => ({

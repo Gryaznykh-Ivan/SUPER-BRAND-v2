@@ -14,6 +14,26 @@ const seed = async () => {
 
     console.log("3) DeliveryProfiles data filling")
     await deliveryProfiles()
+
+    console.log("4) Settings data filling")
+    await settings()
+}
+
+const settings = async () => {
+    await prisma.setting.createMany({
+        data: [
+            {
+                setting: "SEO-SNIPPET",
+                title: "title",
+                value: "[vendor] [title] | brandname"
+            },
+            {
+                setting: "SEO-SNIPPET",
+                title: "description",
+                value: "Покупай кроссовки [title] в магазине brandname. Большой выбор оригинальной обуви [vendor]. Быстрая доставка по всей России."
+            }
+        ]
+    })
 }
 
 const managers = async () => {
@@ -63,9 +83,12 @@ const managers = async () => {
 const countries = async () => {
     const data = JSON.parse(readFileSync(resolve(__dirname, "russia.json"), "utf-8"))
 
-    const { id: russiaId } = await prisma.country.create({
+    const country = await prisma.country.create({
         data: {
             title: "Россия"
+        },
+        select: {
+            id: true
         }
     })
 
@@ -73,7 +96,7 @@ const countries = async () => {
         await prisma.region.create({
             data: {
                 title: region,
-                countryId: russiaId,
+                countryId: country.id,
                 cities: {
                     createMany: {
                         data: data[region].map(city => ({ title: city }))

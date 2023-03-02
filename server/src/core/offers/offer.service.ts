@@ -20,23 +20,18 @@ export class OfferService {
             where: { id: offerId },
             select: {
                 id: true,
+                productTitle: true,
+                variantTitle: true,
+                image: {
+                    select: {
+                        id: true,
+                        src: true,
+                        alt: true,
+                    }
+                },
                 variant: {
                     select: {
-                        option0: true,
-                        option1: true,
-                        option2: true,
-                        product: {
-                            select: {
-                                title: true,
-                                options: {
-                                    select: {
-                                        title: true,
-                                        option: true,
-                                    },
-                                    orderBy: [{ position: 'asc' }]
-                                }
-                            }
-                        }
+                        productId: true
                     }
                 },
                 variantId: true,
@@ -61,14 +56,18 @@ export class OfferService {
 
         const result = {
             id: offer.id,
+            product: offer.productTitle,
+            variant: offer.variantTitle,
+            image: offer.image,
             variantId: offer.variantId,
+            productId: offer.variant?.productId ?? null,
             price: offer.price,
             compareAtPrice: offer.compareAtPrice,
             offerPrice: offer.offerPrice,
             comment: offer.comment,
-            deliveryProfileId: offer.deliveryProfileId,
             status: offer.status,
-            userId: offer.userId,
+            deliveryProfileId: offer.deliveryProfileId,
+            userId: offer.userId ?? null,
             orderId: offer.order?.orderId ?? null
         }
 
@@ -81,46 +80,35 @@ export class OfferService {
     async getOffersBySearch(data: SearchOfferDto) {
         const offers = await this.prisma.offer.findMany({
             where: {
-                OR: [
-                    {
-                        user: {
+                AND: [{
+                    OR: [{
+                        productTitle: {
+                            search: data.q ? `${data.q}*` : undefined,
+                        },
+                    }, {
+                        variantTitle: {
+                            search: data.q ? `${data.q}*` : undefined,
+                        }
+                    }, {
+                        user: data.q ? {
                             fullName: {
                                 search: data.q ? `${data.q}*` : undefined,
                             }
-                        }
-                    },
-                    {
-                        AND: [
-                            {
-                                variant: {
-                                    option0: this.getParamValue(data.q, "option0"),
-                                    option1: this.getParamValue(data.q, "option1"),
-                                    option2: this.getParamValue(data.q, "option2"),
-                                    product: {
-                                        id: this.getParamValue(data.q, "productId")
-                                    }
-                                }
-                            },
-                            {
-                                variant: {
-                                    product: {
-                                        title: {
-                                            search: this.getClearSearchQuery(data.q) ? `${this.getClearSearchQuery(data.q)}*` : undefined,
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ],
-                status: {
-                    equals: data.status,
-                    not: data.notStatus
+                        } : {}
+                    }],
                 },
-                deliveryProfileId: {
-                    equals: data.deliveryProfileId,
-                    not: data.notDeliveryProfileId
-                }
+                {
+                    status: {
+                        equals: data.status,
+                        not: data.notStatus
+                    },
+                }, {
+
+                    deliveryProfileId: {
+                        equals: data.deliveryProfileId,
+                        not: data.notDeliveryProfileId
+                    }
+                }]
             },
             select: {
                 id: true,
@@ -130,47 +118,13 @@ export class OfferService {
                         title: true
                     }
                 },
-                variant: {
+                productTitle: true,
+                variantTitle: true,
+                image: {
                     select: {
-                        option0: true,
-                        option1: true,
-                        option2: true,
-                        product: {
-                            select: {
-                                title: true,
-                                options: {
-                                    select: {
-                                        title: true,
-                                        option: true,
-                                    },
-                                    orderBy: [{ position: 'asc' }]
-                                },
-                                images: {
-                                    select: {
-                                        id: true,
-                                        alt: true,
-                                        src: true,
-                                        position: true
-                                    },
-                                    orderBy: {
-                                        position: 'asc'
-                                    },
-                                    take: 1
-                                }
-                            }
-                        },
-                        images: {
-                            select: {
-                                id: true,
-                                alt: true,
-                                src: true,
-                                position: true
-                            },
-                            orderBy: {
-                                position: 'asc'
-                            },
-                            take: 1
-                        }
+                        id: true,
+                        src: true,
+                        alt: true,
                     }
                 },
                 price: true,
@@ -191,13 +145,13 @@ export class OfferService {
 
         const result = offers.map(offer => ({
             id: offer.id,
-            product: offer.variant.product.title,
-            variant: offer.variant.product.options.map((option) => offer.variant[`option${option.option}`]).join(' | '),
+            product: offer.productTitle,
+            variant: offer.variantTitle, //variant.product.options.map((option) => offer.variant[`option${option.option}`]).join(' | ')
             price: offer.price,
             offerPrice: offer.offerPrice,
             status: offer.status,
             user: offer.user?.fullName ?? null,
-            image: offer.variant.images[0] ?? offer.variant.product.images[0] ?? null,
+            image: offer.image,
             deliveryProfile: offer.deliveryProfile
         }))
 
@@ -208,7 +162,68 @@ export class OfferService {
     }
 
     async createOffer(data: CreateOfferDto) {
+        const variant = await this.prisma.variant.findUnique({
+            where: { id: data.variantId },
+            select: {
+                option0: true,
+                option1: true,
+                option2: true,
+                product: {
+                    select: {
+                        title: true,
+                        options: {
+                            select: {
+                                title: true,
+                                option: true,
+                            },
+                            orderBy: [{ position: 'asc' }]
+                        },
+                        images: {
+                            select: {
+                                id: true,
+                                alt: true,
+                                src: true,
+                                path: true
+                            },
+                            orderBy: {
+                                position: 'asc'
+                            },
+                            take: 1
+                        }
+                    }
+                },
+                images: {
+                    select: {
+                        id: true,
+                        alt: true,
+                        src: true,
+                        path: true
+                    },
+                    orderBy: {
+                        position: 'asc'
+                    },
+                    take: 1
+                }
+            }
+        })
+
+        if (variant === null) {
+            throw new HttpException("Вариант не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        const offerImage = variant.images[0] ?? variant.product.images[0] ?? null
+
         const createOfferQuery = {
+            productTitle: variant.product.title,
+            variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
+            image: offerImage !== null ? {
+                create: {
+                    src: offerImage.src,
+                    alt: offerImage.alt,
+                    path: offerImage.path,
+                    position: 1
+                }
+            } : undefined,
             variantId: data.variantId,
             userId: data.userId,
             status: data.status,
@@ -216,7 +231,7 @@ export class OfferService {
             offerPrice: data.offerPrice,
             deliveryProfileId: data.deliveryProfileId ?? "default", // дефолтный профиль
             compareAtPrice: data.compareAtPrice,
-            comment: data.comment,
+            comment: data.comment
         }
 
         try {
@@ -238,7 +253,8 @@ export class OfferService {
             where: { id: offerId },
             select: {
                 id: true,
-                status: true
+                status: true,
+                variantId: true,
             }
         })
 
@@ -251,7 +267,6 @@ export class OfferService {
         }
 
         const updateOfferQuery = {
-            variantId: data.variantId,
             userId: data.userId,
             status: data.status,
             price: data.price,
@@ -259,6 +274,73 @@ export class OfferService {
             deliveryProfileId: data.deliveryProfileId,
             compareAtPrice: data.compareAtPrice,
             comment: data.comment,
+        }
+
+        if (data.variantId !== undefined && data.variantId !== offer.variantId) {
+            const variant = await this.prisma.variant.findUnique({
+                where: { id: data.variantId },
+                select: {
+                    option0: true,
+                    option1: true,
+                    option2: true,
+                    product: {
+                        select: {
+                            title: true,
+                            options: {
+                                select: {
+                                    title: true,
+                                    option: true,
+                                },
+                                orderBy: [{ position: 'asc' }]
+                            },
+                            images: {
+                                select: {
+                                    id: true,
+                                    alt: true,
+                                    src: true,
+                                    path: true
+                                },
+                                orderBy: {
+                                    position: 'asc'
+                                },
+                                take: 1
+                            }
+                        }
+                    },
+                    images: {
+                        select: {
+                            id: true,
+                            alt: true,
+                            src: true,
+                            path: true
+                        },
+                        orderBy: {
+                            position: 'asc'
+                        },
+                        take: 1
+                    }
+                }
+            })
+
+            if (variant === null) {
+                throw new HttpException("Вариант не найден", HttpStatus.BAD_REQUEST)
+            }
+
+            const offerImage = variant.images[0] ?? variant.product.images[0] ?? null
+
+            Object.assign(updateOfferQuery, {
+                productTitle: variant.product.title,
+                variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
+                variantId: data.variantId,
+                image: offerImage !== null ? {
+                    create: {
+                        src: offerImage.src,
+                        alt: offerImage.alt,
+                        path: offerImage.path,
+                        position: 1
+                    }
+                } : undefined
+            })
         }
 
         try {
@@ -305,26 +387,5 @@ export class OfferService {
         } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
-    }
-
-    private getParamValue(q: string | undefined, param: string) {
-        if (typeof q !== 'string') return undefined
-        if (q.length === 0) return undefined
-
-        const regex = new RegExp(param + ":'([^']+)'");
-        const match = regex.exec(q);
-
-        if (match) {
-            return match[1];
-        }
-
-        return undefined;
-    }
-
-    private getClearSearchQuery(q: string | null) {
-        if (typeof q !== 'string') return undefined
-        if (q.length === 0) return undefined
-
-        return q.replace(/\S+:'([^']+)'/gi, "").trim();
     }
 }
