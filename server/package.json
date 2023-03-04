@@ -34,6 +34,7 @@
     "@nestjs/serve-static": "^3.0.0",
     "@prisma/client": "^4.6.1",
     "bcryptjs": "^2.4.3",
+    "blurhash": "^2.0.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",

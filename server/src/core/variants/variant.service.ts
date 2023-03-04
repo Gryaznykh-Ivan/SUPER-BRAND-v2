@@ -400,6 +400,7 @@ export class VariantService {
             const createImagesQuery = result.data.map((image, index) => ({
                 path: image.path,
                 src: image.src,
+                blurhash: image.blurhash,
                 alt: variant.product.title,
                 position: startPosition + index,
                 variantId: variantId
@@ -474,8 +475,11 @@ export class VariantService {
     async removeImage(variantId: string, imageId: string) {
         try {
             await this.prisma.$transaction(async tx => {
-                const removedImage = await tx.image.delete({
+                const removedImage = await tx.image.update({
                     where: { id: imageId },
+                    data: {
+                        variantId: null
+                    },
                     select: {
                         variantId: true,
                         path: true,

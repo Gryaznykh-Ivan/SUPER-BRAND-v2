@@ -266,6 +266,7 @@ export class ProductService {
                 const createImagesQuery = result.data.map((image, index) => ({
                     path: image.path,
                     src: image.src,
+                    blurhash: image.blurhash,
                     alt: product.title,
                     position: startPosition + index,
                     productId: productId
@@ -303,6 +304,7 @@ export class ProductService {
                                         src: createImagesQuery[0].src,
                                         alt: createImagesQuery[0].alt,
                                         path: createImagesQuery[0].path,
+                                        blurhash: createImagesQuery[0].blurhash,
                                         position: 0
                                     }
                                 }
@@ -375,6 +377,7 @@ export class ProductService {
                                         id: true,
                                         src: true,
                                         alt: true,
+                                        blurhash: true,
                                         path: true,
                                         position: true,
                                     },
@@ -385,7 +388,7 @@ export class ProductService {
                                 }
                             }
                         })
-                        
+
                         const offers = await tx.offer.findMany({
                             where: {
                                 variant: {
@@ -412,6 +415,7 @@ export class ProductService {
                                         [offer.image !== null ? "update" : "create"]: {
                                             src: product.images[0].src,
                                             alt: product.images[0].alt,
+                                            blurhash: product.images[0].blurhash,
                                             path: product.images[0].path,
                                             position: 0
                                         }
@@ -434,8 +438,11 @@ export class ProductService {
     async removeImage(productId: string, imageId: string) {
         try {
             await this.prisma.$transaction(async tx => {
-                const removedImage = await tx.image.delete({
+                const removedImage = await tx.image.update({
                     where: { id: imageId },
+                    data: {
+                        productId: null
+                    },
                     select: {
                         productId: true,
                         path: true,
@@ -459,63 +466,68 @@ export class ProductService {
                         }
                     })
                 }
-                // удаление изображений у офферов если удаляется изображение продукта
-                // if (removedImage.position === 0) {
-                //     const product = await tx.product.findUnique({
-                //         where: { id: productId },
-                //         select: {
-                //             images: {
-                //                 select: {
-                //                     id: true,
-                //                     src: true,
-                //                     alt: true,
-                //                     path: true,
-                //                     position: true,
-                //                 },
-                //                 orderBy: {
-                //                     position: 'asc'
-                //                 },
-                //                 take: 1
-                //             }
-                //         }
-                //     })
 
-                //     const offers = await tx.offer.findMany({
-                //         where: {
-                //             variant: {
-                //                 productId: productId
-                //             }
-                //         },
-                //         select: {
-                //             id: true,
-                //             image: {
-                //                 select: {
-                //                     id: true
-                //                 }
-                //             }
-                //         }
-                //     })
+                //удаление изображений у офферов если удаляется изображение продукта
+                if (removedImage.position === 0) {
+                    const product = await tx.product.findUnique({
+                        where: { id: productId },
+                        select: {
+                            images: {
+                                select: {
+                                    id: true,
+                                    src: true,
+                                    alt: true,
+                                    blurhash: true,
+                                    path: true,
+                                    position: true,
+                                },
+                                orderBy: {
+                                    position: 'asc'
+                                },
+                                take: 1
+                            }
+                        }
+                    })
 
-                //     for (const offer of offers) {
-                //         await tx.offer.update({
-                //             where: {
-                //                 id: offer.id
-                //             },
-                //             data: {
-                //                 image: product.images.length !== 0 ? {
-                //                     [offer.image !== null ? "update" : "create"]: {
-                //                         src: product.images[0].src,
-                //                         alt: product.images[0].alt,
-                //                         path: product.images[0].path,
-                //                         position: 0
-                //                     }
-                //                 } : {
-                //                     disconnect: true
-                //                 }
-                //             }
-                //         })
-                //     }
-                // }
+                    if (product.images.length !== 0) {
+                        const offers = await tx.offer.findMany({
+                            where: {
+                                variant: {
+                                    productId: productId
+                                }
+                            },
+                            select: {
+                                id: true,
+                                image: {
+                                    select: {
+                                        id: true
+                                    }
+                                }
+                            }
+                        })
+
+                        for (const offer of offers) {
+                            await tx.offer.update({
+                                where: {
+                                    id: offer.id
+                                },
+                                data: {
+                                    image: product.images.length !== 0 ? {
+                                        [offer.image !== null ? "update" : "create"]: {
+                                            src: product.images[0].src,
+                                            alt: product.images[0].alt,
+                                            path: product.images[0].path,
+                                            blurhash: product.images[0].blurhash,
+                                            position: 0
+                                        }
+                                    } : {
+                                        disconnect: true
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
             })
 
             return {

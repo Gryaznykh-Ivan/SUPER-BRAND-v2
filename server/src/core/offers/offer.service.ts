@@ -183,7 +183,8 @@ export class OfferService {
                                 id: true,
                                 alt: true,
                                 src: true,
-                                path: true
+                                path: true,
+                                blurhash: true,
                             },
                             orderBy: {
                                 position: 'asc'
@@ -209,6 +210,7 @@ export class OfferService {
                     src: offerImage.src,
                     alt: offerImage.alt,
                     path: offerImage.path,
+                    blurhash: offerImage.blurhash,
                     position: 0
                 }
             } : undefined,
@@ -291,7 +293,8 @@ export class OfferService {
                                     id: true,
                                     alt: true,
                                     src: true,
-                                    path: true
+                                    path: true,
+                                    blurhash: true,
                                 },
                                 orderBy: {
                                     position: 'asc'
@@ -317,6 +320,7 @@ export class OfferService {
                     [offer.image !== null ? "update" : "create"]: {
                         src: offerImage.src,
                         alt: offerImage.alt,
+                        blurhash: offerImage.blurhash,
                         path: offerImage.path,
                         position: 0
                     }

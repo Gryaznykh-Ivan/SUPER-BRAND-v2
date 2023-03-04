@@ -218,6 +218,7 @@ export class CollectionService {
             const createImagesQuery = result.data.map((image, index) => ({
                 path: image.path,
                 src: image.src,
+                blurhash: image.blurhash,
                 alt: collection.title,
                 position: startPosition + index,
                 collectionId: collectionId

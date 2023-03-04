@@ -3,6 +3,7 @@ import { access, mkdir, rm, unlink } from 'fs';
 import { resolve, join } from 'path';
 import { v4 as uuid } from 'uuid';
 import * as sharp from 'sharp'
+import * as blurhash from 'blurhash'
 import { DeleteFileDto } from './dto/deleteFile.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { IResponse } from 'src/interfaces/response.interface';
@@ -11,7 +12,7 @@ import { IResponse } from 'src/interfaces/response.interface';
 export class FilesService {
     private SIZES = [2048, 1000, 800, 600, 300, 200]
 
-    async upload(files: Express.Multer.File[], quality: number): Promise<IResponse<{ path: string, src: string }[]>> {
+    async upload(files: Express.Multer.File[], quality: number): Promise<IResponse<{ path: string, src: string, blurhash: string }[]>> {
         try {
             const result = []
 
@@ -33,9 +34,12 @@ export class FilesService {
                     await sharp(file.buffer).resize(size).jpeg({ quality: quality }).toFile(path)
                 }
 
+                const blurhash = await this.getBlurHash(file)
+
                 result.push({
                     path: filePath,
                     src: `/${randomFolder1}/${randomFolder2}/${randomFolder3}/${fileName}`,
+                    blurhash: blurhash
                 })
             }
 
@@ -43,6 +47,18 @@ export class FilesService {
         } catch (e) {
             throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+    async getBlurHash(file: Express.Multer.File) {
+        const image = sharp(file.buffer);
+
+        const resizedImage = image.resize(100, 60, {
+            fit: 'inside',
+            withoutEnlargement: true,
+        });
+
+        const { data: pixels, info: metadata } = await resizedImage.raw().ensureAlpha().toBuffer({ resolveWithObject: true });
+        return blurhash.encode(new Uint8ClampedArray(pixels), metadata.width, metadata.height, 5, 3);
     }
 
     async delete({ paths }: DeleteFileDto) {
