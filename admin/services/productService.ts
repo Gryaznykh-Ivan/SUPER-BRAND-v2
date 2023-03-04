@@ -47,7 +47,7 @@ export const productService = api.injectEndpoints({
                 method: "POST",
                 body: formData
             }),
-            invalidatesTags: ["PRODUCT"]
+            invalidatesTags: ["PRODUCT", "OFFER", "OFFERS"]
         }),
         updateProductImage: builder.mutation<ProductUpdateImageResponse, ProductUpdateImageRequest>({
             query: ({ productId, imageId, ...rest }) => ({
@@ -55,14 +55,14 @@ export const productService = api.injectEndpoints({
                 method: "PUT",
                 body: rest
             }),
-            invalidatesTags: ["PRODUCT"]
+            invalidatesTags: ["PRODUCT", "OFFER", "OFFERS"]
         }),
         removeProductImage: builder.mutation<ProductRemoveImageResponse, ProductRemoveImageRequest>({
             query: ({ productId, imageId }) => ({
                 url: `products/${productId}/removeImage/${imageId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["PRODUCT"]
+            invalidatesTags: ["PRODUCT", "OFFER", "OFFERS"]
         }),
         createOption: builder.mutation<ProductCreateOptionResponse, ProductCreateOptionRequest>({
             query: ({ productId, ...rest }) => ({
@@ -70,7 +70,7 @@ export const productService = api.injectEndpoints({
                 method: "POST",
                 body: rest
             }),
-            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS"]
+            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS", "OFFER", "OFFERS"]
         }),
         updateOption: builder.mutation<ProductUpdateOptionResponse, ProductUpdateOptionRequest>({
             query: ({ productId, optionId, ...rest }) => ({
@@ -78,14 +78,14 @@ export const productService = api.injectEndpoints({
                 method: "PUT",
                 body: rest
             }),
-            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS"]
+            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS", "OFFER", "OFFERS"]
         }),
         removeOption: builder.mutation<ProductRemoveOptionResponse, ProductRemoveOptionRequest>({
             query: ({ productId, optionId }) => ({
                 url: `products/${productId}/removeOption/${optionId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS"]
+            invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS", "OFFER", "OFFERS"]
         })
     })
 })

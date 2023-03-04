@@ -413,7 +413,7 @@ export class VariantService {
                 success: true
             }
         } catch (e) {
-            
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -471,7 +471,7 @@ export class VariantService {
         }
     }
 
-    async removeImage(imageId: string) {
+    async removeImage(variantId: string, imageId: string) {
         try {
             await this.prisma.$transaction(async tx => {
                 const removedImage = await tx.image.delete({
@@ -481,8 +481,6 @@ export class VariantService {
                         path: true,
                     }
                 })
-
-                // await this.files.delete({ paths: [removedImage.path] })
 
                 const images = await tx.image.findMany({
                     where: { variantId: removedImage.variantId },
@@ -561,7 +559,19 @@ export class VariantService {
                     select: {
                         option0: true,
                         option1: true,
-                        option2: true
+                        option2: true,
+                        product: {
+                            select: {
+                                options: {
+                                    select: {
+                                        title: true,
+                                        option: true,
+
+                                    },
+                                    orderBy: [{ position: 'asc' }]
+                                }
+                            }
+                        }
                     }
                 })
 
@@ -577,6 +587,19 @@ export class VariantService {
                 if (existCheck.length > 1) {
                     throw new HttpException("Вариант должен быть уникальным", HttpStatus.INTERNAL_SERVER_ERROR)
                 }
+
+                await tx.offer.updateMany({
+                    where: {
+                        status: {
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                        },
+                        variantId: variantId
+                    },
+                    data: {
+                        variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | ')
+                    }
+                })
+
             })
 
             return {
@@ -593,18 +616,23 @@ export class VariantService {
 
     async removeVariant(variantId: string) {
         try {
-            const variant = await this.prisma.variant.delete({
-                where: { id: variantId },
-                select: {
-                    images: {
-                        select: {
-                            path: true
-                        }
-                    }
-                }
-            })
+            await this.prisma.$transaction(async tx => {
+                await this.prisma.variant.delete({
+                    where: { id: variantId }
+                })
 
-            // await this.files.delete({ paths: variant.images.map(image => image.path) })
+                await tx.offer.updateMany({
+                    where: {
+                        status: {
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                        },
+                        variantId: null
+                    },
+                    data: {
+                        status: OfferStatus.NO_MATCH
+                    }
+                })
+            })
 
             return {
                 success: true

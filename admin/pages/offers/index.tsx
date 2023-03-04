@@ -65,6 +65,7 @@ function Index() {
                             <NavLink href="/offers" query={{ status: "ACCEPTED" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Нужно принять</NavLink>
                             <NavLink href="/offers" query={{ status: "ACTIVE" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Активные</NavLink>
                             <NavLink href="/offers" query={{ status: "SOLD" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Проданные</NavLink>
+                            <NavLink href="/offers" query={{ status: "NO_MATCH" }} className={({ isActive }) => `relative p-3 ${isActive ? "before:absolute" : "text-gray-400"} hover:before:absolute hover:before:bg-gray-500 before:left-0 before:bottom-0 before:rounded-lg before:bg-green-700 before:w-full before:h-[3px]`}>Нет соответствия</NavLink>
                         </div>
                     </div>
                     <div className="pb-4 space-y-4 mt-4">

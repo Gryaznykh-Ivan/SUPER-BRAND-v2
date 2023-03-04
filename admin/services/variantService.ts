@@ -52,7 +52,7 @@ export const variantService = api.injectEndpoints({
                 method: "PUT",
                 body: rest
             }),
-            invalidatesTags: ["VARIANTS", "VARIANT"]
+            invalidatesTags: ["VARIANTS", "VARIANT", "OFFER", "OFFERS"]
         }),
         deleteVariant: builder.mutation<VariantDeleteResponse, VariantDeleteRequest>({
             query: ({ variantId }) => ({

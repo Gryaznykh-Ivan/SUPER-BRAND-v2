@@ -45,6 +45,7 @@ enum Right {
 }
 
 enum OfferStatus {
+    NO_MATCH
     OFFERED
     ACCEPTED
     DECLINED
@@ -289,7 +290,7 @@ model Offer {
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
 
-    @@fulltext([productTitle, variantTitle])
+    @@fulltext([productTitle])
 }
 
 model FavoriteProduct {

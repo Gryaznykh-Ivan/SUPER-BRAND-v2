@@ -1,5 +1,4 @@
 import * as FormData from 'form-data';
-import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { OfferStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -16,7 +15,6 @@ import { FilesService } from 'src/utils/files/files.service';
 export class ProductService {
     constructor(
         private prisma: PrismaService,
-        private http: HttpService,
         private url: UrlService,
         private files: FilesService
     ) { }
@@ -191,6 +189,7 @@ export class ProductService {
                         .replaceAll("[vendor]", createProductQuery.vendor || "")
                         .replaceAll("[SKU]", createProductQuery.SKU || "")
                         .replace(/\s+/g, " ")
+                        .trim()
                 } else {
                     createProductQuery.metaTitle = createProductQuery.title
                 }
@@ -203,6 +202,7 @@ export class ProductService {
                         .replaceAll("[vendor]", createProductQuery.vendor || "")
                         .replaceAll("[SKU]", createProductQuery.SKU || "")
                         .replace(/\s+/g, " ")
+                        .trim()
                 }
             }
         }
@@ -255,29 +255,68 @@ export class ProductService {
                 throw new HttpException("Загрузить картинки не удалось", HttpStatus.INTERNAL_SERVER_ERROR)
             }
 
-            const lastImage = await this.prisma.image.findFirst({
-                where: { productId: productId },
-                select: { position: true },
-                orderBy: [{ position: 'desc' }]
-            })
+            await this.prisma.$transaction(async tx => {
+                const lastImage = await tx.image.findFirst({
+                    where: { productId: productId },
+                    select: { position: true },
+                    orderBy: [{ position: 'desc' }]
+                })
 
-            const startPosition = lastImage !== null ? lastImage.position + 1 : 0
-            const createImagesQuery = result.data.map((image, index) => ({
-                path: image.path,
-                src: image.src,
-                alt: product.title,
-                position: startPosition + index,
-                productId: productId
-            }))
+                const startPosition = lastImage !== null ? lastImage.position + 1 : 0
+                const createImagesQuery = result.data.map((image, index) => ({
+                    path: image.path,
+                    src: image.src,
+                    alt: product.title,
+                    position: startPosition + index,
+                    productId: productId
+                }))
 
-            await this.prisma.image.createMany({
-                data: createImagesQuery
+                await tx.image.createMany({
+                    data: createImagesQuery
+                })
+
+                if (startPosition === 0) {
+                    const offers = await tx.offer.findMany({
+                        where: {
+                            variant: {
+                                productId: productId
+                            }
+                        },
+                        select: {
+                            id: true,
+                            image: {
+                                select: {
+                                    id: true
+                                }
+                            }
+                        }
+                    })
+
+                    for (const offer of offers) {
+                        await tx.offer.update({
+                            where: {
+                                id: offer.id
+                            },
+                            data: {
+                                image: {
+                                    [offer.image !== null ? "update" : "create"]: {
+                                        src: createImagesQuery[0].src,
+                                        alt: createImagesQuery[0].alt,
+                                        path: createImagesQuery[0].path,
+                                        position: 0
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
             })
 
             return {
                 success: true
             }
         } catch (e) {
+            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -325,6 +364,62 @@ export class ProductService {
                             position: data.position
                         }
                     })
+
+                    // Если основное изображение продукта изменилось - меняем изоюражения вариантов
+                    if (data.position === 0 || current.position === 0) {
+                        const product = await tx.product.findUnique({
+                            where: { id: productId },
+                            select: {
+                                images: {
+                                    select: {
+                                        id: true,
+                                        src: true,
+                                        alt: true,
+                                        path: true,
+                                        position: true,
+                                    },
+                                    orderBy: {
+                                        position: 'asc'
+                                    },
+                                    take: 1
+                                }
+                            }
+                        })
+                        
+                        const offers = await tx.offer.findMany({
+                            where: {
+                                variant: {
+                                    productId: productId
+                                }
+                            },
+                            select: {
+                                id: true,
+                                image: {
+                                    select: {
+                                        id: true
+                                    }
+                                }
+                            }
+                        })
+
+                        for (const offer of offers) {
+                            await tx.offer.update({
+                                where: {
+                                    id: offer.id
+                                },
+                                data: {
+                                    image: {
+                                        [offer.image !== null ? "update" : "create"]: {
+                                            src: product.images[0].src,
+                                            alt: product.images[0].alt,
+                                            path: product.images[0].path,
+                                            position: 0
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                    }
                 }
             })
 
@@ -336,18 +431,17 @@ export class ProductService {
         }
     }
 
-    async removeImage(imageId: string) {
+    async removeImage(productId: string, imageId: string) {
         try {
             await this.prisma.$transaction(async tx => {
                 const removedImage = await tx.image.delete({
                     where: { id: imageId },
                     select: {
                         productId: true,
-                        path: true
+                        path: true,
+                        position: true,
                     }
                 })
-
-                // await this.files.delete({ paths: [removedImage.path] })
 
                 const images = await tx.image.findMany({
                     where: { productId: removedImage.productId },
@@ -365,12 +459,70 @@ export class ProductService {
                         }
                     })
                 }
+                // удаление изображений у офферов если удаляется изображение продукта
+                // if (removedImage.position === 0) {
+                //     const product = await tx.product.findUnique({
+                //         where: { id: productId },
+                //         select: {
+                //             images: {
+                //                 select: {
+                //                     id: true,
+                //                     src: true,
+                //                     alt: true,
+                //                     path: true,
+                //                     position: true,
+                //                 },
+                //                 orderBy: {
+                //                     position: 'asc'
+                //                 },
+                //                 take: 1
+                //             }
+                //         }
+                //     })
+
+                //     const offers = await tx.offer.findMany({
+                //         where: {
+                //             variant: {
+                //                 productId: productId
+                //             }
+                //         },
+                //         select: {
+                //             id: true,
+                //             image: {
+                //                 select: {
+                //                     id: true
+                //                 }
+                //             }
+                //         }
+                //     })
+
+                //     for (const offer of offers) {
+                //         await tx.offer.update({
+                //             where: {
+                //                 id: offer.id
+                //             },
+                //             data: {
+                //                 image: product.images.length !== 0 ? {
+                //                     [offer.image !== null ? "update" : "create"]: {
+                //                         src: product.images[0].src,
+                //                         alt: product.images[0].alt,
+                //                         path: product.images[0].path,
+                //                         position: 0
+                //                     }
+                //                 } : {
+                //                     disconnect: true
+                //                 }
+                //             }
+                //         })
+                //     }
+                // }
             })
 
             return {
                 success: true,
             }
         } catch (e) {
+            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -461,12 +613,12 @@ export class ProductService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            not: OfferStatus.SOLD
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
                         },
                         variantId: null
                     },
                     data: {
-                        status: OfferStatus.OFFERED
+                        status: OfferStatus.NO_MATCH
                     }
                 })
 
@@ -537,6 +689,53 @@ export class ProductService {
                             [`option${optionValue.option.option}`]: title,
                         }
                     })
+
+                    // Меняем название варианта у офферов
+                    const offers = await tx.offer.findMany({
+                        where: {
+                            status: {
+                                notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            },
+                            variant: {
+                                productId: productId,
+                            },
+                            variantTitle: {
+                                contains: optionValue.title,
+                            }
+                        },
+                        select: {
+                            id: true,
+                            variantTitle: true,
+                            variant: {
+                                select: {
+                                    option0: true,
+                                    option1: true,
+                                    option2: true,
+                                    product: {
+                                        select: {
+                                            options: {
+                                                select: {
+                                                    title: true,
+                                                    option: true,
+
+                                                },
+                                                orderBy: [{ position: 'asc' }]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+
+                    for (const offer of offers) {
+                        await tx.offer.update({
+                            where: { id: offer.id },
+                            data: {
+                                variantTitle: offer.variant.product.options.map((option) => offer.variant[`option${option.option}`]).join(' | ')
+                            }
+                        })
+                    }
                 }
 
                 // удаление значений опций
@@ -646,6 +845,18 @@ export class ProductService {
                 await tx.variant.createMany({
                     data: variantToCreate
                 })
+
+                await tx.offer.updateMany({
+                    where: {
+                        status: {
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                        },
+                        variantId: null
+                    },
+                    data: {
+                        status: OfferStatus.NO_MATCH
+                    }
+                })
             })
 
             return {
@@ -737,12 +948,12 @@ export class ProductService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            not: OfferStatus.SOLD
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
                         },
                         variantId: null
                     },
                     data: {
-                        status: OfferStatus.OFFERED
+                        status: OfferStatus.NO_MATCH
                     }
                 })
             })
@@ -817,6 +1028,7 @@ export class ProductService {
                                 .replaceAll("[vendor]", vendor || "")
                                 .replaceAll("[SKU]", SKU || "")
                                 .replace(/\s+/g, " ")
+                                .trim()
                         } else {
                             updateProductQuery.metaTitle = productSnippetInfo.title
                         }
@@ -829,8 +1041,26 @@ export class ProductService {
                                 .replaceAll("[vendor]", vendor || "")
                                 .replaceAll("[SKU]", SKU || "")
                                 .replace(/\s+/g, " ")
+                                .trim()
                         }
                     }
+                }
+
+                // Обновляем название офферов
+                if (data.title !== undefined) {
+                    await tx.offer.updateMany({
+                        where: {
+                            status: {
+                                notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            },
+                            variant: {
+                                productId
+                            }
+                        },
+                        data: {
+                            productTitle: data.title
+                        }
+                    })
                 }
 
                 await tx.product.update({
@@ -839,30 +1069,12 @@ export class ProductService {
                     },
                     data: updateProductQuery
                 })
-
-
-                // Обновляем название офферов
-                await tx.offer.updateMany({
-                    where: {
-                        status: {
-                            not: OfferStatus.SOLD
-                        },
-                        variant: {
-                            productId
-                        }
-                    },
-                    data: {
-                        productTitle: data.title
-                    }
-                })
-
             })
 
             return {
                 success: true
             }
         } catch (e) {
-            console.log(e)
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
@@ -875,45 +1087,28 @@ export class ProductService {
 
     async removeProduct(productId: string) {
         try {
-            const product = await this.prisma.product.delete({
-                where: { id: productId },
-                select: {
-                    images: {
-                        select: {
-                            path: true
-                        }
-                    },
-                    variants: {
-                        select: {
-                            images: {
-                                select: {
-                                    path: true
-                                }
-                            }
-                        }
-                    }
-                }
-            })
+            await this.prisma.$transaction(async tx => {
+                await tx.product.delete({
+                    where: { id: productId }
+                })
 
-            // await this.files.delete({
-            //     paths: [
-            //         ...product.images.map(image => image.path),
-            //         ...product.variants.reduce((a, c) => {
-            //             a.push(...c.images.map(image => image.path))
-            //             return a
-            //         }, [])
-            //     ]
-            // })
+                await tx.offer.updateMany({
+                    where: {
+                        status: {
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                        },
+                        variantId: null
+                    },
+                    data: {
+                        status: OfferStatus.NO_MATCH
+                    }
+                })
+            })
 
             return {
                 success: true
             }
         } catch (e) {
-            if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                if (e.code === 'P2003') {
-                    throw new HttpException("У этого продукта есть офферы. Начните с удаления офферов", HttpStatus.BAD_REQUEST)
-                }
-            }
 
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }

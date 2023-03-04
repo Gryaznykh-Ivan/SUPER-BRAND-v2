@@ -2,6 +2,12 @@ import { Type } from "class-transformer";
 import { ArrayMinSize, IsArray, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 
 
+export class CreateNewOptionDto {
+    @IsNotEmpty()
+    @IsString()
+    title: string;
+}
+
 export class CreateOptionDto {
     @IsNotEmpty()
     @IsString()
@@ -36,8 +42,8 @@ export class UpdateOptionDto {
     @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => CreateOptionDto)
-    createOptionValues: CreateOptionDto[]
+    @Type(() => CreateNewOptionDto)
+    createOptionValues: CreateNewOptionDto[]
 
     @IsOptional()
     @IsArray()

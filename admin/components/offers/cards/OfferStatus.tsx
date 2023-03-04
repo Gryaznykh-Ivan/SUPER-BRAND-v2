@@ -6,6 +6,10 @@ interface IProps {
 }
 
 const OfferStatuses = {
+    "NO_MATCH": {
+        className: "bg-gray-400",
+        text: "Нет соответствия"
+    },
     "OFFERED": {
         className: "bg-gray-400",
         text: "Предложено"

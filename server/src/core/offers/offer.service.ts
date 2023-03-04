@@ -87,7 +87,7 @@ export class OfferService {
                         },
                     }, {
                         variantTitle: {
-                            search: data.q ? `${data.q}*` : undefined,
+                            contains: data.q ? data.q : undefined,
                         }
                     }, {
                         user: data.q ? {
@@ -191,18 +191,6 @@ export class OfferService {
                             take: 1
                         }
                     }
-                },
-                images: {
-                    select: {
-                        id: true,
-                        alt: true,
-                        src: true,
-                        path: true
-                    },
-                    orderBy: {
-                        position: 'asc'
-                    },
-                    take: 1
                 }
             }
         })
@@ -211,7 +199,7 @@ export class OfferService {
             throw new HttpException("Вариант не найден", HttpStatus.BAD_REQUEST)
         }
 
-        const offerImage = variant.images[0] ?? variant.product.images[0] ?? null
+        const offerImage = variant.product.images[0] ?? null
 
         const createOfferQuery = {
             productTitle: variant.product.title,
@@ -221,7 +209,7 @@ export class OfferService {
                     src: offerImage.src,
                     alt: offerImage.alt,
                     path: offerImage.path,
-                    position: 1
+                    position: 0
                 }
             } : undefined,
             variantId: data.variantId,
@@ -255,6 +243,11 @@ export class OfferService {
                 id: true,
                 status: true,
                 variantId: true,
+                image: {
+                    select: {
+                        id: true
+                    }
+                }
             }
         })
 
@@ -306,18 +299,6 @@ export class OfferService {
                                 take: 1
                             }
                         }
-                    },
-                    images: {
-                        select: {
-                            id: true,
-                            alt: true,
-                            src: true,
-                            path: true
-                        },
-                        orderBy: {
-                            position: 'asc'
-                        },
-                        take: 1
                     }
                 }
             })
@@ -326,18 +307,18 @@ export class OfferService {
                 throw new HttpException("Вариант не найден", HttpStatus.BAD_REQUEST)
             }
 
-            const offerImage = variant.images[0] ?? variant.product.images[0] ?? null
+            const offerImage = variant.product.images[0] ?? null
 
             Object.assign(updateOfferQuery, {
                 productTitle: variant.product.title,
                 variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
                 variantId: data.variantId,
                 image: offerImage !== null ? {
-                    create: {
+                    [offer.image !== null ? "update" : "create"]: {
                         src: offerImage.src,
                         alt: offerImage.alt,
                         path: offerImage.path,
-                        position: 1
+                        position: 0
                     }
                 } : undefined
             })

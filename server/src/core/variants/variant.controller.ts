@@ -92,9 +92,10 @@ export class VariantController {
     @Delete(':variantId/removeImage/:imageId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE, Right.MEDIA_DELETE])
     removeImage(
+        @Param('variantId') variantId: string,
         @Param('imageId') imageId: string,
     ) {
-        return this.variantService.removeImage(imageId)
+        return this.variantService.removeImage(variantId, imageId)
     }
 
     @Put(':variantId')

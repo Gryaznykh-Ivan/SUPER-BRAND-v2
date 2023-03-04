@@ -66,9 +66,10 @@ export class ProductController {
     @Delete(':productId/removeImage/:imageId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE, Right.MEDIA_DELETE])
     removeImage(
+        @Param('productId') productId: string,
         @Param('imageId') imageId: string,
     ) {
-        return this.productService.removeImage(imageId)
+        return this.productService.removeImage(productId, imageId)
     }
 
     @Post(':productId/createOption')
