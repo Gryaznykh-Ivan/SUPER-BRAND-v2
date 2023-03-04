@@ -255,9 +255,9 @@ export class OfferService {
             throw new HttpException("Оффер не найден", HttpStatus.BAD_REQUEST)
         }
 
-        if (offer.status === OfferStatus.SOLD) {
-            throw new HttpException("Редактирование проданных офферов запрещено, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
-        }
+        // if (offer.status === OfferStatus.SOLD) {
+        //     throw new HttpException("Редактирование проданных офферов запрещено, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
+        // }
 
         const updateOfferQuery = {
             userId: data.userId,
@@ -353,9 +353,9 @@ export class OfferService {
             throw new HttpException("Оффер не найден", HttpStatus.BAD_REQUEST)
         }
 
-        if (offer.status === OfferStatus.SOLD) {
-            throw new HttpException("Удалить проданый оффер невозможно, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
-        }
+        // if (offer.status === OfferStatus.SOLD) {
+        //     throw new HttpException("Удалить проданый оффер невозможно, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
+        // }
 
         try {
             await this.prisma.offer.delete({

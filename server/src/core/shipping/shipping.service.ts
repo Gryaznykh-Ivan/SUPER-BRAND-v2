@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { OfferStatus, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProfileDto } from './dto/createProfile.dto';
 import { CreateDeliveryZoneDto, UpdateDeliveryZoneDto } from './dto/delivery.dto';
@@ -184,7 +184,7 @@ export class ShippingService {
                 success: true
             }
         } catch (e) {
-            
+
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Профиль с таким title уже существует", HttpStatus.BAD_REQUEST)
@@ -264,17 +264,28 @@ export class ShippingService {
         }
 
         try {
-            await this.prisma.deliveryProfile.delete({
-                where: {
-                    id: profileId,
-                }
+            await this.prisma.$transaction(async tx => {
+                await tx.deliveryProfile.delete({
+                    where: {
+                        id: profileId,
+                    }
+                })
+
+                await tx.offer.updateMany({
+                    where: {
+                        deliveryProfileId: null
+                    },
+                    data: {
+                        deliveryProfileId: "default"
+                    }
+                })
             })
 
             return {
                 success: true
             }
         } catch (e) {
-            
+
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

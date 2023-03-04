@@ -40,7 +40,7 @@ export default function Status({ onChange, ...data }: IProps) {
                         ACCEPTED: { value: "Ожидает принятия", disabled: false },
                         DECLINED: { value: "Отклонено", disabled: false },
                         ACTIVE: { value: "Активно", disabled: false },
-                        SOLD: { value: "Продано", disabled: true },
+                        SOLD: { value: "Продано", disabled: false },
                         NO_MATCH: { value: "Нет соответствия", disabled: true },
                     }}
                     name="status"
