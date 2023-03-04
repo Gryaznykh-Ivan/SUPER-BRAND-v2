@@ -81,14 +81,27 @@ export class ProductService {
 
 
     async getProductsBySearch(data: SearchProductDto) {
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const whereQuery = {
-            title: {
-                search: data.q ? `${data.q}*` : undefined,
-            },
-            vendor: {
-                search: data.q ? `${data.q}*` : undefined,
-            },
-            available: data.available,
+            AND: [{
+                OR: [
+                    {
+                        title: {
+                            search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                        },
+                        vendor: {
+                            search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                        },
+                    },
+                    {
+                        id: {
+                            endsWith: fulltextSearch,
+                        }
+                    }
+                ]
+            }, {
+                available: data.available,
+            }]
         }
 
         if (data.notInCollectionId !== undefined) {

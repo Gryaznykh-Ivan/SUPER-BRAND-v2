@@ -43,7 +43,7 @@ export default function ProfileShipping({ profileId }: IProps) {
     }, [data])
 
     useEffect(() => {
-        getDeliveryZones({ ...query, profileId, q: query.q.replace(/[+\-<>()~*\"@]+/g, ' ') })
+        getDeliveryZones({ ...query, profileId, q: query.q })
     }, [query])
 
 

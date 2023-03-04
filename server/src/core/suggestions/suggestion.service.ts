@@ -28,11 +28,12 @@ export class SuggestionService {
     }
 
     async vendors(q: string) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const vendors = await this.prisma.product.findMany({
             distinct: ["vendor"],
             where: {
                 vendor: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                     not: null
                 },
             },
@@ -49,10 +50,11 @@ export class SuggestionService {
     }
 
     async deliveryZones(data: SearchDto) {
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const regions = await this.prisma.region.findMany({
             where: {
                 title: {
-                    search: data.q ? `${data.q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 }
             },
             select: {
@@ -104,10 +106,11 @@ export class SuggestionService {
 
 
     async collections(q: string, ids: string[]) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const collections = await this.prisma.collection.findMany({
             where: {
                 title: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 },
                 id: {
                     notIn: ids
@@ -127,10 +130,11 @@ export class SuggestionService {
     }
 
     async countries(q: string) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const countries = await this.prisma.country.findMany({
             where: {
                 title: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 }
             },
             take: 5
@@ -143,13 +147,14 @@ export class SuggestionService {
     }
 
     async regions(q: string, country?: string) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const regions = await this.prisma.region.findMany({
             where: {
                 country: {
                     title: country
                 },
                 title: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 }
             },
             take: 5
@@ -162,13 +167,14 @@ export class SuggestionService {
     }
 
     async cities(q: string, region?: string) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const cities = await this.prisma.city.findMany({
             where: {
                 region: {
                     title: region
                 },
                 title: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 }
             },
             take: 5

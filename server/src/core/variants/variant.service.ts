@@ -20,13 +20,14 @@ export class VariantService {
 
 
     async getVariantsBySearch(data: SearchVariantDto) {
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const variants = await this.prisma.product.findMany({
             where: {
                 title: {
-                    search: data.q ? `${data.q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 },
                 vendor: {
-                    search: data.q ? `${data.q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 },
                 variants: {
                     some: {}

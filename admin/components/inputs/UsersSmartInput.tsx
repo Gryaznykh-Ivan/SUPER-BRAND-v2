@@ -25,7 +25,7 @@ export default function UsersSmartInput({ onChange, value, placeholder, classNam
 
     useEffect(() => {
         if (focus) {
-            getUsersBySearch({ q: debounced.replace(/[+\-<>()~*\"@]+/g, ' '), limit: 5, skip: 0 })
+            getUsersBySearch({ q: debounced, limit: 5, skip: 0 })
         }
     }, [debounced, focus])
 

@@ -15,18 +15,19 @@ export class OrderService {
     ) { }
 
     async getOrdersBySearch(data: SearchOrderDto) {
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const whereQuery = {
             OR: [
                 {
                     user: {
                         phone: {
-                            search: data.q ? `${data.q}*` : undefined,
+                            search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                         },
                         fullName: {
-                            search: data.q ? `${data.q}*` : undefined,
+                            search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                         },
                         email: {
-                            search: data.q ? `${data.q}*` : undefined,
+                            search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                         }
                     }
                 },

@@ -24,7 +24,7 @@ export default function RegionsSmartInput({ onChange, value, placeholder, classN
 
     useEffect(() => {
         if (focus) {
-            suggest({ q: debounced.replace(/[+\-<>()~*\"@]+/g, ' '), country: country })
+            suggest({ q: debounced, country: country })
         }
     }, [debounced, focus])
 

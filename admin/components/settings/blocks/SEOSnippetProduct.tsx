@@ -6,7 +6,7 @@ import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
 
 
-export default function SEOSnippets() {
+export default function SEOSnippetProduct() {
     const { data } = useGetSettingsBySearchQuery({ setting: "SEO-SNIPPET" })
     const [updateSetting, { }] = useUpdateSettingMutation()
     
@@ -52,7 +52,7 @@ export default function SEOSnippets() {
 
     return (
         <div className="rounded-md bg-white shadow-sm">
-            <h2 className="font-semibold p-5 border-b-[1px]">Шаблон снипета для SEO</h2>
+            <h2 className="font-semibold p-5 border-b-[1px]">Шаблон снипета продукта</h2>
             <div className="space-y-4 p-5">
                 <div className="flex flex-col">
                     <div className="flex justify-between mb-1">

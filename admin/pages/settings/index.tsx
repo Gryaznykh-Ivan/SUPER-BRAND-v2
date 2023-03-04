@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
-import SEOSnippets from '../../components/settings/blocks/SEOSnippets'
+import SEOSnippetProduct from '../../components/settings/blocks/SEOSnippetProduct'
 import Profile from '../../components/shipping/cards/Profile'
 import ProfileName from '../../components/shipping/popups/ProfileName'
 import { useCreateDeliveryProfileMutation, useGetAllDeliveryProfileQuery } from '../../services/shippingService'
@@ -19,7 +19,7 @@ function Index() {
                     <h1 className="text-xl font-medium">Настройки</h1>
                 </div>
                 <div className="flex flex-col pb-4">
-                    <SEOSnippets />
+                    <SEOSnippetProduct />
                 </div>
             </div>
         </MainLayout>

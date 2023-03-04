@@ -44,16 +44,17 @@ export class UserService {
     }
 
     async getUsersBySearch(q: string, limit: number, skip: number) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
         const users = await this.prisma.user.findMany({
             where: {
                 phone: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 },
                 fullName: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 },
                 email: {
-                    search: q ? `${q}*` : undefined,
+                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
                 }
             },
             select: {
