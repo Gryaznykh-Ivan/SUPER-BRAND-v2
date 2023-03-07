@@ -94,7 +94,7 @@ export default function PickVariant({ onChange, creatingPreview = false, ...data
                     </div>
                 </div>
                 {state.variantId === null && creatingPreview === false &&
-                    <div className="text-xs mb-2 text-red-600">Покупатели не увидят этот оффер, так как этот товар не представлен в магазине</div>
+                    <div className="text-xs mb-2 text-red-600 font-bold">Товар не представлен в магазине</div>
                 }
                 <button className="border-blue-700 border-[1px] text-blue-700 px-4 py-2 font-medium rounded-md hover:bg-blue-700 hover:text-white justify-items-end" onClick={onPopupOpen}>Выбрать</button>
             </div>

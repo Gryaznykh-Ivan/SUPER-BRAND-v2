@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { useRouter } from 'next/router'
 import MainLayout from '../../../components/layouts/Main'
-import FulfillmentProducts from '../../../components/orders/blocks/FulfillmentProducts'
+import ProductsToFulfill from '../../../components/orders/blocks/ProductsToFulfill'
 import PickDelivery from '../../../components/orders/blocks/PickDelivery'
 import Customer from '../../../components/orders/blocks/Customer'
 import Payment from '../../../components/orders/blocks/Payment'
@@ -42,7 +42,7 @@ function Index() {
     useEffect(() => {
         if (data?.data) {
             setState({
-                offers: data.data.products,
+                offers: data.data.offers,
                 services: data.data.services
             })
         }
@@ -76,11 +76,11 @@ function Index() {
 
         setState(result)
 
-        const createServices = result.services.filter(a => a.id.startsWith("new") === true).map(({ id, ...data }) => data)
-        const deleteServices = data?.data.services.filter(a => !result.services.some(c => c.id === a.id)).map(({ id }) => ({ id }))
+        const createServices = result.services.filter(a => !data.data.offers.some(c => c.id === a.id)).map(({ id, ...data }) => data)
+        const deleteServices = data.data.services.filter(a => !result.services.some(c => c.id === a.id)).map(({ id }) => ({ id }))
 
-        const createOffers = result.offers.filter(a => a.id.startsWith("new") === true).map(({ offerId }) => ({ id: offerId }))
-        const deleteOffers = data.data.products.filter(a => !result.offers.some(c => c.id === a.id)).map(({ id }) => ({ id }))
+        const createOffers = result.offers.filter(a => !data.data.offers.some(c => c.id === a.id)).map(({ id }) => ({ id }))
+        const deleteOffers = data.data.offers.filter(a => !result.offers.some(c => c.id === a.id)).map(({ id }) => ({ id }))
 
         onCollectChanges({
             createServices: createServices.length !== 0 ? createServices : undefined,
@@ -138,15 +138,16 @@ function Index() {
                         </div>
                         <div className="my-4 flex flex-col space-y-4 pb-4 lg:flex-row lg:space-x-4 lg:space-y-0 border-b-[1px]">
                             <div className="flex-1 space-y-4">
-                                <FulfillmentProducts
+                                <ProductsToFulfill
                                     offers={state.offers}
+                                    offersToAddIds={ changes.createOffers ?? [] }
                                     onChange={onStateChanges}
                                 />
                                 {data.data.fulfillments.map(fulfillment =>
                                     <Fulfillment
                                         key={fulfillment.id}
                                         id={fulfillment.id}
-                                        offers={fulfillment.products}
+                                        offers={fulfillment.offers}
                                         status={fulfillment.status}
                                     />
                                 )}
@@ -157,7 +158,7 @@ function Index() {
                                 />
                                 <Payment
                                     orderId={data.data.id}
-                                    offers={[...state.offers, ...data.data.fulfillments.map(fulfillment => fulfillment.products).reduce((a, c) => [...a, ...c], [])]}
+                                    offers={[...state.offers, ...data.data.fulfillments.map(fulfillment => fulfillment.offers).reduce((a, c) => [...a, ...c], [])]}
                                     services={state.services}
                                     priceDiffrence={data.data.totalPrice - data.data.paid}
                                 />

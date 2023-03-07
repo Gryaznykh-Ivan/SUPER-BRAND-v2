@@ -44,7 +44,7 @@ export class OfferService {
                 userId: true,
                 order: {
                     select: {
-                        orderId: true
+                        id: true
                     }
                 }
             }
@@ -68,7 +68,7 @@ export class OfferService {
             status: offer.status,
             deliveryProfileId: offer.deliveryProfileId,
             userId: offer.userId ?? null,
-            orderId: offer.order?.orderId ?? null
+            orderId: offer.order?.id ?? null
         }
 
         return {
@@ -258,18 +258,21 @@ export class OfferService {
             throw new HttpException("Оффер не найден", HttpStatus.BAD_REQUEST)
         }
 
-        // if (offer.status === OfferStatus.SOLD) {
-        //     throw new HttpException("Редактирование проданных офферов запрещено, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
-        // }
+        if (offer.status === OfferStatus.SOLD) {
+            throw new HttpException("Редактирование проданных офферов запрещено, так как это будет искажать историю продаж", HttpStatus.BAD_REQUEST)
+        }
 
         const updateOfferQuery = {
             userId: data.userId,
-            status: data.status,
             price: data.price,
             offerPrice: data.offerPrice,
             deliveryProfileId: data.deliveryProfileId,
             compareAtPrice: data.compareAtPrice,
             comment: data.comment,
+        }
+
+        if (offer.status === OfferStatus.NO_MATCH && data.variantId === undefined && data.status !== undefined) {
+            throw new HttpException("Невозможно изменить статус у оффера без соответствия. Сначала выберите товар, которому этот оффер принадлежит", HttpStatus.BAD_REQUEST)
         }
 
         if (data.variantId !== undefined && data.variantId !== offer.variantId) {
@@ -314,6 +317,7 @@ export class OfferService {
             const offerImage = variant.product.images[0] ?? null
 
             Object.assign(updateOfferQuery, {
+                status: (offer.status === OfferStatus.NO_MATCH && data.status === undefined) ? OfferStatus.ACTIVE : data.status,
                 productTitle: variant.product.title,
                 variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
                 variantId: data.variantId,
@@ -325,7 +329,9 @@ export class OfferService {
                         path: offerImage.path,
                         position: 0
                     }
-                } : undefined
+                } : {
+                    disconnect: true
+                }
             })
         }
 
@@ -341,6 +347,8 @@ export class OfferService {
                 success: true
             }
         } catch (e) {
+
+            console.log(e)
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -358,9 +366,9 @@ export class OfferService {
             throw new HttpException("Оффер не найден", HttpStatus.BAD_REQUEST)
         }
 
-        // if (offer.status === OfferStatus.SOLD) {
-        //     throw new HttpException("Удалить проданый оффер невозможно, так как это будет влиять на историю продаж", HttpStatus.BAD_REQUEST)
-        // }
+        if (offer.status === OfferStatus.SOLD) {
+            throw new HttpException("Удалить проданый оффер невозможно, так как это будет искажать историю продаж", HttpStatus.BAD_REQUEST)
+        }
 
         try {
             await this.prisma.offer.delete({

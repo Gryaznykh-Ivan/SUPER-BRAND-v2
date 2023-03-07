@@ -62,7 +62,7 @@ export interface IOfferSearch {
     id: string;
     product: string;
     variant: string;
-    price: string | null;
+    price: string;
     offerPrice: string | null;
     status: OfferStatus;
     user: string | null;
@@ -245,7 +245,7 @@ export interface IOrderSearch {
     totalPrice: string;
     paymentStatus: PaymentStatus;
     orderStatus: OrderStatus;
-    productsCount: number;
+    offersCount: number;
     servicesCount: number;
 }
 
@@ -263,13 +263,12 @@ export interface IOrderProduct {
     variant: string;
     image: IImage;
     deliveryProfile: IDeliveryProfile;
-    price: string | null;
-    offerId: string;
+    price: string;
 }
 
 export interface IFulfillment {
     id: string;
-    products: IOrderProduct[];
+    offers: IOrderProduct[];
     status: FulfillmentStatus;
     carrier: string;
     tracking: string;
@@ -293,7 +292,7 @@ export interface IOrder {
     totalPrice: number;
     paymentStatus: PaymentStatus;
     orderStatus: OrderStatus;
-    products: IOrderProduct[];
+    offers: IOrderProduct[];
     fulfillments: IFulfillment[];
     services: IService[];
     paid: number;

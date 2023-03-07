@@ -14,6 +14,10 @@ export default function Status({ onChange, ...data }: IProps) {
     })
 
     useEffect(() => {
+        setState({ status: data.status })
+    }, [data.status])
+
+    useEffect(() => {
         const localState = Object.entries(state)
         const changes = localState.map(([key, value]) => {
             if (data[key as keyof typeof data] === value) {
@@ -40,7 +44,7 @@ export default function Status({ onChange, ...data }: IProps) {
                         ACCEPTED: { value: "Ожидает принятия", disabled: false },
                         DECLINED: { value: "Отклонено", disabled: false },
                         ACTIVE: { value: "Активно", disabled: false },
-                        SOLD: { value: "Продано", disabled: false },
+                        SOLD: { value: "Продано", disabled: true },
                         NO_MATCH: { value: "Нет соответствия", disabled: true },
                     }}
                     name="status"

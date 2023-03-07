@@ -55,7 +55,7 @@ export class OrderService {
                 orderStatus: true,
                 _count: {
                     select: {
-                        products: true,
+                        offers: true,
                         services: true,
                     }
                 }
@@ -74,7 +74,7 @@ export class OrderService {
             totalPrice: order.totalPrice,
             paymentStatus: order.paymentStatus,
             orderStatus: order.orderStatus,
-            productsCount: order._count.products,
+            offersCount: order._count.offers,
             servicesCount: order._count.services,
         }))
 
@@ -123,219 +123,151 @@ export class OrderService {
     }
 
     async getOrderById(orderId: number) {
-        // const order = await this.prisma.order.findUnique({
-        //     where: { id: orderId },
-        //     select: {
-        //         id: true,
-        //         note: true,
-        //         userId: true,
-        //         mailingAddress: true,
-        //         mailingCity: true,
-        //         mailingCountry: true,
-        //         mailingRegion: true,
-        //         totalPrice: true,
-        //         paymentStatus: true,
-        //         orderStatus: true,
-        //         products: {
-        //             where: {
-        //                 fulfillmentId: null
-        //             },
-        //             select: {
-        //                 id: true,
-        //                 offer: {
-        //                     select: {
-        //                         id: true,
-        //                         price: true,
-        //                         deliveryProfile: {
-        //                             select: {
-        //                                 id: true,
-        //                                 title: true
-        //                             }
-        //                         },
-        //                         variant: {
-        //                             select: {
-        //                                 id: true,
-        //                                 option0: true,
-        //                                 option1: true,
-        //                                 option2: true,
-        //                                 product: {
-        //                                     select: {
-        //                                         title: true,
-        //                                         options: {
-        //                                             select: {
-        //                                                 title: true,
-        //                                                 option: true,
-        //                                             },
-        //                                             orderBy: [{ position: 'asc' }]
-        //                                         },
-        //                                         images: {
-        //                                             select: {
-        //                                                 id: true,
-        //                                                 alt: true,
-        //                                                 src: true,
-        //                                                 position: true
-        //                                             },
-        //                                             orderBy: {
-        //                                                 position: 'asc'
-        //                                             },
-        //                                             take: 1
-        //                                         }
-        //                                     }
-        //                                 },
-        //                                 images: {
-        //                                     select: {
-        //                                         id: true,
-        //                                         alt: true,
-        //                                         src: true,
-        //                                         position: true
-        //                                     },
-        //                                     orderBy: {
-        //                                         position: 'asc'
-        //                                     },
-        //                                     take: 1
-        //                                 }
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         },
-        //         fulfillments: {
-        //             select: {
-        //                 id: true,
-        //                 status: true,
-        //                 products: {
-        //                     select: {
-        //                         id: true,
-        //                         offer: {
-        //                             select: {
-        //                                 id: true,
-        //                                 price: true,
-        //                                 deliveryProfile: {
-        //                                     select: {
-        //                                         id: true,
-        //                                         title: true
-        //                                     }
-        //                                 },
-        //                                 variant: {
-        //                                     select: {
-        //                                         id: true,
-        //                                         option0: true,
-        //                                         option1: true,
-        //                                         option2: true,
-        //                                         product: {
-        //                                             select: {
-        //                                                 title: true,
-        //                                                 options: {
-        //                                                     select: {
-        //                                                         title: true,
-        //                                                         option: true,
-        //                                                     },
-        //                                                     orderBy: [{ position: 'asc' }]
-        //                                                 },
-        //                                                 images: {
-        //                                                     select: {
-        //                                                         id: true,
-        //                                                         alt: true,
-        //                                                         src: true,
-        //                                                         position: true
-        //                                                     },
-        //                                                     orderBy: {
-        //                                                         position: 'asc'
-        //                                                     },
-        //                                                     take: 1
-        //                                                 }
-        //                                             }
-        //                                         },
-        //                                         images: {
-        //                                             select: {
-        //                                                 id: true,
-        //                                                 alt: true,
-        //                                                 src: true,
-        //                                                 position: true
-        //                                             },
-        //                                             orderBy: {
-        //                                                 position: 'asc'
-        //                                             },
-        //                                             take: 1
-        //                                         }
-        //                                     }
-        //                                 }
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             },
-        //             orderBy: {
-        //                 createdAt: 'desc'
-        //             }
-        //         },
-        //         services: {
-        //             select: {
-        //                 id: true,
-        //                 type: true,
-        //                 description: true,
-        //                 price: true
-        //             }
-        //         },
-        //         invoices: {
-        //             where: {
-        //                 status: InvoiceStatus.SUCCEEDED
-        //             },
-        //             select: {
-        //                 id: true,
-        //                 amount: true,
-        //                 currency: true
-        //             }
-        //         }
-        //     }
-        // })
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+            select: {
+                id: true,
+                note: true,
+                userId: true,
+                mailingAddress: true,
+                mailingCity: true,
+                mailingCountry: true,
+                mailingRegion: true,
+                totalPrice: true,
+                paymentStatus: true,
+                orderStatus: true,
+                offers: {
+                    where: {
+                        fulfillmentId: null
+                    },
+                    select: {
+                        id: true,
+                        productTitle: true,
+                        variantTitle: true,
+                        image: {
+                            select: {
+                                id: true,
+                                alt: true,
+                                src: true
+                            }
+                        },
+                        price: true,
+                        deliveryProfile: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
+                    }
+                },
+                fulfillments: {
+                    select: {
+                        id: true,
+                        status: true,
+                        offers: {
+                            select: {
+                                id: true,
+                                productTitle: true,
+                                variantTitle: true,
+                                image: {
+                                    select: {
+                                        id: true,
+                                        alt: true,
+                                        src: true
+                                    }
+                                },
+                                price: true,
+                                deliveryProfile: {
+                                    select: {
+                                        id: true,
+                                        title: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
+                services: {
+                    select: {
+                        id: true,
+                        type: true,
+                        description: true,
+                        price: true
+                    }
+                },
+                invoices: {
+                    where: {
+                        status: InvoiceStatus.SUCCEEDED
+                    },
+                    select: {
+                        id: true,
+                        amount: true,
+                        currency: true
+                    }
+                },
+                removedOffers: {
+                    select: {
+                        id: true,
+                        productTitle: true,
+                        variantTitle: true,
+                        image: {
+                            select: {
+                                id: true,
+                                alt: true,
+                                src: true
+                            }
+                        },
+                    }
+                }
+            }
+        })
 
-        // if (order === null) {
-        //     throw new HttpException("Заказ не найден", HttpStatus.BAD_REQUEST)
-        // }
+        if (order === null) {
+            throw new HttpException("Заказ не найден", HttpStatus.BAD_REQUEST)
+        }
 
-        // const result = {
-        //     id: order.id,
-        //     note: order.note,
-        //     userId: order.userId,
-        //     mailingAddress: order.mailingAddress,
-        //     mailingCity: order.mailingCity,
-        //     mailingCountry: order.mailingCountry,
-        //     mailingRegion: order.mailingRegion,
-        //     totalPrice: Number(order.totalPrice),
-        //     paymentStatus: order.paymentStatus,
-        //     orderStatus: order.orderStatus,
-        //     products: order.products.map(product => ({
-        //         id: product.id,
-        //         product: product.offer.variant.product.title,
-        //         variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
-        //         image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
-        //         deliveryProfile: product.offer.deliveryProfile,
-        //         price: product.offer.price,
-        //         offerId: product.offer.id
-        //     })),
-        //     fulfillments: order.fulfillments.map(fulfillment => ({
-        //         id: fulfillment.id,
-        //         products: fulfillment.products.map(product => ({
-        //             id: product.id,
-        //             product: product.offer.variant.product.title,
-        //             variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
-        //             image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
-        //             deliveryProfile: product.offer.deliveryProfile,
-        //             price: product.offer.price,
-        //             offerId: product.offer.id
-        //         })),
-        //         status: fulfillment.status
-        //     })),
-        //     services: order.services,
-        //     paid: order.invoices.map(invoice => invoice.amount).reduce((a, c) => a + Number(c), 0)
-        // }
+        const result = {
+            id: order.id,
+            note: order.note,
+            userId: order.userId,
+            mailingAddress: order.mailingAddress,
+            mailingCity: order.mailingCity,
+            mailingCountry: order.mailingCountry,
+            mailingRegion: order.mailingRegion,
+            totalPrice: Number(order.totalPrice),
+            paymentStatus: order.paymentStatus,
+            orderStatus: order.orderStatus,
+            offers: order.offers.map(offer => ({
+                id: offer.id,
+                product: offer.productTitle,
+                variant: offer.variantTitle,
+                image: offer.image,
+                deliveryProfile: offer.deliveryProfile,
+                price: offer.price
+            })),
+            fulfillments: order.fulfillments.map(fulfillment => ({
+                id: fulfillment.id,
+                offers: fulfillment.offers.map(offer => ({
+                    id: offer.id,
+                    product: offer.productTitle,
+                    variant: offer.variantTitle,
+                    image: offer.image,
+                    deliveryProfile: offer.deliveryProfile,
+                    price: offer.price
+                })),
+                status: fulfillment.status
+            })),
+            services: order.services,
+            paid: order.invoices.map(invoice => invoice.amount).reduce((a, c) => a + Number(c), 0)
+        }
 
-        // return {
-        //     success: true,
-        //     data: result
-        // }
+        return {
+            success: true,
+            data: result
+        }
     }
 
     async createOrder(data: CreateOrderDto, self: IUser) {
@@ -362,420 +294,384 @@ export class OrderService {
         }
 
         try {
-            // const order = await this.prisma.$transaction(async tx => {
-            //     const offers = await tx.offer.findMany({
-            //         where: {
-            //             id: {
-            //                 in: data.offers.map(offer => offer.id)
-            //             },
-            //             status: OfferStatus.ACTIVE
-            //         },
-            //         select: {
-            //             id: true,
-            //             price: true,
-            //             variantId: true,
-            //         }
-            //     })
+            const order = await this.prisma.$transaction(async tx => {
+                const offers = await tx.offer.findMany({
+                    where: {
+                        id: {
+                            in: data.offers.map(offer => offer.id)
+                        },
+                        status: OfferStatus.ACTIVE
+                    },
+                    select: {
+                        id: true,
+                        price: true,
+                        variantId: true,
+                    }
+                })
 
-            //     if (offers.length !== data.offers.length) {
-            //         throw new HttpException("Часть товаров не доступна к покупке", HttpStatus.BAD_REQUEST)
-            //     }
+                if (offers.length !== data.offers.length) {
+                    throw new HttpException("Часть товаров не доступна к покупке", HttpStatus.BAD_REQUEST)
+                }
 
-            //     await tx.offer.updateMany({
-            //         where: {
-            //             id: {
-            //                 in: offers.map(offer => offer.id)
-            //             }
-            //         },
-            //         data: {
-            //             status: OfferStatus.SOLD
-            //         }
-            //     })
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: offers.map(offer => offer.id)
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.SOLD
+                    }
+                })
 
-            //     const subtotalProducts = offers.reduce((a, c) => a + Number(c.price), 0)
-            //     const subtotalService = data.services.reduce((a, c) => a + Number(c.price), 0)
-            //     const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
+                const subtotalProducts = offers.reduce((a, c) => a + Number(c.price), 0)
+                const subtotalService = data.services.reduce((a, c) => a + Number(c.price), 0)
+                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
 
-            //     return await tx.order.create({
-            //         data: {
-            //             ...createOrderQuery,
-            //             totalPrice: totalPrice,
-            //             products: {
-            //                 createMany: {
-            //                     data: offers.map(offer => ({
-            //                         offerId: offer.id,
-            //                         variantId: offer.variantId
-            //                     }))
-            //                 }
-            //             }
-            //         }
-            //     })
-            // })
+                return await tx.order.create({
+                    data: {
+                        ...createOrderQuery,
+                        totalPrice: totalPrice,
+                        offers: {
+                            connect: offers.map(offer => ({ id: offer.id }))
+                        }
+                    }
+                })
+            })
 
-            // return {
-            //     success: true,
-            //     data: order.id
-            // }
+            return {
+                success: true,
+                data: order.id
+            }
         } catch (e) {
-            
-
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
     async updateOrder(orderId: number, data: UpdateOrderDto, self: IUser) {
-        // const updateOrderQuery = {
-        //     mailingCountry: data.mailingCountry,
-        //     mailingCity: data.mailingCity,
-        //     mailingRegion: data.mailingRegion,
-        //     mailingAddress: data.mailingAddress,
-        //     note: data.note,
-        //     userId: data.userId,
-        //     timeline: {
-        //         create: {
-        //             title: "Заказ обновлен",
-        //             message: `Обновленные поля:\n${Object.keys(data).join("\n")}`,
-        //             userId: self.id,
-        //         }
-        //     }
-        // }
+        const updateOrderQuery = {
+            mailingCountry: data.mailingCountry,
+            mailingCity: data.mailingCity,
+            mailingRegion: data.mailingRegion,
+            mailingAddress: data.mailingAddress,
+            note: data.note,
+            userId: data.userId,
+            timeline: {
+                create: {
+                    title: "Заказ обновлен",
+                    message: `Обновленные поля:\n${Object.keys(data).join("\n")}`,
+                    userId: self.id,
+                }
+            }
+        }
 
-        // if (data.deleteServices !== undefined || data.createServices !== undefined) {
-        //     Object.assign(updateOrderQuery, {
-        //         services: {
-        //             deleteMany: data.deleteServices ?? [],
-        //             createMany: {
-        //                 data: data.createServices ?? []
-        //             }
-        //         }
-        //     })
-        // }
+        if (data.deleteServices !== undefined || data.createServices !== undefined) {
+            Object.assign(updateOrderQuery, {
+                services: {
+                    deleteMany: data.deleteServices ?? [],
+                    createMany: {
+                        data: data.createServices ?? []
+                    }
+                }
+            })
+        }
 
-        // if (data.deleteOffers !== undefined || data.createOffers !== undefined) {
-        //     const offers = await this.prisma.offer.findMany({
-        //         where: {
-        //             id: {
-        //                 in: data.createOffers?.map(offer => offer.id) ?? []
-        //             },
-        //             status: OfferStatus.ACTIVE
-        //         },
-        //         select: {
-        //             id: true,
-        //             price: true,
-        //             variantId: true,
-        //         }
-        //     })
+        if (data.deleteOffers !== undefined || data.createOffers !== undefined) {
+            const offers = await this.prisma.offer.findMany({
+                where: {
+                    id: {
+                        in: data.createOffers?.map(offer => offer.id) ?? []
+                    },
+                    status: OfferStatus.ACTIVE
+                },
+                select: {
+                    id: true,
+                    price: true,
+                    variantId: true,
+                }
+            })
 
-        //     if (data.createOffers !== undefined && offers.length !== data.createOffers.length) {
-        //         throw new HttpException("Часть товаров не доступна к покупке", HttpStatus.BAD_REQUEST)
-        //     }
+            if (data.createOffers !== undefined && offers.length !== data.createOffers.length) {
+                throw new HttpException("Часть товаров не доступна к покупке", HttpStatus.BAD_REQUEST)
+            }
 
-        //     Object.assign(updateOrderQuery, {
-        //         products: {
-        //             deleteMany: data.deleteOffers ?? [],
-        //             createMany: {
-        //                 data: offers.map(offer => ({
-        //                     offerId: offer.id,
-        //                     variantId: offer.variantId
-        //                 }))
-        //             }
-        //         }
-        //     })
-        // }
+            Object.assign(updateOrderQuery, {
+                offers: {
+                    disconnect: data.deleteOffers ?? [],
+                    connect: data.createOffers ?? []
+                },
+                removedOffers: {
+                    connect: data.deleteOffers ?? []
+                }
+            })
+        }
 
-        // try {
-        //     await this.prisma.$transaction(async tx => {
-        //         await tx.offer.updateMany({
-        //             where: {
-        //                 id: {
-        //                     in: data.createOffers?.map(offer => offer.id) ?? []
-        //                 }
-        //             },
-        //             data: {
-        //                 status: OfferStatus.SOLD
-        //             }
-        //         })
+        try {
+            await this.prisma.$transaction(async tx => {
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: data.createOffers?.map(offer => offer.id) ?? []
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.SOLD
+                    }
+                })
 
-        //         await tx.offer.updateMany({
-        //             where: {
-        //                 order: {
-        //                     id: {
-        //                         in: data.deleteOffers?.map(offer => offer.id) ?? []
-        //                     }
-        //                 }
-        //             },
-        //             data: {
-        //                 status: OfferStatus.ACTIVE
-        //             }
-        //         })
+                // Удаленным товарам имеющим соответствие ставим активный статус
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: data.deleteOffers?.map(offer => offer.id) ?? []
+                        },
+                        variantId: {
+                            not: null
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.ACTIVE
+                    }
+                })
 
-        //         const order = await tx.order.update({
-        //             where: {
-        //                 id: orderId
-        //             },
-        //             data: updateOrderQuery,
-        //             select: {
-        //                 id: true,
-        //                 totalPrice: true,
-        //                 products: {
-        //                     select: {
-        //                         id: true,
-        //                         fulfillmentId: true,
-        //                         offer: {
-        //                             select: {
-        //                                 id: true,
-        //                                 price: true,
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //                 fulfillments: {
-        //                     select: {
-        //                         id: true,
-        //                         status: true
-        //                     }
-        //                 },
-        //                 services: {
-        //                     select: {
-        //                         id: true,
-        //                         price: true
-        //                     }
-        //                 },
-        //                 invoices: {
-        //                     select: {
-        //                         id: true,
-        //                         amount: true
-        //                     }
-        //                 }
-        //             }
-        //         })
+                // Удаленным товарам не имеющим соответствия ставим статус NO_MATCH
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: data.deleteOffers?.map(offer => offer.id) ?? []
+                        },
+                        variantId: null
+                    },
+                    data: {
+                        status: OfferStatus.NO_MATCH
+                    }
+                })
 
-        //         const subtotalProducts = order.products.map(product => product.offer).reduce((a, c) => a + Number(c.price), 0)
-        //         const subtotalService = order.services.reduce((a, c) => a + Number(c.price), 0)
-        //         const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
-        //         const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
+                const order = await tx.order.update({
+                    where: {
+                        id: orderId
+                    },
+                    data: updateOrderQuery,
+                    select: {
+                        id: true,
+                        totalPrice: true,
+                        offers: {
+                            select: {
+                                id: true,
+                                price: true,
+                                fulfillmentId: true,
+                            }
+                        },
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
+                            }
+                        },
+                        services: {
+                            select: {
+                                id: true,
+                                price: true
+                            }
+                        },
+                        invoices: {
+                            where: {
+                                status: InvoiceStatus.SUCCEEDED
+                            },
+                            select: {
+                                id: true,
+                                amount: true
+                            }
+                        }
+                    }
+                })
 
-        //         await tx.order.update({
-        //             where: {
-        //                 id: orderId
-        //             },
-        //             data: {
-        //                 totalPrice: totalPrice,
-        //                 paymentStatus: totalPrice === totalPaid && totalPaid !== 0
-        //                     ? PaymentStatus.PAID
-        //                     : totalPrice < totalPaid
-        //                         ? PaymentStatus.NEED_TO_RETURN
-        //                         : totalPaid !== 0
-        //                             ? PaymentStatus.PARTIALLY_PAID
-        //                             : PaymentStatus.UNPAID,
-        //                 orderStatus: order.products.filter(product => product.fulfillmentId === null).length === 0 && order.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && order.products.length !== 0
-        //                     ? OrderStatus.FULFILLED
-        //                     : order.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-        //                         ? OrderStatus.PARTIALLY_FULFILLED
-        //                         : order.products.length !== 0
-        //                             ? OrderStatus.UNFULFILLED
-        //                             : OrderStatus.CANCELED
-        //             }
-        //         })
-        //     })
+                const subtotalProducts = order.offers.reduce((a, c) => a + Number(c.price), 0)
+                const subtotalService = order.services.reduce((a, c) => a + Number(c.price), 0)
+                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
+                const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
 
-        //     return {
-        //         success: true
-        //     }
-        // } catch (e) {
-            
+                await tx.order.update({
+                    where: {
+                        id: orderId
+                    },
+                    data: {
+                        totalPrice: totalPrice,
+                        paymentStatus: totalPrice === totalPaid && totalPaid !== 0
+                            ? PaymentStatus.PAID
+                            : totalPrice < totalPaid
+                                ? PaymentStatus.NEED_TO_RETURN
+                                : totalPaid !== 0
+                                    ? PaymentStatus.PARTIALLY_PAID
+                                    : PaymentStatus.UNPAID,
+                        orderStatus: order.offers.filter(offer => offer.fulfillmentId === null).length === 0 && order.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && order.offers.length !== 0
+                            ? OrderStatus.FULFILLED
+                            : order.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : order.offers.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED
+                    }
+                })
+            })
 
-        //     throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
-        // }
+            return {
+                success: true
+            }
+        } catch (e) {
+            console.log(e)
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     async getFulfillmentById(fulfillmentId: string) {
-        // const fulfillment = await this.prisma.fulfillment.findUnique({
-        //     where: { id: fulfillmentId },
-        //     select: {
-        //         id: true,
-        //         status: true,
-        //         carrier: true,
-        //         tracking: true,
-        //         products: {
-        //             select: {
-        //                 id: true,
-        //                 offer: {
-        //                     select: {
-        //                         id: true,
-        //                         price: true,
-        //                         deliveryProfile: {
-        //                             select: {
-        //                                 id: true,
-        //                                 title: true
-        //                             }
-        //                         },
-        //                         variant: {
-        //                             select: {
-        //                                 id: true,
-        //                                 option0: true,
-        //                                 option1: true,
-        //                                 option2: true,
-        //                                 product: {
-        //                                     select: {
-        //                                         title: true,
-        //                                         options: {
-        //                                             select: {
-        //                                                 title: true,
-        //                                                 option: true,
-        //                                             },
-        //                                             orderBy: [{ position: 'asc' }]
-        //                                         },
-        //                                         images: {
-        //                                             select: {
-        //                                                 id: true,
-        //                                                 alt: true,
-        //                                                 src: true,
-        //                                                 position: true
-        //                                             },
-        //                                             orderBy: {
-        //                                                 position: 'asc'
-        //                                             },
-        //                                             take: 1
-        //                                         }
-        //                                     }
-        //                                 },
-        //                                 images: {
-        //                                     select: {
-        //                                         id: true,
-        //                                         alt: true,
-        //                                         src: true,
-        //                                         position: true
-        //                                     },
-        //                                     orderBy: {
-        //                                         position: 'asc'
-        //                                     },
-        //                                     take: 1
-        //                                 }
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // })
+        const fulfillment = await this.prisma.fulfillment.findUnique({
+            where: { id: fulfillmentId },
+            select: {
+                id: true,
+                status: true,
+                carrier: true,
+                tracking: true,
+                offers: {
+                    select: {
+                        id: true,
+                        productTitle: true,
+                        variantTitle: true,
+                        image: {
+                            select: {
+                                id: true,
+                                alt: true,
+                                src: true
+                            }
+                        },
+                        price: true,
+                        deliveryProfile: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
 
-        // if (fulfillment === null) {
-        //     throw new HttpException("Отправка не найдена", HttpStatus.BAD_REQUEST)
-        // }
+        if (fulfillment === null) {
+            throw new HttpException("Отправка не найдена", HttpStatus.BAD_REQUEST)
+        }
 
-        // const result = {
-        //     id: fulfillment.id,
-        //     products: fulfillment.products.map(product => ({
-        //         id: product.id,
-        //         product: product.offer.variant.product.title,
-        //         variant: product.offer.variant.product.options.map((option) => product.offer.variant[`option${option.option}`]).join(' | '),
-        //         image: product.offer.variant.images[0] ?? product.offer.variant.product.images[0] ?? null,
-        //         deliveryProfile: product.offer.deliveryProfile,
-        //         price: product.offer.price,
-        //         offerId: product.offer.id
-        //     })),
-        //     status: fulfillment.status,
-        //     carrier: fulfillment.carrier,
-        //     tracking: fulfillment.tracking
-        // }
+        const result = {
+            id: fulfillment.id,
+            offers: fulfillment.offers.map(offer => ({
+                id: offer.id,
+                product: offer.productTitle,
+                variant: offer.variantTitle,
+                image: offer.image,
+                deliveryProfile: offer.deliveryProfile,
+                price: offer.price
+            })),
+            status: fulfillment.status,
+            carrier: fulfillment.carrier,
+            tracking: fulfillment.tracking
+        }
 
-        // return {
-        //     success: true,
-        //     data: result
-        // }
+        return {
+            success: true,
+            data: result
+        }
     }
 
     async createFulfillment(orderId: number, data: CreateFulfillmentDto, self: IUser) {
-        // const order = await this.prisma.order.findUnique({
-        //     where: { id: orderId },
-        //     select: {
-        //         id: true,
-        //         products: {
-        //             where: {
-        //                 fulfillmentId: null
-        //             },
-        //             select: {
-        //                 id: true,
-        //                 offerId: true
-        //             }
-        //         }
-        //     }
-        // })
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+            select: {
+                id: true,
+                offers: {
+                    where: {
+                        fulfillmentId: null
+                    },
+                    select: {
+                        id: true,
+                        productTitle: true,
+                        variantTitle: true,
+                    }
+                }
+            }
+        })
 
-        // if (order === null) {
-        //     throw new HttpException("Заказ не найден", HttpStatus.BAD_REQUEST)
-        // }
+        if (order === null) {
+            throw new HttpException("Заказ не найден", HttpStatus.BAD_REQUEST)
+        }
 
-        // if (data.offers.every(product => order.products.some(offer => offer.offerId === product.id)) === false) {
-        //     throw new HttpException("Часть товаров которые вы ходите отправить не добавлены в заказ либо уже отправлены", HttpStatus.BAD_REQUEST)
-        // }
+        if (data.offers.every(c => order.offers.some(offer => offer.id === c.id)) === false) {
+            throw new HttpException("Часть товаров которые вы ходите отправить не добавлены в заказ либо уже отправлены", HttpStatus.BAD_REQUEST)
+        }
 
-        // try {
-        //     const fulfillment = await this.prisma.$transaction(async tx => {
-        //         const fulfillment = await tx.fulfillment.create({
-        //             data: {
-        //                 orderId: order.id,
-        //                 products: {
-        //                     connect: order.products.filter(product => data.offers.some(offer => offer.id === product.offerId)).map(product => ({ id: product.id }))
-        //                 }
-        //             },
-        //             select: {
-        //                 id: true
-        //             }
-        //         })
+        try {
+            const fulfillment = await this.prisma.$transaction(async tx => {
+                const offersToFulfill = order.offers.filter(c => data.offers.some(offer => offer.id === c.id))
 
-        //         const updatedOrder = await tx.order.findUnique({
-        //             where: { id: order.id },
-        //             select: {
-        //                 fulfillments: {
-        //                     select: {
-        //                         id: true,
-        //                         status: true
-        //                     }
-        //                 },
-        //                 products: {
-        //                     select: {
-        //                         id: true,
-        //                         fulfillmentId: true
-        //                     }
-        //                 }
-        //             }
-        //         })
+                const fulfillment = await tx.fulfillment.create({
+                    data: {
+                        orderId: order.id,
+                        offers: {
+                            connect: offersToFulfill.map(c => ({ id: c.id }))
+                        }
+                    },
+                    select: {
+                        id: true
+                    }
+                })
 
-        //         await tx.order.update({
-        //             where: { id: order.id },
-        //             data: {
-        //                 timeline: {
-        //                     create: {
-        //                         title: "Отправка товаров",
-        //                         message: `Отправка товаров №${fulfillment.id}`,
-        //                         userId: self.id,
-        //                     }
-        //                 },
-        //                 orderStatus: updatedOrder.products.filter(product => product.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.products.length !== 0
-        //                     ? OrderStatus.FULFILLED
-        //                     : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-        //                         ? OrderStatus.PARTIALLY_FULFILLED
-        //                         : order.products.length !== 0
-        //                             ? OrderStatus.UNFULFILLED
-        //                             : OrderStatus.CANCELED
-        //             }
-        //         })
+                const updatedOrder = await tx.order.findUnique({
+                    where: { id: order.id },
+                    select: {
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
+                            }
+                        },
+                        offers: {
+                            select: {
+                                id: true,
+                                fulfillmentId: true
+                            }
+                        }
+                    }
+                })
 
-        //         return fulfillment
-        //     })
+                await tx.order.update({
+                    where: { id: order.id },
+                    data: {
+                        timeline: {
+                            create: {
+                                title: "Отправка товаров",
+                                message: `${offersToFulfill.map(offer => `${offer.productTitle} ${offer.variantTitle}\n`)}`,
+                                userId: self.id,
+                            }
+                        },
+                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
+                            ? OrderStatus.FULFILLED
+                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : order.offers.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED
+                    }
+                })
 
-        //     return {
-        //         success: true,
-        //         data: fulfillment.id
-        //     }
-        // } catch (e) {
-            
+                return fulfillment
+            })
 
-        //     throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
-        // }
+            return {
+                success: true,
+                data: fulfillment.id
+            }
+        } catch (e) {
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
 
@@ -805,7 +701,7 @@ export class OrderService {
                                 status: true
                             }
                         },
-                        products: {
+                        offers: {
                             select: {
                                 id: true,
                                 fulfillmentId: true
@@ -824,11 +720,11 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.products.length !== 0
+                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
                             ? OrderStatus.FULFILLED
                             : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
                                 ? OrderStatus.PARTIALLY_FULFILLED
-                                : updatedOrder.products.length !== 0
+                                : updatedOrder.offers.length !== 0
                                     ? OrderStatus.UNFULFILLED
                                     : OrderStatus.CANCELED
                     }
@@ -839,8 +735,6 @@ export class OrderService {
                 success: true
             }
         } catch (e) {
-            
-
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -853,7 +747,14 @@ export class OrderService {
             },
             select: {
                 id: true,
-                orderId: true
+                orderId: true,
+                offers: {
+                    select: {
+                        id: true,
+                        productTitle: true,
+                        variantTitle: true,
+                    }
+                }
             }
         })
 
@@ -876,7 +777,7 @@ export class OrderService {
                                 status: true
                             }
                         },
-                        products: {
+                        offers: {
                             select: {
                                 id: true,
                                 fulfillmentId: true
@@ -891,15 +792,15 @@ export class OrderService {
                         timeline: {
                             create: {
                                 title: "Удаление отправки",
-                                message: ``,
+                                message: `${fulfillment.offers.map(offer => `${offer.productTitle} ${offer.variantTitle}\n`)}`,
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.products.filter(product => product.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.products.length !== 0
+                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
                             ? OrderStatus.FULFILLED
                             : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
                                 ? OrderStatus.PARTIALLY_FULFILLED
-                                : updatedOrder.products.length !== 0
+                                : updatedOrder.offers.length !== 0
                                     ? OrderStatus.UNFULFILLED
                                     : OrderStatus.CANCELED
                     }
@@ -915,83 +816,73 @@ export class OrderService {
     }
 
     async confirmPayment(orderId: number, self: IUser) {
-        // try {
-        //     await this.prisma.$transaction(async tx => {
-        //         const order = await tx.order.findUnique({
-        //             where: {
-        //                 id: orderId
-        //             },
-        //             select: {
-        //                 id: true,
-        //                 totalPrice: true,
-        //                 products: {
-        //                     select: {
-        //                         id: true,
-        //                         fulfillmentId: true,
-        //                         offer: {
-        //                             select: {
-        //                                 id: true,
-        //                                 price: true,
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //                 services: {
-        //                     select: {
-        //                         id: true,
-        //                         price: true
-        //                     }
-        //                 },
-        //                 invoices: {
-        //                     select: {
-        //                         id: true,
-        //                         amount: true
-        //                     }
-        //                 }
-        //             }
-        //         })
+        try {
+            await this.prisma.$transaction(async tx => {
+                const order = await tx.order.findUnique({
+                    where: {
+                        id: orderId
+                    },
+                    select: {
+                        id: true,
+                        totalPrice: true,
+                        services: {
+                            select: {
+                                id: true,
+                                price: true
+                            }
+                        },
+                        invoices: {
+                            where: {
+                                status: InvoiceStatus.SUCCEEDED
+                            },
+                            select: {
+                                id: true,
+                                amount: true
+                            }
+                        }
+                    }
+                })
 
-        //         const totalPrice = Number(order.totalPrice)
-        //         const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
-        //         const priceDifference = totalPrice - totalPaid;
+                const totalPrice = Number(order.totalPrice)
+                const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
+                const priceDifference = totalPrice - totalPaid;
 
-        //         if (priceDifference === 0) {
-        //             throw new HttpException("Невозможно закрыть разницу в счете, так как нет разрыва", HttpStatus.BAD_REQUEST)
-        //         }
-                
-        //         await tx.invoice.create({
-        //             data: {
-        //                 orderId: orderId,
-        //                 status: InvoiceStatus.SUCCEEDED,
-        //                 amount: priceDifference,
-        //                 method: priceDifference > 0 ? "Наличные" : "Возврат"
-        //             }
-        //         })
+                if (priceDifference === 0) {
+                    throw new HttpException("Невозможно закрыть разницу в счете, так как нет разрыва", HttpStatus.BAD_REQUEST)
+                }
 
-        //         await tx.order.update({
-        //             where: {
-        //                 id: orderId
-        //             },
-        //             data: {
-        //                 paymentStatus: totalPrice !== 0 ? PaymentStatus.PAID : PaymentStatus.REFUNDED,
-        //                 timeline: {
-        //                     create: {
-        //                         title: priceDifference > 0 ? `Заказ оплачен` : `Возврат разрыва`,
-        //                         message: priceDifference > 0 ? `Заказ отмечен как оплаченный наличными: ${ Math.abs(priceDifference) } руб.` : `Разница была возвращена клиенту: ${ Math.abs(priceDifference) } руб.`,
-        //                         userId: self.id,
-        //                     }
-        //                 },
-        //             }
-        //         })
-        //     })
+                await tx.invoice.create({
+                    data: {
+                        orderId: orderId,
+                        status: InvoiceStatus.SUCCEEDED,
+                        amount: priceDifference,
+                        method: priceDifference > 0 ? "Наличные" : "Возврат"
+                    }
+                })
 
-        //     return {
-        //         success: true
-        //     }
-        // } catch (e) {
-            
+                await tx.order.update({
+                    where: {
+                        id: orderId
+                    },
+                    data: {
+                        paymentStatus: totalPrice !== 0 ? PaymentStatus.PAID : PaymentStatus.REFUNDED,
+                        timeline: {
+                            create: {
+                                title: priceDifference > 0 ? `Заказ оплачен` : `Возврат разрыва`,
+                                message: priceDifference > 0 ? `Заказ отмечен как оплаченный наличными: ${Math.abs(priceDifference)} руб.` : `Разница была возвращена клиенту: ${Math.abs(priceDifference)} руб.`,
+                                userId: self.id,
+                            }
+                        },
+                    }
+                })
+            })
 
-        //     throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
-        // }
+            return {
+                success: true
+            }
+        } catch (e) {
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 }

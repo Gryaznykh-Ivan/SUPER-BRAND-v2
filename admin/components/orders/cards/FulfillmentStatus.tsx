@@ -13,6 +13,10 @@ const FulfillmentStatuses = {
     "DELIVERED": {
         className: "bg-green-600",
         text: "Доставлен"
+    },
+    "RETURNED": {
+        className: "bg-red-500",
+        text: "Возврат"
     }
 }
 

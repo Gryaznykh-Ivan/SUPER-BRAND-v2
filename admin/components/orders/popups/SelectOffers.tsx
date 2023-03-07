@@ -32,13 +32,12 @@ export default function SelectOffers({ title, offers, onAddOffer, onClose }: IPr
 
     useEffect(() => {
         const newResult = data?.data.map(offer => ({
-            id: `new${Math.random()}`,
+            id: offer.id,
             deliveryProfile: offer.deliveryProfile,
             image: offer.image,
             product: offer.product,
             variant: offer.variant,
-            price: offer.price,
-            offerId: offer.id
+            price: offer.price
         })) ?? []
 
         if (query.skip === 0) {
@@ -97,9 +96,9 @@ export default function SelectOffers({ title, offers, onAddOffer, onClose }: IPr
                         }
                         <div className="divide-y-[1px] max-h-96 overflow-y-auto">
                             {state.map(offer =>
-                                <label key={offer.id} htmlFor={ offer.id } className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
+                                <label key={offer.id} htmlFor={`pick${offer.id}`} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
                                     <div className="">
-                                        <input type="checkbox" readOnly id={offer.id} name="" className="rounded" checked={offers?.find(c => c.offerId === offer.offerId) !== undefined} onClick={() => onAddOffer(offer)} />
+                                        <input type="checkbox" readOnly id={`pick${offer.id}`} name="" className="rounded" checked={offers?.find(c => c.id === offer.id) !== undefined} onClick={() => onAddOffer(offer)} />
                                     </div>
                                     <div className="relative w-12 aspect-square border-[1px] rounded-md">
                                         {offer.image !== null ?

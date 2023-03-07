@@ -114,7 +114,7 @@ function Index() {
                             <div className="flex-1 space-y-4">
                                 <Fulfillment
                                     id={data.data.id}
-                                    offers={data.data.products}
+                                    offers={data.data.offers}
                                     status={data.data.status}
                                     hideEdit={true}
                                 />

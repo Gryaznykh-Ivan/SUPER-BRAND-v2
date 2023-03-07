@@ -61,7 +61,7 @@ export default function Fulfillment({ id, offers, status, hideEdit = false }: IP
                         </div>
                         <div className="flex-1 flex items-center py-1 space-x-4 hover:bg-gray-100">
                             <div className="flex-1 text-sm py-1">
-                                <Link href={`/offers/${offer.offerId}`} className="hover:underline">{offer.product} • {offer.variant}</Link>
+                                <Link href={`/offers/${offer.id}`} className="hover:underline">{offer.product} • {offer.variant}</Link>
                                 <div className="text-gray-500">{offer.deliveryProfile.title}</div>
                             </div>
                             <div className="ml-2">{offer.price}₽</div>

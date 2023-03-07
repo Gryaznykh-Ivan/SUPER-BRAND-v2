@@ -116,7 +116,7 @@ function Index() {
                                                 <td className="px-3 py-2">{order.totalPrice}₽</td>
                                                 <td className="px-3 py-2"><PaymentStatus status={order.paymentStatus} /></td>
                                                 <td className="px-3 py-2"><OrderStatus status={order.orderStatus} /></td>
-                                                <td className="px-3 py-2">{order.productsCount}</td>
+                                                <td className="px-3 py-2">{order.offersCount}</td>
                                                 <td className="px-3 py-2">{order.servicesCount}</td>
                                             </tr>
                                         ))}

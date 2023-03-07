@@ -61,7 +61,7 @@ function New() {
         setState(result)
         onCollectChanges({
             services: result.services.map(({ id, ...data }) => data),
-            offers: result.offers.map(({ offerId }) => ({ id: offerId }))
+            offers: result.offers.map(({ id }) => ({ id }))
         })
     }
 

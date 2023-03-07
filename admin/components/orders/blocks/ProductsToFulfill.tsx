@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import SearchInput from '../../inputs/SearchInput'
 import SelectProducts from '../../collections/popups/SelectProducts'
-import { CollectionCreateRequest, CollectionUpdateRequest, ICollectionProduct, IErrorResponse, IOrderProduct, IProduct } from '../../../types/api';
+import { CollectionCreateRequest, CollectionUpdateRequest, ICollectionProduct, IErrorResponse, IOffer, IOrderProduct, IProduct } from '../../../types/api';
 import ImageLoader from '../../image/ImageLoader';
 import { useLazyGetCollectionProductsQuery } from '../../../services/collectionService';
 import { useRouter } from 'next/router';
@@ -16,10 +16,11 @@ import { toast } from 'react-toastify';
 
 interface IProps {
     offers: IOrderProduct[];
+    offersToAddIds: Pick<IOffer, "id">[];
     onChange: (obj: Partial<IOrderState>) => void;
 }
 
-export default function FulfillmentProducts({ onChange, ...data }: IProps) {
+export default function ProductsToFulfill({ onChange, ...data }: IProps) {
     const router = useRouter()
 
     const [state, setState] = useState<{ id: string }[]>([])
@@ -48,8 +49,10 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
     const onToggleOffer = (offer: IOrderProduct) => {
         let result: IOrderProduct[]
 
-        if (data.offers.find(c => c.offerId === offer.offerId) !== undefined) {
-            result = data.offers.filter(c => c.offerId !== offer.offerId) ?? []
+        console.log(offer)
+
+        if (data.offers.find(c => c.id === offer.id) !== undefined) {
+            result = data.offers.filter(c => c.id !== offer.id) ?? []
         } else {
             result = [...data.offers, offer]
         }
@@ -90,8 +93,8 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
             <div className="divide-y-[1px] overflow-y-auto">
                 {data.offers.map((offer) =>
                     <label key={offer.id} htmlFor={offer.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
-                        {data.offers.some(offer => offer.id.startsWith("new")) === false &&
-                            <input type="checkbox" readOnly name="" id={offer.id} className="rounded" checked={state.some(c => c.id === offer.offerId) === true} onClick={() => onToggleFulfillmentOffer(offer.offerId)} />
+                        {data.offersToAddIds.some(c => c.id === offer.id) === false &&
+                            <input type="checkbox" readOnly name="" id={offer.id} className="rounded" checked={state.some(c => c.id === offer.id) === true} onClick={() => onToggleFulfillmentOffer(offer.id)} />
                         }
                         <div className="relative w-12 aspect-square border-[1px] rounded-md">
                             {offer.image !== null ?
@@ -113,7 +116,7 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
                         </div>
                         <div className="flex-1 flex items-center py-1 space-x-4 hover:bg-gray-100">
                             <div className="flex-1 text-sm py-1">
-                                <Link href={`/offers/${offer.offerId}`} className="hover:underline">{offer.product} • {offer.variant}</Link>
+                                <Link href={`/offers/${offer.id}`} className="hover:underline">{offer.product} • {offer.variant}</Link>
                                 <div className="text-gray-500">{offer.deliveryProfile.title}</div>
                             </div>
                             <div className="ml-2">{offer.price}₽</div>
@@ -127,7 +130,7 @@ export default function FulfillmentProducts({ onChange, ...data }: IProps) {
                 )}
                 <div className=""></div>
             </div>
-            {state.length !== 0 && data.offers.some(offer => offer.id.startsWith("new")) === false &&
+            {state.length !== 0 && 
                 <div className="p-3 flex justify-end">
                     <button className="bg-green-600 px-4 py-2 text-white font-medium rounded-md text-sm" onClick={onCreateFulfillment}>Отправить</button>
                 </div>
