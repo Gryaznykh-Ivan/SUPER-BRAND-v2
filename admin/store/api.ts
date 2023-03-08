@@ -9,7 +9,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { AppState } from '.';
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_API_URL_PRODUCTION : process.env.NEXT_PUBLIC_API_URL_DEVELOPMENT,
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const state = getState() as AppState
