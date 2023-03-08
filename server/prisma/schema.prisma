@@ -75,10 +75,15 @@ enum OrderStatus {
     CANCELED
 }
 
+enum ReturnStatus {
+    RETURN_REQUESTED
+    RETURN_IN_PROGRESS
+    RETURNED
+}
+
 enum FulfillmentStatus {
     SENT
     DELIVERED
-    RETURNED
 }
 
 enum PaymentStatus {
@@ -191,6 +196,7 @@ model Order {
     id             Int            @id @default(autoincrement())
     orderStatus    OrderStatus    @default(UNFULFILLED)
     paymentStatus  PaymentStatus  @default(UNPAID)
+    returnStatus   ReturnStatus?
     totalPrice     Decimal        @db.Decimal(9, 2)
     mailingCountry String
     mailingCity    String

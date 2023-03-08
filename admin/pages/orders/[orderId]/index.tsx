@@ -19,6 +19,7 @@ import { toast } from 'react-toastify'
 import { IOrderState } from '../../../types/store'
 import OrderStatus from '../../../components/orders/cards/OrderStatus'
 import PaymentStatus from '../../../components/orders/cards/PaymentStatus'
+import RemovedOffers from '../../../components/orders/blocks/RemovedOffers'
 
 
 function Index() {
@@ -76,7 +77,7 @@ function Index() {
 
         setState(result)
 
-        const createServices = result.services.filter(a => !data.data.offers.some(c => c.id === a.id)).map(({ id, ...data }) => data)
+        const createServices = result.services.filter(a => !data.data.services.some(c => c.id === a.id)).map(({ id, ...data }) => data)
         const deleteServices = data.data.services.filter(a => !result.services.some(c => c.id === a.id)).map(({ id }) => ({ id }))
 
         const createOffers = result.offers.filter(a => !data.data.offers.some(c => c.id === a.id)).map(({ id }) => ({ id }))
@@ -122,10 +123,12 @@ function Index() {
                                     <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </Link>
-                            <div className="flex-1 flex space-x-2">
-                                <h1 className="text-xl font-medium">Заказ №{data.data.id}</h1>
-                                <PaymentStatus status={data.data.paymentStatus} />
-                                <OrderStatus status={data.data.orderStatus} />
+                            <div className="flex-1 flex items-center flex-wrap">
+                                <h1 className="text-xl font-medium mr-2">Заказ №{data.data.id}</h1>
+                                <div className="space-x-2">
+                                    <PaymentStatus status={data.data.paymentStatus} />
+                                    <OrderStatus status={data.data.orderStatus} />
+                                </div>
                             </div>
                             <div className="flex items-center">
                                 <Link href="/orders" className="p-2 font-bold hover:bg-gray-200 rounded-md">
@@ -140,7 +143,7 @@ function Index() {
                             <div className="flex-1 space-y-4">
                                 <ProductsToFulfill
                                     offers={state.offers}
-                                    offersToAddIds={ changes.createOffers ?? [] }
+                                    offersToAddIds={changes.createOffers ?? []}
                                     onChange={onStateChanges}
                                 />
                                 {data.data.fulfillments.map(fulfillment =>
@@ -151,6 +154,11 @@ function Index() {
                                         status={fulfillment.status}
                                     />
                                 )}
+                                {data.data.removedOffers.length !== 0 &&
+                                    <RemovedOffers
+                                        offers={data.data.removedOffers}
+                                    />
+                                }
                                 <Service
                                     services={state.services}
                                     region={data.data.mailingRegion}

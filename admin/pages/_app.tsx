@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
+import Head from 'next/head';
 
 export default function App({ Component, ...rest }: AppProps) {
     const { store, props } = wrapper.useWrappedStore(rest);
@@ -41,6 +42,9 @@ export default function App({ Component, ...rest }: AppProps) {
 
     return (
         <Provider store={store}>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
             {showContent &&
                 <>
                     <Component {...props.pageProps} />

@@ -261,7 +261,7 @@ export interface IOrderProduct {
     id: string;
     product: string;
     variant: string;
-    image: IImage;
+    image: IImage | null;
     deliveryProfile: IDeliveryProfile;
     price: string;
 }
@@ -281,6 +281,15 @@ export interface IService {
     price: string;
 }
 
+export interface IRemovedOffer {
+    id: string;
+    product: string;
+    variant: string;
+    image: IImage | null;
+    deliveryProfile: IDeliveryProfile;
+    price: string;
+}
+
 export interface IOrder {
     id: number;
     note: string;
@@ -293,6 +302,7 @@ export interface IOrder {
     paymentStatus: PaymentStatus;
     orderStatus: OrderStatus;
     offers: IOrderProduct[];
+    removedOffers: IRemovedOffer[];
     fulfillments: IFulfillment[];
     services: IService[];
     paid: number;

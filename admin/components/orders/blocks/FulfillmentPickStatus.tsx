@@ -39,7 +39,7 @@ export default function FulfillmentStatus({ onChange, ...data }: IProps) {
                     options={{
                         SENT: { value: "Отправлено", disabled: false },
                         DELIVERED: { value: "Доставлено", disabled: false },
-                        RETURNED: { value: "Возврат", disabled: false },
+                        // RETURNED: { value: "Возврат", disabled: false },
                     }}
                     name="status"
                     value={state.status}

@@ -262,17 +262,18 @@ export class OfferService {
             throw new HttpException("Редактирование проданных офферов запрещено, так как это будет искажать историю продаж", HttpStatus.BAD_REQUEST)
         }
 
+        if (offer.status === OfferStatus.NO_MATCH && data.variantId === undefined && data.status !== undefined) {
+            throw new HttpException("Невозможно изменить статус у оффера без соответствия. Сначала выберите товар, которому этот оффер принадлежит", HttpStatus.BAD_REQUEST)
+        }
+
         const updateOfferQuery = {
             userId: data.userId,
+            status: data.status,
             price: data.price,
             offerPrice: data.offerPrice,
             deliveryProfileId: data.deliveryProfileId,
             compareAtPrice: data.compareAtPrice,
             comment: data.comment,
-        }
-
-        if (offer.status === OfferStatus.NO_MATCH && data.variantId === undefined && data.status !== undefined) {
-            throw new HttpException("Невозможно изменить статус у оффера без соответствия. Сначала выберите товар, которому этот оффер принадлежит", HttpStatus.BAD_REQUEST)
         }
 
         if (data.variantId !== undefined && data.variantId !== offer.variantId) {

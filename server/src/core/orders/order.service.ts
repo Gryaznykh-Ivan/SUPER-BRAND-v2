@@ -220,6 +220,13 @@ export class OrderService {
                                 src: true
                             }
                         },
+                        price: true,
+                        deliveryProfile: {
+                            select: {
+                                id: true,
+                                title: true
+                            }
+                        }
                     }
                 }
             }
@@ -259,6 +266,14 @@ export class OrderService {
                     price: offer.price
                 })),
                 status: fulfillment.status
+            })),
+            removedOffers: order.removedOffers.map(offer => ({
+                id: offer.id,
+                product: offer.productTitle,
+                variant: offer.variantTitle,
+                image: offer.image,
+                deliveryProfile: offer.deliveryProfile,
+                price: offer.price
             })),
             services: order.services,
             paid: order.invoices.map(invoice => invoice.amount).reduce((a, c) => a + Number(c), 0)
@@ -648,7 +663,7 @@ export class OrderService {
                         timeline: {
                             create: {
                                 title: "Отправка товаров",
-                                message: `${offersToFulfill.map(offer => `${offer.productTitle} ${offer.variantTitle}\n`)}`,
+                                message: `${offersToFulfill.map(offer => `${offer.productTitle} ${offer.variantTitle}`).join("\n")}`,
                                 userId: self.id,
                             }
                         },
@@ -792,7 +807,7 @@ export class OrderService {
                         timeline: {
                             create: {
                                 title: "Удаление отправки",
-                                message: `${fulfillment.offers.map(offer => `${offer.productTitle} ${offer.variantTitle}\n`)}`,
+                                message: `${fulfillment.offers.map(offer => `${offer.productTitle} ${offer.variantTitle}`).join("\n")}`,
                                 userId: self.id,
                             }
                         },
