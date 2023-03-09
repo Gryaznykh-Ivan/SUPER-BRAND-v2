@@ -91,6 +91,10 @@ export class OfferService {
                             contains: fulltextSearch,
                         }
                     }, {
+                        variantId: fulltextSearch
+                    }, {
+                        userId: fulltextSearch
+                    }, {
                         user: data.q ? {
                             fullName: {
                                 search: fulltextSearch ? `${fulltextSearch}*` : undefined,

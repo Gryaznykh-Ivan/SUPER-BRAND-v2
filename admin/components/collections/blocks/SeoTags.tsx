@@ -52,16 +52,22 @@ export default function SeoTags({ onChange, ...data }: IProps) {
             <h2 className="font-semibold p-5 border-b-[1px]">SEO теги</h2>
             <div className="space-y-4 p-5">
                 <div className="flex flex-col">
-                    <label htmlFor="metaTitle" className="text-sm text-gray-600 mb-1">Мета название</label>
-                    <Input type="text" id="metaTitle" placeholder="Мета название" name="metaTitle" value={ state.metaTitle } onChange={onInputChange} />
+                    <div className="flex justify-between mb-1">
+                        <label htmlFor="metaTitle" className="text-sm text-gray-600">Мета название</label>
+                        <div className="text-gray-500 text-sm">{state.metaTitle.length} из 70</div>
+                    </div>
+                    <Input type="text" id="metaTitle" placeholder="Мета название" name="metaTitle" value={state.metaTitle} onChange={onInputChange} />
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="metaDescription" className="text-sm text-gray-600 mb-1">Мета описание</label>
-                    <TextArea id="metaDescription" placeholder="мета описание" name="metaDescription" value={ state.metaDescription } onChange={onInputChange} />
+                    <div className="flex justify-between mb-1">
+                        <label htmlFor="metaDescription" className="text-sm text-gray-600">Мета описание</label>
+                        <div className="text-gray-500 text-sm">{state.metaDescription.length} из 320</div>
+                    </div>
+                    <TextArea id="metaDescription" placeholder="мета описание" name="metaDescription" value={state.metaDescription} onChange={onInputChange} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="handle" className="text-sm text-gray-600 mb-1">URL ручка</label>
-                    <Input type="text" id="handle" placeholder="URL ручка" name="handle" value={ state.handle } onChange={onInputChange} />
+                    <Input type="text" id="handle" placeholder="URL ручка" name="handle" value={state.handle} onChange={onInputChange} />
                     <div className="text-gray-400 text-sm mt-1">Доступ к товару по предыдущей ссылке будет потерен, что плохо для SEO</div>
                 </div>
             </div>

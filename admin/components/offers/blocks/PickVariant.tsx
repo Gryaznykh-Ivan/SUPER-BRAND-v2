@@ -55,8 +55,8 @@ export default function PickVariant({ onChange, creatingPreview = false, ...data
     }
 
     return (
-        <div className="flex rounded-md bg-white shadow-sm p-5 space-x-4 flex-col md:flex-row">
-            <div className={`relative w-64 aspect-5/3 border-[1px] rounded-md border-gray-400 mx-auto overflow-hidden`}>
+        <div className="flex rounded-md bg-white shadow-sm p-5 space-y-2 md:space-y-0 md:space-x-4 flex-col md:flex-row">
+            <div className={`relative w-full md:w-64 aspect-5/3 border-[1px] rounded-md border-gray-400 mx-auto overflow-hidden`}>
                 {state.image ?
                     <Image
                         className="object-contain"
