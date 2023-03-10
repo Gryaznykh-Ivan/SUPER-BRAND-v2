@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { OfferCreateRequest } from '../../../types/api';
+import { OrderReturnUpdateRequest } from '../../../types/api';
 import Select from '../../inputs/Select'
 
 interface IProps {
     status: string;
-    onChange: (obj: OfferCreateRequest) => void;
+    onChange: (obj: OrderReturnUpdateRequest) => void;
 }
 
-
-export default function Status({ onChange, ...data }: IProps) {
+export default function ReturnStatus({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
         status: data.status,
     })
-
-    useEffect(() => {
-        setState({ status: data.status })
-    }, [data.status])
 
     useEffect(() => {
         const localState = Object.entries(state)
@@ -36,17 +31,15 @@ export default function Status({ onChange, ...data }: IProps) {
 
     return (
         <div className="rounded-md bg-white shadow-sm">
-            <h2 className="font-semibold p-5 border-b-[1px]">Статус</h2>
-            <div className="space-y-4 p-5">
+            <div className="p-5 border-b-[1px] flex justify-between items-center">
+                <h2 className="font-semibold">Статус</h2>
+            </div>
+            <div className="p-5">
                 <Select
                     options={{
-                        OFFERED: { value: "Предложено", disabled: false },
-                        ACCEPTED: { value: "Ожидает принятия", disabled: false },
-                        DECLINED: { value: "Отклонено", disabled: false },
-                        ACTIVE: { value: "Активно", disabled: false },
-                        SOLD: { value: "Продано", disabled: true },
-                        RETURNING: { value: "Возврат", disabled: true },
-                        NO_MATCH: { value: "Нет соответствия", disabled: true },
+                        RETURN_REQUESTED: { value: "Запрошен возврат", disabled: false },
+                        RETURN_IN_PROGRESS: { value: "В процессе", disabled: false },
+                        RETURNED: { value: "Обработан", disabled: false },
                     }}
                     name="status"
                     value={state.status}

@@ -49,8 +49,6 @@ export default function ProductsToFulfill({ onChange, ...data }: IProps) {
     const onToggleOffer = (offer: IOrderProduct) => {
         let result: IOrderProduct[]
 
-        console.log(offer)
-
         if (data.offers.find(c => c.id === offer.id) !== undefined) {
             result = data.offers.filter(c => c.id !== offer.id) ?? []
         } else {

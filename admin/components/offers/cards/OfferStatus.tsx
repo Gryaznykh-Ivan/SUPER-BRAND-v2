@@ -18,6 +18,10 @@ const OfferStatuses = {
         className: "bg-gray-400",
         text: "Ожидает принятия"
     },
+    "RETURNING": {
+        className: "bg-gray-400",
+        text: "Возврат"
+    },
     "DECLINED": {
         className: "bg-red-500",
         text: "Отклонено"

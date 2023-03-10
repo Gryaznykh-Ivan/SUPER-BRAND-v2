@@ -3,13 +3,13 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 
 import { useRouter } from 'next/router'
-import MainLayout from '../../../../components/layouts/Main'
-import Fulfillment from '../../../../components/orders/blocks/Fulfillment'
-import TrackingInformation from '../../../../components/orders/blocks/TrackingInformation'
-import FulfillmentStatus from '../../../../components/orders/blocks/FulfillmentPickStatus'
-import { useDeleteFulfillmentMutation, useGetFulfillmentByIdQuery, useUpdateFulfillmentMutation } from '../../../../services/orderService'
+import MainLayout from '../../../../../components/layouts/Main'
+import Fulfillment from '../../../../../components/orders/blocks/Fulfillment'
+import TrackingInformation from '../../../../../components/orders/blocks/TrackingInformation'
+import FulfillmentStatus from '../../../../../components/orders/blocks/FulfillmentPickStatus'
+import { useDeleteFulfillmentMutation, useGetFulfillmentByIdQuery, useUpdateFulfillmentMutation } from '../../../../../services/orderService'
 import { toast } from 'react-toastify'
-import { OrderFulfillmentUpdateRequest, IErrorResponse } from '../../../../types/api'
+import { OrderFulfillmentUpdateRequest, IErrorResponse } from '../../../../../types/api'
 
 
 
@@ -136,7 +136,7 @@ function Index() {
                                 {mustBeSaved ?
                                     <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={() => router.reload()}>Отменить</button>
                                     :
-                                    <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={onFulfillmentDelete}>Удалить</button>
+                                    <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={onFulfillmentDelete}>Отменить</button>
                                 }
                             </div>
                             <div className="flex justify-end">

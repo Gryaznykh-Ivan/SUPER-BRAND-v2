@@ -5,6 +5,7 @@ import { User } from 'src/decorators/user.decorator';
 import { IUser } from 'src/interfaces/user.interface';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { CreateFulfillmentDto, UpdateFulfillmentDto } from './dto/fulfillment.dto';
+import { CreateReturnDto, UpdateReturnDto } from './dto/return.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
 import { SearchTimelineDto } from './dto/searchTimeline.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
@@ -41,12 +42,20 @@ export class OrderController {
         return this.orderService.getOrderById(orderId)
     }
 
-    @Get(':orderId/:fulfillmentId')
+    @Get(':orderId/fulfillment/:fulfillmentId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_READ])
     getFulfillmentById(
         @Param('fulfillmentId') fulfillmentId: string
     ) {
         return this.orderService.getFulfillmentById(fulfillmentId)
+    }
+
+    @Get(':orderId/return/:returnId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_READ])
+    getReturnById(
+        @Param('returnId') returnId: string
+    ) {
+        return this.orderService.getReturnById(returnId)
     }
 
 
@@ -88,7 +97,28 @@ export class OrderController {
         return this.orderService.createFulfillment(orderId, data, self)
     }
 
-    @Put(':orderId/:fulfillmentId')
+    @Post(':orderId/createReturn')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
+    createReturn(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Body() data: CreateReturnDto,
+        @User() self: IUser
+    ) {
+        return this.orderService.createReturn(orderId, data, self)
+    }
+
+    @Put(':orderId/return/:returnId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
+    updateReturn(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Param('returnId') returnId: string,
+        @Body() data: UpdateReturnDto,
+        @User() self: IUser
+    ) {
+        return this.orderService.updateReturn(orderId, returnId, data, self)
+    }
+
+    @Put(':orderId/fulfillment/:fulfillmentId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
     updateFulfillment(
         @Param('orderId', ParseIntPipe) orderId: number,
@@ -99,7 +129,7 @@ export class OrderController {
         return this.orderService.updateFulfillment(orderId, fulfillmentId, data, self)
     }
 
-    @Delete(':orderId/:fulfillmentId')
+    @Delete(':orderId/fulfillment/:fulfillmentId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
     removeFulfillment(
         @Param('orderId', ParseIntPipe) orderId: number,
@@ -107,5 +137,15 @@ export class OrderController {
         @User() self: IUser
     ) {
         return this.orderService.removeFulfillment(orderId, fulfillmentId, self)
+    }
+
+    @Delete(':orderId/return/:returnId')
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
+    removeReturn(
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Param('returnId') returnId: string,
+        @User() self: IUser
+    ) {
+        return this.orderService.removeReturn(orderId, returnId, self)
     }
 }

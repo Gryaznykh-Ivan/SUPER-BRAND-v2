@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { FulfillmentStatus, InvoiceStatus, OfferStatus, OrderStatus, PaymentStatus, Prisma } from '@prisma/client';
+import { FulfillmentStatus, InvoiceStatus, OfferStatus, OrderStatus, PaymentStatus, Prisma, ReturnStatus } from '@prisma/client';
 import { IUser } from 'src/interfaces/user.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { CreateFulfillmentDto, UpdateFulfillmentDto } from './dto/fulfillment.dto';
+import { CreateReturnDto, UpdateReturnDto } from './dto/return.dto';
 import { SearchOrderDto } from './dto/searchOrder.dto';
 import { SearchTimelineDto } from './dto/searchTimeline.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
@@ -49,6 +50,7 @@ export class OrderService {
                         fullName: true
                     }
                 },
+                returnStatus: true,
                 createdAt: true,
                 totalPrice: true,
                 paymentStatus: true,
@@ -73,6 +75,7 @@ export class OrderService {
             createdAt: order.createdAt,
             totalPrice: order.totalPrice,
             paymentStatus: order.paymentStatus,
+            returnStatus: order.returnStatus,
             orderStatus: order.orderStatus,
             offersCount: order._count.offers,
             servicesCount: order._count.services,
@@ -136,9 +139,11 @@ export class OrderService {
                 totalPrice: true,
                 paymentStatus: true,
                 orderStatus: true,
+                returnStatus: true,
                 offers: {
                     where: {
-                        fulfillmentId: null
+                        fulfillmentId: null,
+                        status: OfferStatus.SOLD
                     },
                     select: {
                         id: true,
@@ -156,6 +161,32 @@ export class OrderService {
                             select: {
                                 id: true,
                                 title: true
+                            }
+                        }
+                    }
+                },
+                returns: {
+                    select: {
+                        id: true,
+                        status: true,
+                        offers: {
+                            select: {
+                                reason: true,
+                                offer: {
+                                    select: {
+                                        id: true,
+                                        productTitle: true,
+                                        variantTitle: true,
+                                        image: {
+                                            select: {
+                                                id: true,
+                                                alt: true,
+                                                src: true
+                                            }
+                                        },
+                                        price: true
+                                    }
+                                }
                             }
                         }
                     }
@@ -247,6 +278,7 @@ export class OrderService {
             totalPrice: Number(order.totalPrice),
             paymentStatus: order.paymentStatus,
             orderStatus: order.orderStatus,
+            returnStatus: order.returnStatus,
             offers: order.offers.map(offer => ({
                 id: offer.id,
                 product: offer.productTitle,
@@ -266,6 +298,18 @@ export class OrderService {
                     price: offer.price
                 })),
                 status: fulfillment.status
+            })),
+            returns: order.returns.map(orderReturn => ({
+                id: orderReturn.id,
+                offers: orderReturn.offers.map(({ offer, reason }) => ({
+                    id: offer.id,
+                    product: offer.productTitle,
+                    variant: offer.variantTitle,
+                    image: offer.image,
+                    price: offer.price,
+                    reason: reason,
+                })),
+                status: orderReturn.status,
             })),
             removedOffers: order.removedOffers.map(offer => ({
                 id: offer.id,
@@ -471,6 +515,9 @@ export class OrderService {
                         id: true,
                         totalPrice: true,
                         offers: {
+                            where: {
+                                status: OfferStatus.SOLD
+                            },
                             select: {
                                 id: true,
                                 price: true,
@@ -597,6 +644,62 @@ export class OrderService {
         }
     }
 
+    async getReturnById(returnId: string) {
+        const orderReturn = await this.prisma.return.findUnique({
+            where: { id: returnId },
+            select: {
+                id: true,
+                status: true,
+                carrier: true,
+                tracking: true,
+                offers: {
+                    select: {
+                        reason: true,
+                        offer: {
+                            select: {
+                                id: true,
+                                productTitle: true,
+                                variantTitle: true,
+                                image: {
+                                    select: {
+                                        id: true,
+                                        alt: true,
+                                        src: true
+                                    }
+                                },
+                                price: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        if (orderReturn === null) {
+            throw new HttpException("Возврат не найдена", HttpStatus.BAD_REQUEST)
+        }
+
+        const result = {
+            id: orderReturn.id,
+            offers: orderReturn.offers.map(({ offer, reason }) => ({
+                id: offer.id,
+                product: offer.productTitle,
+                variant: offer.variantTitle,
+                image: offer.image,
+                price: offer.price,
+                reason: reason,
+            })),
+            status: orderReturn.status,
+            carrier: orderReturn.carrier,
+            tracking: orderReturn.tracking
+        }
+
+        return {
+            success: true,
+            data: result
+        }
+    }
+
     async createFulfillment(orderId: number, data: CreateFulfillmentDto, self: IUser) {
         const order = await this.prisma.order.findUnique({
             where: { id: orderId },
@@ -604,7 +707,8 @@ export class OrderService {
                 id: true,
                 offers: {
                     where: {
-                        fulfillmentId: null
+                        fulfillmentId: null,
+                        status: OfferStatus.SOLD
                     },
                     select: {
                         id: true,
@@ -620,7 +724,7 @@ export class OrderService {
         }
 
         if (data.offers.every(c => order.offers.some(offer => offer.id === c.id)) === false) {
-            throw new HttpException("Часть товаров которые вы ходите отправить не добавлены в заказ либо уже отправлены", HttpStatus.BAD_REQUEST)
+            throw new HttpException("Часть товаров которые вы хотите отправить не добавлены в заказ либо уже отправлены", HttpStatus.BAD_REQUEST)
         }
 
         try {
@@ -649,6 +753,9 @@ export class OrderService {
                             }
                         },
                         offers: {
+                            where: {
+                                status: OfferStatus.SOLD
+                            },
                             select: {
                                 id: true,
                                 fulfillmentId: true
@@ -671,7 +778,7 @@ export class OrderService {
                             ? OrderStatus.FULFILLED
                             : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
                                 ? OrderStatus.PARTIALLY_FULFILLED
-                                : order.offers.length !== 0
+                                : updatedOrder.offers.length !== 0
                                     ? OrderStatus.UNFULFILLED
                                     : OrderStatus.CANCELED
                     }
@@ -717,6 +824,9 @@ export class OrderService {
                             }
                         },
                         offers: {
+                            where: {
+                                status: OfferStatus.SOLD
+                            },
                             select: {
                                 id: true,
                                 fulfillmentId: true
@@ -793,6 +903,9 @@ export class OrderService {
                             }
                         },
                         offers: {
+                            where: {
+                                status: OfferStatus.SOLD
+                            },
                             select: {
                                 id: true,
                                 fulfillmentId: true
@@ -897,6 +1010,428 @@ export class OrderService {
             }
         } catch (e) {
 
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async createReturn(orderId: number, data: CreateReturnDto, self: IUser) {
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+            select: {
+                id: true,
+                offers: {
+                    where: {
+                        fulfillmentId: {
+                            not: null
+                        }
+                    },
+                    select: {
+                        id: true,
+                        productTitle: true,
+                        variantTitle: true,
+                    }
+                }
+            }
+        })
+
+        if (order === null) {
+            throw new HttpException("Заказ не найден", HttpStatus.BAD_REQUEST)
+        }
+
+        if (data.offers.every(c => order.offers.some(offer => offer.id === c.id)) === false) {
+            throw new HttpException("Часть товаров которые вы хотите оформить на возврат недоступны к возврату", HttpStatus.BAD_REQUEST)
+        }
+
+        try {
+            const orderReturn = await this.prisma.$transaction(async tx => {
+                const offersToReturn = order.offers.filter(c => data.offers.some(offer => offer.id === c.id))
+
+                const orderReturn = await tx.return.create({
+                    data: {
+                        orderId: order.id,
+                        offers: {
+                            createMany: {
+                                data: data.offers.map(c => ({
+                                    offerId: c.id,
+                                    reason: c.reason
+                                }))
+                            }
+                        },
+                        status: ReturnStatus.RETURN_IN_PROGRESS
+                    },
+                    select: {
+                        id: true
+                    }
+                })
+
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: data.offers.map(c => c.id)
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.RETURNING,
+                        fulfillmentId: null
+                    }
+                })
+
+                // удаляем фулфилменты без офферов
+                await tx.fulfillment.deleteMany({
+                    where: {
+                        offers: {
+                            none: {}
+                        }
+                    }
+                })
+
+                const updatedOrder = await tx.order.findUnique({
+                    where: { id: order.id },
+                    select: {
+                        returns: {
+                            select: {
+                                status: true
+                            }
+                        },
+                        id: true,
+                        totalPrice: true,
+                        offers: {
+                            where: {
+                                status: OfferStatus.SOLD
+                            },
+                            select: {
+                                id: true,
+                                price: true,
+                                fulfillmentId: true,
+                            }
+                        },
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
+                            }
+                        },
+                        services: {
+                            select: {
+                                id: true,
+                                price: true
+                            }
+                        },
+                        invoices: {
+                            where: {
+                                status: InvoiceStatus.SUCCEEDED
+                            },
+                            select: {
+                                id: true,
+                                amount: true
+                            }
+                        }
+                    }
+                })
+
+                const subtotalProducts = updatedOrder.offers.reduce((a, c) => a + Number(c.price), 0)
+                const subtotalService = updatedOrder.services.reduce((a, c) => a + Number(c.price), 0)
+                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
+                const totalPaid = updatedOrder.invoices.reduce((a, c) => a + Number(c.amount), 0)
+
+                await tx.order.update({
+                    where: { id: order.id },
+                    data: {
+                        timeline: {
+                            create: {
+                                title: "Оформлен возврат товаров",
+                                message: `${offersToReturn.map(offer => `${offer.productTitle} ${offer.variantTitle}`).join("\n")}`,
+                                userId: self.id,
+                            }
+                        },
+                        totalPrice: totalPrice,
+                        paymentStatus: totalPrice === totalPaid && totalPaid !== 0
+                            ? PaymentStatus.PAID
+                            : totalPrice < totalPaid
+                                ? PaymentStatus.NEED_TO_RETURN
+                                : totalPaid !== 0
+                                    ? PaymentStatus.PARTIALLY_PAID
+                                    : PaymentStatus.UNPAID,
+                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
+                            ? OrderStatus.FULFILLED
+                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : updatedOrder.offers.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED,
+                        returnStatus: updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_REQUESTED)
+                            ? ReturnStatus.RETURN_REQUESTED
+                            : updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_IN_PROGRESS)
+                                ? ReturnStatus.RETURN_IN_PROGRESS
+                                : updatedOrder.returns.every(c => c.status === ReturnStatus.RETURNED)
+                                    ? ReturnStatus.RETURNED
+                                    : null
+                    }
+                })
+
+                return orderReturn
+            })
+
+            return {
+                success: true,
+                data: orderReturn.id
+            }
+        } catch (e) {
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async updateReturn(orderId: number, returnId: string, data: UpdateReturnDto, self: IUser) {
+        const orderReturn = await this.prisma.return.findUnique({
+            where: {
+                id: returnId
+            },
+            select: {
+                status: true
+            }
+        })
+
+        if (orderReturn.status === ReturnStatus.RETURNED) {
+            throw new HttpException("Изменение возврата невозможно после restock`a", HttpStatus.BAD_REQUEST)
+        }
+
+        const updateReturnQuery = {
+            status: data.status,
+            tracking: data.tracking,
+            carrier: data.carrier
+        }
+
+        try {
+            await this.prisma.$transaction(async tx => {
+                if (data.status === ReturnStatus.RETURNED) {
+                    // Удаляем соответствие с заказом
+                    await tx.offer.updateMany({
+                        where: {
+                            returned: {
+                                some: {
+                                    returnId
+                                }
+                            }
+                        },
+                        data: {
+                            orderId: null,
+                            status: OfferStatus.NO_MATCH
+                        }
+                    })
+
+                    // Проставляем статус если есть соотстветствие с вариантом
+                    await tx.offer.updateMany({
+                        where: {
+                            returned: {
+                                some: {
+                                    returnId
+                                }
+                            },
+                            variantId: {
+                                not: null
+                            }
+                        },
+                        data: {
+                            status: OfferStatus.ACTIVE
+                        }
+                    })
+                }
+
+                const orderReturn = await tx.return.update({
+                    where: { id: returnId },
+                    data: updateReturnQuery,
+                    select: {
+                        status: true,
+                        orderId: true
+                    }
+                })
+
+
+                const updatedOrder = await tx.order.findUnique({
+                    where: { id: orderReturn.orderId },
+                    select: {
+                        returns: {
+                            select: {
+                                status: true
+                            }
+                        },
+                    }
+                })
+
+                await tx.order.update({
+                    where: { id: orderReturn.orderId },
+                    data: {
+                        timeline: {
+                            create: {
+                                title: "Изменение возврата",
+                                message: `Обновленные поля:\n${Object.keys(data).join("\n")}`,
+                                userId: self.id,
+                            }
+                        },
+                        returnStatus: updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_REQUESTED)
+                            ? ReturnStatus.RETURN_REQUESTED
+                            : updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_IN_PROGRESS)
+                                ? ReturnStatus.RETURN_IN_PROGRESS
+                                : updatedOrder.returns.every(c => c.status === ReturnStatus.RETURNED)
+                                    ? ReturnStatus.RETURNED
+                                    : null
+                    }
+                })
+            })
+
+            return {
+                success: true
+            }
+        } catch (e) {
+            if (e.name === HttpException.name) {
+                console.log(e.status)
+                throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+
+            throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async removeReturn(orderId: number, returnId: string, self: IUser) {
+        const orderReturn = await this.prisma.return.findUnique({
+            where: {
+                id: returnId
+            },
+            select: {
+                status: true,
+                offers: {
+                    select: {
+                        offerId: true
+                    }
+                }
+            }
+        })
+
+        if (orderReturn.status === ReturnStatus.RETURNED) {
+            throw new HttpException("Отмена возврата невозможна после restock`a", HttpStatus.BAD_REQUEST)
+        }
+
+        try {
+            await this.prisma.$transaction(async tx => {
+                await tx.fulfillment.create({
+                    data: {
+                        orderId,
+                        status: FulfillmentStatus.DELIVERED,
+                        offers: {
+                            connect: orderReturn.offers.map(c => ({ id: c.offerId }))
+                        }
+                    },
+                    select: {
+                        id: true
+                    }
+                })
+
+                await tx.offer.updateMany({
+                    where: {
+                        id: {
+                            in: orderReturn.offers.map(c => c.offerId)
+                        }
+                    },
+                    data: {
+                        status: OfferStatus.SOLD
+                    }
+                })
+
+                await tx.return.delete({
+                    where: {
+                        id: returnId
+                    }
+                })
+
+                const updatedOrder = await tx.order.findUnique({
+                    where: { id: orderId },
+                    select: {
+                        returns: {
+                            select: {
+                                status: true
+                            }
+                        },
+                        id: true,
+                        totalPrice: true,
+                        offers: {
+                            where: {
+                                status: OfferStatus.SOLD
+                            },
+                            select: {
+                                id: true,
+                                price: true,
+                                fulfillmentId: true,
+                            }
+                        },
+                        fulfillments: {
+                            select: {
+                                id: true,
+                                status: true
+                            }
+                        },
+                        services: {
+                            select: {
+                                id: true,
+                                price: true
+                            }
+                        },
+                        invoices: {
+                            where: {
+                                status: InvoiceStatus.SUCCEEDED
+                            },
+                            select: {
+                                id: true,
+                                amount: true
+                            }
+                        }
+                    }
+                })
+
+                const subtotalProducts = updatedOrder.offers.reduce((a, c) => a + Number(c.price), 0)
+                const subtotalService = updatedOrder.services.reduce((a, c) => a + Number(c.price), 0)
+                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
+                const totalPaid = updatedOrder.invoices.reduce((a, c) => a + Number(c.amount), 0)
+
+                await tx.order.update({
+                    where: { id: orderId },
+                    data: {
+                        timeline: {
+                            create: {
+                                title: "Отмена возврата",
+                                message: ``,
+                                userId: self.id,
+                            }
+                        },
+                        totalPrice: totalPrice,
+                        paymentStatus: totalPrice === totalPaid && totalPaid !== 0
+                            ? PaymentStatus.PAID
+                            : totalPrice < totalPaid
+                                ? PaymentStatus.NEED_TO_RETURN
+                                : totalPaid !== 0
+                                    ? PaymentStatus.PARTIALLY_PAID
+                                    : PaymentStatus.UNPAID,
+                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
+                            ? OrderStatus.FULFILLED
+                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                                ? OrderStatus.PARTIALLY_FULFILLED
+                                : updatedOrder.offers.length !== 0
+                                    ? OrderStatus.UNFULFILLED
+                                    : OrderStatus.CANCELED,
+                        returnStatus: updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_REQUESTED)
+                            ? ReturnStatus.RETURN_REQUESTED
+                            : updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_IN_PROGRESS)
+                                ? ReturnStatus.RETURN_IN_PROGRESS
+                                : updatedOrder.returns.every(c => c.status === ReturnStatus.RETURNED)
+                                    ? ReturnStatus.RETURNED
+                                    : null
+                    }
+                })
+            })
+
+            return {
+                success: true
+            }
+        } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

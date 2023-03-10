@@ -266,6 +266,10 @@ export class OfferService {
             throw new HttpException("Редактирование проданных офферов запрещено, так как это будет искажать историю продаж", HttpStatus.BAD_REQUEST)
         }
 
+        if (offer.status === OfferStatus.RETURNING) {
+            throw new HttpException("Изменить возвращающийся оффер невозможно", HttpStatus.BAD_REQUEST)
+        }
+
         if (offer.status === OfferStatus.NO_MATCH && data.variantId === undefined && data.status !== undefined) {
             throw new HttpException("Невозможно изменить статус у оффера без соответствия. Сначала выберите товар, которому этот оффер принадлежит", HttpStatus.BAD_REQUEST)
         }
@@ -373,6 +377,10 @@ export class OfferService {
 
         if (offer.status === OfferStatus.SOLD) {
             throw new HttpException("Удалить проданый оффер невозможно, так как это будет искажать историю продаж", HttpStatus.BAD_REQUEST)
+        }
+
+        if (offer.status === OfferStatus.RETURNING) {
+            throw new HttpException("Удалить невернувшийся оффер невозможно", HttpStatus.BAD_REQUEST)
         }
 
         try {

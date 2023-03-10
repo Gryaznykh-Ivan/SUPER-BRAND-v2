@@ -1,4 +1,4 @@
-import { FulfillmentStatus, OfferStatus, OrderStatus, PaymentStatus, Right, Role, Service } from "./store";
+import { FulfillmentStatus, OfferStatus, OrderStatus, PaymentStatus, ReturnStatus, Right, Role, Service } from "./store";
 
 export interface IResponse<T> {
     success: boolean;
@@ -245,6 +245,7 @@ export interface IOrderSearch {
     totalPrice: string;
     paymentStatus: PaymentStatus;
     orderStatus: OrderStatus;
+    returnStatus: ReturnStatus | null;
     offersCount: number;
     servicesCount: number;
 }
@@ -266,10 +267,27 @@ export interface IOrderProduct {
     price: string;
 }
 
+export interface IReturnProduct {
+    id: string;
+    product: string;
+    variant: string;
+    image: IImage | null;
+    price: string;
+    reason: string;
+}
+
 export interface IFulfillment {
     id: string;
     offers: IOrderProduct[];
     status: FulfillmentStatus;
+    carrier: string;
+    tracking: string;
+}
+
+export interface IOrderReturn {
+    id: string;
+    offers: IReturnProduct[];
+    status: ReturnStatus;
     carrier: string;
     tracking: string;
 }
@@ -300,8 +318,10 @@ export interface IOrder {
     mailingRegion: string;
     totalPrice: number;
     paymentStatus: PaymentStatus;
+    returnStatus: ReturnStatus | null;
     orderStatus: OrderStatus;
     offers: IOrderProduct[];
+    returns: IOrderReturn[];
     removedOffers: IRemovedOffer[];
     fulfillments: IFulfillment[];
     services: IService[];
@@ -871,6 +891,12 @@ export type OrderFulfillmentGetByIdRequest = {
     fulfillmentId: string;
 }
 
+export type OrderReturnGetByIdResponse = IResponse<IOrderReturn>
+export type OrderReturnGetByIdRequest = {
+    orderId: number,
+    returnId: string;
+}
+
 export type OrderCreateResponse = IResponse<string>
 export type OrderCreateRequest = {
     userId?: string;
@@ -922,6 +948,27 @@ export type OrderFulfillmentDeleteResponse = IResponse<void>
 export type OrderFulfillmentDeleteRequest = {
     orderId?: number;
     fulfillmentId?: string;
+}
+
+export type OrderReturnCreateResponse = IResponse<string>
+export type OrderReturnCreateRequest = {
+    orderId?: number;
+    offers?: Pick<IReturnProduct, "id" | "reason">[];
+}
+
+export type OrderReturnUpdateResponse = IResponse<void>
+export type OrderReturnUpdateRequest = {
+    orderId?: number;
+    returnId?: string;
+    status?: ReturnStatus;
+    carrier?: string;
+    tracking?: string;
+}
+
+export type OrderReturnDeleteResponse = IResponse<void>
+export type OrderReturnDeleteRequest = {
+    orderId?: number;
+    returnId?: string;
 }
 
 

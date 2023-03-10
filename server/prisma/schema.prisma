@@ -51,6 +51,7 @@ enum OfferStatus {
     DECLINED
     ACTIVE
     SOLD
+    RETURNING
 }
 
 enum Service {
@@ -207,6 +208,7 @@ model Order {
     services       OrderService[]
     offers         Offer[]        @relation(name: "OrderOffers")
     fulfillments   Fulfillment[]
+    returns        Return[]
     timeline       Timeline[]
     removedOffers  Offer[]        @relation(name: "OrderRemovedOffers")
     user           User           @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
@@ -260,6 +262,29 @@ model Fulfillment {
     updatedAt DateTime          @updatedAt
 }
 
+model Return {
+    id        String        @id @default(cuid())
+    status    ReturnStatus  @default(RETURN_REQUESTED)
+    tracking  String?
+    carrier   String?
+    offers    ReturnOffer[]
+    order     Order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId   Int
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+}
+
+model ReturnOffer {
+    return    Return   @relation(fields: [returnId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    returnId  String
+    offer     Offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    offerId   String
+    reason    String
+    createdAt DateTime @default(now())
+
+    @@id([returnId, offerId])
+}
+
 model Offer {
     id                String           @id @default(cuid())
     productTitle      String           @db.VarChar(255)
@@ -282,6 +307,7 @@ model Offer {
     fulfillment       Fulfillment?     @relation(fields: [fulfillmentId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     fulfillmentId     String?
     cartProduct       CartProduct[]
+    returned          ReturnOffer[]
     removedFromOrders Order[]          @relation(name: "OrderRemovedOffers")
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt

@@ -5,6 +5,7 @@ import RouterSearchInput from '../../components/inputs/RouterSearchInput'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import NavLink from '../../components/navigation/NavLink'
+import OrderReturnStatus from '../../components/orders/cards/OrderReturnStatus'
 import OrderStatus from '../../components/orders/cards/OrderStatus'
 import PaymentStatus from '../../components/orders/cards/PaymentStatus'
 import useDidMount from '../../hooks/useDidMount'
@@ -101,6 +102,7 @@ function Index() {
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Статус исполнения</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Продукты</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Услуги</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-36">Статус возврата</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -118,6 +120,7 @@ function Index() {
                                                 <td className="px-3 py-2"><OrderStatus status={order.orderStatus} /></td>
                                                 <td className="px-3 py-2">{order.offersCount}</td>
                                                 <td className="px-3 py-2">{order.servicesCount}</td>
+                                                <td className="px-3 py-2"><OrderReturnStatus status={order.returnStatus} /></td>
                                             </tr>
                                         ))}
                                     </tbody>
