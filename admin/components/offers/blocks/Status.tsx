@@ -45,6 +45,7 @@ export default function Status({ onChange, ...data }: IProps) {
                         DECLINED: { value: "Отклонено", disabled: false },
                         ACTIVE: { value: "Активно", disabled: false },
                         SOLD: { value: "Продано", disabled: true },
+                        RETURN_APPROVAL: { value: "Утверждение возврата", disabled: true },
                         RETURNING: { value: "Возврат", disabled: true },
                         NO_MATCH: { value: "Нет соответствия", disabled: true },
                     }}

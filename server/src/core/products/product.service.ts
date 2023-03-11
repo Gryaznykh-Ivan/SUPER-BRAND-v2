@@ -638,7 +638,7 @@ export class ProductService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                         },
                         variantId: null
                     },
@@ -719,7 +719,7 @@ export class ProductService {
                     const offers = await tx.offer.findMany({
                         where: {
                             status: {
-                                notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                                notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                             },
                             variant: {
                                 productId: productId,
@@ -874,7 +874,7 @@ export class ProductService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                         },
                         variantId: null
                     },
@@ -973,7 +973,7 @@ export class ProductService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                         },
                         variantId: null
                     },
@@ -1076,7 +1076,7 @@ export class ProductService {
                     await tx.offer.updateMany({
                         where: {
                             status: {
-                                notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                                notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                             },
                             variant: {
                                 productId
@@ -1120,7 +1120,7 @@ export class ProductService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                         },
                         variantId: null
                     },

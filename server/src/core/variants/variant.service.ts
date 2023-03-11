@@ -596,7 +596,7 @@ export class VariantService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                         },
                         variantId: variantId
                     },
@@ -629,7 +629,7 @@ export class VariantService {
                 await tx.offer.updateMany({
                     where: {
                         status: {
-                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH]
+                            notIn: [OfferStatus.SOLD, OfferStatus.NO_MATCH, OfferStatus.RETURNING]
                         },
                         variantId: null
                     },

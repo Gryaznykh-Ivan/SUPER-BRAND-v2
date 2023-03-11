@@ -489,7 +489,7 @@ export class OrderService {
                         }
                     },
                     data: {
-                        status: OfferStatus.ACTIVE
+                        status: OfferStatus.RETURN_APPROVAL
                     }
                 })
 
@@ -1232,7 +1232,7 @@ export class OrderService {
                             }
                         },
                         data: {
-                            status: OfferStatus.ACTIVE
+                            status: OfferStatus.RETURN_APPROVAL
                         }
                     })
                 }

@@ -18,6 +18,10 @@ const OfferStatuses = {
         className: "bg-gray-400",
         text: "Ожидает принятия"
     },
+    "RETURN_APPROVAL": {
+        className: "bg-gray-400",
+        text: "Утверждение возврата"
+    },
     "RETURNING": {
         className: "bg-gray-400",
         text: "Возврат"

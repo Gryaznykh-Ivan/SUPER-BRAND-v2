@@ -52,6 +52,7 @@ enum OfferStatus {
     ACTIVE
     SOLD
     RETURNING
+    RETURN_APPROVAL
 }
 
 enum Service {
