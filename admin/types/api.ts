@@ -10,6 +10,12 @@ export interface IErrorResponse {
     statusCode: number;
 }
 
+export interface IMetafield {
+    id: string;
+    key: string;
+    value: string;
+}
+
 export interface ISetting {
     id: string;
     setting: string;
@@ -236,6 +242,7 @@ export interface IProduct {
     images: IImage[];
     collections: Pick<ICollection, "id" | "title">[];
     options: IProductOption[];
+    metafields: IMetafield[];
 }
 
 export interface IOrderSearch {
@@ -540,6 +547,9 @@ export type ProductUpdateRequest = {
     vendor?: string | null;
     connectCollections?: Pick<ICollection, "id">[];
     disconnectCollections?: Pick<ICollection, "id">[];
+    createMetafields?: Omit<IMetafield, "id">[];
+    updateMetafields?: IMetafield[];
+    deleteMetafields?: Pick<IMetafield, "id">[];
 }
 
 export type ProductDeleteResponse = IResponse<void>

@@ -14,6 +14,7 @@ import { useDeleteProductMutation, useGetProductByIdQuery, useUpdateProductMutat
 import { IErrorResponse, ProductUpdateRequest } from '../../../types/api'
 import { toast } from 'react-toastify'
 import Media from '../../../components/products/blocks/Media'
+import Metafields from '../../../components/products/blocks/Metafields'
 
 function Index() {
     const router = useRouter()
@@ -137,6 +138,10 @@ function Index() {
                                     metaTitle={data.data.metaTitle}
                                     metaDescription={data.data.metaDescription}
                                     handle={data.data.handle}
+                                    onChange={onCollectChanges}
+                                />
+                                <Metafields
+                                    metafields={data.data.metafields}
                                     onChange={onCollectChanges}
                                 />
                             </div>

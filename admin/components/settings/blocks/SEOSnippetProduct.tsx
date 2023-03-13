@@ -9,12 +9,12 @@ import TextArea from '../../inputs/TextArea'
 export default function SEOSnippetProduct() {
     const { data, isLoading } = useGetSettingsBySearchQuery({ setting: "SEO-SNIPPET" })
     const [updateSetting, { }] = useUpdateSettingMutation()
-    
+
     const [state, setState] = useState({
         title: "",
         description: ""
     })
-    
+
 
     useEffect(() => {
         if (data?.data !== undefined) {
@@ -70,12 +70,12 @@ export default function SEOSnippetProduct() {
                     <TextArea id="description" placeholder="Mета описание" name="description" value={state.description} onChange={onInputChange} />
                     <div className="text-gray-400 text-sm mt-1">Пример: Покупай кроссовки [title] [SKU] в магазине SB</div>
                 </div>
-                {isLoading === false && mustBeSaved === true &&
-                    <div className="flex">
-                        <button className="flex-1 text-sm py-2 px-3 border-[1px] border-gray-300 hover:bg-gray-100 rounded-md font-medium" onClick={onSave}>Сохранить</button>
-                    </div>
-                }
             </div>
+            {isLoading === false && mustBeSaved === true &&
+                <div className="flex">
+                    <button className="flex-1 border-t-[1px] font-medium hover:bg-gray-50 py-3" onClick={onSave}>Сохранить</button>
+                </div>
+            }
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 import { ConnectCollectionDto, DisconnectCollectionDto } from "./collections.dto";
+import { CreateMetafieldDto, DeleteMetafieldDto, UpdateMetafieldDto } from "./metafields.dto";
 
 export class UpdateProductDto {
     @IsNotEmpty()
@@ -54,4 +55,22 @@ export class UpdateProductDto {
     @ValidateNested({ each: true })
     @Type(() => DisconnectCollectionDto)
     disconnectCollections: DisconnectCollectionDto[]
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateMetafieldDto)
+    createMetafields: CreateMetafieldDto[]
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => UpdateMetafieldDto)
+    updateMetafields: UpdateMetafieldDto[]
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => DeleteMetafieldDto)
+    deleteMetafields: DeleteMetafieldDto[]
 }

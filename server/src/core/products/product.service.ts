@@ -33,6 +33,13 @@ export class ProductService {
                 vendor: true,
                 SKU: true,
                 barcode: true,
+                metafields: {
+                    select: {
+                        id: true,
+                        key: true,
+                        value: true
+                    }
+                },
                 images: {
                     select: {
                         id: true,
@@ -1022,6 +1029,17 @@ export class ProductService {
             })
         }
 
+        if (data.createMetafields !== undefined || data.deleteMetafields !== undefined) {
+            Object.assign(updateProductQuery, {
+                metafields: {
+                    deleteMany: data.deleteMetafields ?? [],
+                    createMany: {
+                        data: data.createMetafields ?? []
+                    },
+                }
+            })
+        }
+
         try {
             await this.prisma.$transaction(async tx => {
                 // обновляем снипет если title, SKU или vendor был изменен
@@ -1088,6 +1106,19 @@ export class ProductService {
                     })
                 }
 
+                // Oбновляем метаполя
+                for (const metafield of data.updateMetafields ?? []) {
+                    await tx.metafield.update({
+                        where: {
+                            id: metafield.id
+                        },
+                        data: {
+                            key: metafield.key,
+                            value: metafield.value,
+                        }
+                    })
+                }
+
                 await tx.product.update({
                     where: {
                         id: productId
@@ -1102,7 +1133,11 @@ export class ProductService {
         } catch (e) {
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
-                    throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
+                    if (e.meta?.target === "Metafield_productId_key_key") {
+                        throw new HttpException("Ключи у метаполей должны быть уникальными", HttpStatus.BAD_REQUEST)
+                    } else {
+                        throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
+                    }
                 }
             }
 
