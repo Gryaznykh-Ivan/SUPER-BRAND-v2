@@ -1,20 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { toast } from 'react-toastify';
 import { productService } from '../../../services/productService';
 import { useGetSettingsBySearchQuery, useUpdateSettingMutation } from '../../../services/settingService';
-import { ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
+import { IErrorResponse, ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
 
 
 export default function SEOSnippetProduct() {
     const { data, isLoading } = useGetSettingsBySearchQuery({ setting: "SEO-SNIPPET" })
-    const [updateSetting, { }] = useUpdateSettingMutation()
+    const [updateSetting, { isSuccess, isError, error }] = useUpdateSettingMutation()
 
     const [state, setState] = useState({
         title: "",
         description: ""
     })
-
 
     useEffect(() => {
         if (data?.data !== undefined) {
@@ -28,6 +28,20 @@ export default function SEOSnippetProduct() {
             }))
         }
     }, [data])
+
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("Шаблон снипета продукта обновлен")
+        }
+
+        if (isError) {
+            if (error && "status" in error) {
+                toast.error((error.data as IErrorResponse).message)
+            } else {
+                toast.error("Произошла неизвесная ошибка")
+            }
+        }
+    }, [isSuccess, isError])
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
