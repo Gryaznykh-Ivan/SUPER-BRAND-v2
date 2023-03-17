@@ -156,6 +156,9 @@ export class ProductService {
             },
             skip: data.skip,
             take: data.limit,
+            orderBy: [{
+                createdAt: 'desc'
+            }]
         })
 
         const result = products.map(product => ({
