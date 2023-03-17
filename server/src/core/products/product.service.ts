@@ -88,16 +88,16 @@ export class ProductService {
 
 
     async getProductsBySearch(data: SearchProductDto) {
-        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const whereQuery = {
             AND: [{
                 OR: [
                     {
                         title: {
-                            search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                            search: fulltextSearch ? fulltextSearch : undefined,
                         },
                         vendor: {
-                            search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                            search: fulltextSearch ? fulltextSearch : undefined,
                         },
                     },
                     {
@@ -156,9 +156,6 @@ export class ProductService {
             },
             skip: data.skip,
             take: data.limit,
-            orderBy: [{
-                createdAt: 'desc'
-            }]
         })
 
         const result = products.map(product => ({

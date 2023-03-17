@@ -28,12 +28,12 @@ export class SuggestionService {
     }
 
     async vendors(q: string) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const vendors = await this.prisma.product.findMany({
             distinct: ["vendor"],
             where: {
                 vendor: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                     not: null
                 },
             },
@@ -50,7 +50,7 @@ export class SuggestionService {
     }
 
     async deliveryZones(profileId: string, data: SearchDto) {
-        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
 
         const profile = await this.prisma.deliveryProfile.findUnique({
             where: {
@@ -72,7 +72,7 @@ export class SuggestionService {
         const regions = await this.prisma.region.findMany({
             where: {
                 title: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                     notIn: profile.zones.map(zone => zone.region)
                 }
             },
@@ -125,11 +125,11 @@ export class SuggestionService {
 
 
     async collections(q: string, ids: string[]) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const collections = await this.prisma.collection.findMany({
             where: {
                 title: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 },
                 id: {
                     notIn: ids
@@ -149,11 +149,11 @@ export class SuggestionService {
     }
 
     async countries(q: string) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const countries = await this.prisma.country.findMany({
             where: {
                 title: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 }
             },
             take: 5
@@ -166,14 +166,14 @@ export class SuggestionService {
     }
 
     async regions(q: string, country?: string) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const regions = await this.prisma.region.findMany({
             where: {
                 country: {
                     title: country
                 },
                 title: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 }
             },
             take: 5
@@ -186,14 +186,14 @@ export class SuggestionService {
     }
 
     async cities(q: string, region?: string) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const cities = await this.prisma.city.findMany({
             where: {
                 region: {
                     title: region
                 },
                 title: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 }
             },
             take: 5

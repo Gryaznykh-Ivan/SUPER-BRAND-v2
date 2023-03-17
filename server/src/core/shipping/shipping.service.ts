@@ -43,15 +43,15 @@ export class ShippingService {
     }
 
     async getDeliveryZones(profileId: string, data: SearchZoneDto) {
-        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const zones = await this.prisma.deliveryZone.findMany({
             where: {
                 deliveryProfileId: profileId,
                 country: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 },
                 region: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 },
             },
             select: {

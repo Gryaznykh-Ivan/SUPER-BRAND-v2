@@ -63,11 +63,11 @@ export class CollectionService {
     }
 
     async getCollectionProducts(collectionId: string, q: string, limit: number, skip: number) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const products = await this.prisma.product.findMany({
             where: {
                 title: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 },
                 collections: {
                     some: {
@@ -111,11 +111,11 @@ export class CollectionService {
     }
 
     async getCollectionsBySearch(q: string, limit: number, skip: number) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const collections = await this.prisma.collection.findMany({
             where: {
                 title: {
-                    search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    search: fulltextSearch ? fulltextSearch : undefined,
                 }
             },
             select: {
