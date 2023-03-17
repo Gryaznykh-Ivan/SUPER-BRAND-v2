@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify';
-import { IOption, IProductOption, ProductUpdateOptionRequest } from '../../../types/api';
+import { IOption, IProductOption, IProductOptionValue, ProductUpdateOptionRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 
 interface IProps {
     className: string;
     item: IProductOption;
     index: number;
-    onOptionValuesUpdate: (id: string, data: Pick<ProductUpdateOptionRequest, "createOptionValues" | "deleteOptionValues" | "updateOptionValues">) => Promise<boolean>;
+    onOptionValuesUpdate: (id: string, data: Pick<ProductUpdateOptionRequest, "createOptionValues" | "deleteOptionValues" | "updateOptionValues" | "reorderOptionValue">) => Promise<boolean>;
     onItemsInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onOptionUpdate: (item: IProductOption) => void;
     onOptionRemove: (id: string) => void;
@@ -17,7 +17,8 @@ interface IProps {
     setSelected: (item: IProductOption | null) => void;
 }
 
-export default function Option({ className, item, index, onItemsInputChange, onDragStart, onDragOver, onDragEnd, setSelected, onOptionUpdate, onOptionRemove, onOptionValuesUpdate }: IProps) {
+export default function Option({ className, item, index, onItemsInputChange, onDragStart: onDragOptionStart, onDragOver: onDragOptionOver, onDragEnd: onDragOptionEnd, setSelected: setOptionSelected, onOptionUpdate, onOptionRemove, onOptionValuesUpdate }: IProps) {
+    const [selected, setSelected] = useState<IProductOptionValue | null>(null)
     const [state, setState] = useState({
         edit: false,
         newOptionValue: "",
@@ -25,12 +26,49 @@ export default function Option({ className, item, index, onItemsInputChange, onD
     })
 
     useEffect(() => {
-        setState({
-            edit: false,
+        setState(prev => ({
+            ...prev,
             newOptionValue: "",
             values: item.values
-        })
+        }))
     }, [item])
+
+    const onDragStart = (e: React.DragEvent) => {
+        if (selected === null) return e.preventDefault()
+    }
+
+    const onDragEnd = async (e: React.DragEvent) => {
+        if (selected === null) return
+
+        const currentPosition = state.values.findIndex(c => c.id === selected.id);
+        if (selected.position !== currentPosition) {
+            await onOptionValuesUpdate(item.id, { reorderOptionValue: { id: selected.id, position: currentPosition } })
+        }
+
+
+        setSelected(null)
+    }
+
+    const onDragOver = (e: React.DragEvent, itemValue: IProductOptionValue, i: number) => {
+        e.preventDefault();
+
+        if (selected === null) return
+        if (itemValue.id === selected.id) return
+
+        if (i !== selected.position) {
+            const sortedItems = [...state.values].sort((a, b) => a.position - b.position)
+            const mappedItems = sortedItems.map((current) => {
+                if (current.id === itemValue.id) return selected
+                if (current.id === selected.id) return itemValue
+
+                return current
+            })
+
+            setState(prev => ({ ...prev, values: mappedItems }))
+        } else {
+            setState(prev => ({ ...prev, values: item.values }))
+        }
+    }
 
     const onActionButtonClick = () => {
         if (state.edit) {
@@ -55,11 +93,13 @@ export default function Option({ className, item, index, onItemsInputChange, onD
             return toast.error("Такое значение уже создано")
         }
 
-        setState(prev => ({ ...prev, newOptionValue: "", values: [...state.values, { id: `new${Math.random()}`, title: prev.newOptionValue }] }))
+        setState(prev => ({ ...prev, newOptionValue: "", values: [...state.values, { id: `new${Math.random()}`, title: prev.newOptionValue, position: state.values.length }] }))
     }
 
+    const mustBeSaved = useMemo(() => state.values.length !== item.values.length || state.values.some(c => item.values.find(a => a.id === c.id)?.title !== c.title), [state])
+
     const onSave = async () => {
-        if (state.values.length === item.values.length && state.values.every(c => item.values.find(a => a.id === c.id)?.title === c.title)) {
+        if (mustBeSaved === false) {
             return setState(prev => ({ ...prev, edit: false }))
         }
 
@@ -79,14 +119,13 @@ export default function Option({ className, item, index, onItemsInputChange, onD
             updateOptionValues: updateOptionValues.length !== 0 ? updateOptionValues : undefined,
         })
 
-        console.log(result)
-
         if (result === false) {
-            setState({
+            setState(prev => ({
+                ...prev,
                 edit: false,
                 newOptionValue: "",
                 values: item.values
-            })
+            }))
         }
     }
 
@@ -95,13 +134,13 @@ export default function Option({ className, item, index, onItemsInputChange, onD
             key={item.id}
             className={className}
             draggable="true"
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-            onDragOver={(e) => onDragOver(e, item, index)}
+            onDragStart={(e) => { if (selected === null) onDragOptionStart(e) }}
+            onDragEnd={onDragOptionEnd}
+            onDragOver={(e) => onDragOptionOver(e, item, index)}
         >
             <div className="flex-1  py-2">
                 <div className="flex items-center justify-between pr-2 bg-white">
-                    <div className="p-3 cursor-pointer" onMouseDown={() => setSelected(item)} onMouseUp={() => setSelected(null)}>
+                    <div className="p-3 cursor-pointer" onMouseDown={() => setOptionSelected(item)} onMouseUp={() => setOptionSelected(null)}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 5V5.01M12 12V12.01M12 19V19.01M12 6C11.7348 6 11.4804 5.89464 11.2929 5.70711C11.1054 5.51957 11 5.26522 11 5C11 4.73478 11.1054 4.48043 11.2929 4.29289C11.4804 4.10536 11.7348 4 12 4C12.2652 4 12.5196 4.10536 12.7071 4.29289C12.8946 4.48043 13 4.73478 13 5C13 5.26522 12.8946 5.51957 12.7071 5.70711C12.5196 5.89464 12.2652 6 12 6ZM12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13ZM12 20C11.7348 20 11.4804 19.8946 11.2929 19.7071C11.1054 19.5196 11 19.2652 11 19C11 18.7348 11.1054 18.4804 11.2929 18.2929C11.4804 18.1054 11.7348 18 12 18C12.2652 18 12.5196 18.1054 12.7071 18.2929C12.8946 18.4804 13 18.7348 13 19C13 19.2652 12.8946 19.5196 12.7071 19.7071C12.5196 19.8946 12.2652 20 12 20Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
@@ -130,11 +169,29 @@ export default function Option({ className, item, index, onItemsInputChange, onD
                 }
             </div>
             {state.edit &&
-                <div className="pl-12">
-                    <div className="text-sm text-gray-500">Значения опций</div>
+                <div className="">
+                    <div className="text-sm text-gray-500 pl-12">Значения опций</div>
                     <div className="pb-2">
-                        {state.values.map(value =>
-                            <div key={value.id} className="flex items-center justify-between pr-2 bg-white">
+                        {state.values.map((value, i) =>
+                            <div
+                                key={value.id}
+                                className={`flex items-center justify-between pr-2 bg-white ${selected?.id === value.id ? "opacity-30" : ""}`}
+                                draggable="true"
+                                onDragStart={onDragStart}
+                                onDragEnd={onDragEnd}
+                                onDragOver={(e) => onDragOver(e, value, i)}
+                            >
+                                {mustBeSaved === false ?
+                                    <div className="p-3 cursor-pointer" onMouseDown={() => setSelected(value)} onMouseUp={() => setSelected(null)}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 5V5.01M12 12V12.01M12 19V19.01M12 6C11.7348 6 11.4804 5.89464 11.2929 5.70711C11.1054 5.51957 11 5.26522 11 5C11 4.73478 11.1054 4.48043 11.2929 4.29289C11.4804 4.10536 11.7348 4 12 4C12.2652 4 12.5196 4.10536 12.7071 4.29289C12.8946 4.48043 13 4.73478 13 5C13 5.26522 12.8946 5.51957 12.7071 5.70711C12.5196 5.89464 12.2652 6 12 6ZM12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13ZM12 20C11.7348 20 11.4804 19.8946 11.2929 19.7071C11.1054 19.5196 11 19.2652 11 19C11 18.7348 11.1054 18.4804 11.2929 18.2929C11.4804 18.1054 11.7348 18 12 18C12.2652 18 12.5196 18.1054 12.7071 18.2929C12.8946 18.4804 13 18.7348 13 19C13 19.2652 12.8946 19.5196 12.7071 19.7071C12.5196 19.8946 12.2652 20 12 20Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </div>
+                                    :
+                                    <div className="p-3 cursor-pointer" onMouseDown={() => setSelected(value)} onMouseUp={() => setSelected(null)}>
+                                        <div className="w-6 h-6"></div>
+                                    </div>
+                                }
                                 <Input type="text" placeholder="Значение опции" name={value.id} value={value.title} onChange={onOptionValueChange} />
                                 <button className={`m-1 p-2 rounded-md hover:bg-gray-100 ${state.values.length < 2 && "invisible"}`} onClick={() => onRemoveOptionValue(value.id)}>
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +200,7 @@ export default function Option({ className, item, index, onItemsInputChange, onD
                                 </button>
                             </div>
                         )}
-                        <div className="flex items-center pr-2">
+                        <div className="flex items-center pr-2 pl-12">
                             <Input type="text" className="" name="newOptionValue" value={state.newOptionValue} onChange={(e) => setState(prev => ({ ...prev, [e.target.name]: e.target.value }))} placeholder="Добавить значение" />
                             <button className="m-1 p-2 rounded-md hover:bg-gray-100" onClick={onAddOptionValue}>
                                 <svg className="stroke-blue-800" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -151,7 +208,9 @@ export default function Option({ className, item, index, onItemsInputChange, onD
                                 </svg>
                             </button>
                         </div>
-                        <button className="text-sm mt-2 py-2 px-3 border-[1px] border-gray-300 hover:bg-gray-100 rounded-md font-medium" onClick={onSave}>Готово</button>
+                        <div className="pl-12 pr-14">
+                            <button className="w-full text-sm mt-2 py-2 px-3 border-[1px] border-gray-300 hover:bg-gray-100 rounded-md font-medium" onClick={onSave}>Готово</button>
+                        </div>
                     </div>
                 </div>
             }

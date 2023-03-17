@@ -146,10 +146,13 @@ export interface IProductOption {
     id: string;
     title: string;
     position: number;
-    values: {
-        id: string;
-        title: string;
-    }[]
+    values: IProductOptionValue[]
+}
+
+export interface IProductOptionValue {
+    id: string;
+    title: string;
+    position: number;
 }
 
 export interface IOption {
@@ -335,7 +338,10 @@ export interface IOrder {
     paid: number;
 }
 
-
+export interface IReorderOptionValue {
+    id: string;
+    position: number;
+}
 
 
 
@@ -594,6 +600,7 @@ export type ProductUpdateOptionRequest = {
     optionId: string;
     title?: string;
     position?: number;
+    reorderOptionValue?: IReorderOptionValue;
     createOptionValues?: Pick<IProductOption, "title">[];
     updateOptionValues?: Pick<IProductOption, "title" | "id">[];
     deleteOptionValues?: string[];

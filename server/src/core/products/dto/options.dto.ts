@@ -29,6 +29,15 @@ export class UpdateOptionValueDto {
     title: string;
 }
 
+export class ReorderOptionValueDto {
+    @IsNotEmpty()
+    @IsString()
+    id: string;
+
+    @IsInt()
+    position: number;
+}
+
 export class UpdateOptionDto {
     @IsOptional()
     @IsNotEmpty()
@@ -38,6 +47,11 @@ export class UpdateOptionDto {
     @IsOptional()
     @IsInt()
     position: number;
+
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => ReorderOptionValueDto)
+    reorderOptionValue: ReorderOptionValueDto;
 
     @IsOptional()
     @IsArray()

@@ -5,7 +5,7 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { Token } from 'src/decorators/token.decorator';
 import { ParseBooleanPipe } from 'src/pipes/parse-boolean.pipe';
 import { CreateProductDto } from './dto/createProduct.dto';
-import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
+import { CreateOptionDto, ReorderOptionValueDto, UpdateOptionDto } from './dto/options.dto';
 import { SearchProductDto } from './dto/searchProduct.dto';
 import { UpdateImageDto } from './dto/updateImage.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
@@ -90,6 +90,7 @@ export class ProductController {
     ) {
         return this.productService.updateOption(productId, optionId, data)
     }
+
 
     @Delete(':productId/removeOption/:optionId')
     @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])

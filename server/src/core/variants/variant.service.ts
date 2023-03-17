@@ -88,6 +88,26 @@ export class VariantService {
     }
 
     async getVariants(productId: string) {
+        const options = await this.prisma.option.findMany({
+            where: { productId },
+            select: {
+                id: true,
+                option: true,
+                values: {
+                    select: {
+                        title: true,
+                        position: true,
+                    },
+                    orderBy: {
+                        position: 'asc'
+                    }
+                }
+            },
+            orderBy: {
+                position: 'asc'
+            }
+        })
+
         const variants = await this.prisma.variant.findMany({
             where: {
                 productId: productId
@@ -118,31 +138,31 @@ export class VariantService {
                         position: 'asc'
                     },
                     take: 1
-                },
-                product: {
-                    select: {
-                        options: {
-                            select: {
-                                id: true,
-                                title: true,
-                                option: true,
-                                position: true
-                            },
-                            orderBy: [{ position: 'asc' }]
-                        }
-                    }
                 }
-            },
-            orderBy: [
-                { option0: 'asc' },
-                { option1: 'asc' },
-                { option2: 'asc' },
-            ]
+            }
         })
 
-        const result = variants.map(variant => ({
+        // Сортировка вариантов по позиции опции
+        const sortedVariants = variants.sort((a, b) => {
+            for (const option of options) {
+                const optionName = `option${option.option}`
+                const valueA = a[optionName]
+                const valueB = b[optionName]
+                if (valueA && valueB) {
+                    const optionValues = option.values.map(v => v.title)
+                    const indexA = optionValues.indexOf(valueA)
+                    const indexB = optionValues.indexOf(valueB)
+                    if (indexA !== indexB) {
+                        return indexA - indexB
+                    }
+                }
+            }
+            return 0
+        })
+
+        const result = sortedVariants.map(variant => ({
             id: variant.id,
-            title: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
+            title: options.map(option => variant[`option${option.option}`]).join(' | '),
             price: variant.offers[0]?.price ?? 0,
             image: variant.images[0] ?? null
         }))
@@ -320,6 +340,9 @@ export class VariantService {
                         values: {
                             select: {
                                 title: true
+                            },
+                            orderBy: {
+                                position: 'asc'
                             }
                         }
                     }
@@ -369,7 +392,7 @@ export class VariantService {
     }
 
 
-    async uploadImages(variantId: string, images: Express.Multer.File[], token: string) {
+    async uploadImages(variantId: string, images: Express.Multer.File[]) {
         const variant = await this.prisma.variant.findFirst({
             where: { id: variantId },
             select: {
@@ -531,6 +554,9 @@ export class VariantService {
                 values: {
                     select: {
                         title: true
+                    },
+                    orderBy: {
+                        position: 'asc'
                     }
                 }
             }

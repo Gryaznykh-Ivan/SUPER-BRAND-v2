@@ -65,7 +65,11 @@ export class ProductService {
                         values: {
                             select: {
                                 id: true,
+                                position: true,
                                 title: true,
+                            },
+                            orderBy: {
+                                position: 'asc'
                             }
                         }
                     },
@@ -387,7 +391,7 @@ export class ProductService {
                         }
                     })
 
-                    // Если основное изображение продукта изменилось - меняем изоюражения вариантов
+                    // Если основное изображение продукта изменилось - меняем изображения вариантов
                     if (data.position === 0 || current.position === 0) {
                         const product = await tx.product.findUnique({
                             where: { id: productId },
@@ -589,7 +593,7 @@ export class ProductService {
                         productId: productId,
                         values: {
                             createMany: {
-                                data: data.createOptionValues.map(option => ({ title: option }))
+                                data: data.createOptionValues.map((option, i) => ({ title: option, position: i }))
                             }
                         }
                     },
@@ -614,6 +618,9 @@ export class ProductService {
                             select: {
                                 id: true,
                                 title: true
+                            },
+                            orderBy: {
+                                position: 'asc'
                             }
                         }
                     },
@@ -676,18 +683,26 @@ export class ProductService {
             title: data.title
         }
 
-        if (data.createOptionValues !== undefined) {
-            Object.assign(OptionUpdateQuery, {
-                values: {
-                    createMany: {
-                        data: data.createOptionValues
-                    }
-                }
-            })
-        }
-
         try {
             await this.prisma.$transaction(async tx => {
+                if (data.createOptionValues !== undefined) {
+                    const lastOptionValue = await tx.optionValue.findFirst({
+                        where: { optionId },
+                        select: { position: true },
+                        orderBy: [{ position: 'desc' }]
+                    })
+
+                    const startPosition = lastOptionValue !== null ? lastOptionValue.position + 1 : 0
+
+                    Object.assign(OptionUpdateQuery, {
+                        values: {
+                            createMany: {
+                                data: data.createOptionValues.map((value, index) => ({ title: value.title, position: startPosition + index }))
+                            }
+                        }
+                    })
+                }
+
                 // Обновляем опцию и сразу создаем значения у опции
                 await tx.option.update({
                     where: { id: optionId },
@@ -749,7 +764,6 @@ export class ProductService {
                                                 select: {
                                                     title: true,
                                                     option: true,
-
                                                 },
                                                 orderBy: [{ position: 'asc' }]
                                             }
@@ -770,23 +784,74 @@ export class ProductService {
                     }
                 }
 
-                // удаление значений опций
-                for (const id of data.deleteOptionValues ?? []) {
-                    const deletedOptionValue = await tx.optionValue.delete({
-                        where: { id },
+                if (data.reorderOptionValue !== undefined) {
+                    const current = await tx.optionValue.findFirst({
+                        where: {
+                            id: data.reorderOptionValue.id
+                        },
                         select: {
-                            title: true,
-                            option: {
-                                select: {
-                                    option: true
-                                }
-                            }
+                            id: true,
+                            position: true
                         }
                     })
 
-                    await tx.variant.deleteMany({
-                        where: { [`option${deletedOptionValue.option.option}`]: deletedOptionValue.title, productId },
+                    await tx.optionValue.updateMany({
+                        where: {
+                            optionId,
+                            position: data.reorderOptionValue.position
+                        },
+                        data: {
+                            position: current.position
+                        }
                     })
+
+                    await tx.optionValue.update({
+                        where: {
+                            id: data.reorderOptionValue.id
+                        },
+                        data: {
+                            position: data.reorderOptionValue.position
+                        }
+                    })
+                }
+
+                // удаление значений опций
+                if (data.deleteOptionValues !== undefined) {
+                    for (const id of data.deleteOptionValues ?? []) {
+                        const deletedOptionValue = await tx.optionValue.delete({
+                            where: { id },
+                            select: {
+                                title: true,
+                                option: {
+                                    select: {
+                                        option: true
+                                    }
+                                }
+                            }
+                        })
+
+                        await tx.variant.deleteMany({
+                            where: { [`option${deletedOptionValue.option.option}`]: deletedOptionValue.title, productId },
+                        })
+                    }
+
+                    // Убираем пустоту между positon, если она образовалась
+                    const optionValues = await tx.optionValue.findMany({
+                        where: { optionId },
+                        select: { id: true },
+                        orderBy: [{ position: 'asc' }]
+                    })
+
+                    for (const [index, value] of Object.entries(optionValues)) {
+                        await tx.optionValue.update({
+                            where: {
+                                id: value.id
+                            },
+                            data: {
+                                position: +index
+                            }
+                        })
+                    }
                 }
 
                 // swap позиции у опций
@@ -834,6 +899,9 @@ export class ProductService {
                                     select: {
                                         id: true,
                                         title: true
+                                    },
+                                    orderBy: {
+                                        position: 'asc'
                                     }
                                 }
                             },
@@ -938,6 +1006,9 @@ export class ProductService {
                             select: {
                                 id: true,
                                 title: true
+                            },
+                            orderBy: {
+                                position: 'asc'
                             }
                         }
                     },

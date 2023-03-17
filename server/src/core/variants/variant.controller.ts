@@ -73,10 +73,9 @@ export class VariantController {
     @UseInterceptors(FilesInterceptor('images'))
     uploadImages(
         @Param('variantId') variantId: string,
-        @UploadedFiles() images: Express.Multer.File[],
-        @Token() token: string
+        @UploadedFiles() images: Express.Multer.File[]
     ) {
-        return this.variantService.uploadImages(variantId, images, token)
+        return this.variantService.uploadImages(variantId, images)
     }
 
     @Put(':variantId/updateImage/:imageId')
