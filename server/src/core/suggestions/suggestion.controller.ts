@@ -33,9 +33,10 @@ export class SuggestionController {
 
     @Get('deliveryZones')
     deliveryZones(
+        @Query('profileId') profileId: string,
         @Query(new ValidationPipe({ transform: true })) data: SearchDto,
     ) {
-        return this.suggestionService.deliveryZones(data)
+        return this.suggestionService.deliveryZones(profileId, data)
     }
 
     @Get('collections')

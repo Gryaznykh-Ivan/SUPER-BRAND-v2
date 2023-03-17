@@ -503,6 +503,7 @@ export type DeliveryZonesSuggestionRequest = {
     q?: string;
     limit?: number;
     skip?: number;
+    profileId?: string;
 };
 
 

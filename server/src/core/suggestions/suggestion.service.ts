@@ -49,12 +49,31 @@ export class SuggestionService {
         }
     }
 
-    async deliveryZones(data: SearchDto) {
+    async deliveryZones(profileId: string, data: SearchDto) {
         const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim() : undefined
+
+        const profile = await this.prisma.deliveryProfile.findUnique({
+            where: {
+                id: profileId
+            },
+            select: {
+                zones: {
+                    select: {
+                        region: true
+                    }
+                }
+            }
+        })
+
+        if (profile === null) {
+            throw new HttpException("Профиль доставки не найден", HttpStatus.BAD_REQUEST)
+        }
+
         const regions = await this.prisma.region.findMany({
             where: {
                 title: {
                     search: fulltextSearch ? `${fulltextSearch}*` : undefined,
+                    notIn: profile.zones.map(zone => zone.region)
                 }
             },
             select: {

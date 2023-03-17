@@ -168,7 +168,7 @@ export default function ProfileShipping({ profileId }: IProps) {
                 )}
             </div>
             <button className={`w-full py-3 text-blue-600 border-t-[1px] ${data?.data.length !== itemPerPage && "hidden"}`} onClick={onNextPage}>Загрузить еще</button>
-            {popup && <SelectRegion title="Выбор региона" onClose={onPopupClose} onDone={onCreateDeliveryZone} />}
+            {popup && <SelectRegion title="Выбор региона" profileId={ profileId } onClose={onPopupClose} onDone={onCreateDeliveryZone} />}
         </div>
     )
 }
