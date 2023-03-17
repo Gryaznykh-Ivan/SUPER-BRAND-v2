@@ -9,14 +9,16 @@ import { useCreateDeliveryZoneMutation, useDeleteDeliveryZoneMutation, useLazyGe
 import { DeliveryZoneUpdateRequest, IDeliveryZone, IErrorResponse } from '../../../types/api'
 import DeliveryZone from '../cards/DeliveryZone'
 import { toast } from 'react-toastify'
+import useConfirm from '../../../hooks/useConfirm'
 
 interface IProps {
     profileId: string;
 }
 
 export default function ProfileShipping({ profileId }: IProps) {
-
     const itemPerPage = 20
+
+    const { show } = useConfirm()
 
     const [getDeliveryZones, { isError, error, isFetching, data }] = useLazyGetDeliveryZonesQuery()
 
@@ -106,8 +108,12 @@ export default function ProfileShipping({ profileId }: IProps) {
         createDeliveryZone({ profileId, ...zone })
     }
 
-    const onRemoveDeliveryZone = (zoneId: string) => {
-        removeDeliveryZone({ profileId, zoneId })
+    const onRemoveDeliveryZone = async (zoneId: string) => {
+        const isConfirmed = await show("Подтверждение", "Подтвердите удаление зоны")
+
+        if (isConfirmed === true) {
+            removeDeliveryZone({ profileId, zoneId })
+        }
     }
 
     const onUpdateDeliveryZone = (zoneId: string, data: Omit<DeliveryZoneUpdateRequest, "profileId" | "zoneId">) => {

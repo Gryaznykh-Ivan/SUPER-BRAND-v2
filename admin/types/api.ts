@@ -528,6 +528,8 @@ export type ProductCreateRequest = {
     title?: string;
     handle?: string;
     available?: boolean;
+    SKU?: string;
+    barcode?: string;
     description?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;

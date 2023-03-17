@@ -33,6 +33,12 @@ export interface IAuthState {
     payload: IJwtDecode | null;
 }
 
+export interface IConfirmState {
+    show: boolean;
+    title: string;
+    message: string;
+}
+
 export interface IOrderState {
     offers: IOrderProduct[];
     services: IService[];

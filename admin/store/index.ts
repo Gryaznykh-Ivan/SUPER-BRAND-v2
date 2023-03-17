@@ -3,10 +3,12 @@ import { AnyAction, configureStore, Reducer } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux'
 import { api } from './api'
 import authSlice from './slices/auth.slice'
+import confirmSlice from './slices/confirm.slice'
 
 const reducers = {
     [api.reducerPath]: api.reducer,
     auth: authSlice,
+    confirm: confirmSlice,
 };
 
 const combinedReducer = combineReducers<typeof reducers>(reducers);

@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
+import Confirm from '../components/portals/Confirm';
 
 export default function App({ Component, ...rest }: AppProps) {
     const { store, props } = wrapper.useWrappedStore(rest);
@@ -60,6 +61,7 @@ export default function App({ Component, ...rest }: AppProps) {
                         pauseOnHover
                         theme="light"
                     />
+                    <Confirm />
                 </>
             }
         </Provider>
