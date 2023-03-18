@@ -108,12 +108,38 @@ const countries = async () => {
 }
 
 const deliveryProfiles = async () => {
-    await prisma.deliveryProfile.create({
-        data: {
-            id: "default",
-            title: "Товары с долгой доставкой"
+    const data = JSON.parse(readFileSync(resolve(__dirname, "profiles.json"), "utf-8"))
+
+    for (const profile of data) {
+        const createdProfile = await prisma.deliveryProfile.create({
+            data: {
+                id: profile.id ?? undefined,
+                title: profile.title
+            },
+            select: {
+                id: true
+            }
+        })
+
+        for (const zone of profile.zones) {
+            await prisma.deliveryZone.create({
+                data: {
+                    deliveryProfileId: createdProfile.id,
+                    country: zone.country,
+                    region: zone.region,
+                    options: {
+                        createMany: {
+                            data: zone.options.map(option => ({
+                                title: option.title,
+                                duration: option.duration,
+                                price: option.price
+                            }))
+                        }
+                    }
+                }
+            })
         }
-    })
+    }
 }
 
 seed().then(async () => {
