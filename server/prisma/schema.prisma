@@ -109,8 +109,8 @@ model Setting {
     value     String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@unique([setting, title])
+    @@map("setting")
 }
 
 model VerificationCode {
@@ -118,6 +118,7 @@ model VerificationCode {
     email     String
     code      String
     createdAt DateTime @default(now())
+    @@map("verificationcode")
 }
 
 model User {
@@ -146,9 +147,9 @@ model User {
     timeline             Timeline[]
     createdAt            DateTime          @default(now())
     updatedAt            DateTime          @updatedAt
-
     @@fulltext([fullName])
     @@fulltext([fullName, email, phone])
+    @@map("user")
 }
 
 model Permission {
@@ -158,8 +159,8 @@ model Permission {
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@unique([userId, right])
+    @@map("permission")
 }
 
 model CartProduct {
@@ -169,8 +170,8 @@ model CartProduct {
     offerId   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@id([userId, offerId])
+    @@map("cartproduct")
 }
 
 model Token {
@@ -180,6 +181,7 @@ model Token {
     refreshToken String
     expiresIn    DateTime
     createdAt    DateTime @default(now())
+    @@map("token")
 }
 
 model Address {
@@ -192,6 +194,7 @@ model Address {
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    @@map("address")
 }
 
 model Order {
@@ -207,15 +210,16 @@ model Order {
     note           String?
     invoices       Invoice[]
     services       OrderService[]
-    offers         Offer[]        @relation(name: "OrderOffers")
+    offers         Offer[]        @relation(name: "orderoffers")
     fulfillments   Fulfillment[]
     returns        Return[]
     timeline       Timeline[]
-    removedOffers  Offer[]        @relation(name: "OrderRemovedOffers")
+    removedOffers  Offer[]        @relation(name: "orderremovedoffers")
     user           User           @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId         String
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
+    @@map("order")
 }
 
 model Invoice {
@@ -229,6 +233,7 @@ model Invoice {
     orderId     Int
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
+    @@map("invoice")
 }
 
 model OrderService {
@@ -238,6 +243,7 @@ model OrderService {
     price       Decimal @db.Decimal(9, 2)
     order       Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId     Int
+    @@map("orderservice")
 }
 
 model Timeline {
@@ -249,6 +255,7 @@ model Timeline {
     user      User?    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     userId    String?
     createdAt DateTime @default(now())
+    @@map("timeline")
 }
 
 model Fulfillment {
@@ -261,6 +268,7 @@ model Fulfillment {
     orderId   Int
     createdAt DateTime          @default(now())
     updatedAt DateTime          @updatedAt
+    @@map("fulfillment")
 }
 
 model Return {
@@ -273,6 +281,7 @@ model Return {
     orderId   Int
     createdAt DateTime      @default(now())
     updatedAt DateTime      @updatedAt
+    @@map("return")
 }
 
 model ReturnOffer {
@@ -282,8 +291,8 @@ model ReturnOffer {
     offerId   String
     reason    String
     createdAt DateTime @default(now())
-
     @@id([returnId, offerId])
+    @@map("returnoffer")
 }
 
 model Offer {
@@ -299,7 +308,7 @@ model Offer {
     status            OfferStatus      @default(OFFERED)
     user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId            String?
-    order             Order?           @relation(name: "OrderOffers", fields: [orderId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    order             Order?           @relation(name: "orderoffers", fields: [orderId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     orderId           Int?
     variant           Variant?         @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     variantId         String?
@@ -309,11 +318,11 @@ model Offer {
     fulfillmentId     String?
     cartProduct       CartProduct[]
     returned          ReturnOffer[]
-    removedFromOrders Order[]          @relation(name: "OrderRemovedOffers")
+    removedFromOrders Order[]          @relation(name: "orderremovedoffers")
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
-
     @@fulltext([productTitle])
+    @@map("offer")
 }
 
 model FavoriteProduct {
@@ -323,8 +332,8 @@ model FavoriteProduct {
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@id([productId, userId])
+    @@map("favoriteproduct")
 }
 
 model Collection {
@@ -334,12 +343,12 @@ model Collection {
     metaTitle       String?   @db.VarChar(255)
     metaDescription String?   @db.Text
     handle          String    @unique() @db.VarChar(255)
-    products        Product[]
+    products        Product[] @relation(name: "collectiontoproduct")
     images          Image[]
     createdAt       DateTime  @default(now())
     updatedAt       DateTime  @updatedAt
-
     @@fulltext([title])
+    @@map("collection")
 }
 
 model Product {
@@ -354,17 +363,17 @@ model Product {
     metaTitle        String?           @db.VarChar(255)
     metaDescription  String?           @db.Text
     images           Image[]
-    collections      Collection[]
+    collections      Collection[]      @relation(name: "collectiontoproduct")
     variants         Variant[]
     productIsFavored FavoriteProduct[]
     options          Option[]
     metafields       Metafield[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
-
     @@fulltext([title])
     @@fulltext([vendor])
     @@fulltext([title, vendor])
+    @@map("product")
 }
 
 model Metafield {
@@ -373,8 +382,8 @@ model Metafield {
     value     String
     product   Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
-
     @@unique([productId, key])
+    @@map("metafield")
 }
 
 model Option {
@@ -387,8 +396,8 @@ model Option {
     productId String
     createdAt DateTime      @default(now())
     updatedAt DateTime      @updatedAt
-
     @@unique([productId, title])
+    @@map("option")
 }
 
 model OptionValue {
@@ -399,8 +408,8 @@ model OptionValue {
     optionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@unique([optionId, title])
+    @@map("optionvalue")
 }
 
 model Image {
@@ -420,6 +429,7 @@ model Image {
     offerId      String?     @unique
     createdAt    DateTime    @default(now())
     updatedAt    DateTime    @updatedAt
+    @@map("image")
 }
 
 model Variant {
@@ -435,6 +445,7 @@ model Variant {
     offers    Offer[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    @@map("variant")
 }
 
 model DeliveryProfile {
@@ -444,6 +455,7 @@ model DeliveryProfile {
     zones     DeliveryZone[]
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
+    @@map("deliveryprofile")
 }
 
 model DeliveryZone {
@@ -455,9 +467,9 @@ model DeliveryZone {
     deliveryProfileId String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
-
     @@unique([deliveryProfileId, country, region])
     @@fulltext([country, region])
+    @@map("deliveryzone")
 }
 
 model DeliveryOption {
@@ -469,6 +481,7 @@ model DeliveryOption {
     deliveryZoneId String
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
+    @@map("deliveryoption")
 }
 
 model Country {
@@ -477,8 +490,8 @@ model Country {
     regions   Region[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@fulltext([title])
+    @@map("country")
 }
 
 model Region {
@@ -489,9 +502,9 @@ model Region {
     countryId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@unique([countryId, title])
     @@fulltext([title])
+    @@map("region")
 }
 
 model City {
@@ -501,7 +514,7 @@ model City {
     regionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     @@unique([regionId, title])
     @@fulltext([title])
+    @@map("city")
 }
