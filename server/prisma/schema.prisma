@@ -102,7 +102,7 @@ enum InvoiceStatus {
     SUCCEEDED
 }
 
-model Setting {
+model setting {
     id        String   @id @default(cuid())
     setting   String
     title     String
@@ -114,7 +114,7 @@ model Setting {
     @@map("setting")
 }
 
-model VerificationCode {
+model verificationcode {
     id        String   @id @default(cuid())
     email     String
     code      String
@@ -123,7 +123,7 @@ model VerificationCode {
     @@map("verificationcode")
 }
 
-model User {
+model user {
     id                   String            @id @default(cuid())
     email                String?           @unique
     phone                String?
@@ -139,14 +139,14 @@ model User {
     isVerified           Boolean           @default(false)
     isSubscribed         Boolean           @default(false)
     role                 Role              @default(GUEST)
-    addresses            Address[]
-    orders               Order[]
-    favoriteProducts     FavoriteProduct[]
-    tokens               Token[]
-    cart                 CartProduct[]
-    offers               Offer[]
-    permissions          Permission[]
-    timeline             Timeline[]
+    addresses            address[]
+    orders               order[]
+    favoriteProducts     favoriteproduct[]
+    tokens               token[]
+    cart                 cartproduct[]
+    offers               offer[]
+    permissions          permission[]
+    timeline             timeline[]
     createdAt            DateTime          @default(now())
     updatedAt            DateTime          @updatedAt
 
@@ -155,10 +155,10 @@ model User {
     @@map("user")
 }
 
-model Permission {
+model permission {
     id        String   @id @default(cuid())
     right     Right
-    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    user      user     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -167,10 +167,10 @@ model Permission {
     @@map("permission")
 }
 
-model CartProduct {
-    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+model cartproduct {
+    user      user     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId    String
-    offer     Offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    offer     offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     offerId   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -179,9 +179,9 @@ model CartProduct {
     @@map("cartproduct")
 }
 
-model Token {
+model token {
     id           String   @id @default(cuid())
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    user         user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     userId       String
     refreshToken String
     expiresIn    DateTime
@@ -190,13 +190,13 @@ model Token {
     @@map("token")
 }
 
-model Address {
+model address {
     id        String   @id @default(cuid())
     country   String
     city      String
     address   String
     region    String
-    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    user      user     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -204,7 +204,7 @@ model Address {
     @@map("address")
 }
 
-model Order {
+model order {
     id             Int            @id @default(autoincrement())
     orderStatus    OrderStatus    @default(UNFULFILLED)
     paymentStatus  PaymentStatus  @default(UNPAID)
@@ -215,14 +215,14 @@ model Order {
     mailingRegion  String
     mailingAddress String
     note           String?
-    invoices       Invoice[]
-    services       OrderService[]
-    offers         Offer[]        @relation(name: "orderoffers")
-    fulfillments   Fulfillment[]
-    returns        Return[]
-    timeline       Timeline[]
-    removedOffers  Offer[]        @relation(name: "orderremovedoffers")
-    user           User           @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    invoices       invoice[]
+    services       orderservice[]
+    offers         offer[]        @relation(name: "orderoffers")
+    fulfillments   fulfillment[]
+    returns        orderreturn[]
+    timeline       timeline[]
+    removedOffers  offer[]        @relation(name: "orderremovedoffers")
+    user           user           @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId         String
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
@@ -230,14 +230,14 @@ model Order {
     @@map("order")
 }
 
-model Invoice {
+model invoice {
     id          String        @id @default(cuid())
     invoiceType InvoiceType   @default(PAYMENT)
     status      InvoiceStatus @default(PENDING)
     method      String
     amount      Decimal       @db.Decimal(9, 2)
     currency    Currency      @default(RUB)
-    order       Order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    order       order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId     Int
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
@@ -245,37 +245,37 @@ model Invoice {
     @@map("invoice")
 }
 
-model OrderService {
+model orderservice {
     id          String  @id @default(cuid())
     type        Service @default(SHIPPING)
     description String? @db.Text
     price       Decimal @db.Decimal(9, 2)
-    order       Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    order       order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId     Int
 
     @@map("orderservice")
 }
 
-model Timeline {
+model timeline {
     id        String   @id @default(cuid())
     title     String   @db.VarChar(255)
     message   String?  @db.Text
-    order     Order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    order     order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId   Int
-    user      User?    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    user      user?    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     userId    String?
     createdAt DateTime @default(now())
 
     @@map("timeline")
 }
 
-model Fulfillment {
+model fulfillment {
     id        String            @id @default(cuid())
     status    FulfillmentStatus @default(SENT)
     tracking  String?
     carrier   String?
-    offers    Offer[]
-    order     Order             @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    offers    offer[]
+    order     order             @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId   Int
     createdAt DateTime          @default(now())
     updatedAt DateTime          @updatedAt
@@ -283,24 +283,24 @@ model Fulfillment {
     @@map("fulfillment")
 }
 
-model Return {
+model orderreturn {
     id        String        @id @default(cuid())
     status    ReturnStatus  @default(RETURN_REQUESTED)
     tracking  String?
     carrier   String?
-    offers    ReturnOffer[]
-    order     Order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    offers    returnoffer[]
+    order     order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId   Int
     createdAt DateTime      @default(now())
     updatedAt DateTime      @updatedAt
 
-    @@map("return")
+    @@map("orderreturn")
 }
 
-model ReturnOffer {
-    return    Return   @relation(fields: [returnId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+model returnoffer {
+    return    orderreturn   @relation(fields: [returnId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     returnId  String
-    offer     Offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    offer     offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     offerId   String
     reason    String
     createdAt DateTime @default(now())
@@ -309,30 +309,30 @@ model ReturnOffer {
     @@map("returnoffer")
 }
 
-model Offer {
+model offer {
     id                String           @id @default(cuid())
     productTitle      String           @db.VarChar(255)
     variantTitle      String
-    image             Image?
+    image             image?
     price             Decimal          @db.Decimal(9, 2)
     offerPrice        Decimal          @db.Decimal(9, 2)
     compareAtPrice    Decimal?         @db.Decimal(9, 2)
     comment           String?
     tag               String?
     status            OfferStatus      @default(OFFERED)
-    user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    user              user?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId            String?
-    order             Order?           @relation(name: "orderoffers", fields: [orderId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    order             order?           @relation(name: "orderoffers", fields: [orderId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     orderId           Int?
-    variant           Variant?         @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    variant           variant?         @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     variantId         String?
-    deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    deliveryProfile   deliveryprofile? @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     deliveryProfileId String?
-    fulfillment       Fulfillment?     @relation(fields: [fulfillmentId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    fulfillment       fulfillment?     @relation(fields: [fulfillmentId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     fulfillmentId     String?
-    cartProduct       CartProduct[]
-    returned          ReturnOffer[]
-    removedFromOrders Order[]          @relation(name: "orderremovedoffers")
+    cartProduct       cartproduct[]
+    returned          returnoffer[]
+    removedFromOrders order[]          @relation(name: "orderremovedoffers")
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
 
@@ -340,10 +340,10 @@ model Offer {
     @@map("offer")
 }
 
-model FavoriteProduct {
-    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+model favoriteproduct {
+    product   product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
-    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    user      user     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -352,15 +352,15 @@ model FavoriteProduct {
     @@map("favoriteproduct")
 }
 
-model Collection {
+model collection {
     id              String    @id @default(cuid())
     title           String    @db.VarChar(255)
     description     String?   @db.Text
     metaTitle       String?   @db.VarChar(255)
     metaDescription String?   @db.Text
     handle          String    @unique() @db.VarChar(255)
-    products        Product[] @relation(name: "collectiontoproduct")
-    images          Image[]
+    products        product[] @relation(name: "collectiontoproduct")
+    images          image[]
     createdAt       DateTime  @default(now())
     updatedAt       DateTime  @updatedAt
 
@@ -368,7 +368,7 @@ model Collection {
     @@map("collection")
 }
 
-model Product {
+model product {
     id               String            @id @default(cuid())
     handle           String            @unique() @db.VarChar(255)
     title            String            @db.VarChar(255)
@@ -379,12 +379,12 @@ model Product {
     description      String?           @db.Text
     metaTitle        String?           @db.VarChar(255)
     metaDescription  String?           @db.Text
-    images           Image[]
-    collections      Collection[]      @relation(name: "collectiontoproduct")
-    variants         Variant[]
-    productIsFavored FavoriteProduct[]
-    options          Option[]
-    metafields       Metafield[]
+    images           image[]
+    collections      collection[]      @relation(name: "collectiontoproduct")
+    variants         variant[]
+    productIsFavored favoriteproduct[]
+    options          option[]
+    metafields       metafield[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
 
@@ -394,24 +394,24 @@ model Product {
     @@map("product")
 }
 
-model Metafield {
+model metafield {
     id        String  @id @default(cuid())
     key       String
     value     String
-    product   Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    product   product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
 
     @@unique([productId, key])
     @@map("metafield")
 }
 
-model Option {
+model option {
     id        String        @id @default(cuid())
     title     String
     option    Int
     position  Int
-    values    OptionValue[]
-    product   Product       @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    values    optionvalue[]
+    product   product       @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
     createdAt DateTime      @default(now())
     updatedAt DateTime      @updatedAt
@@ -420,11 +420,11 @@ model Option {
     @@map("option")
 }
 
-model OptionValue {
+model optionvalue {
     id        String   @id @default(cuid())
     title     String
     position  Int
-    option    Option   @relation(fields: [optionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    option    option   @relation(fields: [optionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     optionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -433,20 +433,20 @@ model OptionValue {
     @@map("optionvalue")
 }
 
-model Image {
+model image {
     id           String      @id @default(cuid())
     path         String
     src          String
     alt          String
     blurhash     String
     position     Int
-    product      Product?    @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    product      product?    @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     productId    String?
-    collection   Collection? @relation(fields: [collectionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    collection   collection? @relation(fields: [collectionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     collectionId String?
-    variant      Variant?    @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    variant      variant?    @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     variantId    String?
-    offer        Offer?      @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    offer        offer?      @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     offerId      String?     @unique
     createdAt    DateTime    @default(now())
     updatedAt    DateTime    @updatedAt
@@ -454,40 +454,40 @@ model Image {
     @@map("image")
 }
 
-model Variant {
+model variant {
     id        String   @id @default(cuid())
     SKU       String?
     barcode   String?
     option0   String?
     option1   String?
     option2   String?
-    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    product   product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
-    images    Image[]
-    offers    Offer[]
+    images    image[]
+    offers    offer[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     @@map("variant")
 }
 
-model DeliveryProfile {
+model deliveryprofile {
     id        String         @id @default(cuid())
     title     String         @unique
-    offers    Offer[]
-    zones     DeliveryZone[]
+    offers    offer[]
+    zones     deliveryzone[]
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
 
     @@map("deliveryprofile")
 }
 
-model DeliveryZone {
+model deliveryzone {
     id                String           @id @default(cuid())
     country           String
     region            String
-    options           DeliveryOption[]
-    deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    options           deliveryoption[]
+    deliveryProfile   deliveryprofile  @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     deliveryProfileId String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
@@ -497,12 +497,12 @@ model DeliveryZone {
     @@map("deliveryzone")
 }
 
-model DeliveryOption {
+model deliveryoption {
     id             String       @id @default(cuid())
     title          String
     duration       Int
     price          Decimal      @db.Decimal(9, 2)
-    deliveryZone   DeliveryZone @relation(fields: [deliveryZoneId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    deliveryZone   deliveryzone @relation(fields: [deliveryZoneId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     deliveryZoneId String
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
@@ -510,10 +510,10 @@ model DeliveryOption {
     @@map("deliveryoption")
 }
 
-model Country {
+model country {
     id        String   @id @default(cuid())
     title     String   @unique
-    regions   Region[]
+    regions   region[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -521,11 +521,11 @@ model Country {
     @@map("country")
 }
 
-model Region {
+model region {
     id        String   @id @default(cuid())
     title     String
-    cities    City[]
-    country   Country  @relation(fields: [countryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    cities    city[]
+    country   country  @relation(fields: [countryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     countryId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -535,10 +535,10 @@ model Region {
     @@map("region")
 }
 
-model City {
+model city {
     id        String   @id @default(cuid())
     title     String
-    region    Region   @relation(fields: [regionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    region    region   @relation(fields: [regionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     regionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
