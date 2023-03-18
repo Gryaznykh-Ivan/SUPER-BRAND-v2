@@ -38,6 +38,7 @@ services:
     restart: unless-stopped
   db:
     image: mysql:8
+    command: --lower_case_table_names=1
     environment:
       MYSQL_USER: adminsbtest
       MYSQL_ROOT_PASSWORD: adminsbtest
