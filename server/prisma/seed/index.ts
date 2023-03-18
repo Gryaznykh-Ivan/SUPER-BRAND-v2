@@ -78,6 +78,48 @@ const managers = async () => {
             }
         }
     })
+
+    await prisma.user.create({
+        data: {
+            email: "larosipier@gmail.com",
+            role: "ADMIN",
+            firstName: "Артур",
+            lastName: "Зинган",
+            fullName: "Артур Зинган",
+            permissions: {
+                createMany: {
+                    data: [
+                        { right: "ORDER_CREATE" },
+                        { right: "ORDER_READ" },
+                        { right: "ORDER_UPDATE" },
+                        { right: "ORDER_DELETE" },
+                        { right: "PRODUCT_CREATE" },
+                        { right: "PRODUCT_READ" },
+                        { right: "PRODUCT_UPDATE" },
+                        { right: "PRODUCT_DELETE" },
+                        { right: "COLLECTION_CREATE" },
+                        { right: "COLLECTION_READ" },
+                        { right: "COLLECTION_UPDATE" },
+                        { right: "COLLECTION_DELETE" },
+                        { right: "OFFER_CREATE" },
+                        { right: "OFFER_READ" },
+                        { right: "OFFER_UPDATE" },
+                        { right: "OFFER_DELETE" },
+                        { right: "USER_CREATE" },
+                        { right: "USER_READ" },
+                        { right: "USER_UPDATE" },
+                        { right: "USER_DELETE" },
+                        { right: "SHIPPING_CREATE" },
+                        { right: "SHIPPING_READ" },
+                        { right: "SHIPPING_UPDATE" },
+                        { right: "SHIPPING_DELETE" },
+                        { right: "MEDIA_UPLOAD" },
+                        { right: "MEDIA_DELETE" },
+                    ]
+                }
+            }
+        }
+    })
 }
 
 const countries = async () => {
