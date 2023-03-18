@@ -61,6 +61,7 @@ function Variant() {
     const onVariantDelete = async () => {
         const result = await deleteVariant({ variantId: router.query.variantId as string }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push(`/products/${router.query.productId}`)
         }
     }

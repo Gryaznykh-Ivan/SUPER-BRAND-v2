@@ -42,7 +42,7 @@ function Index() {
 
     useEffect(() => {
         if (isDeleteFulfillmentSuccess) {
-            setTimeout(() => toast.success("Отправка удален"), 100)
+            setTimeout(() => toast.success("Отправка удалена"), 100)
         }
 
         if (isDeleteFulfillmentError) {
@@ -75,6 +75,7 @@ function Index() {
             orderId: Number(router.query.orderId as string)
         }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push(`/orders/${router.query.orderId}`)
         }
     }

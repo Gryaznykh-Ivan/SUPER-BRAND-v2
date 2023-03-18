@@ -64,6 +64,7 @@ export default function Index() {
     const onDeliveryProfileDelete = async () => {
         const result = await deleteDeliveryProfile({ profileId: router.query.profileId as string }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push("/shipping")
         }
     }

@@ -67,6 +67,7 @@ export default function Index() {
     const onUserDelete = async () => {
         const result = await deleteUser({ userId: router.query.userId as string }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push("/users")
         }
     }

@@ -41,6 +41,7 @@ export default function Return() {
 
         const result = await createReturn(createReturnData).unwrap()
         if (result.success === true) {
+            setChanges({})
             router.push('/orders/' + router.query.orderId)
         }
     }

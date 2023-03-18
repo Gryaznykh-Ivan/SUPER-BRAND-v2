@@ -13,7 +13,7 @@ import CreateCollectionProducts from '../../components/collections/blocks/Create
 export default function New() {
     const router = useRouter()
 
-    const [createCollection, { isSuccess: isCreateCollectionSuccess, isError: isCreateCollectionError, error: createCollectionError, data }] = useCreateCollectionMutation()
+    const [createCollection, { isSuccess: isCreateCollectionSuccess, isError: isCreateCollectionError, error: createCollectionError }] = useCreateCollectionMutation()
 
     const [changes, setChanges] = useState<CollectionCreateRequest>({})
     const onCollectChanges = (obj: CollectionCreateRequest) => {
@@ -39,6 +39,7 @@ export default function New() {
 
         const result = await createCollection(createCollectionData).unwrap()
         if (result.success === true) {
+            setChanges({})
             router.push('/collections/' + result.data)
         }
     }
@@ -85,7 +86,7 @@ export default function New() {
                 <div className="flex justify-between">
                     <div className=""></div>
                     <div className="flex justify-end">
-                        <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={!mustBeSaved} onClick={onSaveChanges}>Создать</button>
+                        <button className={`${mustBeSaved ? "bg-green-600" : "bg-gray-300"} px-4 py-2 text-white font-medium rounded-md`} disabled={mustBeSaved === false} onClick={onSaveChanges}>Создать</button>
                     </div>
                 </div>
             </div>

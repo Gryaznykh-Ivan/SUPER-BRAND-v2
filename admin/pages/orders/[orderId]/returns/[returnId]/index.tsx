@@ -61,10 +61,10 @@ function Index() {
             ...changes
         }).unwrap()
         if (result.success === true) {
+            setChanges({})
+
             if (changes.status === 'RETURNED') {
                 router.push(`/orders/${router.query.orderId}`)
-            } else {
-                setChanges({})
             }
         }
     }
@@ -79,6 +79,7 @@ function Index() {
             orderId: Number(router.query.orderId as string)
         }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push(`/orders/${router.query.orderId}`)
         }
     }

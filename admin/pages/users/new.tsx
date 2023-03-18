@@ -39,6 +39,7 @@ export default function New() {
     const onSaveChanges = async () => {
         const result = await createUser(changes).unwrap()
         if (result.success === true) {
+            setChanges({})
             router.push('/users/' + result.data)
         }
     }

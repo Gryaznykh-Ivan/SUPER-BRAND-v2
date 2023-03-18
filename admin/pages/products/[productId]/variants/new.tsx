@@ -36,6 +36,7 @@ function New() {
     const onSaveChanges = async () => {
         const result = await createVariant({ ...changes, productId: router.query.productId as string }).unwrap()
         if (result.success === true) {
+            setChanges({})
             router.push(`/products/${router.query.productId}/variants/${result.data}`)
         }
     }

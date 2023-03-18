@@ -67,6 +67,7 @@ export default function Index() {
     const onCollectionDelete = async () => {
         const result = await deleteCollection({ collectionId: router.query.collectionId as string }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push("/collections")
         }
     }

@@ -51,6 +51,7 @@ function New() {
 
         const result = await createOrder(createOrderData).unwrap()
         if (result.success === true) {
+            setChanges({})
             router.push('/orders/' + result.data)
         }
     }

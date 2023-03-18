@@ -54,10 +54,7 @@ export default function SEOSnippetProduct() {
             value: setting[1]
         }))
 
-        const result = await updateSetting({ updateSettings }).unwrap()
-        if (result.success === true) {
-            console.log('cegth')
-        }
+        await updateSetting({ updateSettings }).unwrap()
     }
 
     const mustBeSaved = useMemo(() => {

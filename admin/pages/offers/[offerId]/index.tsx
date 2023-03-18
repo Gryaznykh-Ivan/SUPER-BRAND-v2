@@ -70,6 +70,7 @@ function New() {
     const onOfferDelete = async () => {
         const result = await deleteOffer({ offerId: router.query.offerId as string }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push("/offers")
         }
     }

@@ -42,6 +42,7 @@ function New() {
 
         const result = await createProduct(createProductData).unwrap()
         if (result.success === true) {
+            setChanges({})
             router.push('/products/' + result.data)
         }
     }

@@ -71,6 +71,7 @@ function Index() {
     const onProductDelete = async () => {
         const result = await deleteProduct({ productId: router.query.productId as string }).unwrap();
         if (result.success === true) {
+            setChanges({})
             router.push("/products")
         }
     }

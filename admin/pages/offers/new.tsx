@@ -25,7 +25,6 @@ function New() {
 
     const [changes, setChanges] = useState<OfferCreateRequest>({})
     const onCollectChanges = (obj: OfferCreateRequest) => {
-        console.log(obj)
         setChanges(prev => ({ ...prev, ...obj }))
     }
 
@@ -48,6 +47,7 @@ function New() {
 
         const result = await createOffer(createOfferData).unwrap()
         if (result.success === true) {
+            setChanges({})
             router.push('/offers/' + result.data)
         }
     }
