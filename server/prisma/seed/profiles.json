@@ -4,870 +4,194 @@
         "title": "Товары с долгой доставкой",
         "zones": [
             {
-                "id": "clfa4hx2v00fsrn08rzlsbyu4",
+                "id": "clfe1oa8q0058lt08hk2pu9u0",
                 "country": "Россия",
-                "region": "Ярославская область",
+                "region": "Ненецкий АО",
                 "options": [
                     {
-                        "id": "clfa4i8fw00fxrn0834ojpq2g",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4hclt00flrn08gmb1g3ux",
-                "country": "Россия",
-                "region": "Ямало-Ненецкий АО",
-                "options": [
-                    {
-                        "id": "clfa4hlgl00fqrn08m724kb1f",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 28,
-                        "price": "2300"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4gujw00fern08rq0ozd6w",
-                "country": "Россия",
-                "region": "Чукотский АО",
-                "options": [
-                    {
-                        "id": "clfa4h6cd00fjrn085i6zrrur",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 31,
-                        "price": "4500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4e30a00f7rn0812m56gyg",
-                "country": "Россия",
-                "region": "Чувашия",
-                "options": [
-                    {
-                        "id": "clfa4f39d00fcrn08ndhbxf5v",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4aw6a00f0rn083uir46pj",
-                "country": "Россия",
-                "region": "Чечня",
-                "options": [
-                    {
-                        "id": "clfa4dtin00f5rn08vrw2vd8z",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "1000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4aggg00etrn084p97u7z0",
-                "country": "Россия",
-                "region": "Челябинская область",
-                "options": [
-                    {
-                        "id": "clfa4anfb00eyrn08jx38rvq2",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa49aac00emrn088a1j38v0",
-                "country": "Россия",
-                "region": "Ханты-Мансийский АО",
-                "options": [
-                    {
-                        "id": "clfa4a6wn00errn08fhskvo6k",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 28,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa48jk500efrn08abb8ak9k",
-                "country": "Россия",
-                "region": "Хабаровский край",
-                "options": [
-                    {
-                        "id": "clfa48sr200ekrn08cag7ukbc",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "1300"
-                    }
-                ]
-            },
-            {
-                "id": "clfa45tuy00e8rn08abu0mpfn",
-                "country": "Россия",
-                "region": "Ульяновская область",
-                "options": [
-                    {
-                        "id": "clfa464mk00edrn088e1ir2qi",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa45egq00e1rn08wutiactn",
-                "country": "Россия",
-                "region": "Удмуртия",
-                "options": [
-                    {
-                        "id": "clfa45kj300e6rn08ptxly0oi",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa44xvr00durn0805cwd81o",
-                "country": "Россия",
-                "region": "Тюменская область",
-                "options": [
-                    {
-                        "id": "clfa455r000dzrn0825snm5m3",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa44inj00dnrn08yxueqmf2",
-                "country": "Россия",
-                "region": "Тульская область",
-                "options": [
-                    {
-                        "id": "clfa44ray00dsrn0884fs1hwr",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa442zg00dgrn08vmth2d34",
-                "country": "Россия",
-                "region": "Томская область",
-                "options": [
-                    {
-                        "id": "clfa4498o00dlrn08sohkup8e",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "1600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa437rs00d9rn08vjlu5vzc",
-                "country": "Россия",
-                "region": "Тверская область",
-                "options": [
-                    {
-                        "id": "clfa43hot00dern08p3476c3z",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa42vau00d2rn080y2iqbvi",
-                "country": "Россия",
-                "region": "Тамбовская область",
-                "options": [
-                    {
-                        "id": "clfa431yq00d7rn08cf01bmu1",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa42kfw00cvrn082ompcnrg",
-                "country": "Россия",
-                "region": "Ставропольский край",
-                "options": [
-                    {
-                        "id": "clfa42oj600d0rn086wpx7rav",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "1000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4214o00corn08h9s6792y",
-                "country": "Россия",
-                "region": "Смоленская область",
-                "options": [
-                    {
-                        "id": "clfa42bm200ctrn08fvsvi1g2",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa41k6p00chrn08ca52yk6p",
-                "country": "Россия",
-                "region": "Свердловская область",
-                "options": [
-                    {
-                        "id": "clfa41trv00cmrn0819ib93m9",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa413fn00carn08o4lsfcc4",
-                "country": "Россия",
-                "region": "Сахалинская область",
-                "options": [
-                    {
-                        "id": "clfa41bz000cfrn08prvmu1lw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 30,
-                        "price": "2000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa40o8m00c3rn08znxmndqr",
-                "country": "Россия",
-                "region": "Саратовская область",
-                "options": [
-                    {
-                        "id": "clfa40va400c8rn08akrf0dnw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3zphl00bwrn089t466sc6",
-                "country": "Россия",
-                "region": "Санкт-Петербург",
-                "options": [
-                    {
-                        "id": "clfa401ul00c1rn08v2fc07xc",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3ytvj00bprn0899njcstj",
-                "country": "Россия",
-                "region": "Самарская область",
-                "options": [
-                    {
-                        "id": "clfa3z23m00burn080n2tdllq",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3yggk00birn08revgkcli",
-                "country": "Россия",
-                "region": "Рязанская область",
-                "options": [
-                    {
-                        "id": "clfa3ylti00bnrn08c7nim09z",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3xyz800bbrn08jo0i94pu",
-                "country": "Россия",
-                "region": "Ростовская область",
-                "options": [
-                    {
-                        "id": "clfa3y72500bgrn084dov1aka",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3xe5h00b4rn08stm3hcp1",
-                "country": "Россия",
-                "region": "Хакасия",
-                "options": [
-                    {
-                        "id": "clfa3xo1p00b9rn08g3dwnrw1",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3wcxp00axrn08xgk91fdq",
-                "country": "Россия",
-                "region": "Тыва",
-                "options": [
-                    {
-                        "id": "clfa3wphq00b2rn08nbcyiqry",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 28,
-                        "price": "1600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3vtuq00aqrn08vzmnvvuc",
-                "country": "Россия",
-                "region": "Татарстан",
-                "options": [
-                    {
-                        "id": "clfa3w0fw00avrn08fie13b3b",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3reqw00ajrn087r47pkk0",
-                "country": "Россия",
-                "region": "Северная Осетия",
-                "options": [
-                    {
-                        "id": "clfa3vmil00aorn08g3fz3nhe",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3kylh00acrn080w55ym54",
-                "country": "Россия",
-                "region": "Мордовия",
-                "options": [
-                    {
-                        "id": "clfa3l4st00ahrn08aqulj8r6",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3kl0900a5rn0863y3w8cz",
-                "country": "Россия",
-                "region": "Марий Эл",
-                "options": [
-                    {
-                        "id": "clfa3kqv400aarn08v77summz",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3kb7o009yrn08hhrbe2bw",
-                "country": "Россия",
-                "region": "Коми",
-                "options": [
-                    {
-                        "id": "clfa3keuz00a3rn086874i9u1",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "1600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3jyxf009rrn08q6sgu5fj",
-                "country": "Россия",
-                "region": "Карелия",
-                "options": [
-                    {
-                        "id": "clfa3k4ho009wrn08vmvx8puy",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3jlbh009krn081e34lwui",
-                "country": "Россия",
-                "region": "Калмыкия",
-                "options": [
-                    {
-                        "id": "clfa3jrt1009prn08xqlljh8k",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3j6qt009drn08cdp4muvz",
-                "country": "Россия",
-                "region": "Ингушетия",
-                "options": [
-                    {
-                        "id": "clfa3jdf7009irn08mh5iupri",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3isqr0096rn088yfja9iq",
-                "country": "Россия",
-                "region": "Дагестан",
-                "options": [
-                    {
-                        "id": "clfa3iyz1009brn08544sv0hr",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "1000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3ifsy008zrn08j4lj3ceb",
-                "country": "Россия",
-                "region": "Бурятия",
-                "options": [
-                    {
-                        "id": "clfa3im2d0094rn08tsxgimls",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3hzuv008srn08nq87181l",
-                "country": "Россия",
-                "region": "Башкортостан",
-                "options": [
-                    {
-                        "id": "clfa3i8r1008xrn08qeox3teo",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3hi4w008lrn08htwrf5c9",
-                "country": "Россия",
-                "region": "Алтай",
-                "options": [
-                    {
-                        "id": "clfa3hs7t008qrn0826tfi6nx",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "2000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3grcz008ern089xfhke8v",
-                "country": "Россия",
-                "region": "Адыгея",
-                "options": [
-                    {
-                        "id": "clfa3gz74008jrn08acto0a8f",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3ga420087rn08lvm1nxv5",
-                "country": "Россия",
-                "region": "Псковская область",
-                "options": [
-                    {
-                        "id": "clfa3gjk2008crn08px6erkia",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3fskm0080rn083vm0t0gj",
-                "country": "Россия",
-                "region": "Приморский край",
-                "options": [
-                    {
-                        "id": "clfa3g1kc0085rn087kfbwwsc",
+                        "id": "clfe1ohvj005dlt082ifofis6",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 29,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3crk1007trn081skx5g57",
-                "country": "Россия",
-                "region": "Пермский край",
-                "options": [
-                    {
-                        "id": "clfa3cy60007yrn08ew9w1kqg",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3cheo007mrn08h5nx5wbi",
-                "country": "Россия",
-                "region": "Пензенская область",
-                "options": [
-                    {
-                        "id": "clfa3clfc007rrn08z3zrdliq",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3c3ly007frn08apnu8sd3",
-                "country": "Россия",
-                "region": "Орловская область",
-                "options": [
-                    {
-                        "id": "clfa3cago007krn08wk8nf3b2",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3bcww0078rn088poctv84",
-                "country": "Россия",
-                "region": "Оренбургская область",
-                "options": [
-                    {
-                        "id": "clfa3bien007drn087o7gjfx8",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3axt10071rn083jml59wd",
-                "country": "Россия",
-                "region": "Омская область",
-                "options": [
-                    {
-                        "id": "clfa3b4nl0076rn088sgoj6ir",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "1400"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3akep006urn08yvabjyc5",
-                "country": "Россия",
-                "region": "Новосибирская область",
-                "options": [
-                    {
-                        "id": "clfa3aqqe006zrn086weoynhm",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "1400"
-                    }
-                ]
-            },
-            {
-                "id": "clfa3a4q1006nrn08clsmviuc",
-                "country": "Россия",
-                "region": "Новгородская область",
-                "options": [
-                    {
-                        "id": "clfa3ab0r006srn08ijg5m38o",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa39ofn006grn08ddgy5cze",
-                "country": "Россия",
-                "region": "Нижегородская область",
-                "options": [
-                    {
-                        "id": "clfa39xbv006lrn080qcaigm3",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa38sx70069rn08wkuloo6x",
-                "country": "Россия",
-                "region": "Мурманская область",
-                "options": [
-                    {
-                        "id": "clfa3905d006ern08ah3itcbl",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa38g2t0062rn08on1ce5dh",
-                "country": "Россия",
-                "region": "Московская область",
-                "options": [
-                    {
-                        "id": "clfa38lx30067rn08fqietnkj",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 21,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa36jun005rrn08inghl5gz",
-                "country": "Россия",
-                "region": "Москва",
-                "options": [
-                    {
-                        "id": "clfa36x52005wrn08kury32rk",
-                        "title": "Курьерская доставка по Москве в пределах МКАД",
-                        "duration": 20,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa35fqs005krn0829by6m5h",
-                "country": "Россия",
-                "region": "Магаданская область",
-                "options": [
-                    {
-                        "id": "clfa35ls2005prn08tngslrhl",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 26,
-                        "price": "2500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa351a6005drn08cxgn99lz",
-                "country": "Россия",
-                "region": "Липецкая область",
-                "options": [
-                    {
-                        "id": "clfa358ir005irn0853qxhfo5",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa34jtg0056rn085c0dgijb",
-                "country": "Россия",
-                "region": "Ленинградская область",
-                "options": [
-                    {
-                        "id": "clfa34sg8005brn0853eo951l",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa342ih004zrn08t5p7ncq5",
-                "country": "Россия",
-                "region": "Курская область",
-                "options": [
-                    {
-                        "id": "clfa34cid0054rn0836baqbws",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2v2c4004srn08ygfukf9e",
-                "country": "Россия",
-                "region": "Курганская область",
-                "options": [
-                    {
-                        "id": "clfa2vcgz004xrn08zn9tjcbn",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2rxlc004hrn086hi8heth",
-                "country": "Россия",
-                "region": "Красноярский край",
-                "options": [
-                    {
-                        "id": "clfa2sagb004mrn08ydj20p5m",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2r7e5004arn08h34p8pms",
-                "country": "Россия",
-                "region": "Краснодарский край",
-                "options": [
-                    {
-                        "id": "clfa2rgrh004frn08twgxvly8",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2px2t0043rn08gzvzi9iw",
-                "country": "Россия",
-                "region": "Костромская область",
-                "options": [
-                    {
-                        "id": "clfa2q61j0048rn085wdzfu1u",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2pirk003wrn08f4s6c4t5",
-                "country": "Россия",
-                "region": "Кировская область",
-                "options": [
-                    {
-                        "id": "clfa2pp6p0041rn08sox4qkk4",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 23,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2mf9c003prn084e2mdd9p",
-                "country": "Россия",
-                "region": "Кемеровская область",
-                "options": [
-                    {
-                        "id": "clfa2mmgd003urn08ezx5n5ef",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 26,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2lxgd003irn08ocn33f8o",
-                "country": "Россия",
-                "region": "Карачаево-Черкесия",
-                "options": [
-                    {
-                        "id": "clfa2m67x003nrn088p4v0bch",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 24,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2limp003brn08xvhmtuu7",
-                "country": "Россия",
-                "region": "Камчатский край",
-                "options": [
-                    {
-                        "id": "clfa2lq1f003grn08fy56uxb8",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 25,
                         "price": "2300"
                     }
                 ]
             },
             {
-                "id": "clfa2l5d10034rn085smjknm8",
+                "id": "clfe1fkgx004ult081x7aeysq",
                 "country": "Россия",
-                "region": "Калужская область",
+                "region": "Ханты-Мансийский АО — Югра",
                 "options": [
                     {
-                        "id": "clfa2lbx20039rn08ke1cgyqs",
+                        "id": "clfe1fp9h004zlt08d2wh8bcl",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
+                        "duration": 28,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0n578004nlt085w8iwz7o",
+                "country": "Россия",
+                "region": "Чувашская Республика",
+                "options": [
+                    {
+                        "id": "clfe0n99j004slt08hn5tbe9v",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
                         "price": "500"
                     }
                 ]
             },
             {
-                "id": "clfa2ksqb002xrn08g00tb45z",
+                "id": "clfe0mouj004glt08u4za1iod",
                 "country": "Россия",
-                "region": "Калининградская область",
+                "region": "Чеченская Республика",
                 "options": [
                     {
-                        "id": "clfa2kzgd0032rn08uanyb5n5",
+                        "id": "clfe0msx1004llt08poz47imc",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 26,
+                        "duration": 25,
+                        "price": "1000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0lpva0049lt08twa9pap0",
+                "country": "Россия",
+                "region": "Удмуртская Республика",
+                "options": [
+                    {
+                        "id": "clfe0luxs004elt080zwwz1of",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0k2k50042lt08bzl6xhnb",
+                "country": "Россия",
+                "region": "Республика Хакасия",
+                "options": [
+                    {
+                        "id": "clfe0k6u80047lt08znpwskm1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0jn79003vlt08n1g2147f",
+                "country": "Россия",
+                "region": "Республика Тыва",
+                "options": [
+                    {
+                        "id": "clfe0jrk40040lt080nsgnry8",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 28,
+                        "price": "1600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0j6kh003olt08qhg1qu51",
+                "country": "Россия",
+                "region": "Республика Татарстан",
+                "options": [
+                    {
+                        "id": "clfe0ja1o003tlt08r5uh5obe",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0irau003hlt088h7l97k4",
+                "country": "Россия",
+                "region": "Республика Северная Осетия — Алания",
+                "options": [
+                    {
+                        "id": "clfe0ivjh003mlt087htx6cwq",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0dbpn003alt08xg6pjkrt",
+                "country": "Россия",
+                "region": "Республика Саха (Якутия)",
+                "options": [
+                    {
+                        "id": "clfe0fetb003flt08vzgc3ftf",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 45,
+                        "price": "5500"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0ctzv0033lt082f936wai",
+                "country": "Россия",
+                "region": "Республика Мордовия",
+                "options": [
+                    {
+                        "id": "clfe0cyx60038lt080mnr05mq",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0c0hy002wlt0887jhgoru",
+                "country": "Россия",
+                "region": "Республика Марий Эл",
+                "options": [
+                    {
+                        "id": "clfe0c4n50031lt08zuv6mbkk",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0b663002plt08j7m9pufs",
+                "country": "Россия",
+                "region": "Республика Крым",
+                "options": [
+                    {
+                        "id": "clfe0bluz002ult08nylnrhjr",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
                         "price": "1200"
                     }
                 ]
             },
             {
-                "id": "clfa2kc7h002qrn08tw3rzdgh",
+                "id": "clfe0avh5002ilt08zrvytkpt",
                 "country": "Россия",
-                "region": "Кабардино-Балкария",
+                "region": "Республика Коми",
                 "options": [
                     {
-                        "id": "clfa2kjj7002vrn08k8z16ukf",
+                        "id": "clfe0azcl002nlt088nvf2ipy",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "1600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0afra002blt0849nljnh3",
+                "country": "Россия",
+                "region": "Республика Карелия",
+                "options": [
+                    {
+                        "id": "clfe0ajpq002glt08unh91myz",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 24,
                         "price": "600"
@@ -875,142 +199,181 @@
                 ]
             },
             {
-                "id": "clfa2jvlf002jrn08wxdm3xyp",
+                "id": "clfe0a1e60024lt08816qbo9k",
                 "country": "Россия",
-                "region": "Иркутская область",
+                "region": "Республика Калмыкия",
                 "options": [
                     {
-                        "id": "clfa2k3hb002orn083irjhatx",
+                        "id": "clfe0a5650029lt08d9t2cdql",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "1900"
+                        "duration": 25,
+                        "price": "600"
                     }
                 ]
             },
             {
-                "id": "clfa2jb2t002crn085qw6ygqg",
+                "id": "clfe09c96001xlt08jhinkfxi",
                 "country": "Россия",
-                "region": "Ивановская область",
+                "region": "Республика Ингушетия",
                 "options": [
                     {
-                        "id": "clfa2jltj002hrn08faa189yn",
+                        "id": "clfe09gi00022lt08ruzz76qs",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
+                        "duration": 24,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe08iv7001qlt08eam4jx84",
+                "country": "Россия",
+                "region": "Республика Дагестан",
+                "options": [
+                    {
+                        "id": "clfe08tlw001vlt08p0bsr9ca",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "1000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe07wce001jlt08bf934gll",
+                "country": "Россия",
+                "region": "Республика Бурятия",
+                "options": [
+                    {
+                        "id": "clfe081bv001olt08l901b6x9",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfe07ac3001clt08nuo1hkb0",
+                "country": "Россия",
+                "region": "Республика Башкортостан",
+                "options": [
+                    {
+                        "id": "clfe07fq8001hlt083t93uycf",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfe06p2b0015lt081vpcvx75",
+                "country": "Россия",
+                "region": "Республика Алтай",
+                "options": [
+                    {
+                        "id": "clfe06tg0001alt08c8lhcagd",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "2000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe0575a000ylt08hv89xlx3",
+                "country": "Россия",
+                "region": "Республика Адыгея",
+                "options": [
+                    {
+                        "id": "clfe05e6k0013lt08tjcxr375",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
                         "price": "500"
                     }
                 ]
             },
             {
-                "id": "clfa2i4um0025rn08knlx3jdn",
+                "id": "clfe0264a000rlt08ydlzyvnt",
                 "country": "Россия",
-                "region": "Забайкальский край",
+                "region": "Карачаево-Черкесская Республика",
                 "options": [
                     {
-                        "id": "clfa2idz3002arn08lohhsq1i",
+                        "id": "clfe02egf000wlt083sbrt5qr",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 24,
-                        "price": "2600"
+                        "price": "500"
                     }
                 ]
             },
             {
-                "id": "clfa2gweb001yrn08qajsdmeo",
+                "id": "clfe0102y000klt08obzoq2uz",
                 "country": "Россия",
-                "region": "Еврейская АО",
+                "region": "Кабардино-Балкарская Республика",
                 "options": [
                     {
-                        "id": "clfa2hten0023rn08m2kilkct",
+                        "id": "clfe01aeg000plt08dp3acuac",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdzuzln000dlt08mdfxy00g",
+                "country": "Россия",
+                "region": "Севастополь",
+                "options": [
+                    {
+                        "id": "clfdzymzf000ilt08sikrgqw1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "1200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jb2016rw714nfdvbxqg",
+                "country": "Россия",
+                "region": "Алтайский край",
+                "options": [
+                    {
+                        "id": "clfdz5jb2016sw714gil69upi",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jaw016pw714zabfpogd",
+                "country": "Россия",
+                "region": "Амурская область",
+                "options": [
+                    {
+                        "id": "clfdz5jaw016qw714b1gimjiz",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 28,
-                        "price": "1300"
+                        "price": "1400"
                     }
                 ]
             },
             {
-                "id": "clfa2g5m4001rrn08bewwkrxf",
+                "id": "clfdz5jar016mw714008d3hd9",
                 "country": "Россия",
-                "region": "Воронежская область",
+                "region": "Архангельская область",
                 "options": [
                     {
-                        "id": "clfa2gbx8001wrn08qacrua3i",
+                        "id": "clfdz5jar016nw714f6qcbxr8",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 22,
-                        "price": "500"
+                        "price": "1000"
                     }
                 ]
             },
             {
-                "id": "clfa2fax3001krn08sp2hmgqb",
-                "country": "Россия",
-                "region": "Вологодская область",
-                "options": [
-                    {
-                        "id": "clfa2fstb001prn087soewltb",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2elpb001drn080b3g8f3z",
-                "country": "Россия",
-                "region": "Волгоградская область",
-                "options": [
-                    {
-                        "id": "clfa2ewv4001irn089gmdlnze",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2dlwd0016rn08s39phc4t",
-                "country": "Россия",
-                "region": "Владимирская область",
-                "options": [
-                    {
-                        "id": "clfa2du2e001brn086i31fdwo",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 21,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2d335000zrn08zulpmh49",
-                "country": "Россия",
-                "region": "Брянская область",
-                "options": [
-                    {
-                        "id": "clfa2db3v0014rn087ph081hc",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 21,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2cd7w000srn08o8l07v7v",
-                "country": "Россия",
-                "region": "Белгородская область",
-                "options": [
-                    {
-                        "id": "clfa2cssr000xrn08bz4djlyp",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 21,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa2b6s4000lrn089x3yzppb",
+                "id": "clfdz5jam016kw714cx9xe3tc",
                 "country": "Россия",
                 "region": "Астраханская область",
                 "options": [
                     {
-                        "id": "clfa2blpd000qrn08cil7425q",
+                        "id": "clfdz5jam016lw714ukq76fig",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 23000,
                         "price": "700"
@@ -1018,41 +381,730 @@
                 ]
             },
             {
-                "id": "clfa29c1m000ern08g2cbw4if",
+                "id": "clfdz5jah016iw714ixdiju5l",
                 "country": "Россия",
-                "region": "Архангельская область",
+                "region": "Белгородская область",
                 "options": [
                     {
-                        "id": "clfa2au65000jrn08ezi2y5il",
+                        "id": "clfdz5jah016jw7144admvqoq",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 22,
-                        "price": "1000"
+                        "duration": 21,
+                        "price": "600"
                     }
                 ]
             },
             {
-                "id": "clfa2848q0007rn08zj7a22ip",
+                "id": "clfdz5jac016fw714hw97xryt",
                 "country": "Россия",
-                "region": "Амурская область",
+                "region": "Брянская область",
                 "options": [
                     {
-                        "id": "clfa28l0y000crn08ug7o7ic8",
+                        "id": "clfdz5jac016gw714q294mb8m",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 21,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5ja6016cw71435zky8s0",
+                "country": "Россия",
+                "region": "Владимирская область",
+                "options": [
+                    {
+                        "id": "clfdz5ja6016dw714oobac1z8",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 21,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5ja1016aw714v430nslr",
+                "country": "Россия",
+                "region": "Волгоградская область",
+                "options": [
+                    {
+                        "id": "clfdz5ja1016bw714rjpe1ivf",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j9w0167w714gn6h1c6v",
+                "country": "Россия",
+                "region": "Вологодская область",
+                "options": [
+                    {
+                        "id": "clfdz5j9w0168w7143zpkv3bc",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j9r0164w71473cfy1ts",
+                "country": "Россия",
+                "region": "Воронежская область",
+                "options": [
+                    {
+                        "id": "clfdz5j9r0165w714mtsalxd1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j9m0162w714bryuoaxq",
+                "country": "Россия",
+                "region": "Еврейская АО",
+                "options": [
+                    {
+                        "id": "clfdz5j9m0163w714vw47b92z",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 28,
+                        "price": "1300"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j9h0160w714q28u8tic",
+                "country": "Россия",
+                "region": "Забайкальский край",
+                "options": [
+                    {
+                        "id": "clfdz5j9h0161w7142z94bxr6",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "2600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j9c015xw7143sytvrmx",
+                "country": "Россия",
+                "region": "Ивановская область",
+                "options": [
+                    {
+                        "id": "clfdz5j9c015yw714tseqhwnb",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j97015uw714en4fenwj",
+                "country": "Россия",
+                "region": "Иркутская область",
+                "options": [
+                    {
+                        "id": "clfdz5j97015vw714dr9cfnkk",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "1900"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j8x015qw714yth0rdq2",
+                "country": "Россия",
+                "region": "Калининградская область",
+                "options": [
+                    {
+                        "id": "clfdz5j8x015rw714zbz7k11t",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 26,
+                        "price": "1200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j8s015ow714fb7brkmm",
+                "country": "Россия",
+                "region": "Калужская область",
+                "options": [
+                    {
+                        "id": "clfdz5j8s015pw714xtwnpxg6",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j8n015lw714v1rsdxif",
+                "country": "Россия",
+                "region": "Камчатский край",
+                "options": [
+                    {
+                        "id": "clfdz5j8n015mw71426yygvyz",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "2300"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j8b015gw714i0qdjguv",
+                "country": "Россия",
+                "region": "Кемеровская область",
+                "options": [
+                    {
+                        "id": "clfdz5j8b015hw714wjpwbstm",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 26,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j82015dw714tzzmxhna",
+                "country": "Россия",
+                "region": "Кировская область",
+                "options": [
+                    {
+                        "id": "clfdz5j83015ew714c6m0g6je",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j7x015bw7144zzhofzs",
+                "country": "Россия",
+                "region": "Костромская область",
+                "options": [
+                    {
+                        "id": "clfdz5j7x015cw714j9v954ku",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j7s0158w714ddffps45",
+                "country": "Россия",
+                "region": "Краснодарский край",
+                "options": [
+                    {
+                        "id": "clfdz5j7s0159w71475gsnw7e",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j7m0155w7149ybsps60",
+                "country": "Россия",
+                "region": "Красноярский край",
+                "options": [
+                    {
+                        "id": "clfdz5j7n0156w7144i6f1d0f",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "800"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j7i0153w71400j4rfek",
+                "country": "Россия",
+                "region": "Курганская область",
+                "options": [
+                    {
+                        "id": "clfdz5j7i0154w714xmxau1vj",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j7c0151w714c211yq5u",
+                "country": "Россия",
+                "region": "Курская область",
+                "options": [
+                    {
+                        "id": "clfdz5j7c0152w714onwh5em6",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j76014zw714mgmnkcol",
+                "country": "Россия",
+                "region": "Ленинградская область",
+                "options": [
+                    {
+                        "id": "clfdz5j770150w714gqk58yqq",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j70014xw7141iw5s53n",
+                "country": "Россия",
+                "region": "Липецкая область",
+                "options": [
+                    {
+                        "id": "clfdz5j70014yw714xb7xpao0",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j6v014vw714gkfoou7g",
+                "country": "Россия",
+                "region": "Магаданская область",
+                "options": [
+                    {
+                        "id": "clfdz5j6v014ww714uvhz9f3c",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 26,
+                        "price": "2500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j6q014tw714gagbrtvb",
+                "country": "Россия",
+                "region": "Москва",
+                "options": [
+                    {
+                        "id": "clfdz5j6q014uw71486cx6jto",
+                        "title": "Курьерская доставка по Москве в пределах МКАД",
+                        "duration": 20,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j6k014qw714ggze82mv",
+                "country": "Россия",
+                "region": "Московская область",
+                "options": [
+                    {
+                        "id": "clfdz5j6k014rw714ci5yv4xc",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 21,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j6e014ow714582zk7if",
+                "country": "Россия",
+                "region": "Мурманская область",
+                "options": [
+                    {
+                        "id": "clfdz5j6e014pw7146pmtpm2k",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j66014lw714hb9n8r88",
+                "country": "Россия",
+                "region": "Нижегородская область",
+                "options": [
+                    {
+                        "id": "clfdz5j66014mw714alqsi90o",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j5z014jw714rl8wu8fr",
+                "country": "Россия",
+                "region": "Новгородская область",
+                "options": [
+                    {
+                        "id": "clfdz5j5z014kw7147leqk4g3",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j5t014hw714qeftj2vs",
+                "country": "Россия",
+                "region": "Новосибирская область",
+                "options": [
+                    {
+                        "id": "clfdz5j5t014iw714u9l080yj",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
                         "price": "1400"
                     }
                 ]
             },
             {
-                "id": "clfa26pon0000rn0889cx9pzi",
+                "id": "clfdz5j5n014fw714648gb8jz",
                 "country": "Россия",
-                "region": "Алтайский край",
+                "region": "Омская область",
                 "options": [
                     {
-                        "id": "clfa27fs80005rn082qgg21xf",
+                        "id": "clfdz5j5n014gw714t6ws0ufg",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 25,
-                        "price": "1700"
+                        "price": "1400"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j5h014cw714hqbco07w",
+                "country": "Россия",
+                "region": "Оренбургская область",
+                "options": [
+                    {
+                        "id": "clfdz5j5h014dw714zvgpahoa",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j5a0149w714dsg381yf",
+                "country": "Россия",
+                "region": "Орловская область",
+                "options": [
+                    {
+                        "id": "clfdz5j5a014aw714qdhzocxq",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j540147w714mhzhcgcw",
+                "country": "Россия",
+                "region": "Пензенская область",
+                "options": [
+                    {
+                        "id": "clfdz5j540148w71488t8v6iz",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j4z0145w7141txhad2o",
+                "country": "Россия",
+                "region": "Пермский край",
+                "options": [
+                    {
+                        "id": "clfdz5j4z0146w714nl2et8qo",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j4u0143w714gbtc02r7",
+                "country": "Россия",
+                "region": "Приморский край",
+                "options": [
+                    {
+                        "id": "clfdz5j4u0144w71431z8aybb",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 29,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j4p0140w7142fzkygku",
+                "country": "Россия",
+                "region": "Псковская область",
+                "options": [
+                    {
+                        "id": "clfdz5j4p0141w714u9jj3s34",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j2g012zw7140je4xoua",
+                "country": "Россия",
+                "region": "Ростовская область",
+                "options": [
+                    {
+                        "id": "clfdz5j2g0130w714oex972bf",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j2a012xw714qd1tbrel",
+                "country": "Россия",
+                "region": "Рязанская область",
+                "options": [
+                    {
+                        "id": "clfdz5j2a012yw7141p12i41j",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j25012uw714liitco18",
+                "country": "Россия",
+                "region": "Самарская область",
+                "options": [
+                    {
+                        "id": "clfdz5j25012vw714olc70upj",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j1z012sw714mchhl069",
+                "country": "Россия",
+                "region": "Санкт-Петербург",
+                "options": [
+                    {
+                        "id": "clfdz5j20012tw714jz9rvfag",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j1u012pw714y6c0544y",
+                "country": "Россия",
+                "region": "Саратовская область",
+                "options": [
+                    {
+                        "id": "clfdz5j1u012qw714qslc0p58",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j1p012mw714d137g0ud",
+                "country": "Россия",
+                "region": "Сахалинская область",
+                "options": [
+                    {
+                        "id": "clfdz5j1p012nw714xoi3ofr5",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 30,
+                        "price": "2000"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j1k012kw71439g4frdf",
+                "country": "Россия",
+                "region": "Свердловская область",
+                "options": [
+                    {
+                        "id": "clfdz5j1k012lw7142r4e419i",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j1f012iw7146q5wbxm2",
+                "country": "Россия",
+                "region": "Смоленская область",
+                "options": [
+                    {
+                        "id": "clfdz5j1f012jw714mypfbj6o",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j19012fw7148n5vk2cd",
+                "country": "Россия",
+                "region": "Ставропольский край",
+                "options": [
+                    {
+                        "id": "clfdz5j19012gw714utvw30ek",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 23,
+                        "price": "1000"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j14012dw7146fdgi2t8",
+                "country": "Россия",
+                "region": "Тамбовская область",
+                "options": [
+                    {
+                        "id": "clfdz5j15012ew714slomo918",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j0z012aw7141k0l879i",
+                "country": "Россия",
+                "region": "Тверская область",
+                "options": [
+                    {
+                        "id": "clfdz5j0z012bw7145zmwuiwb",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 22,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j0u0127w7145ouf6eu8",
+                "country": "Россия",
+                "region": "Томская область",
+                "options": [
+                    {
+                        "id": "clfdz5j0u0128w714zzt6n3va",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "1600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j0p0124w714sdx5tam6",
+                "country": "Россия",
+                "region": "Тульская область",
+                "options": [
+                    {
+                        "id": "clfdz5j0p0125w7145ivs7t9r",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j0j0122w714uyk7e8ay",
+                "country": "Россия",
+                "region": "Тюменская область",
+                "options": [
+                    {
+                        "id": "clfdz5j0j0123w714mc04jj1z",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 24,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j09011ww714f407q1gy",
+                "country": "Россия",
+                "region": "Ульяновская область",
+                "options": [
+                    {
+                        "id": "clfdz5j09011xw7141108ymwz",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5j04011uw7145a5jgt48",
+                "country": "Россия",
+                "region": "Хабаровский край",
+                "options": [
+                    {
+                        "id": "clfdz5j04011vw714n87ulpcg",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "1300"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5izt011pw714pfxgntym",
+                "country": "Россия",
+                "region": "Челябинская область",
+                "options": [
+                    {
+                        "id": "clfdz5izt011qw714dmq68kb7",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5izc011hw714r7mfze5z",
+                "country": "Россия",
+                "region": "Чукотский АО",
+                "options": [
+                    {
+                        "id": "clfdz5izc011iw714hrh627xf",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 31,
+                        "price": "4500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5iz5011ew714snmhmqmd",
+                "country": "Россия",
+                "region": "Ямало-Ненецкий АО",
+                "options": [
+                    {
+                        "id": "clfdz5iz5011fw714goxjucsc",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 28,
+                        "price": "2300"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5iyw011bw714uznorg6a",
+                "country": "Россия",
+                "region": "Ярославская область",
+                "options": [
+                    {
+                        "id": "clfdz5iyw011cw714nw8b8ske",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "700"
                     }
                 ]
             }
@@ -1063,126 +1115,31 @@
         "title": "Товары с быстрой доставкой",
         "zones": [
             {
-                "id": "clfa5rc7c00zxrn08tg3iu93p",
+                "id": "clfe2m80800bblt08inchfskv",
                 "country": "Россия",
-                "region": "Ярославская область",
+                "region": "Ненецкий АО",
                 "options": [
                     {
-                        "id": "clfa5rkr10102rn08nxkp1h4l",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa5rkr10103rn083k6keqyq",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5qvxs00zorn080x3m2fki",
-                "country": "Россия",
-                "region": "Ямало-Ненецкий АО",
-                "options": [
-                    {
-                        "id": "clfa5r8kt00ztrn08ff35jbzt",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 6,
-                        "price": "2300"
-                    },
-                    {
-                        "id": "clfa5r8kt00zurn08ld7040ac",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "4200"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5qge500zhrn08njforg2o",
-                "country": "Россия",
-                "region": "Чукотский АО",
-                "options": [
-                    {
-                        "id": "clfa5qqpd00zmrn08d7t9z6eh",
+                        "id": "clfe2msqh00bglt083bl7mohy",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 9,
-                        "price": "4500"
+                        "price": "2300"
                     }
                 ]
             },
             {
-                "id": "clfa5pzjt00z8rn08aepfgdtc",
+                "id": "clfe2low900b1lt08ivwefbcg",
                 "country": "Россия",
-                "region": "Чувашия",
+                "region": "Ханты-Мансийский АО — Югра",
                 "options": [
                     {
-                        "id": "clfa5q9m800zdrn08ra5f5oru",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa5q9m800zern08dyxncrkr",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5pln500yzrn08mgbu2nia",
-                "country": "Россия",
-                "region": "Чечня",
-                "options": [
-                    {
-                        "id": "clfa5pvwe00z4rn082amr43ey",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "1000"
-                    },
-                    {
-                        "id": "clfa5pvwe00z5rn08jtb38kj0",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5p8ll00yqrn08i0z5r4oe",
-                "country": "Россия",
-                "region": "Челябинская область",
-                "options": [
-                    {
-                        "id": "clfa5phn900yvrn08a6t19fw9",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa5phn900ywrn08wjlnh98c",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2100"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5o8m900yhrn086o9qf9jy",
-                "country": "Россия",
-                "region": "Ханты-Мансийский АО",
-                "options": [
-                    {
-                        "id": "clfa5p4i300ymrn08tkpyt5bp",
+                        "id": "clfe2m07n00b6lt0882quso9h",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 6,
                         "price": "1800"
                     },
                     {
-                        "id": "clfa5p4i300ynrn08dtnae9i7",
+                        "id": "clfe2m4s100b9lt087oq60m07",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "3000"
@@ -1190,37 +1147,18 @@
                 ]
             },
             {
-                "id": "clfa5nrdg00y8rn08wtdj1x6d",
+                "id": "clfe2kyal00aslt08b3oigtr3",
                 "country": "Россия",
-                "region": "Хабаровский край",
+                "region": "Чувашская Республика",
                 "options": [
                     {
-                        "id": "clfa5o2uf00ydrn081liln44x",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 8,
-                        "price": "1300"
-                    },
-                    {
-                        "id": "clfa5o2uf00yern08vhpc6c0t",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "3200"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5nfir00xzrn08qulwua0w",
-                "country": "Россия",
-                "region": "Ульяновская область",
-                "options": [
-                    {
-                        "id": "clfa5nngo00y4rn08p904mgon",
+                        "id": "clfe2l9ho00axlt08hss4s32k",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 3,
-                        "price": "700"
+                        "price": "500"
                     },
                     {
-                        "id": "clfa5nngo00y5rn084u08vdd0",
+                        "id": "clfe2l9ho00aylt08nug8loyp",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "1700"
@@ -1228,18 +1166,18 @@
                 ]
             },
             {
-                "id": "clfa5n2ts00xqrn08upbmtrwx",
+                "id": "clfe2k6se00ajlt08rggsa7in",
                 "country": "Россия",
-                "region": "Удмуртия",
+                "region": "Чеченская Республика",
                 "options": [
                     {
-                        "id": "clfa5nbe300xvrn08bp65corx",
+                        "id": "clfe2khut00aolt08k094c2c0",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 3,
-                        "price": "600"
+                        "price": "1000"
                     },
                     {
-                        "id": "clfa5nbe300xwrn08cinq1pxc",
+                        "id": "clfe2khut00aplt08loeo8w0q",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "1500"
@@ -1247,113 +1185,247 @@
                 ]
             },
             {
-                "id": "clfa5mqw600xhrn08b0pq4cvd",
+                "id": "clfe2jjrb00aalt08u472waqy",
                 "country": "Россия",
-                "region": "Тюменская область",
+                "region": "Удмуртская Республика",
                 "options": [
                     {
-                        "id": "clfa5mz1400xmrn08nsnm2r8c",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa5mz1500xnrn08uqxn85p0",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2300"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5mem400x8rn087rmqhur3",
-                "country": "Россия",
-                "region": "Тульская область",
-                "options": [
-                    {
-                        "id": "clfa5mm0u00xdrn08bpfatmrw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa5mm0u00xern08qvcec2fj",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5ldrt00wzrn08210d9mt2",
-                "country": "Россия",
-                "region": "Томская область",
-                "options": [
-                    {
-                        "id": "clfa5lu4100x4rn08xtwcv4kz",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "1400"
-                    },
-                    {
-                        "id": "clfa5lu4100x5rn08569ma0zb",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5l0bw00wqrn08mn4dri93",
-                "country": "Россия",
-                "region": "Тверская область",
-                "options": [
-                    {
-                        "id": "clfa5l9u500wvrn08od81yg5l",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5l9u600wwrn08y6z7so5o",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5klq100whrn0822cvsrs2",
-                "country": "Россия",
-                "region": "Тамбовская область",
-                "options": [
-                    {
-                        "id": "clfa5kus000wmrn088efk7i02",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5kus000wnrn08zilx0icf",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5k9cq00w8rn0867gv3tzb",
-                "country": "Россия",
-                "region": "Ставропольский край",
-                "options": [
-                    {
-                        "id": "clfa5khn400wdrn0896oxlfbx",
+                        "id": "clfe2jsgv00aflt08jy2t0vg7",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 3,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfe2jsgv00aglt08713g6wqs",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2isve00a1lt08ujrshpu3",
+                "country": "Россия",
+                "region": "Республика Хакасия",
+                "options": [
+                    {
+                        "id": "clfe2j2x000a6lt08pr4lylg7",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "1500"
+                    },
+                    {
+                        "id": "clfe2j2x000a7lt088f8rihrs",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2700"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2i44y009slt08oks52o0w",
+                "country": "Россия",
+                "region": "Республика Тыва",
+                "options": [
+                    {
+                        "id": "clfe2if5k009xlt08rkcw722l",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 8,
+                        "price": "1600"
+                    },
+                    {
+                        "id": "clfe2if5k009ylt089n8v2c51",
+                        "title": "Экспресс-доставка",
+                        "duration": 6,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2hirh009jlt08s6r94hki",
+                "country": "Россия",
+                "region": "Республика Татарстан",
+                "options": [
+                    {
+                        "id": "clfe2hsmp009olt083rdxhiw1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfe2hsmp009plt08nh8hk99s",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2gw1a009alt08vqpxb6tm",
+                "country": "Россия",
+                "region": "Республика Северная Осетия — Алания",
+                "options": [
+                    {
+                        "id": "clfe2h5wc009flt081f889bkz",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfe2h5wc009glt08sdlno4al",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2gbjy0093lt0843pzmbx4",
+                "country": "Россия",
+                "region": "Республика Саха (Якутия)",
+                "options": [
+                    {
+                        "id": "clfe2gib00098lt08ii6ywan8",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 25,
+                        "price": "5700"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2fqk1008ult08qae6nnqt",
+                "country": "Россия",
+                "region": "Республика Мордовия",
+                "options": [
+                    {
+                        "id": "clfe2g0ru008zlt08k07xj0a9",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfe2g0ru0090lt088pb2v4sk",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2etcf008llt08wdlnnsaf",
+                "country": "Россия",
+                "region": "Республика Марий Эл",
+                "options": [
+                    {
+                        "id": "clfe2f4pd008qlt08psugropx",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfe2f4pd008rlt08m0yd4nzv",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2e3q3008clt08s5iak4ge",
+                "country": "Россия",
+                "region": "Республика Крым",
+                "options": [
+                    {
+                        "id": "clfe2eibw008hlt082ct0jgc5",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 7,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfe2eibw008ilt084w0bov9h",
+                        "title": "Экспресс-доставка",
+                        "duration": 4,
+                        "price": "1200"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2dlxs0085lt08t899oq1f",
+                "country": "Россия",
+                "region": "Республика Коми",
+                "options": [
+                    {
+                        "id": "clfe2dsw4008alt08f4yy55s3",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "1600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2d78u007ylt08qhsz0l33",
+                "country": "Россия",
+                "region": "Республика Карелия",
+                "options": [
+                    {
+                        "id": "clfe2daeo0083lt08j3odisxl",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2c9v1007plt08nng8xaj4",
+                "country": "Россия",
+                "region": "Республика Калмыкия",
+                "options": [
+                    {
+                        "id": "clfe2cqin007ult081axeq18o",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 5,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfe2cqin007vlt086ttfpior",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "1300"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2bgu9007glt08txuz5evn",
+                "country": "Россия",
+                "region": "Республика Ингушетия",
+                "options": [
+                    {
+                        "id": "clfe2bu9t007llt086fuw8p4c",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfe2bu9t007mlt08i3aieemr",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2anpe0077lt080bpv2350",
+                "country": "Россия",
+                "region": "Республика Дагестан",
+                "options": [
+                    {
+                        "id": "clfe2axt6007clt087tktkjvr",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
                         "price": "1000"
                     },
                     {
-                        "id": "clfa5khn400wern08i0wq798b",
+                        "id": "clfe2axt6007dlt08bi5xpouu",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "2000"
@@ -1361,18 +1433,253 @@
                 ]
             },
             {
-                "id": "clfa5juio00vzrn08mj0dyyci",
+                "id": "clfe29xoe006ylt08k6ay7jx0",
                 "country": "Россия",
-                "region": "Смоленская область",
+                "region": "Республика Бурятия",
                 "options": [
                     {
-                        "id": "clfa5k2kp00w4rn08mo8qtvpk",
+                        "id": "clfe2aa9o0073lt08wl2fpxq0",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 3,
+                        "price": "1800"
+                    },
+                    {
+                        "id": "clfe2aa9o0074lt08jvlv8hrp",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2700"
+                    }
+                ]
+            },
+            {
+                "id": "clfe29832006plt08zedxl0dl",
+                "country": "Россия",
+                "region": "Республика Башкортостан",
+                "options": [
+                    {
+                        "id": "clfe29ihc006ult08ysyxuu27",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfe29ihc006vlt08pev7g5ne",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe27osa006flt08wzsywlmu",
+                "country": "Россия",
+                "region": "Республика Алтай",
+                "options": [
+                    {
+                        "id": "clfe28eh5006klt08btqp4m4f",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 5,
+                        "price": "800"
+                    },
+                    {
+                        "id": "clfe28ncg006nlt08ckloat50",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "2000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe2717k0066lt085ivq1wlw",
+                "country": "Россия",
+                "region": "Республика Адыгея",
+                "options": [
+                    {
+                        "id": "clfe27b0t006blt08z5m52hjp",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfe27b0t006clt08tzsde2mq",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "1000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe25n5m005xlt08ap81jmlf",
+                "country": "Россия",
+                "region": "Карачаево-Черкесская Республика",
+                "options": [
+                    {
+                        "id": "clfe265ez0062lt08dt94dw5u",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfe265ez0063lt087at6b6kc",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "1400"
+                    }
+                ]
+            },
+            {
+                "id": "clfe24owu005olt08ytxps6kt",
+                "country": "Россия",
+                "region": "Кабардино-Балкарская Республика",
+                "options": [
+                    {
+                        "id": "clfe2532r005tlt08a968zucj",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
                         "price": "600"
                     },
                     {
-                        "id": "clfa5k2kp00w5rn08kfkfseby",
+                        "id": "clfe2532r005ult085jxsbytx",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "2000"
+                    }
+                ]
+            },
+            {
+                "id": "clfe23ar4005flt082bq84670",
+                "country": "Россия",
+                "region": "Севастополь",
+                "options": [
+                    {
+                        "id": "clfe23u3p005klt08ca3cue1a",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 7,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfe23u3p005llt08vsohlgpj",
+                        "title": "Экспресс-доставка",
+                        "duration": 4,
+                        "price": "1200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jo701enw714gf6glio0",
+                "country": "Россия",
+                "region": "Москва",
+                "options": [
+                    {
+                        "id": "clfdz5jo801eow7147w9ahjja",
+                        "title": "Курьерская доставка (В пределах МКАД)",
+                        "duration": 1,
+                        "price": "500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jo201ekw7146xi1sayz",
+                "country": "Россия",
+                "region": "Алтайский край",
+                "options": [
+                    {
+                        "id": "clfdz5jo201elw714hhmr5qxt",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 6,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jny01egw7144g45dq05",
+                "country": "Россия",
+                "region": "Амурская область",
+                "options": [
+                    {
+                        "id": "clfdz5jny01ehw7149je8ea6l",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 9,
+                        "price": "1400"
+                    },
+                    {
+                        "id": "clfdz5jny01eiw714bfuynlsv",
+                        "title": "Экспресс-доставка",
+                        "duration": 4,
+                        "price": "2200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jns01edw714tr97sjpq",
+                "country": "Россия",
+                "region": "Архангельская область",
+                "options": [
+                    {
+                        "id": "clfdz5jns01eew714mam71zkz",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "1000"
+                    },
+                    {
+                        "id": "clfdz5jnt01efw714z2o6vb2b",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2100"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jnn01e9w714e7zlzoa0",
+                "country": "Россия",
+                "region": "Астраханская область",
+                "options": [
+                    {
+                        "id": "clfdz5jnn01eaw714q4vlt75c",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jnn01ebw714444m5y6c",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2400"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jni01e5w714lb821cln",
+                "country": "Россия",
+                "region": "Белгородская область",
+                "options": [
+                    {
+                        "id": "clfdz5jni01e6w7148bduatbl",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jni01e7w7144ohlcqvf",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jnc01e2w714qq9rfwep",
+                "country": "Россия",
+                "region": "Брянская область",
+                "options": [
+                    {
+                        "id": "clfdz5jnc01e3w714cms2t5dj",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jnc01e4w7140d62uug3",
                         "title": "Экспресс-доставка",
                         "duration": 1,
                         "price": "1800"
@@ -1380,18 +1687,170 @@
                 ]
             },
             {
-                "id": "clfa5jj7t00vqrn08uqdm7eyt",
+                "id": "clfdz5jn701dzw7149ghycmxc",
                 "country": "Россия",
-                "region": "Свердловская область",
+                "region": "Владимирская область",
                 "options": [
                     {
-                        "id": "clfa5jrch00vvrn082mdypx0n",
+                        "id": "clfdz5jn701e0w714lwqwmo6c",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 5,
+                        "duration": 2,
                         "price": "600"
                     },
                     {
-                        "id": "clfa5jrch00vwrn08n0wlzrya",
+                        "id": "clfdz5jn701e1w714a1ksfb3i",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jn101dvw714ucyq4zec",
+                "country": "Россия",
+                "region": "Волгоградская область",
+                "options": [
+                    {
+                        "id": "clfdz5jn101dww714ohpebeyh",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jn101dxw714yi9np8ij",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "2300"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jmv01drw714wgym29p9",
+                "country": "Россия",
+                "region": "Вологодская область",
+                "options": [
+                    {
+                        "id": "clfdz5jmv01dsw714rg1plhbl",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jmw01dtw714ot1g7zng",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "2000"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jmq01dnw7145ovxetuh",
+                "country": "Россия",
+                "region": "Воронежская область",
+                "options": [
+                    {
+                        "id": "clfdz5jmq01dow714v7dxpowh",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jmq01dpw714sy7wm3gl",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jmm01djw714scwskpyt",
+                "country": "Россия",
+                "region": "Еврейская АО",
+                "options": [
+                    {
+                        "id": "clfdz5jmm01dkw7145srgvd5d",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 9,
+                        "price": "1300"
+                    },
+                    {
+                        "id": "clfdz5jmm01dlw7140y8y5kms",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "3000"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jmh01dfw714a7e9fpcs",
+                "country": "Россия",
+                "region": "Забайкальский край",
+                "options": [
+                    {
+                        "id": "clfdz5jmh01dgw714krawivcg",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "2600"
+                    },
+                    {
+                        "id": "clfdz5jmh01dhw714rb4nvwto",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "4500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jm801dcw714f5w9428c",
+                "country": "Россия",
+                "region": "Ивановская область",
+                "options": [
+                    {
+                        "id": "clfdz5jm801ddw714efwzcq5l",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jm801dew714vbfkdqwe",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jm101d9w714cg8cezxj",
+                "country": "Россия",
+                "region": "Иркутская область",
+                "options": [
+                    {
+                        "id": "clfdz5jm101daw71435k11yog",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 8,
+                        "price": "1900"
+                    },
+                    {
+                        "id": "clfdz5jm201dbw7143fup05lf",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "3000"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jlr01d1w7147jau3awh",
+                "country": "Россия",
+                "region": "Калининградская область",
+                "options": [
+                    {
+                        "id": "clfdz5jlr01d2w714f3ul082m",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "1200"
+                    },
+                    {
+                        "id": "clfdz5jlr01d3w714sadcj9bt",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "2200"
@@ -1399,818 +1858,31 @@
                 ]
             },
             {
-                "id": "clfa5j4lb00vhrn08o6dtc1la",
+                "id": "clfdz5jlm01cyw714661f8ixa",
                 "country": "Россия",
-                "region": "Сахалинская область",
+                "region": "Калужская область",
                 "options": [
                     {
-                        "id": "clfa5jefb00vmrn089awzf4gq",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 11,
-                        "price": "2000"
-                    },
-                    {
-                        "id": "clfa5jefb00vnrn087qy5crpw",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "3700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5ion000v8rn088hpb69l0",
-                "country": "Россия",
-                "region": "Саратовская область",
-                "options": [
-                    {
-                        "id": "clfa5iyrk00vdrn08fj4sjhwh",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5iyrk00vern08pn28xfmk",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5i7qf00uzrn08hkr7bwud",
-                "country": "Россия",
-                "region": "Санкт-Петербург",
-                "options": [
-                    {
-                        "id": "clfa5ijus00v4rn080cs3ye1c",
+                        "id": "clfdz5jlm01czw7140eadomo7",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 2,
                         "price": "500"
-                    },
-                    {
-                        "id": "clfa5ijus00v5rn08bbp9p3lo",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1900"
                     }
                 ]
             },
             {
-                "id": "clfa5hw0g00uqrn086tsxx3f5",
-                "country": "Россия",
-                "region": "Самарская область",
-                "options": [
-                    {
-                        "id": "clfa5i4yu00uvrn084nnrbxjg",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5i4yu00uwrn085j0qmzpv",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5hiww00uhrn08lez4ly4r",
-                "country": "Россия",
-                "region": "Рязанская область",
-                "options": [
-                    {
-                        "id": "clfa5hrz500umrn08her4j6lw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa5hrz500unrn08qalax2p6",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5h5hh00u8rn08uane71s1",
-                "country": "Россия",
-                "region": "Ростовская область",
-                "options": [
-                    {
-                        "id": "clfa5heqq00udrn084gcw7sfw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 5,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa5heqq00uern08z51ip4wz",
-                        "title": "Экспресс-доставка",
-                        "duration": 3,
-                        "price": "1200"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5gs3z00tzrn085fx53hel",
-                "country": "Россия",
-                "region": "Хакасия",
-                "options": [
-                    {
-                        "id": "clfa5h10000u4rn08xvhy9oti",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "1500"
-                    },
-                    {
-                        "id": "clfa5h10000u5rn0883o3xzfe",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5gf3j00tqrn08svbuglrh",
-                "country": "Россия",
-                "region": "Тыва",
-                "options": [
-                    {
-                        "id": "clfa5gomw00tvrn088evcssaw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 8,
-                        "price": "1600"
-                    },
-                    {
-                        "id": "clfa5gomw00twrn08azxny1vq",
-                        "title": "Экспресс-доставка",
-                        "duration": 6,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5g2l900thrn08l9mzt0dq",
-                "country": "Россия",
-                "region": "Татарстан",
-                "options": [
-                    {
-                        "id": "clfa5gaso00tmrn08ldu8m2sy",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5gaso00tnrn08g1uljdy0",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5fq7800t8rn08fwcicwhf",
-                "country": "Россия",
-                "region": "Северная Осетия",
-                "options": [
-                    {
-                        "id": "clfa5fymh00tdrn08ibduefm4",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5fymh00tern08spgqvrd8",
-                        "title": "Экспресс-доставка",
-                        "duration": 3,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5eyq400szrn083eka3xol",
-                "country": "Россия",
-                "region": "Мордовия",
-                "options": [
-                    {
-                        "id": "clfa5f86y00t4rn08loergscq",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa5f86y00t5rn08qr6rmhts",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5eirn00sqrn08gl5r6m3s",
-                "country": "Россия",
-                "region": "Марий Эл",
-                "options": [
-                    {
-                        "id": "clfa5eumu00svrn08skzkihqi",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa5eumu00swrn08qqxa2wlu",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5e0a100sjrn08uwbk1ky2",
-                "country": "Россия",
-                "region": "Коми",
-                "options": [
-                    {
-                        "id": "clfa5edry00sorn085liel2m9",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "1600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5dr4d00scrn08j8epjkq4",
-                "country": "Россия",
-                "region": "Карелия",
-                "options": [
-                    {
-                        "id": "clfa5dvw100shrn084kollchh",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5d7kp00s3rn08zw1s2b9l",
-                "country": "Россия",
-                "region": "Калмыкия",
-                "options": [
-                    {
-                        "id": "clfa5dmn500s8rn084txw4hib",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 5,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5dmn500s9rn08cx4arzp5",
-                        "title": "Экспресс-доставка",
-                        "duration": 3,
-                        "price": "1300"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5ctj500rurn086oen7lye",
-                "country": "Россия",
-                "region": "Ингушетия",
-                "options": [
-                    {
-                        "id": "clfa5d1we00rzrn08c78k0xxm",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5d1we00s0rn08abzo4cv5",
-                        "title": "Экспресс-доставка",
-                        "duration": 3,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5cg0w00rlrn089bn1etk7",
-                "country": "Россия",
-                "region": "Дагестан",
-                "options": [
-                    {
-                        "id": "clfa5coir00rqrn08donxnsid",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "1000"
-                    },
-                    {
-                        "id": "clfa5coir00rrrn089l2c3xex",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5c2vb00rcrn08b91bn3rm",
-                "country": "Россия",
-                "region": "Бурятия",
-                "options": [
-                    {
-                        "id": "clfa5cc2d00rhrn08l73h7etw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "1800"
-                    },
-                    {
-                        "id": "clfa5cc2d00rirn086xbr26zj",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5927n00r3rn082oyjj3z1",
-                "country": "Россия",
-                "region": "Башкортостан",
-                "options": [
-                    {
-                        "id": "clfa59hec00r8rn08ltv4lngw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa59hec00r9rn08d1v8laki",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa589ez00qnrn08gsr3er97",
-                "country": "Россия",
-                "region": "Алтай",
-                "options": [
-                    {
-                        "id": "clfa58fnv00qsrn0850papt9r",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "2000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa57nyv00qern086vjxog3c",
-                "country": "Россия",
-                "region": "Адыгея",
-                "options": [
-                    {
-                        "id": "clfa57x4g00qjrn08qr6zec6n",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa57x4g00qkrn08l7hi9hzd",
-                        "title": "Экспресс-доставка",
-                        "duration": 3,
-                        "price": "1000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa57f5a00q7rn08jxs1tias",
-                "country": "Россия",
-                "region": "Псковская область",
-                "options": [
-                    {
-                        "id": "clfa57jpd00qcrn08o7bie8uo",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa5703s00pyrn087d8cxhex",
-                "country": "Россия",
-                "region": "Приморский край",
-                "options": [
-                    {
-                        "id": "clfa57bfv00q3rn086ygrcjkw",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 9,
-                        "price": "1500"
-                    },
-                    {
-                        "id": "clfa57bfv00q4rn0808xm7c2y",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "3000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa56o8400pprn08diped0jx",
-                "country": "Россия",
-                "region": "Пермский край",
-                "options": [
-                    {
-                        "id": "clfa56w0b00purn08iwmemq0z",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa56w0b00pvrn08cvg9htmj",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa56b8200pgrn08uke0m9gs",
-                "country": "Россия",
-                "region": "Пензенская область",
-                "options": [
-                    {
-                        "id": "clfa56jzk00plrn08vjf2p36t",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa56jzl00pmrn08v605mswn",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1700"
-                    }
-                ]
-            },
-            {
-                "id": "clfa55yc500p7rn08ls7h5uyi",
-                "country": "Россия",
-                "region": "Орловская область",
-                "options": [
-                    {
-                        "id": "clfa5678300pcrn08xao35gv1",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5678300pdrn08dh1vk7wq",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa55n6m00p0rn08avd8rkub",
-                "country": "Россия",
-                "region": "Оренбургская область",
-                "options": [
-                    {
-                        "id": "clfa55u3v00p5rn08pjxxt0oe",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa55ban00orrn08mzu7tc1k",
-                "country": "Россия",
-                "region": "Омская область",
-                "options": [
-                    {
-                        "id": "clfa55j4z00owrn081w5ms6le",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 5,
-                        "price": "1400"
-                    },
-                    {
-                        "id": "clfa55j4z00oxrn08pdxskm1q",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "3200"
-                    }
-                ]
-            },
-            {
-                "id": "clfa54ytp00oirn08xjw3gpvi",
-                "country": "Россия",
-                "region": "Новосибирская область",
-                "options": [
-                    {
-                        "id": "clfa5579b00onrn08ayquo59i",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 5,
-                        "price": "1400"
-                    },
-                    {
-                        "id": "clfa5579b00oorn08yn6eyzmx",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa54l2a00o9rn08r631y4wn",
-                "country": "Россия",
-                "region": "Новгородская область",
-                "options": [
-                    {
-                        "id": "clfa54tsy00oern082b6aassq",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa54tsz00ofrn08i11hrgpl",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1400"
-                    }
-                ]
-            },
-            {
-                "id": "clfa546kt00o0rn08g2cqwghm",
-                "country": "Россия",
-                "region": "Нижегородская область",
-                "options": [
-                    {
-                        "id": "clfa54gky00o5rn082ornh68a",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa54gky00o6rn08ayvhaymz",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa53ou800nrrn08yfhr6r0a",
-                "country": "Россия",
-                "region": "Мурманская область",
-                "options": [
-                    {
-                        "id": "clfa5416h00nwrn086caiarzx",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa5416h00nxrn087kc0bab9",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "2400"
-                    }
-                ]
-            },
-            {
-                "id": "clfa52tji00nirn08h8hc6qlk",
-                "country": "Россия",
-                "region": "Московская область",
-                "options": [
-                    {
-                        "id": "clfa53jv200nnrn088ulweolf",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa53jv200norn08nn31q7c8",
-                        "title": "Курьерская экспресс-доставка",
-                        "duration": 1,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa51kyr00n4rn08i12o9vru",
-                "country": "Россия",
-                "region": "Магаданская область",
-                "options": [
-                    {
-                        "id": "clfa51w7j00n9rn08fnijax20",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 6,
-                        "price": "2500"
-                    },
-                    {
-                        "id": "clfa51w7j00narn083jifjcyw",
-                        "title": "Экспресс-доставка",
-                        "duration": 4,
-                        "price": "3200"
-                    }
-                ]
-            },
-            {
-                "id": "clfa515hl00mvrn08b1lxqp3i",
-                "country": "Россия",
-                "region": "Липецкая область",
-                "options": [
-                    {
-                        "id": "clfa51ds300n0rn08a2mc2oau",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa51ds300n1rn08ser4orss",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa50qk200mmrn08z900fgq9",
-                "country": "Россия",
-                "region": "Ленинградская область",
-                "options": [
-                    {
-                        "id": "clfa5115500mrrn08yx05whko",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa5115500msrn08cste5fnd",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa50dbx00mdrn08bxi0h6gc",
-                "country": "Россия",
-                "region": "Курская область",
-                "options": [
-                    {
-                        "id": "clfa50mvl00mirn08i1pb0hfk",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa50mvl00mjrn08xme1rbix",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4zzoa00m4rn08o4lfqt5p",
-                "country": "Россия",
-                "region": "Курганская область",
-                "options": [
-                    {
-                        "id": "clfa5086100m9rn086ui0pi0p",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 5,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa5086100marn088capdye9",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2100"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4zmv000lvrn089sr0r2ab",
-                "country": "Россия",
-                "region": "Красноярский край",
-                "options": [
-                    {
-                        "id": "clfa4zvbm00m0rn08whf632v4",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "800"
-                    },
-                    {
-                        "id": "clfa4zvbm00m1rn08byl220oh",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4z7ut00lmrn086utu35m8",
-                "country": "Россия",
-                "region": "Краснодарский край",
-                "options": [
-                    {
-                        "id": "clfa4zhj700lrrn08jz93096h",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "700"
-                    },
-                    {
-                        "id": "clfa4zhj700lsrn08pgl0nqsd",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2400"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4yt9r00lfrn08ogkhp0a0",
-                "country": "Россия",
-                "region": "Костромская область",
-                "options": [
-                    {
-                        "id": "clfa4z1jy00lkrn087a9aljfd",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "600"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4yfs200l6rn08s0ew27gb",
-                "country": "Россия",
-                "region": "Кировская область",
-                "options": [
-                    {
-                        "id": "clfa4yp8t00lbrn08t25b3gs9",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa4yp8t00lcrn08vy0hx89v",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4xoeb00kwrn081lhs7384",
-                "country": "Россия",
-                "region": "Кемеровская область",
-                "options": [
-                    {
-                        "id": "clfa4xzug00l1rn081bz4z4x4",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 6,
-                        "price": "1500"
-                    },
-                    {
-                        "id": "clfa4y7xx00l4rn08zz1dssgk",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "3500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4xayl00knrn087s6hyx12",
-                "country": "Россия",
-                "region": "Карачаево-Черкесия",
-                "options": [
-                    {
-                        "id": "clfa4xk8400ksrn08w7fyhpun",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa4xk8400ktrn089fon6e2g",
-                        "title": "Экспресс-доставка",
-                        "duration": 3,
-                        "price": "1400"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4wvva00kern08pewpygmv",
+                "id": "clfdz5jlg01cvw7144fzkpl01",
                 "country": "Россия",
                 "region": "Камчатский край",
                 "options": [
                     {
-                        "id": "clfa4x5te00kjrn08vt1axk0f",
+                        "id": "clfdz5jlg01cww714cn67seth",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 5,
                         "price": "2300"
                     },
                     {
-                        "id": "clfa4x5te00kkrn08w6z7r5cg",
+                        "id": "clfdz5jlg01cxw714991am0hb",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "4800"
@@ -2218,259 +1890,69 @@
                 ]
             },
             {
-                "id": "clfa4war300k7rn084sk38ggg",
+                "id": "clfdz5jl501cow714vicj12sk",
                 "country": "Россия",
-                "region": "Калужская область",
+                "region": "Кемеровская область",
                 "options": [
                     {
-                        "id": "clfa4wofu00kcrn084slm6adx",
+                        "id": "clfdz5jl501cpw71465h38dqk",
                         "title": "Доставка почтовой службой СДЕК",
+                        "duration": 6,
+                        "price": "1500"
+                    },
+                    {
+                        "id": "clfdz5jl501cqw714vsp8xe8l",
+                        "title": "Экспресс-доставка",
                         "duration": 2,
-                        "price": "500"
+                        "price": "3500"
                     }
                 ]
             },
             {
-                "id": "clfa4vwki00jyrn08spuzd9en",
+                "id": "clfdz5jl001ckw7143iw9w9fi",
                 "country": "Россия",
-                "region": "Калининградская область",
+                "region": "Кировская область",
                 "options": [
                     {
-                        "id": "clfa4w6zj00k3rn087sb9s0sc",
+                        "id": "clfdz5jl001clw714gpvp96e4",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "1200"
-                    },
-                    {
-                        "id": "clfa4w6zk00k4rn0886vpq3w4",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "2200"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4vk3700jprn083ssm388e",
-                "country": "Россия",
-                "region": "Кабардино-Балкария",
-                "options": [
-                    {
-                        "id": "clfa4vsmc00jurn08em8u8nhj",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa4vsmc00jvrn0802rt7uhp",
-                        "title": "Экспресс-доставка",
                         "duration": 3,
-                        "price": "2000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4v3in00jgrn082p5x0t0u",
-                "country": "Россия",
-                "region": "Иркутская область",
-                "options": [
-                    {
-                        "id": "clfa4vfsk00jlrn08oymqu6h5",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 8,
-                        "price": "1900"
+                        "price": "600"
                     },
                     {
-                        "id": "clfa4vfsk00jmrn08xyz8etrx",
+                        "id": "clfdz5jl001cmw714feqdsz7d",
                         "title": "Экспресс-доставка",
                         "duration": 2,
-                        "price": "3000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4urd800j7rn08vdglcby5",
-                "country": "Россия",
-                "region": "Ивановская область",
-                "options": [
-                    {
-                        "id": "clfa4uz7a00jcrn08ydwrjjps",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa4uz7a00jdrn08gs5c5bw6",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
                         "price": "1500"
                     }
                 ]
             },
             {
-                "id": "clfa4uelr00iyrn0898im2rte",
+                "id": "clfdz5jks01ciw7147r60ochg",
                 "country": "Россия",
-                "region": "Забайкальский край",
+                "region": "Костромская область",
                 "options": [
                     {
-                        "id": "clfa4unp000j3rn08o92zt32h",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "2600"
-                    },
-                    {
-                        "id": "clfa4unp000j4rn08ygmogvij",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "4500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4u0eh00iprn088bnzhofy",
-                "country": "Россия",
-                "region": "Еврейская АО",
-                "options": [
-                    {
-                        "id": "clfa4ua6h00iurn08zloru30c",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 9,
-                        "price": "1300"
-                    },
-                    {
-                        "id": "clfa4ua6h00ivrn08y70m9ewa",
-                        "title": "Экспресс-доставка",
-                        "duration": 2,
-                        "price": "3000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4tngr00igrn08484dkiuf",
-                "country": "Россия",
-                "region": "Воронежская область",
-                "options": [
-                    {
-                        "id": "clfa4tvx200ilrn08iaqfgat9",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa4tvx200imrn08qxv4ibgk",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4tbeu00i7rn08h8bdt31i",
-                "country": "Россия",
-                "region": "Вологодская область",
-                "options": [
-                    {
-                        "id": "clfa4tjp700icrn08nh868xzc",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa4tjp700idrn08bmcbwbi1",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "2000"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4syty00hyrn08jkosqbu1",
-                "country": "Россия",
-                "region": "Волгоградская область",
-                "options": [
-                    {
-                        "id": "clfa4t7e100i3rn0892jqe0j3",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 4,
-                        "price": "500"
-                    },
-                    {
-                        "id": "clfa4t7e100i4rn08yom7qbjb",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "2300"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4sj7q00hprn08kcuq5prq",
-                "country": "Россия",
-                "region": "Владимирская область",
-                "options": [
-                    {
-                        "id": "clfa4sum800hurn08egmuagtj",
+                        "id": "clfdz5jkt01cjw714gvl7ss6w",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 2,
                         "price": "600"
-                    },
-                    {
-                        "id": "clfa4sum800hvrn084f4wdk6s",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1800"
                     }
                 ]
             },
             {
-                "id": "clfa4s7oj00hgrn08fbngqclp",
+                "id": "clfdz5jko01cew714uc8l3t81",
                 "country": "Россия",
-                "region": "Брянская область",
+                "region": "Краснодарский край",
                 "options": [
                     {
-                        "id": "clfa4sfxi00hlrn08ekw3e629",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa4sfxi00hmrn08m9xjz5n4",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1800"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4rr8i00h7rn0864pgnoyb",
-                "country": "Россия",
-                "region": "Белгородская область",
-                "options": [
-                    {
-                        "id": "clfa4s1un00hcrn08vxl08r6n",
-                        "title": "Доставка почтовой службой СДЕК",
-                        "duration": 2,
-                        "price": "600"
-                    },
-                    {
-                        "id": "clfa4s1un00hdrn088wjmm6gw",
-                        "title": "Экспресс-доставка",
-                        "duration": 1,
-                        "price": "1500"
-                    }
-                ]
-            },
-            {
-                "id": "clfa4razi00gyrn08q4ixft47",
-                "country": "Россия",
-                "region": "Астраханская область",
-                "options": [
-                    {
-                        "id": "clfa4rl5p00h3rn08noivifye",
+                        "id": "clfdz5jko01cfw714h59emlsm",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 4,
                         "price": "700"
                     },
                     {
-                        "id": "clfa4rl5p00h4rn081uehb8b6",
+                        "id": "clfdz5jko01cgw714cu350uxz",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "2400"
@@ -2478,18 +1960,37 @@
                 ]
             },
             {
-                "id": "clfa4qwbv00gprn08s9dr5dy6",
+                "id": "clfdz5jki01cbw7149hy83cpt",
                 "country": "Россия",
-                "region": "Архангельская область",
+                "region": "Красноярский край",
                 "options": [
                     {
-                        "id": "clfa4r6io00gurn08ddy4mrwp",
+                        "id": "clfdz5jki01ccw714yq520m52",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 3,
-                        "price": "1000"
+                        "duration": 4,
+                        "price": "800"
                     },
                     {
-                        "id": "clfa4r6io00gvrn08ydzr35st",
+                        "id": "clfdz5jki01cdw714y86j7tqr",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jkd01c7w714iqspipt1",
+                "country": "Россия",
+                "region": "Курганская область",
+                "options": [
+                    {
+                        "id": "clfdz5jkd01c8w7148mvoqy94",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 5,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jkd01c9w7147ovigzfz",
                         "title": "Экспресс-доставка",
                         "duration": 2,
                         "price": "2100"
@@ -2497,47 +1998,668 @@
                 ]
             },
             {
-                "id": "clfa4p9wn00g6rn08umuqk3h9",
+                "id": "clfdz5jk801c3w7143rek0rt5",
                 "country": "Россия",
-                "region": "Амурская область",
+                "region": "Курская область",
                 "options": [
                     {
-                        "id": "clfa4peyy00gbrn085nyxjz1o",
+                        "id": "clfdz5jk801c4w714t5wnbt97",
                         "title": "Доставка почтовой службой СДЕК",
-                        "duration": 9,
-                        "price": "1400"
+                        "duration": 2,
+                        "price": "500"
                     },
                     {
-                        "id": "clfa4pt9z00gern08evi0505h",
+                        "id": "clfdz5jk801c5w714xyyopbsv",
                         "title": "Экспресс-доставка",
-                        "duration": 4,
-                        "price": "2200"
+                        "duration": 1,
+                        "price": "1800"
                     }
                 ]
             },
             {
-                "id": "clfa4p09n00fzrn082ktqpy8j",
+                "id": "clfdz5jk201bzw714j7ozhh3f",
                 "country": "Россия",
-                "region": "Алтайский край",
+                "region": "Ленинградская область",
                 "options": [
                     {
-                        "id": "clfa4p6cj00g4rn08kr9wwl6c",
+                        "id": "clfdz5jk201c0w714s1mrxt08",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jk201c1w7141qru3k56",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jjx01bww714ng6go013",
+                "country": "Россия",
+                "region": "Липецкая область",
+                "options": [
+                    {
+                        "id": "clfdz5jjx01bxw714kuthqp7d",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jjy01byw714fsowp2sm",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jjt01btw714bgmhaaa4",
+                "country": "Россия",
+                "region": "Магаданская область",
+                "options": [
+                    {
+                        "id": "clfdz5jjt01buw714xd0d3mcl",
                         "title": "Доставка почтовой службой СДЕК",
                         "duration": 6,
+                        "price": "2500"
+                    },
+                    {
+                        "id": "clfdz5jjt01bvw714vuwfl2lp",
+                        "title": "Экспресс-доставка",
+                        "duration": 4,
+                        "price": "3200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jjn01bqw714z2zi70p4",
+                "country": "Россия",
+                "region": "Московская область",
+                "options": [
+                    {
+                        "id": "clfdz5jjn01brw714chgu93dd",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jjn01bsw714h50qstfd",
+                        "title": "Курьерская экспресс-доставка",
+                        "duration": 1,
+                        "price": "1500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jji01bmw714whm4ocer",
+                "country": "Россия",
+                "region": "Мурманская область",
+                "options": [
+                    {
+                        "id": "clfdz5jji01bnw714kphssyfz",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jji01bow714a03axo7x",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "2400"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jjc01bjw714yxcv745x",
+                "country": "Россия",
+                "region": "Нижегородская область",
+                "options": [
+                    {
+                        "id": "clfdz5jjc01bkw714njr2t1q1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jjc01blw714cufv3h4m",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jj701bfw7147xrnsz8y",
+                "country": "Россия",
+                "region": "Новгородская область",
+                "options": [
+                    {
+                        "id": "clfdz5jj701bgw714a6mipnu2",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jj701bhw7146bdapmv3",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1400"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jj101bbw714w784z3b4",
+                "country": "Россия",
+                "region": "Новосибирская область",
+                "options": [
+                    {
+                        "id": "clfdz5jj101bcw7142dapkfz5",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 5,
+                        "price": "1400"
+                    },
+                    {
+                        "id": "clfdz5jj201bdw714rwkrr6oa",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jix01b7w714zz3umczs",
+                "country": "Россия",
+                "region": "Омская область",
+                "options": [
+                    {
+                        "id": "clfdz5jix01b8w714po3xhwoo",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 5,
+                        "price": "1400"
+                    },
+                    {
+                        "id": "clfdz5jix01b9w714fp3cpkzi",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "3200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jis01b4w714l04n84yw",
+                "country": "Россия",
+                "region": "Оренбургская область",
+                "options": [
+                    {
+                        "id": "clfdz5jis01b5w714f0d8n7vc",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jim01b0w7148r45ciq6",
+                "country": "Россия",
+                "region": "Орловская область",
+                "options": [
+                    {
+                        "id": "clfdz5jim01b1w714m3qkzfc4",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jim01b2w7148y87li8y",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jie01axw714tesxghbz",
+                "country": "Россия",
+                "region": "Пензенская область",
+                "options": [
+                    {
+                        "id": "clfdz5jie01ayw714myq7zxr2",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jie01azw714fgdf89l9",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
                         "price": "1700"
                     }
                 ]
             },
             {
-                "id": "clf0vrm4k0061ql08shfyt18a",
+                "id": "clfdz5jhy01atw714fuzr85aa",
                 "country": "Россия",
-                "region": "Москва",
+                "region": "Пермский край",
                 "options": [
                     {
-                        "id": "clf0vtt9z006aql08czkhec3u",
-                        "title": "Курьерская доставка (В пределах МКАД)",
-                        "duration": 1,
+                        "id": "clfdz5jhy01auw714ioltv8ek",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jhy01avw714w3lp41xz",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jht01apw714hk85v0dk",
+                "country": "Россия",
+                "region": "Приморский край",
+                "options": [
+                    {
+                        "id": "clfdz5jht01aqw714xj5qygs4",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 9,
+                        "price": "1500"
+                    },
+                    {
+                        "id": "clfdz5jht01arw714h4cgmt31",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "3000"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jhm01amw714q2mmm11i",
+                "country": "Россия",
+                "region": "Псковская область",
+                "options": [
+                    {
+                        "id": "clfdz5jhm01anw714zg3wefq1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jf80193w714rikkmwvv",
+                "country": "Россия",
+                "region": "Ростовская область",
+                "options": [
+                    {
+                        "id": "clfdz5jf80194w714tp4nkx5z",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 5,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jf80195w714q75zplo6",
+                        "title": "Экспресс-доставка",
+                        "duration": 3,
+                        "price": "1200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jf10190w714p1c5gwds",
+                "country": "Россия",
+                "region": "Рязанская область",
+                "options": [
+                    {
+                        "id": "clfdz5jf10191w714ldbcs8rd",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
                         "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jf10192w714aa5kgfic",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jew018ww7146kmjp2t3",
+                "country": "Россия",
+                "region": "Самарская область",
+                "options": [
+                    {
+                        "id": "clfdz5jew018xw714wqvp6bml",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jew018yw714icg7zr50",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jem018sw714tjqkjyus",
+                "country": "Россия",
+                "region": "Санкт-Петербург",
+                "options": [
+                    {
+                        "id": "clfdz5jem018tw714k1rglpw7",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "500"
+                    },
+                    {
+                        "id": "clfdz5jem018uw714lxj5t8sp",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1900"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jeh018pw71432c9gd91",
+                "country": "Россия",
+                "region": "Саратовская область",
+                "options": [
+                    {
+                        "id": "clfdz5jeh018qw714gesm0721",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jeh018rw714rdzjlxma",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jea018mw7144iy36gqf",
+                "country": "Россия",
+                "region": "Сахалинская область",
+                "options": [
+                    {
+                        "id": "clfdz5jea018nw714fz075bf8",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 11,
+                        "price": "2000"
+                    },
+                    {
+                        "id": "clfdz5jea018ow714xt2rbxjb",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "3700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5je4018jw714l60km07l",
+                "country": "Россия",
+                "region": "Свердловская область",
+                "options": [
+                    {
+                        "id": "clfdz5je5018kw714r2cvc7it",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 5,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5je5018lw714ytiipt2f",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jdy018gw714bpz6pz0o",
+                "country": "Россия",
+                "region": "Смоленская область",
+                "options": [
+                    {
+                        "id": "clfdz5jdy018hw714phk11gwp",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jdy018iw714cgpre00j",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1800"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jdt018dw714gugtp6r2",
+                "country": "Россия",
+                "region": "Ставропольский край",
+                "options": [
+                    {
+                        "id": "clfdz5jdt018ew714yt9dtv4b",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "1000"
+                    },
+                    {
+                        "id": "clfdz5jdu018fw714nm9c2oad",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2000"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jdo018aw7141hwhsejt",
+                "country": "Россия",
+                "region": "Тамбовская область",
+                "options": [
+                    {
+                        "id": "clfdz5jdo018bw7147ul4k48x",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jdo018cw714w335orh0",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jdj0187w714rkz53c6x",
+                "country": "Россия",
+                "region": "Тверская область",
+                "options": [
+                    {
+                        "id": "clfdz5jdj0188w7145y3j4g5j",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 2,
+                        "price": "600"
+                    },
+                    {
+                        "id": "clfdz5jdj0189w7145reau620",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jdc0184w714mfpsyopd",
+                "country": "Россия",
+                "region": "Томская область",
+                "options": [
+                    {
+                        "id": "clfdz5jdc0185w714jjulek9n",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "1400"
+                    },
+                    {
+                        "id": "clfdz5jdc0186w714hs52wyqd",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2600"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jd70180w714g6x0ui28",
+                "country": "Россия",
+                "region": "Тульская область",
+                "options": [
+                    {
+                        "id": "clfdz5jd70181w714w8pthrk1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jd70182w714dkajru99",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jcx017xw714hq73i1zl",
+                "country": "Россия",
+                "region": "Тюменская область",
+                "options": [
+                    {
+                        "id": "clfdz5jcx017yw714siiepjyq",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 4,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jcx017zw714bhu358x8",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2300"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jcm017pw714rionbpe5",
+                "country": "Россия",
+                "region": "Ульяновская область",
+                "options": [
+                    {
+                        "id": "clfdz5jcm017qw714s892cry0",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jcm017rw714z0m250uu",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "1700"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jch017lw714wz4terf4",
+                "country": "Россия",
+                "region": "Хабаровский край",
+                "options": [
+                    {
+                        "id": "clfdz5jch017mw714hbltcsn0",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 8,
+                        "price": "1300"
+                    },
+                    {
+                        "id": "clfdz5jch017nw714yam9uxqa",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "3200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jc6017dw714pxre3rgp",
+                "country": "Россия",
+                "region": "Челябинская область",
+                "options": [
+                    {
+                        "id": "clfdz5jc6017ew714m5yn6qag",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jc7017fw7145gexvvg1",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "2100"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jbo0173w714jo1bqh3m",
+                "country": "Россия",
+                "region": "Чукотский АО",
+                "options": [
+                    {
+                        "id": "clfdz5jbo0174w7143ab62nm5",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 9,
+                        "price": "4500"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jbh016zw714iwr4xyv2",
+                "country": "Россия",
+                "region": "Ямало-Ненецкий АО",
+                "options": [
+                    {
+                        "id": "clfdz5jbh0170w714n60x7nn1",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 6,
+                        "price": "2300"
+                    },
+                    {
+                        "id": "clfdz5jbh0171w71467l6tay6",
+                        "title": "Экспресс-доставка",
+                        "duration": 2,
+                        "price": "4200"
+                    }
+                ]
+            },
+            {
+                "id": "clfdz5jbc016ww714d5jvbj2u",
+                "country": "Россия",
+                "region": "Ярославская область",
+                "options": [
+                    {
+                        "id": "clfdz5jbc016xw714sazi09kd",
+                        "title": "Доставка почтовой службой СДЕК",
+                        "duration": 3,
+                        "price": "700"
+                    },
+                    {
+                        "id": "clfdz5jbc016yw7142bxxbgrc",
+                        "title": "Экспресс-доставка",
+                        "duration": 1,
+                        "price": "1800"
                     }
                 ]
             }
