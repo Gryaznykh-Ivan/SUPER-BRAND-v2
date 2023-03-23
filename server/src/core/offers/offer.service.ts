@@ -91,9 +91,9 @@ export class OfferService {
                             contains: fulltextSearch,
                         }
                     }, {
-                        variantId: fulltextSearch
+                        variantId: data.q ? data.q : undefined
                     }, {
-                        userId: fulltextSearch
+                        userId: data.q ? data.q : undefined
                     }, {
                         user: data.q ? {
                             fullName: {
