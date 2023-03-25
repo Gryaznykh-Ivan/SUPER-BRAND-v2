@@ -34,7 +34,7 @@ export class OfferController {
 
 
     @Post('create')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_CREATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE])
     createOffer(
         @Body() data: CreateOfferDto
     ) {
@@ -51,7 +51,7 @@ export class OfferController {
     }
 
     @Delete(':offerId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_DELETE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE])
     removeOffer(
         @Param('offerId') offerId: string,
     ) {

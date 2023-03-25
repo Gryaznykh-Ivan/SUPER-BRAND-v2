@@ -1,0 +1,513 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/@prisma-shop"
+  previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount", "interactiveTransactions"]
+}
+
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL_SHOP")
+}
+
+enum Role {
+    ADMIN
+    MANAGER
+    GUEST
+    CUSTOMER
+}
+
+enum Right {
+    ORDER_READ
+    ORDER_UPDATE
+    PRODUCT_READ
+    PRODUCT_UPDATE
+    OFFER_READ
+    OFFER_UPDATE
+    COLLECTION_READ
+    COLLECTION_UPDATE
+    USER_READ
+    USER_UPDATE
+    SHIPPING_READ
+    SHIPPING_UPDATE
+    MEDIA_UPLOAD
+    MEDIA_DELETE
+}
+
+enum OfferStatus {
+    NO_MATCH
+    OFFERED
+    ACCEPTED
+    DECLINED
+    ACTIVE
+    SOLD
+    RETURNING
+    RETURN_APPROVAL
+}
+
+enum Service {
+    SHIPPING
+    DISCOUNT
+}
+
+enum Currency {
+    RUB
+    USD
+}
+
+enum InvoiceType {
+    PAYMENT
+    REFUND
+}
+
+enum OrderStatus {
+    FULFILLED
+    PARTIALLY_FULFILLED
+    UNFULFILLED
+    CANCELED
+}
+
+enum ReturnStatus {
+    RETURN_REQUESTED
+    RETURN_IN_PROGRESS
+    RETURNED
+}
+
+enum FulfillmentStatus {
+    SENT
+    DELIVERED
+}
+
+enum PaymentStatus {
+    UNPAID
+    PARTIALLY_PAID
+    NEED_TO_RETURN
+    REFUNDED
+    PAID
+}
+
+enum InvoiceStatus {
+    PENDING
+    CANCELED
+    SUCCEEDED
+}
+
+model Setting {
+    id        String   @id @default(cuid())
+    setting   String
+    title     String
+    value     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@unique([setting, title])
+    @@map("setting")
+}
+
+model VerificationCode {
+    id        String   @id @default(cuid())
+    email     String
+    code      String
+    createdAt DateTime @default(now())
+    @@map("verificationcode")
+}
+
+model User {
+    id                   String            @id @default(cuid())
+    email                String?           @unique
+    phone                String?
+    firstName            String?
+    lastName             String?
+    fullName             String?
+    inn                  String?
+    account              String?
+    correspondentAccount String?
+    bic                  String?
+    passport             String?
+    comment              String?
+    isVerified           Boolean           @default(false)
+    isSubscribed         Boolean           @default(false)
+    role                 Role              @default(GUEST)
+    addresses            Address[]
+    orders               Order[]
+    favoriteProducts     FavoriteProduct[]
+    tokens               Token[]
+    cart                 CartProduct[]
+    offers               Offer[]
+    permissions          Permission[]
+    timeline             Timeline[]
+    createdAt            DateTime          @default(now())
+    updatedAt            DateTime          @updatedAt
+    @@fulltext([fullName])
+    @@fulltext([fullName, email, phone])
+    @@map("user")
+}
+
+model Permission {
+    id        String   @id @default(cuid())
+    right     Right
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@unique([userId, right])
+    @@map("permission")
+}
+
+model CartProduct {
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId    String
+    offer     Offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    offerId   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@id([userId, offerId])
+    @@map("cartproduct")
+}
+
+model Token {
+    id           String   @id @default(cuid())
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    userId       String
+    refreshToken String
+    expiresIn    DateTime
+    createdAt    DateTime @default(now())
+    @@map("token")
+}
+
+model Address {
+    id        String   @id @default(cuid())
+    country   String
+    city      String
+    address   String
+    region    String
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@map("address")
+}
+
+model Order {
+    id             Int            @id @default(autoincrement())
+    orderStatus    OrderStatus    @default(UNFULFILLED)
+    paymentStatus  PaymentStatus  @default(UNPAID)
+    returnStatus   ReturnStatus?
+    totalPrice     Decimal        @db.Decimal(9, 2)
+    mailingCountry String
+    mailingCity    String
+    mailingRegion  String
+    mailingAddress String
+    note           String?
+    invoices       Invoice[]
+    services       OrderService[]
+    offers         Offer[]        @relation(name: "orderoffers")
+    fulfillments   Fulfillment[]
+    returns        Return[]
+    timeline       Timeline[]
+    removedOffers  Offer[]        @relation(name: "orderremovedoffers")
+    user           User           @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId         String
+    createdAt      DateTime       @default(now())
+    updatedAt      DateTime       @updatedAt
+    @@map("order")
+}
+
+model Invoice {
+    id          String        @id @default(cuid())
+    invoiceType InvoiceType   @default(PAYMENT)
+    status      InvoiceStatus @default(PENDING)
+    method      String
+    amount      Decimal       @db.Decimal(9, 2)
+    currency    Currency      @default(RUB)
+    order       Order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId     Int
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    @@map("invoice")
+}
+
+model OrderService {
+    id          String  @id @default(cuid())
+    type        Service @default(SHIPPING)
+    description String? @db.Text
+    price       Decimal @db.Decimal(9, 2)
+    order       Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId     Int
+    @@map("orderservice")
+}
+
+model Timeline {
+    id        String   @id @default(cuid())
+    title     String   @db.VarChar(255)
+    message   String?  @db.Text
+    order     Order    @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId   Int
+    user      User?    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    userId    String?
+    createdAt DateTime @default(now())
+    @@map("timeline")
+}
+
+model Fulfillment {
+    id        String            @id @default(cuid())
+    status    FulfillmentStatus @default(SENT)
+    tracking  String?
+    carrier   String?
+    offers    Offer[]
+    order     Order             @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId   Int
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @updatedAt
+    @@map("fulfillment")
+}
+
+model Return {
+    id        String        @id @default(cuid())
+    status    ReturnStatus  @default(RETURN_REQUESTED)
+    tracking  String?
+    carrier   String?
+    offers    ReturnOffer[]
+    order     Order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId   Int
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+    @@map("return")
+}
+
+model ReturnOffer {
+    return    Return   @relation(fields: [returnId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    returnId  String
+    offer     Offer    @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    offerId   String
+    reason    String
+    createdAt DateTime @default(now())
+    @@id([returnId, offerId])
+    @@map("returnoffer")
+}
+
+model Offer {
+    id                String           @id @default(cuid())
+    productTitle      String           @db.VarChar(255)
+    variantTitle      String
+    image             Image?
+    price             Decimal          @db.Decimal(9, 2)
+    offerPrice        Decimal          @db.Decimal(9, 2)
+    compareAtPrice    Decimal?         @db.Decimal(9, 2)
+    comment           String?
+    tag               String?
+    status            OfferStatus      @default(OFFERED)
+    user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId            String?
+    order             Order?           @relation(name: "orderoffers", fields: [orderId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    orderId           Int?
+    variant           Variant?         @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    variantId         String?
+    deliveryProfile   DeliveryProfile? @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    deliveryProfileId String?
+    fulfillment       Fulfillment?     @relation(fields: [fulfillmentId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    fulfillmentId     String?
+    cartProduct       CartProduct[]
+    returned          ReturnOffer[]
+    removedFromOrders Order[]          @relation(name: "orderremovedoffers")
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+    @@fulltext([productTitle])
+    @@map("offer")
+}
+
+model FavoriteProduct {
+    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    productId String
+    user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@id([productId, userId])
+    @@map("favoriteproduct")
+}
+
+model Collection {
+    id              String    @id @default(cuid())
+    title           String    @db.VarChar(255)
+    description     String?   @db.Text
+    metaTitle       String?   @db.VarChar(255)
+    metaDescription String?   @db.Text
+    handle          String    @unique() @db.VarChar(255)
+    products        Product[] @relation(name: "collectiontoproduct")
+    images          Image[]
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+    @@fulltext([title])
+    @@map("collection")
+}
+
+model Product {
+    id               String            @id @default(cuid())
+    handle           String            @unique() @db.VarChar(255)
+    title            String            @db.VarChar(255)
+    available        Boolean           @default(false)
+    SKU              String?
+    barcode          String?
+    vendor           String?
+    description      String?           @db.Text
+    metaTitle        String?           @db.VarChar(255)
+    metaDescription  String?           @db.Text
+    images           Image[]
+    collections      Collection[]      @relation(name: "collectiontoproduct")
+    variants         Variant[]
+    productIsFavored FavoriteProduct[]
+    options          Option[]
+    metafields       Metafield[]
+    createdAt        DateTime          @default(now())
+    updatedAt        DateTime          @updatedAt
+    @@fulltext([title])
+    @@fulltext([vendor])
+    @@fulltext([title, vendor])
+    @@map("product")
+}
+
+model Metafield {
+    id        String  @id @default(cuid())
+    key       String
+    value     String
+    product   Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    productId String
+    @@unique([productId, key])
+    @@map("metafield")
+}
+
+model Option {
+    id        String        @id @default(cuid())
+    title     String
+    option    Int
+    position  Int
+    values    OptionValue[]
+    product   Product       @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    productId String
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+    @@unique([productId, title])
+    @@map("option")
+}
+
+model OptionValue {
+    id        String   @id @default(cuid())
+    title     String
+    position  Int
+    option    Option   @relation(fields: [optionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    optionId  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@unique([optionId, title])
+    @@map("optionvalue")
+}
+
+model Image {
+    id           String      @id @default(cuid())
+    path         String
+    src          String
+    alt          String
+    blurhash     String
+    position     Int
+    product      Product?    @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    productId    String?
+    collection   Collection? @relation(fields: [collectionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    collectionId String?
+    variant      Variant?    @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    variantId    String?
+    offer        Offer?      @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    offerId      String?     @unique
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt
+    @@map("image")
+}
+
+model Variant {
+    id        String   @id @default(cuid())
+    SKU       String?
+    barcode   String?
+    option0   String?
+    option1   String?
+    option2   String?
+    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    productId String
+    images    Image[]
+    offers    Offer[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@map("variant")
+}
+
+model DeliveryProfile {
+    id        String         @id @default(cuid())
+    title     String         @unique
+    offers    Offer[]
+    zones     DeliveryZone[]
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    @@map("deliveryprofile")
+}
+
+model DeliveryZone {
+    id                String           @id @default(cuid())
+    country           String
+    region            String
+    options           DeliveryOption[]
+    deliveryProfile   DeliveryProfile  @relation(fields: [deliveryProfileId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    deliveryProfileId String
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+    @@unique([deliveryProfileId, country, region])
+    @@fulltext([country, region])
+    @@map("deliveryzone")
+}
+
+model DeliveryOption {
+    id             String       @id @default(cuid())
+    title          String
+    duration       Int
+    price          Decimal      @db.Decimal(9, 2)
+    deliveryZone   DeliveryZone @relation(fields: [deliveryZoneId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    deliveryZoneId String
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
+    @@map("deliveryoption")
+}
+
+model Country {
+    id        String   @id @default(cuid())
+    title     String   @unique
+    regions   Region[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@fulltext([title])
+    @@map("country")
+}
+
+model Region {
+    id        String   @id @default(cuid())
+    title     String
+    cities    City[]
+    country   Country  @relation(fields: [countryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    countryId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@unique([countryId, title])
+    @@fulltext([title])
+    @@map("region")
+}
+
+model City {
+    id        String   @id @default(cuid())
+    title     String
+    region    Region   @relation(fields: [regionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    regionId  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@unique([regionId, title])
+    @@fulltext([title])
+    @@map("city")
+}

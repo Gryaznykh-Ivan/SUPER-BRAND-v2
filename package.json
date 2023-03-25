@@ -6,8 +6,9 @@
   "scripts": {
     "dev:server": "cd ./server && npm run start:dev",
     "dev:admin": "cd ./admin && npm run dev",
-    "dev:store": "cd ./store && npm run dev",
-    "dev": "concurrently \"npm run dev:store\" \"npm run dev:server\" \"npm run dev:admin\""
+    "dev:parser": "cd ./parser/client && npm run dev",
+    "dev:api.parser": "cd ./parser/server && npm run start:dev",
+    "dev": "concurrently \"npm run dev:parser\" \"npm run dev:server\" \"npm run dev:admin\" \"npm run dev:api.parser\""
   },
   "repository": {
     "type": "git",

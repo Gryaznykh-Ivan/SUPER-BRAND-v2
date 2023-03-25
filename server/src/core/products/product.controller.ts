@@ -36,7 +36,7 @@ export class ProductController {
 
 
     @Post('create')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_CREATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
     createProduct(
         @Body() data: CreateProductDto
     ) {
@@ -110,7 +110,7 @@ export class ProductController {
     }
 
     @Delete(':productId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_DELETE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.PRODUCT_UPDATE])
     removeProduct(
         @Param('productId') productId: string,
     ) {

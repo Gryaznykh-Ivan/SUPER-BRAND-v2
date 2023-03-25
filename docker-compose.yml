@@ -8,18 +8,17 @@ services:
     depends_on:
       - db
       - nginx
+      - api.parser
     restart: always
   api.parser:
     build:
-      context: ./server
+      context: ./parser/server
     environment:
       PORT: 4001
-      COOKIE_DOMAIN: adminsb.space
-      DATABASE_URL: mysql://adminsbtest:adminsbtest@db:3306/sb
+      DATABASE_URL_SHOP: mysql://adminsbtest:adminsbtest@db:3306/sb
+      DATABASE_URL_PARSER: mysql://adminsbtest:adminsbtest@db:3306/sb-parser
       SECRET: ade8959dd56e2b039e862b59ec6c0e3eb0879f456c7a5874467ea6677e34e219
-      STATIC_FILES_PATH: /static
-      SMTP_EMAIL: gryaznykh.ivan@gmail.com
-      SMTP_PASSWORD: qunzzygesomjogxd
+      COOKIE_DOMAIN: adminsb.space
       EXPIRES_IN: 15d
     volumes:
       - ./static:/static
@@ -41,12 +40,12 @@ services:
       context: ./server
     environment:
       PORT: 5000
-      COOKIE_DOMAIN: adminsb.space
       DATABASE_URL: mysql://adminsbtest:adminsbtest@db:3306/sb
       SECRET: ade8959dd56e2b039e862b59ec6c0e3eb0879f456c7a5874467ea6677e34e219
       STATIC_FILES_PATH: /static
       SMTP_EMAIL: gryaznykh.ivan@gmail.com
       SMTP_PASSWORD: qunzzygesomjogxd
+      COOKIE_DOMAIN: adminsb.space
       EXPIRES_IN: 15d
     volumes:
       - ./static:/static

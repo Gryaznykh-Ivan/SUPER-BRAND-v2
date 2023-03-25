@@ -47,7 +47,7 @@ export class CollectionController {
 
 
     @Post('create')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_CREATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE])
     createCollection(
         @Body() data: CreateCollectionDto
     ) {
@@ -93,7 +93,7 @@ export class CollectionController {
     }
 
     @Delete(':collectionId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_DELETE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.COLLECTION_UPDATE])
     removeCollection(
         @Param('collectionId') collectionId: string,
     ) {

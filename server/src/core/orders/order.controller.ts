@@ -60,7 +60,7 @@ export class OrderController {
 
 
     @Post('create')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_CREATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.ORDER_UPDATE])
     createOrder(
         @Body() data: CreateOrderDto,
         @User() self: IUser

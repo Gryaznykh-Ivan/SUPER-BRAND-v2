@@ -38,7 +38,7 @@ export class ShippingController {
 
 
     @Post('create')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.SHIPPING_CREATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.SHIPPING_UPDATE])
     createProfile(
         @Body() data: CreateProfileDto
     ) {
@@ -83,7 +83,7 @@ export class ShippingController {
     }
 
     @Delete(':profileId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.SHIPPING_DELETE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.SHIPPING_UPDATE])
     removeProfile(
         @Param('profileId') profileId: string,
     ) {

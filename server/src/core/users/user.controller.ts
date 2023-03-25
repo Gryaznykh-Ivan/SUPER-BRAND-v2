@@ -41,7 +41,7 @@ export class UserController {
 
     @Post('create')
     @HttpCode(200)
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_CREATE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_UPDATE])
     createUser(
         @Body() data: CreateUserDto,
         @User() self: IUser
@@ -60,7 +60,7 @@ export class UserController {
     }
 
     @Delete(':userId')
-    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_DELETE])
+    @Auth([Role.ADMIN, Role.MANAGER], [Right.USER_UPDATE])
     deleteUser(
         @Param('userId') id: string,
         @User() self: IUser

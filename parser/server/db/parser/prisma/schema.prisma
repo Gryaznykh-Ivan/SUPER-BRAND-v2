@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider        = "prisma-client-js"
+    output          = "../../../node_modules/@prisma-parser"
+    previewFeatures = ["orderByNulls", "fullTextSearch", "fullTextIndex", "interactiveTransactions"]
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL_PARSER")
+}
+
+enum BotStatus {
+    ACTIVE
+    INACTIVE
+}
+
+enum ProductStatus {
+    WAITING_STOCKX_DATA
+    WAITING_SHOP_UPDATE
+    DONE
+    ERROR
+}
+
+enum BotAction {
+    REST
+    RECEIVING_PRODUCTS_FROM_SHOP
+    RECEIVING_PRODUCTS_FROM_STOCKX
+    UPDATEING_PRODUCTS
+}
+
+model Settings {
+    id      String  @id
+    rate    Decimal @default(75.00) @db.Decimal(9, 2)
+    proxy   String  @db.MediumText
+    upTo135 String  @default("x")
+    upTo200 String  @default("x")
+    upTo266 String  @default("x")
+    upTo333 String  @default("x")
+    upTo400 String  @default("x")
+    upTo466 String  @default("x")
+    upTo533 String  @default("x")
+    upTo600 String  @default("x")
+    upTo666 String  @default("x")
+    over666 String  @default("x")
+
+    @@map("settings")
+}
+
+model Bot {
+    id     String    @id
+    status BotStatus @default(INACTIVE)
+    action BotAction @default(REST)
+
+    @@map("bot")
+}
+
+model Product {
+    id        String        @id @default(cuid())
+    title     String
+    stockx    String
+    pfactor   Decimal       @db.Decimal(9, 2)
+    status    ProductStatus @default(WAITING_STOCKX_DATA)
+    variants  Variant[]
+    updatedAt DateTime      @updatedAt
+    createdAt DateTime      @default(now())
+
+    @@fulltext([title])
+    @@map("product")
+}
+
+model Variant {
+    id          String  @id @default(cuid())
+    title       String
+    searchTitle String
+    price       Int?
+    product     Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    productId   String
+    
+    @@map("variant")
+}
