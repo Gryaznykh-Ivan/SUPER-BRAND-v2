@@ -185,11 +185,7 @@ export class OfferService {
                         },
                         images: {
                             select: {
-                                id: true,
-                                alt: true,
-                                src: true,
-                                path: true,
-                                blurhash: true,
+                                id: true
                             },
                             orderBy: {
                                 position: 'asc'
@@ -210,15 +206,7 @@ export class OfferService {
         const createOfferQuery = {
             productTitle: variant.product.title,
             variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
-            image: offerImage !== null ? {
-                create: {
-                    src: offerImage.src,
-                    alt: offerImage.alt,
-                    path: offerImage.path,
-                    blurhash: offerImage.blurhash,
-                    position: 0
-                }
-            } : undefined,
+            imageId: offerImage !== null ? offerImage.id : undefined,
             variantId: data.variantId,
             userId: data.userId,
             status: data.status,
@@ -303,11 +291,7 @@ export class OfferService {
                             },
                             images: {
                                 select: {
-                                    id: true,
-                                    alt: true,
-                                    src: true,
-                                    path: true,
-                                    blurhash: true,
+                                    id: true
                                 },
                                 orderBy: {
                                     position: 'asc'
@@ -330,17 +314,7 @@ export class OfferService {
                 productTitle: variant.product.title,
                 variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
                 variantId: data.variantId,
-                image: offerImage !== null ? {
-                    [offer.image !== null ? "update" : "create"]: {
-                        src: offerImage.src,
-                        alt: offerImage.alt,
-                        blurhash: offerImage.blurhash,
-                        path: offerImage.path,
-                        position: 0
-                    }
-                } : {
-                    disconnect: true
-                }
+                imageId: offerImage !== null ? offerImage.id : null
             })
         }
 

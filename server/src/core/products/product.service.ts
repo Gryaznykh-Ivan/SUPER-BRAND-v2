@@ -10,6 +10,7 @@ import { CreateOptionDto, UpdateOptionDto } from './dto/options.dto';
 import { UrlService } from 'src/utils/urls/urls.service';
 import { SearchProductDto } from './dto/searchProduct.dto';
 import { FilesService } from 'src/utils/files/files.service';
+import { Console } from 'console';
 
 @Injectable()
 export class ProductService {
@@ -300,6 +301,7 @@ export class ProductService {
                     data: createImagesQuery
                 })
 
+                // У товара появляется изображение - оно должно проявляться и у оффера
                 if (startPosition === 0) {
                     const offers = await tx.offer.findMany({
                         where: {
@@ -308,33 +310,30 @@ export class ProductService {
                             }
                         },
                         select: {
-                            id: true,
-                            image: {
-                                select: {
-                                    id: true
-                                }
-                            }
+                            id: true
                         }
                     })
 
-                    for (const offer of offers) {
-                        await tx.offer.update({
-                            where: {
-                                id: offer.id
-                            },
-                            data: {
-                                image: {
-                                    [offer.image !== null ? "update" : "create"]: {
-                                        src: createImagesQuery[0].src,
-                                        alt: createImagesQuery[0].alt,
-                                        path: createImagesQuery[0].path,
-                                        blurhash: createImagesQuery[0].blurhash,
-                                        position: 0
-                                    }
-                                }
+                    const image = await tx.image.findFirst({
+                        where: { productId },
+                        select: {
+                            id: true
+                        },
+                        orderBy: {
+                            position: 'asc'
+                        }
+                    })
+
+                    await tx.offer.updateMany({
+                        where: {
+                            id: {
+                                in: offers.map(offer => offer.id)
                             }
-                        })
-                    }
+                        },
+                        data: {
+                            imageId: image.id
+                        }
+                    })
                 }
             })
 
@@ -398,12 +397,7 @@ export class ProductService {
                             select: {
                                 images: {
                                     select: {
-                                        id: true,
-                                        src: true,
-                                        alt: true,
-                                        blurhash: true,
-                                        path: true,
-                                        position: true,
+                                        id: true
                                     },
                                     orderBy: {
                                         position: 'asc'
@@ -429,24 +423,16 @@ export class ProductService {
                             }
                         })
 
-                        for (const offer of offers) {
-                            await tx.offer.update({
-                                where: {
-                                    id: offer.id
-                                },
-                                data: {
-                                    image: {
-                                        [offer.image !== null ? "update" : "create"]: {
-                                            src: product.images[0].src,
-                                            alt: product.images[0].alt,
-                                            blurhash: product.images[0].blurhash,
-                                            path: product.images[0].path,
-                                            position: 0
-                                        }
-                                    }
+                        await tx.offer.updateMany({
+                            where: {
+                                id: {
+                                    in: offers.map(offer => offer.id)
                                 }
-                            })
-                        }
+                            },
+                            data: {
+                                imageId: product.images[0].id
+                            }
+                        })
                     }
                 }
             })
@@ -475,7 +461,7 @@ export class ProductService {
                 })
 
                 const images = await tx.image.findMany({
-                    where: { productId: removedImage.productId },
+                    where: { productId },
                     select: { id: true },
                     orderBy: [{ position: 'asc' }]
                 })
@@ -498,12 +484,7 @@ export class ProductService {
                         select: {
                             images: {
                                 select: {
-                                    id: true,
-                                    src: true,
-                                    alt: true,
-                                    blurhash: true,
-                                    path: true,
-                                    position: true,
+                                    id: true
                                 },
                                 orderBy: {
                                     position: 'asc'
@@ -513,44 +494,32 @@ export class ProductService {
                         }
                     })
 
-                    if (product.images.length !== 0) {
-                        const offers = await tx.offer.findMany({
-                            where: {
-                                variant: {
-                                    productId: productId
-                                }
-                            },
-                            select: {
-                                id: true,
-                                image: {
-                                    select: {
-                                        id: true
-                                    }
+                    const offers = await tx.offer.findMany({
+                        where: {
+                            variant: {
+                                productId: productId
+                            }
+                        },
+                        select: {
+                            id: true,
+                            image: {
+                                select: {
+                                    id: true
                                 }
                             }
-                        })
-
-                        for (const offer of offers) {
-                            await tx.offer.update({
-                                where: {
-                                    id: offer.id
-                                },
-                                data: {
-                                    image: product.images.length !== 0 ? {
-                                        [offer.image !== null ? "update" : "create"]: {
-                                            src: product.images[0].src,
-                                            alt: product.images[0].alt,
-                                            path: product.images[0].path,
-                                            blurhash: product.images[0].blurhash,
-                                            position: 0
-                                        }
-                                    } : {
-                                        disconnect: true
-                                    }
-                                }
-                            })
                         }
-                    }
+                    })
+
+                    await tx.offer.updateMany({
+                        where: {
+                            id: {
+                                in: offers.map(offer => offer.id)
+                            }
+                        },
+                        data: {
+                            imageId: product.images.length !== 0 ? product.images[0].id : null
+                        }
+                    })
                 }
             })
 
