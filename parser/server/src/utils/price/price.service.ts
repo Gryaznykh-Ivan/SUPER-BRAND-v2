@@ -33,4 +33,8 @@ export class PriceService {
 
         return result.toString()
     }
+
+    getPrice(price: number, { rate }: Settings) {
+        return (price * Number(rate)).toString()
+    }
 }

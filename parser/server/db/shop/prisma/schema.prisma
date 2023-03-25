@@ -102,6 +102,7 @@ model Setting {
     value     String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@unique([setting, title])
     @@map("setting")
 }
@@ -111,6 +112,7 @@ model VerificationCode {
     email     String
     code      String
     createdAt DateTime @default(now())
+
     @@map("verificationcode")
 }
 
@@ -140,6 +142,7 @@ model User {
     timeline             Timeline[]
     createdAt            DateTime          @default(now())
     updatedAt            DateTime          @updatedAt
+
     @@fulltext([fullName])
     @@fulltext([fullName, email, phone])
     @@map("user")
@@ -152,6 +155,7 @@ model Permission {
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@unique([userId, right])
     @@map("permission")
 }
@@ -163,6 +167,7 @@ model CartProduct {
     offerId   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@id([userId, offerId])
     @@map("cartproduct")
 }
@@ -174,6 +179,7 @@ model Token {
     refreshToken String
     expiresIn    DateTime
     createdAt    DateTime @default(now())
+
     @@map("token")
 }
 
@@ -187,6 +193,7 @@ model Address {
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@map("address")
 }
 
@@ -212,6 +219,7 @@ model Order {
     userId         String
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
+
     @@map("order")
 }
 
@@ -226,6 +234,7 @@ model Invoice {
     orderId     Int
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
+
     @@map("invoice")
 }
 
@@ -236,6 +245,7 @@ model OrderService {
     price       Decimal @db.Decimal(9, 2)
     order       Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId     Int
+
     @@map("orderservice")
 }
 
@@ -248,6 +258,7 @@ model Timeline {
     user      User?    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     userId    String?
     createdAt DateTime @default(now())
+
     @@map("timeline")
 }
 
@@ -261,6 +272,7 @@ model Fulfillment {
     orderId   Int
     createdAt DateTime          @default(now())
     updatedAt DateTime          @updatedAt
+
     @@map("fulfillment")
 }
 
@@ -274,6 +286,7 @@ model Return {
     orderId   Int
     createdAt DateTime      @default(now())
     updatedAt DateTime      @updatedAt
+
     @@map("return")
 }
 
@@ -284,6 +297,7 @@ model ReturnOffer {
     offerId   String
     reason    String
     createdAt DateTime @default(now())
+
     @@id([returnId, offerId])
     @@map("returnoffer")
 }
@@ -292,12 +306,10 @@ model Offer {
     id                String           @id @default(cuid())
     productTitle      String           @db.VarChar(255)
     variantTitle      String
-    image             Image?
     price             Decimal          @db.Decimal(9, 2)
     offerPrice        Decimal          @db.Decimal(9, 2)
     compareAtPrice    Decimal?         @db.Decimal(9, 2)
     comment           String?
-    tag               String?
     status            OfferStatus      @default(OFFERED)
     user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId            String?
@@ -309,11 +321,14 @@ model Offer {
     deliveryProfileId String?
     fulfillment       Fulfillment?     @relation(fields: [fulfillmentId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     fulfillmentId     String?
+    image             Image?           @relation(fields: [imageId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+    imageId           String?
     cartProduct       CartProduct[]
     returned          ReturnOffer[]
     removedFromOrders Order[]          @relation(name: "orderremovedoffers")
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
+
     @@fulltext([productTitle])
     @@map("offer")
 }
@@ -325,6 +340,7 @@ model FavoriteProduct {
     userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@id([productId, userId])
     @@map("favoriteproduct")
 }
@@ -340,6 +356,7 @@ model Collection {
     images          Image[]
     createdAt       DateTime  @default(now())
     updatedAt       DateTime  @updatedAt
+
     @@fulltext([title])
     @@map("collection")
 }
@@ -363,6 +380,7 @@ model Product {
     metafields       Metafield[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
+
     @@fulltext([title])
     @@fulltext([vendor])
     @@fulltext([title, vendor])
@@ -375,6 +393,7 @@ model Metafield {
     value     String
     product   Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId String
+
     @@unique([productId, key])
     @@map("metafield")
 }
@@ -389,6 +408,7 @@ model Option {
     productId String
     createdAt DateTime      @default(now())
     updatedAt DateTime      @updatedAt
+
     @@unique([productId, title])
     @@map("option")
 }
@@ -401,6 +421,7 @@ model OptionValue {
     optionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@unique([optionId, title])
     @@map("optionvalue")
 }
@@ -418,10 +439,10 @@ model Image {
     collectionId String?
     variant      Variant?    @relation(fields: [variantId], references: [id], onUpdate: Cascade, onDelete: SetNull)
     variantId    String?
-    offer        Offer?      @relation(fields: [offerId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-    offerId      String?     @unique
+    offer        Offer[]
     createdAt    DateTime    @default(now())
     updatedAt    DateTime    @updatedAt
+
     @@map("image")
 }
 
@@ -438,6 +459,7 @@ model Variant {
     offers    Offer[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@map("variant")
 }
 
@@ -448,6 +470,7 @@ model DeliveryProfile {
     zones     DeliveryZone[]
     createdAt DateTime       @default(now())
     updatedAt DateTime       @updatedAt
+
     @@map("deliveryprofile")
 }
 
@@ -460,6 +483,7 @@ model DeliveryZone {
     deliveryProfileId String
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
+
     @@unique([deliveryProfileId, country, region])
     @@fulltext([country, region])
     @@map("deliveryzone")
@@ -474,6 +498,7 @@ model DeliveryOption {
     deliveryZoneId String
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
+
     @@map("deliveryoption")
 }
 
@@ -483,6 +508,7 @@ model Country {
     regions   Region[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@fulltext([title])
     @@map("country")
 }
@@ -495,6 +521,7 @@ model Region {
     countryId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@unique([countryId, title])
     @@fulltext([title])
     @@map("region")
@@ -507,6 +534,7 @@ model City {
     regionId  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     @@unique([regionId, title])
     @@fulltext([title])
     @@map("city")

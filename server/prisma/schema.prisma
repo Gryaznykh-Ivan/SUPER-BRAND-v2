@@ -305,7 +305,6 @@ model Offer {
     offerPrice        Decimal          @db.Decimal(9, 2)
     compareAtPrice    Decimal?         @db.Decimal(9, 2)
     comment           String?
-    tag               String?
     status            OfferStatus      @default(OFFERED)
     user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     userId            String?

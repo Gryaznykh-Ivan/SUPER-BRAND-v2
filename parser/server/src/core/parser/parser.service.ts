@@ -3,9 +3,9 @@ import { Browser } from 'puppeteer';
 import * as csv from 'csv-parse'
 import { Cron } from '@nestjs/schedule';
 import { BotAction, BotStatus, ProductStatus } from '@prisma-parser';
+import { PriceService } from 'src/utils/price/price.service';
 import { PuppetterService } from 'src/utils/puppetter/puppetter.service';
 import { ParserDBService } from '../../db/parser/parser.service';
-import { ShopDBService } from 'src/db/shop/shop.service';
 import { ShopService } from '../shop/shop.service';
 
 
@@ -14,7 +14,8 @@ export class ParserService {
     constructor(
         private parser: ParserDBService,
         private shop: ShopService,
-        private puppetter: PuppetterService
+        private puppetter: PuppetterService,
+        private shopPrice: PriceService
     ) { }
 
     async getBotById(botId: string) {
@@ -113,7 +114,10 @@ export class ParserService {
                     stockx: true,
                 },
                 skip: skip,
-                take: limit
+                take: limit,
+                orderBy: {
+                    updatedAt: 'asc'
+                }
             })
 
             for (const product of products) {
@@ -170,8 +174,6 @@ export class ParserService {
                     })
                 }
             }
-
-            break; // temp
 
             hasNextPage = products.length === limit
             skip += limit
@@ -237,7 +239,80 @@ export class ParserService {
 
 
     private async updateShopProducts() {
-        return
+        const provider = await this.shop.getStockxProvider()
+        const setting = await this.parser.settings.findUnique({ where: { id: process.env.BOT_ID } })
+
+        const limit = 10;
+        let skip = 0;
+        let hasNextPage = true
+
+        do {
+            const products = await this.parser.product.findMany({
+                where: {
+                    status: ProductStatus.WAITING_SHOP_UPDATE
+                },
+                select: {
+                    id: true,
+                    variants: {
+                        select: {
+                            id: true,
+                            price: true
+                        }
+                    }
+                },
+                skip: skip,
+                take: limit,
+                orderBy: {
+                    updatedAt: 'asc'
+                }
+            })
+
+            if (products.length === 0) break;
+
+            for (const product of products) {
+                try {
+                    let sum = 0, count = 0;
+                    for (const variant of product.variants) {
+                        if (variant.price !== null && variant.price < 5000) {
+                            sum += variant.price;
+                            count++;
+                        }
+                    }
+
+                    const averagePrice = count ? Number((sum / count).toFixed(2)) : 0
+
+                    for (const variant of product.variants) {
+                        if (variant.price !== null && variant.price < averagePrice * 4) {
+                            await this.shop.createOffers({
+                                variantId: variant.id,
+                                userId: provider.id,
+                                price: this.shopPrice.getShopPrice(variant.price, setting),
+                                offerPrice: this.shopPrice.getPrice(variant.price, setting)
+                            })
+                        }
+                    }
+                } catch (e) {
+                    console.log(e)
+
+                    await this.parser.product.update({
+                        where: { id: product.id },
+                        data: {
+                            status: ProductStatus.ERROR
+                        }
+                    })
+                }
+
+                await this.parser.product.update({
+                    where: { id: product.id },
+                    data: {
+                        status: ProductStatus.DONE
+                    }
+                })
+            }
+
+            hasNextPage = products.length === limit
+            skip += limit
+        } while (hasNextPage === true)
     }
 
 
