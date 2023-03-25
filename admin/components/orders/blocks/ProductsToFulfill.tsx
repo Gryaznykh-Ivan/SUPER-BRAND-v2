@@ -91,7 +91,7 @@ export default function ProductsToFulfill({ onChange, ...data }: IProps) {
             <div className="divide-y-[1px] overflow-y-auto">
                 {data.offers.map((offer) =>
                     <label key={offer.id} htmlFor={offer.id} className="flex items-center px-5 py-2 space-x-4 hover:bg-gray-100">
-                        {data.offersToAddIds.some(c => c.id === offer.id) === false &&
+                        {data.offersToAddIds.length === 0 &&
                             <input type="checkbox" readOnly name="" id={offer.id} className="rounded" checked={state.some(c => c.id === offer.id) === true} onClick={() => onToggleFulfillmentOffer(offer.id)} />
                         }
                         <div className="relative w-12 aspect-square border-[1px] rounded-md">
