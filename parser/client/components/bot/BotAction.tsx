@@ -6,15 +6,15 @@ const actions = {
         style: "text-gray-500"
     },
     RECEIVING_PRODUCTS_FROM_SHOP: {
-        text: "Получаем список продуктов требующих обновления цен Shopify",
+        text: "Получаем список продуктов магазина",
         style: "text-gray-500"
     },
     RECEIVING_PRODUCTS_FROM_STOCKX: {
         text: "Получаем цены продуктов Stockx",
         style: "text-gray-500"
     },
-    UPLOADING_PRODUCTS: {
-        text: "Загружаем актуальные данные в Shopify",
+    UPDATEING_PRODUCTS: {
+        text: "Загружаем актуальные данные",
         style: "text-gray-500"
     }
 }

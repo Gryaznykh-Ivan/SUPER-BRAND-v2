@@ -30,7 +30,7 @@ const baseQueryWithLogic: BaseQueryFn<
     let result = await baseQuery(args, api, extraOptions);
 
     if (typeof window === "undefined") {
-        return result // Не рефрешим токин на сервере
+        return result
     }
 
     if (result.error && result.error.status === 401) {
@@ -51,7 +51,7 @@ const baseQueryWithLogic: BaseQueryFn<
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: baseQueryWithLogic,
-    tagTypes: ["BOT", "SETTINGS"],
+    tagTypes: ["BOT", "SETTINGS", "PRODUCTS"],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {
             return action.payload[reducerPath];

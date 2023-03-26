@@ -2,6 +2,7 @@ import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, 
 import { Role } from '@prisma-shop';
 import { Auth } from 'src/decorators/auth.decorator';
 import { SearchProductDto } from './dto/searchProduct.dto';
+import { UpdateProductsDto } from './dto/updateProducts.dto';
 import { ProductService } from './products.service';
 
 @Controller('products')
@@ -17,5 +18,13 @@ export class ProductController {
         @Query(new ValidationPipe({ transform: true })) data: SearchProductDto
     ) {
         return this.productService.getProductsBySearch(data)
+    }
+
+    @Post('update')
+    @Auth([Role.ADMIN])
+    updateProducts(
+        @Body() data: UpdateProductsDto
+    ) {
+        return this.productService.updateProducts(data)
     }
 }

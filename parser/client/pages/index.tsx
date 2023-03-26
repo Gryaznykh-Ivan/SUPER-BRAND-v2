@@ -6,28 +6,44 @@ import BotAction from '../components/bot/BotAction'
 import BotStatus from '../components/bot/BotStatus'
 import MainLayout from '../components/layouts/Main'
 import { useAppSelector } from '../hooks/store'
-import { useGetBotByIdQuery, useBotStartMutation } from '../services/botService'
+import { useGetBotByIdQuery, useBotStartMutation, useBotCompleteMutation } from '../services/botService'
 import { IErrorResponse } from '../types/api'
 
 
 export default function Index() {
     const auth = useAppSelector(state => state.auth)
     const { data } = useGetBotByIdQuery({ botId: process.env.NEXT_PUBLIC_BOT_ID as string }, { pollingInterval: 5000 })
-    const [botStart, { isSuccess, isError, error }] = useBotStartMutation()
+
+    const [botStart, { isSuccess: isBotStartSuccess, isError: isBotStartError, error: botStartError }] = useBotStartMutation();
+    const [botComplete, { isSuccess: isBotCompleteSuccess, isError: isBotCompleteError, error: botCompleteError }] = useBotCompleteMutation();
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isBotStartSuccess) {
             setTimeout(() => toast.success("Парсер запущен"), 100)
         }
 
-        if (isError) {
-            if (error && "status" in error) {
-                toast.error((error.data as IErrorResponse).message)
+        if (isBotStartError) {
+            if (botStartError && "status" in botStartError) {
+                toast.error((botStartError.data as IErrorResponse).message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
         }
-    }, [isSuccess, isError])
+    }, [isBotStartSuccess, isBotStartError])
+
+    useEffect(() => {
+        if (isBotCompleteSuccess) {
+            setTimeout(() => toast.success("Парсер запущен"), 100)
+        }
+
+        if (isBotCompleteError) {
+            if (botCompleteError && "status" in botCompleteError) {
+                toast.error((botCompleteError.data as IErrorResponse).message)
+            } else {
+                toast.error("Произошла неизвесная ошибка")
+            }
+        }
+    }, [isBotCompleteSuccess, isBotCompleteError])
 
     const onBotStart = () => {
         if (data?.data.status === "ACTIVE") {
@@ -35,6 +51,14 @@ export default function Index() {
         }
 
         botStart()
+    }
+
+    const onBotComplete = () => {
+        if (data?.data.status === "ACTIVE") {
+            return toast.error("Робот еще работает. Принудительный запуск невозможен")
+        }
+
+        botComplete()
     }
 
     return (
@@ -60,8 +84,9 @@ export default function Index() {
                     </div>
                 </div>
                 {auth.isAuth &&
-                    <div className="flex justify-center py-3 space-x-4">
-                        <button className="px-4 py-2 bg-green-600 rounded text-white" onClick={onBotStart}>Запустить</button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <button className="px-4 py-2 bg-green-600 rounded text-white hover:font-medium" onClick={onBotStart}>Запустить</button>
+                        <button className="px-4 py-2 bg-gray-300 border-[1px] rounded text-black hover:font-medium" onClick={onBotComplete}>Запустить очередь</button>
                     </div>
                 }
             </div>

@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { BotAddProductToParseRequest, BotAddProductToParseResponse, BotGetByIdRequest, BotGetByIdResponse, BotStartRequest, BotStartResponse } from "../types/api";
+import { BotCompleteRequest, BotCompleteResponse, BotGetByIdRequest, BotGetByIdResponse, BotStartRequest, BotStartResponse } from "../types/api";
 
 export const botService = api.injectEndpoints({
     endpoints: builder => ({
@@ -11,19 +11,19 @@ export const botService = api.injectEndpoints({
             providesTags: ["BOT"]
         }),
         botStart: builder.mutation<BotStartResponse, BotStartRequest>({
-            query: (credentials) => ({
+            query: () => ({
                 url: "parser/start",
-                method: "POST",
-                params: credentials
+                method: "POST"
             }),
             invalidatesTags: ["BOT"]
         }),
-        botAddProductToParse: builder.mutation<BotAddProductToParseResponse, BotAddProductToParseRequest>({
+        botComplete: builder.mutation<BotCompleteResponse, BotCompleteRequest>({
             query: (credentials) => ({
-                url: "parser/addProductToParse",
+                url: "parser/complete",
                 method: "POST",
                 body: credentials
-            })
+            }),
+            invalidatesTags: ["BOT"]
         }),
     })
 })
@@ -31,6 +31,6 @@ export const botService = api.injectEndpoints({
 export const {
     useGetBotByIdQuery,
     useBotStartMutation,
-    useBotAddProductToParseMutation
+    useBotCompleteMutation
 } = botService
 

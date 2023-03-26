@@ -62,6 +62,7 @@ model Product {
     title     String
     stockx    String
     pfactor   Decimal       @db.Decimal(9, 2)
+    pamount   Int
     status    ProductStatus @default(WAITING_STOCKX_DATA)
     variants  Variant[]
     updatedAt DateTime      @updatedAt
@@ -72,12 +73,14 @@ model Product {
 }
 
 model Variant {
-    id          String  @id @default(cuid())
+    id          String   @id @default(cuid())
     title       String
     searchTitle String
+    shopAmount  Int
+    shopPrice   Decimal? @db.Decimal(9, 2)
     price       Int?
-    product     Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    product     Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     productId   String
-    
+
     @@map("variant")
 }

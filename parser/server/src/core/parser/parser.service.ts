@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Browser } from 'puppeteer';
-import * as csv from 'csv-parse'
 import { Cron } from '@nestjs/schedule';
 import { BotAction, BotStatus, ProductStatus } from '@prisma-parser';
 import { PriceService } from 'src/utils/price/price.service';
@@ -52,18 +51,28 @@ export class ParserService {
         }
     }
 
-    @Cron('0 0 * * *')
-    private async parse() {
-        try {
-            await this.parser.bot.update({
-                where: { id: process.env.BOT_ID },
-                data: {
-                    status: BotStatus.ACTIVE,
-                    action: BotAction.RECEIVING_PRODUCTS_FROM_SHOP
-                }
-            })
+    async complete() {
+        const bot = await this.parser.bot.findUnique({
+            where: { id: process.env.BOT_ID },
+            select: {
+                status: true
+            }
+        })
 
-            await this.getShopProducts();
+        if (bot.status === BotStatus.ACTIVE) {
+            throw new HttpException("Бот уже запущен", HttpStatus.BAD_REQUEST)
+        }
+
+        this.parseRestProducts()
+
+        return {
+            success: true
+        }
+    }
+
+    private async parseRestProducts() {
+        try {
+            const provider = await this.shop.getStockxProvider()
 
             await this.parser.bot.update({
                 where: { id: process.env.BOT_ID },
@@ -83,18 +92,65 @@ export class ParserService {
                 }
             })
 
-            await this.updateShopProducts();
+            await this.updateShopProducts(provider);
         } catch (e) {
             console.log(e)
-        } finally {
+        }
+        
+        await this.parser.bot.update({
+            where: { id: process.env.BOT_ID },
+            data: {
+                status: BotStatus.INACTIVE,
+                action: BotAction.REST
+            }
+        })
+    }
+
+    @Cron('0 0 * * *')
+    private async parse() {
+        try {
+            const provider = await this.shop.getStockxProvider()
+
             await this.parser.bot.update({
                 where: { id: process.env.BOT_ID },
                 data: {
-                    status: BotStatus.INACTIVE,
-                    action: BotAction.REST
+                    status: BotStatus.ACTIVE,
+                    action: BotAction.RECEIVING_PRODUCTS_FROM_SHOP
                 }
             })
+
+            await this.getShopProducts(provider);
+
+            await this.parser.bot.update({
+                where: { id: process.env.BOT_ID },
+                data: {
+                    status: BotStatus.ACTIVE,
+                    action: BotAction.RECEIVING_PRODUCTS_FROM_STOCKX
+                }
+            })
+
+            await this.getStockxProducts();
+
+            await this.parser.bot.update({
+                where: { id: process.env.BOT_ID },
+                data: {
+                    status: BotStatus.ACTIVE,
+                    action: BotAction.UPDATEING_PRODUCTS
+                }
+            })
+
+            await this.updateShopProducts(provider);
+        } catch (e) {
+            console.log(e)
         }
+
+        await this.parser.bot.update({
+            where: { id: process.env.BOT_ID },
+            data: {
+                status: BotStatus.INACTIVE,
+                action: BotAction.REST
+            }
+        })
     }
 
     private async getStockxProducts() {
@@ -182,25 +238,25 @@ export class ParserService {
         await browser.close()
     }
 
-    private async getShopProducts() {
-        await this.parser.variant.deleteMany({})
+    private async getShopProducts({ id: providerId }: { id: string }) {
+        await this.parser.product.deleteMany({})
 
         const limit = 250;
         let skip = 0;
         let hasNextPage = true
 
         do {
-            const products = await this.shop.getProducts({ skip, limit })
+            const products = await this.shop.getProducts({ skip, limit, providerId })
 
             for (const product of products) {
                 if (product.stockx === undefined) continue;
 
-                await this.parser.product.upsert({
-                    where: { id: product.id },
-                    create: {
+                await this.parser.product.create({
+                    data: {
                         id: product.id,
                         title: product.title,
                         pfactor: isNaN(+product.pfactor) === false ? product.pfactor : "1",
+                        pamount: isNaN(+product.pamount) === false ? Math.floor(Number(product.pamount) > 10 ? 10 : Number(product.pamount)) : 3,
                         stockx: product.stockx,
                         status: ProductStatus.WAITING_STOCKX_DATA,
                         variants: {
@@ -208,23 +264,9 @@ export class ParserService {
                                 data: product.variants.map(variant => ({
                                     id: variant.id,
                                     title: variant.title,
-                                    searchTitle: variant.title.replace(/[^0-9.]/gi, "") || variant.title
-                                }))
-                            }
-                        }
-                    },
-                    update: {
-                        id: product.id,
-                        title: product.title,
-                        pfactor: isNaN(+product.pfactor) === false ? product.pfactor : "1",
-                        stockx: product.stockx,
-                        status: ProductStatus.WAITING_STOCKX_DATA,
-                        variants: {
-                            createMany: {
-                                data: product.variants.map(variant => ({
-                                    id: variant.id,
-                                    title: variant.title,
-                                    searchTitle: variant.title.replace(/[^0-9.]/gi, "") || variant.title
+                                    searchTitle: variant.title.replace(/[^0-9.]/gi, "") || variant.title,
+                                    shopPrice: variant.shopPrice,
+                                    shopAmount: variant.shopAmount,
                                 }))
                             }
                         }
@@ -238,8 +280,7 @@ export class ParserService {
     }
 
 
-    private async updateShopProducts() {
-        const provider = await this.shop.getStockxProvider()
+    private async updateShopProducts({ id: providerId }: { id: string }) {
         const setting = await this.parser.settings.findUnique({ where: { id: process.env.BOT_ID } })
 
         const limit = 10;
@@ -253,10 +294,14 @@ export class ParserService {
                 },
                 select: {
                     id: true,
+                    pfactor: true,
+                    pamount: true,
                     variants: {
                         select: {
                             id: true,
-                            price: true
+                            price: true,
+                            shopPrice: true,
+                            shopAmount: true
                         }
                     }
                 },
@@ -283,11 +328,17 @@ export class ParserService {
 
                     for (const variant of product.variants) {
                         if (variant.price !== null && variant.price < averagePrice * 4) {
-                            await this.shop.createOffers({
+                            const price = this.shopPrice.getShopPrice(variant.price, Number(product.pfactor), setting)
+                            const offerPrice = this.shopPrice.getPrice(variant.price, setting)
+
+                            if (Number(price) === Number(variant.shopPrice) && variant.shopAmount === product.pamount) continue;
+
+                            await this.shop.upsertOffers({
                                 variantId: variant.id,
-                                userId: provider.id,
-                                price: this.shopPrice.getShopPrice(variant.price, setting),
-                                offerPrice: this.shopPrice.getPrice(variant.price, setting)
+                                userId: providerId,
+                                price: price,
+                                offerPrice: offerPrice,
+                                amount: product.pamount
                             })
                         }
                     }

@@ -35,6 +35,7 @@ export interface IProduct {
     id: string;
     title: string;
     pfactor: string;
+    pamount: number;
     status: ProductStatus;
     stockx: string;
     updatedAt: string;
@@ -76,8 +77,8 @@ export type BotGetByIdRequest = {
 export type BotStartResponse = IResponse<void>
 export type BotStartRequest = void;
 
-export type BotAddProductToParseResponse = IResponse<void>
-export type BotAddProductToParseRequest = FormData;
+export type BotCompleteResponse = IResponse<void>
+export type BotCompleteRequest = void;
 
 
 
@@ -90,4 +91,9 @@ export type ProductGetBySearchRequest = {
     status: string;
     limit: number;
     skip: number;
+}
+
+export type ProductsUpdateResponse = IResponse<void>
+export type ProductsUpdateRequest = {
+    ids: string[];
 }

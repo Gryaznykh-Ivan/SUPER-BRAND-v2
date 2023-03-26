@@ -4,7 +4,7 @@ import { Settings } from '@prisma-parser';
 @Injectable()
 export class PriceService {
 
-    getShopPrice(price: number, { rate, upTo135, upTo200, upTo266, upTo333, upTo400, upTo466, upTo533, upTo600, upTo666, over666 }: Settings) {
+    getShopPrice(price: number, factor: number, { rate, upTo135, upTo200, upTo266, upTo333, upTo400, upTo466, upTo533, upTo600, upTo666, over666 }: Settings) {
         let result = price
 
         if (result <= 135) {
@@ -29,6 +29,7 @@ export class PriceService {
             result = eval(over666.replaceAll("x", result.toString())) * Number(rate)
         }
 
+        result *= factor
         result = Math.ceil(result / 1000) * 1000
 
         return result.toString()

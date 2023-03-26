@@ -11,7 +11,7 @@ export class ShopService {
         private shop: ShopDBService,
     ) { }
 
-    async getProducts(data: { skip: number; limit: number }) {
+    async getProducts(data: { skip: number; limit: number; providerId: string }) {
         const products = await this.shop.product.findMany({
             select: {
                 id: true,
@@ -40,7 +40,19 @@ export class ShopService {
                         option0: true,
                         option1: true,
                         option2: true,
-                    }
+                        offers: {
+                            where: {
+                                userId: data.providerId
+                            },
+                            select: {
+                                id: true,
+                                price: true
+                            },
+                            orderBy: {
+                                price: 'asc'
+                            }
+                        }
+                    },
                 },
                 metafields: {
                     select: {
@@ -58,17 +70,95 @@ export class ShopService {
         return products.map(product => ({
             id: product.id,
             title: product.title,
-            pfactor: product.metafields.find(metafield => metafield.key === "pfactor")?.value,
+            pfactor: product.metafields.find(metafield => metafield.key === "pfactor")?.value.replaceAll(",", "."),
+            pamount: product.metafields.find(metafield => metafield.key === "pamount")?.value,
             stockx: product.metafields.find(metafield => metafield.key === "stockx")?.value,
             variants: product.variants.map(variant => ({
                 id: variant.id,
-                title: product.options.map(option => variant[`option${option.option}`]).join(' | ')
+                title: product.options.map(option => variant[`option${option.option}`]).join(' | '),
+                shopPrice: variant.offers[0]?.price ?? null,
+                shopAmount: variant.offers.length
             }))
         }))
 
     }
 
-    async createOffers(data: { variantId: string; userId: string; price: string; offerPrice: string; }) {
+    async getProductsByIds(data: { ids: string[]; providerId: string }) {
+        const products = await this.shop.product.findMany({
+            where: {
+                id: {
+                    in: data.ids
+                }
+            },
+            select: {
+                id: true,
+                title: true,
+                options: {
+                    select: {
+                        id: true,
+                        option: true,
+                        values: {
+                            select: {
+                                title: true,
+                                position: true,
+                            },
+                            orderBy: {
+                                position: 'asc'
+                            }
+                        }
+                    },
+                    orderBy: {
+                        position: 'asc'
+                    }
+                },
+                variants: {
+                    select: {
+                        id: true,
+                        option0: true,
+                        option1: true,
+                        option2: true,
+                        offers: {
+                            where: {
+                                userId: data.providerId
+                            },
+                            select: {
+                                id: true,
+                                price: true
+                            },
+                            orderBy: {
+                                price: 'asc'
+                            }
+                        }
+                    },
+                },
+                metafields: {
+                    select: {
+                        id: true,
+                        key: true,
+                        value: true
+                    }
+                },
+            },
+            orderBy: { createdAt: 'desc' }
+        })
+
+        return products.map(product => ({
+            id: product.id,
+            title: product.title,
+            pfactor: product.metafields.find(metafield => metafield.key === "pfactor")?.value.replaceAll(",", "."),
+            pamount: product.metafields.find(metafield => metafield.key === "pamount")?.value,
+            stockx: product.metafields.find(metafield => metafield.key === "stockx")?.value,
+            variants: product.variants.map(variant => ({
+                id: variant.id,
+                title: product.options.map(option => variant[`option${option.option}`]).join(' | '),
+                shopPrice: variant.offers[0]?.price ?? null,
+                shopAmount: variant.offers.length
+            }))
+        }))
+
+    }
+
+    async upsertOffers(data: { variantId: string; userId: string; price: string; offerPrice: string; amount: number }) {
         try {
             await this.shop.$transaction(async tx => {
                 const variant = await tx.variant.findUnique({
@@ -130,7 +220,7 @@ export class ShopService {
                 })
 
                 await tx.offer.createMany({
-                    data: [createOfferQuery, createOfferQuery, createOfferQuery]
+                    data: new Array(data.amount).fill(createOfferQuery)
                 })
             })
 

@@ -28,7 +28,7 @@ export class ProxyService {
         const proxyList = await this.getProxyList();
 
         if (proxyList.length === 0) return null
-        if (proxyList.length === 1) return this.getFormatProxy("http://" + this._selectedProxy)
+        if (proxyList.length === 1) return this.getFormatProxy("http://" + proxyList[0])
 
         const filteredproxyList = proxyList.filter(str => str !== this._selectedProxy);
         const randomIndex = Math.floor(Math.random() * filteredproxyList.length);

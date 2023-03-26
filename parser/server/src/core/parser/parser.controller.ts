@@ -23,4 +23,10 @@ export class ParserController {
     start() {
         return this.parserService.start()
     }
+
+    @Post('complete')
+    @Auth([Role.ADMIN])
+    complete() {
+        return this.parserService.complete()
+    }
 }
