@@ -29,4 +29,4 @@ COPY --from=builder /app/package.json ./package.json
 
 USER nextjs
 
-CMD ["npm", "start"]
+CMD npm start
