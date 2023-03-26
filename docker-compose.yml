@@ -10,7 +10,7 @@ services:
       - nginx
       - api.parser
     restart: always
-  api.parser:
+  apiparser:
     build:
       context: ./parser/server
     environment:
@@ -20,11 +20,13 @@ services:
       SECRET: ade8959dd56e2b039e862b59ec6c0e3eb0879f456c7a5874467ea6677e34e219
       COOKIE_DOMAIN: adminsb.space
       EXPIRES_IN: 15d
+      BOT_ID: super-brand-parser
     volumes:
       - ./static:/static
     depends_on:
       - db
       - nginx
+      - server
     restart: always
   admin:
     build:
