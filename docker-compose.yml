@@ -5,6 +5,15 @@ services:
       context: ./parser/client
     environment:
       PORT: 4000
+      NEXT_PUBLIC_SHOP_API_URL_PRODUCTION: https://api.adminsb.space
+      NEXT_PUBLIC_SHOP_API_URL_DEVELOPMENT: http://api.sb.com
+      NEXT_PUBLIC_PARSER_API_URL_PRODUCTION: https://apiparser.adminsb.space
+      NEXT_PUBLIC_PARSER_API_URL_DEVELOPMENT: http://api.parser.sb.com
+      NEXT_PUBLIC_STATIC_URL_PRODUCTION: https://static.adminsb.space
+      NEXT_PUBLIC_STATIC_URL_DEVELOPMENT: http://static.sb.com
+      NEXT_PUBLIC_ADMIN_PANEL_URL_PRODUCTION: https://adminsb.space
+      NEXT_PUBLIC_ADMIN_PANEL_URL_DEVELOPMENT: http://admin.sb.com
+      NEXT_PUBLIC_BOT_ID: super-brand-parser
     depends_on:
       - db
       - nginx
@@ -15,7 +24,7 @@ services:
       context: ./parser/server
     environment:
       PORT: 4001
-      DATABASE_URL_SHOP: mysql://adminsbtest:adminsbtest@db:3306/sb
+      DATABASE_URL_SHOP: mysql://root:adminsbtest@db:3306/sb
       DATABASE_URL_PARSER: mysql://root:adminsbtest@db:3306/sb-parser
       SECRET: ade8959dd56e2b039e862b59ec6c0e3eb0879f456c7a5874467ea6677e34e219
       COOKIE_DOMAIN: adminsb.space
@@ -33,6 +42,12 @@ services:
       context: ./admin
     environment:
       PORT: 3000
+      NEXT_PUBLIC_API_URL_PRODUCTION: https://api.adminsb.space
+      NEXT_PUBLIC_API_URL_DEVELOPMENT: http://api.sb.com
+      NEXT_PUBLIC_STATIC_URL_PRODUCTION: https://static.adminsb.space
+      NEXT_PUBLIC_STATIC_URL_DEVELOPMENT: http://static.sb.com
+      NEXT_PUBLIC_PARSER_URL_PRODUCTION: https://parser.adminsb.space
+      NEXT_PUBLIC_PARSER_URL_DEVELOPMENT: http://parser.sb.com
     depends_on:
       - db
       - nginx
@@ -42,7 +57,7 @@ services:
       context: ./server
     environment:
       PORT: 5000
-      DATABASE_URL: mysql://adminsbtest:adminsbtest@db:3306/sb
+      DATABASE_URL: mysql://root:adminsbtest@db:3306/sb
       SECRET: ade8959dd56e2b039e862b59ec6c0e3eb0879f456c7a5874467ea6677e34e219
       STATIC_FILES_PATH: /static
       SMTP_EMAIL: gryaznykh.ivan@gmail.com
@@ -66,10 +81,7 @@ services:
   db:
     image: mysql:8
     environment:
-      MYSQL_USER: adminsbtest
       MYSQL_ROOT_PASSWORD: adminsbtest
-      MYSQL_PASSWORD: adminsbtest
-      MYSQL_DATABASE: sb
     volumes:
       - ./db:/var/lib/mysql
     ports:
