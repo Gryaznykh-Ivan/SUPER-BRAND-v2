@@ -69,6 +69,7 @@ services:
       MYSQL_USER: adminsbtest
       MYSQL_ROOT_PASSWORD: adminsbtest
       MYSQL_PASSWORD: adminsbtest
+      MYSQL_DATABASE: sb
     volumes:
       - ./db:/var/lib/mysql
     ports:
