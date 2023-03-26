@@ -5,15 +5,6 @@ services:
       context: ./parser/client
     environment:
       PORT: 4000
-      NEXT_PUBLIC_SHOP_API_URL_PRODUCTION: https://api.adminsb.space
-      NEXT_PUBLIC_SHOP_API_URL_DEVELOPMENT: http://api.sb.com
-      NEXT_PUBLIC_PARSER_API_URL_PRODUCTION: https://apiparser.adminsb.space
-      NEXT_PUBLIC_PARSER_API_URL_DEVELOPMENT: http://api.parser.sb.com
-      NEXT_PUBLIC_STATIC_URL_PRODUCTION: https://static.adminsb.space
-      NEXT_PUBLIC_STATIC_URL_DEVELOPMENT: http://static.sb.com
-      NEXT_PUBLIC_ADMIN_PANEL_URL_PRODUCTION: https://adminsb.space
-      NEXT_PUBLIC_ADMIN_PANEL_URL_DEVELOPMENT: http://admin.sb.com
-      NEXT_PUBLIC_BOT_ID: super-brand-parser
     depends_on:
       - db
       - nginx
@@ -42,12 +33,6 @@ services:
       context: ./admin
     environment:
       PORT: 3000
-      NEXT_PUBLIC_API_URL_PRODUCTION: https://api.adminsb.space
-      NEXT_PUBLIC_API_URL_DEVELOPMENT: http://api.sb.com
-      NEXT_PUBLIC_STATIC_URL_PRODUCTION: https://static.adminsb.space
-      NEXT_PUBLIC_STATIC_URL_DEVELOPMENT: http://static.sb.com
-      NEXT_PUBLIC_PARSER_URL_PRODUCTION: https://parser.adminsb.space
-      NEXT_PUBLIC_PARSER_URL_DEVELOPMENT: http://parser.sb.com
     depends_on:
       - db
       - nginx
