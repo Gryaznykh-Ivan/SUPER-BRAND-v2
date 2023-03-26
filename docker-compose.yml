@@ -16,7 +16,7 @@ services:
     environment:
       PORT: 4001
       DATABASE_URL_SHOP: mysql://adminsbtest:adminsbtest@db:3306/sb
-      DATABASE_URL_PARSER: mysql://adminsbtest:adminsbtest@db:3306/sb-parser
+      DATABASE_URL_PARSER: mysql://root:adminsbtest@db:3306/sb-parser
       SECRET: ade8959dd56e2b039e862b59ec6c0e3eb0879f456c7a5874467ea6677e34e219
       COOKIE_DOMAIN: adminsb.space
       EXPIRES_IN: 15d
