@@ -8,7 +8,7 @@ services:
     depends_on:
       - db
       - nginx
-      - api.parser
+      - apiparser
     restart: always
   apiparser:
     build:
@@ -69,7 +69,6 @@ services:
       MYSQL_USER: adminsbtest
       MYSQL_ROOT_PASSWORD: adminsbtest
       MYSQL_PASSWORD: adminsbtest
-      MYSQL_DATABASE: sb
     volumes:
       - ./db:/var/lib/mysql
     ports:
