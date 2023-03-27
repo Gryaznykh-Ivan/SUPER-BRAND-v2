@@ -67,6 +67,9 @@ services:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: adminsbtest
+    command:
+      - "mysqld"
+      - "--ft-min_word-len=2"
     volumes:
       - ./db:/var/lib/mysql
     ports:

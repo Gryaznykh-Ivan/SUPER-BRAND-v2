@@ -329,7 +329,7 @@ model Offer {
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
 
-    @@fulltext([productTitle])
+    @@fulltext([productTitle, variantTitle])
     @@map("offer")
 }
 
