@@ -145,7 +145,7 @@ export default function Index() {
                                             <th className="font-medium text-gray-500 text-start px-3 py-2 w-32">Статус</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2 w-32">Фактор</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2 w-32">Количество</th>
-                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-40">Обновлено</th>
+                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-40">Последнее изм.</th>
                                         </tr>
                                     </thead>
                                     <tbody>

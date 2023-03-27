@@ -157,7 +157,6 @@ export class ParserService {
         let browser = await this.puppetter.createOrUpdateBrowser()
 
         const limit = 10;
-        let skip = 0;
         let hasNextPage = true
 
         do {
@@ -169,7 +168,7 @@ export class ParserService {
                     id: true,
                     stockx: true,
                 },
-                skip: skip,
+                skip: 0,
                 take: limit,
                 orderBy: {
                     updatedAt: 'asc'
@@ -232,7 +231,6 @@ export class ParserService {
             }
 
             hasNextPage = products.length === limit
-            skip += limit
         } while (hasNextPage === true)
 
         await browser.close()
@@ -284,7 +282,6 @@ export class ParserService {
         const setting = await this.parser.settings.findUnique({ where: { id: process.env.BOT_ID } })
 
         const limit = 10;
-        let skip = 0;
         let hasNextPage = true
 
         do {
@@ -305,7 +302,7 @@ export class ParserService {
                         }
                     }
                 },
-                skip: skip,
+                skip: 0,
                 take: limit,
                 orderBy: {
                     updatedAt: 'asc'
@@ -362,7 +359,6 @@ export class ParserService {
             }
 
             hasNextPage = products.length === limit
-            skip += limit
         } while (hasNextPage === true)
     }
 
