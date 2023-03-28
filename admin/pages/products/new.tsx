@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import MainLayout from '../../components/layouts/Main'
 import OrganizationInfo from '../../components/products/blocks/OrganizationInfo'
 import GeneralInfo from '../../components/products/blocks/GeneralInfo'
-import SeoTags from '../../components/products/blocks/SeoTags'
+import CreateSeoSearch from '../../components/products/blocks/CreateSeoSearch'
 import Status from '../../components/products/blocks/Status'
 import { useRouter } from 'next/router'
 import { useCreateProductMutation } from '../../services/productService'
@@ -48,7 +48,7 @@ function New() {
     }
 
     const mustBeSaved = useMemo(() => {
-        return Object.values(changes).some(c => c !== undefined)
+        return Object.values(changes).some(c => c !== undefined) && changes.title !== undefined
     }, [changes])
 
     return (
@@ -74,10 +74,11 @@ function New() {
                             barcode={null}
                             onChange={onCollectChanges}
                         />
-                        <SeoTags
+                        <CreateSeoSearch
                             metaTitle={null}
                             metaDescription={null}
                             handle={null}
+                            defaultSnippet={null}
                             onChange={onCollectChanges}
                         />
                     </div>

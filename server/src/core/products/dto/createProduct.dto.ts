@@ -1,10 +1,11 @@
-import { Type } from "class-transformer";
-import { ArrayMaxSize, IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
+import { Transform, TransformFnParams, Type } from "class-transformer";
+import { ArrayMaxSize, IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 import { ConnectCollectionDto } from "./collections.dto";
 
 export class CreateProductDto {
     @IsNotEmpty()
     @IsString()
+    @Transform(({ value }: TransformFnParams) => value?.trim())
     title: string;
 
     @IsOptional()
@@ -15,17 +16,24 @@ export class CreateProductDto {
     @IsString()
     description: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
     metaTitle: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
     metaDescription: string;
 
     @IsOptional()
     @IsBoolean()
     available: boolean;
+
+    @IsBoolean()
+    defaultSnippet: boolean;
 
     @IsOptional()
     @IsString()

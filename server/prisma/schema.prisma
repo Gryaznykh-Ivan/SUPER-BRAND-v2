@@ -324,7 +324,7 @@ model Offer {
     createdAt         DateTime         @default(now())
     updatedAt         DateTime         @updatedAt
 
-    @@fulltext([productTitle, variantTitle])
+    @@fulltext([productTitle])
     @@map("offer")
 }
 
@@ -361,12 +361,12 @@ model Product {
     handle           String            @unique() @db.VarChar(255)
     title            String            @db.VarChar(255)
     available        Boolean           @default(false)
+    metaTitle        String            @db.VarChar(255)
+    metaDescription  String            @db.Text
     SKU              String?
     barcode          String?
     vendor           String?
     description      String?           @db.Text
-    metaTitle        String?           @db.VarChar(255)
-    metaDescription  String?           @db.Text
     images           Image[]
     collections      Collection[]      @relation(name: "collectiontoproduct")
     variants         Variant[]

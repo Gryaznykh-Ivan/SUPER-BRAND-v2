@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import MainLayout from '../../../components/layouts/Main'
 import Link from 'next/link'
 import GeneralInfo from '../../../components/products/blocks/GeneralInfo'
-import SeoTags from '../../../components/products/blocks/SeoTags'
+import SeoSearch from '../../../components/products/blocks/SeoSearch'
 import Status from '../../../components/products/blocks/Status'
 import OrganizationInfo from '../../../components/products/blocks/OrganizationInfo'
 import Inventory from '../../../components/products/blocks/Inventory'
@@ -135,10 +135,11 @@ function Index() {
                                     barcode={data.data.barcode}
                                     onChange={onCollectChanges}
                                 />
-                                <SeoTags
+                                <SeoSearch
                                     metaTitle={data.data.metaTitle}
                                     metaDescription={data.data.metaDescription}
                                     handle={data.data.handle}
+                                    defaultSnippet={data.data.defaultSnippet}
                                     onChange={onCollectChanges}
                                 />
                                 <Metafields

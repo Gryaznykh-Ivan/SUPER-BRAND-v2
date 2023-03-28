@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 export class UrlService {
     
     getSlug(string: string) {
+        if (typeof string !== "string") return undefined
+
         return string.toLowerCase()
             .replace(/\u0401/g, 'YO')
             .replace(/\u0419/g, 'I')

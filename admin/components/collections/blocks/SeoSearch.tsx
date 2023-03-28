@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
+import { CollectionCreateRequest, CollectionUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
 
@@ -7,10 +7,10 @@ interface IProps {
     metaTitle: string | null;
     metaDescription: string | null;
     handle: string | null;
-    onChange: (obj: ProductCreateRequest | ProductUpdateRequest) => void;
+    onChange: (obj: CollectionCreateRequest | CollectionUpdateRequest) => void;
 }
 
-export default function SeoTags({ onChange, ...data }: IProps) {
+export default function SeoSearch({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
         metaTitle: data.metaTitle ?? "",
         metaDescription: data.metaDescription ?? "",
@@ -18,13 +18,8 @@ export default function SeoTags({ onChange, ...data }: IProps) {
     })
 
     useEffect(() => {
-        setState(prev => ({
-            ...prev,
-            handle: data.handle ?? "",
-            metaTitle: data.metaTitle ?? "",
-            metaDescription: data.metaDescription ?? "",
-        }))
-    }, [data.handle, data.metaDescription, data.metaTitle])
+        setState(prev => ({ ...prev, handle: data.handle ?? "" }))
+    }, [data.handle])
 
     useEffect(() => {
         const localState = Object.entries(state)
@@ -54,7 +49,7 @@ export default function SeoTags({ onChange, ...data }: IProps) {
 
     return (
         <div className="rounded-md bg-white shadow-sm">
-            <h2 className="font-semibold p-5 border-b-[1px]">SEO теги</h2>
+            <h2 className="font-semibold p-5 border-b-[1px]">Поиск и SEO</h2>
             <div className="space-y-4 p-5">
                 <div className="flex flex-col">
                     <div className="flex justify-between mb-1">

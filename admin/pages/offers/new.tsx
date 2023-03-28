@@ -5,8 +5,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import MainLayout from '../../components/layouts/Main'
 import GeneralInfo from '../../components/products/blocks/GeneralInfo'
 
-import SeoTags from '../../components/products/blocks/SeoTags'
-
 import Status from '../../components/offers/blocks/Status'
 import DeliveryProfile from '../../components/offers/blocks/DeliveryProfile'
 import Prices from '../../components/offers/blocks/Prices'

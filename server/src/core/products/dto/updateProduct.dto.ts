@@ -1,4 +1,4 @@
-import { Type } from "class-transformer";
+import { Transform, TransformFnParams, Type } from "class-transformer";
 import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 import { ConnectCollectionDto, DisconnectCollectionDto } from "./collections.dto";
 import { CreateMetafieldDto, DeleteMetafieldDto, UpdateMetafieldDto } from "./metafields.dto";
@@ -20,12 +20,16 @@ export class UpdateProductDto {
     @IsString()
     description: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
     metaTitle: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
     metaDescription: string;
 
     @IsOptional()

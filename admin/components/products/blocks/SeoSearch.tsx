@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CollectionCreateRequest, CollectionUpdateRequest } from '../../../types/api';
+import { ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
 
@@ -7,19 +7,24 @@ interface IProps {
     metaTitle: string | null;
     metaDescription: string | null;
     handle: string | null;
-    onChange: (obj: CollectionCreateRequest | CollectionUpdateRequest) => void;
+    onChange: (obj: ProductCreateRequest | ProductUpdateRequest) => void;
 }
 
-export default function SeoTags({ onChange, ...data }: IProps) {
+export default function SeoSearch({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
         metaTitle: data.metaTitle ?? "",
         metaDescription: data.metaDescription ?? "",
-        handle: data.handle ?? "",
+        handle: data.handle ?? ""
     })
 
     useEffect(() => {
-        setState(prev => ({ ...prev, handle: data.handle ?? "" }))
-    }, [data.handle])
+        setState(prev => ({
+            ...prev,
+            handle: data.handle ?? "",
+            metaTitle: data.metaTitle ?? "",
+            metaDescription: data.metaDescription ?? ""
+        }))
+    }, [data.handle, data.metaDescription, data.metaTitle])
 
     useEffect(() => {
         const localState = Object.entries(state)
@@ -46,11 +51,17 @@ export default function SeoTags({ onChange, ...data }: IProps) {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
+    const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setState(prev => ({ ...prev, [e.target.name]: e.target.checked }))
+    }
+
 
     return (
         <div className="rounded-md bg-white shadow-sm">
-            <h2 className="font-semibold p-5 border-b-[1px]">SEO теги</h2>
-            <div className="space-y-4 p-5">
+            <div className="flex justify-center items-center p-5">
+                <h2 className="flex-1 font-semibold">Поиск и SEO</h2>
+            </div>
+            <div className="space-y-4 p-5 border-t-[1px]">
                 <div className="flex flex-col">
                     <div className="flex justify-between mb-1">
                         <label htmlFor="metaTitle" className="text-sm text-gray-600">Мета название</label>
@@ -68,9 +79,9 @@ export default function SeoTags({ onChange, ...data }: IProps) {
                 <div className="flex flex-col">
                     <label htmlFor="handle" className="text-sm text-gray-600 mb-1">URL ручка</label>
                     <Input type="text" id="handle" placeholder="URL ручка" name="handle" value={state.handle} onChange={onInputChange} />
-                    <div className="text-gray-400 text-sm mt-1">Доступ к товару по предыдущей ссылке будет потерен, что плохо для SEO</div>
                 </div>
             </div>
+
         </div>
     )
 }

@@ -93,7 +93,7 @@ export class ProductService {
 
 
     async getProductsBySearch(data: SearchProductDto) {
-        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length > 1).map(word => `+${word}*`).join(" ") : undefined
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
         const whereQuery = {
             AND: [{
                 OR: [
@@ -184,7 +184,7 @@ export class ProductService {
     }
 
     async createProduct(data: CreateProductDto) {
-        if ((data.title !== undefined && data.title.length > 255) || (data.metaTitle !== undefined && data.metaTitle.length > 255)) {
+        if (data.title.length > 255) {
             throw new HttpException("Максимальная длина названия 255 символов", HttpStatus.BAD_REQUEST)
         }
 
@@ -193,43 +193,38 @@ export class ProductService {
             description: data.description,
             available: data.available,
             vendor: data.vendor,
-            handle: data.handle,
+            handle: this.url.getSlug(data.handle),
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,
             SKU: data.SKU,
             barcode: data.barcode
         }
 
-        createProductQuery.handle = this.url.getSlug(createProductQuery.handle === undefined ? createProductQuery.title : createProductQuery.handle)
+        if (data.defaultSnippet === true) {
+            if (data.metaTitle !== undefined && data.metaTitle.length > 255) {
+                throw new HttpException("Максимальная длина мета названия 255 символов", HttpStatus.BAD_REQUEST)
+            }
 
-        if (createProductQuery.metaTitle === undefined || createProductQuery.metaDescription === undefined) {
             const snippets = await this.prisma.setting.findMany({ where: { setting: "SEO-SNIPPET" } })
-            const metaTitle = snippets.find(snippet => snippet.title === "title")?.value
-            const metaDescription = snippets.find(snippet => snippet.title === "description")?.value
+            const sMetaTitle = snippets.find(snippet => snippet.title === "title")?.value
+            const sMetaDescription = snippets.find(snippet => snippet.title === "description")?.value
 
-            if (createProductQuery.metaTitle === undefined) {
-                if (metaTitle !== undefined) {
-                    createProductQuery.metaTitle = metaTitle
-                        .replaceAll("[title]", createProductQuery.title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
-                        .replaceAll("[vendor]", createProductQuery.vendor || "")
-                        .replaceAll("[SKU]", createProductQuery.SKU || "")
-                        .replace(/\s+/g, " ")
-                        .trim()
-                } else {
-                    createProductQuery.metaTitle = createProductQuery.title
-                }
-            }
+            createProductQuery.handle = this.url.getSlug(data.title)
+            createProductQuery.metaTitle = sMetaTitle.replaceAll("[title]", createProductQuery.title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
+                .replaceAll("[vendor]", createProductQuery.vendor || "")
+                .replaceAll("[SKU]", createProductQuery.SKU || "")
+                .replace(/\s+/g, " ")
+                .trim();
+            createProductQuery.metaDescription = sMetaDescription
+                .replaceAll("[title]", createProductQuery.title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
+                .replaceAll("[vendor]", createProductQuery.vendor || "")
+                .replaceAll("[SKU]", createProductQuery.SKU || "")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
 
-            if (createProductQuery.metaDescription === undefined) {
-                if (metaDescription !== undefined) {
-                    createProductQuery.metaDescription = metaDescription
-                        .replaceAll("[title]", createProductQuery.title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
-                        .replaceAll("[vendor]", createProductQuery.vendor || "")
-                        .replaceAll("[SKU]", createProductQuery.SKU || "")
-                        .replace(/\s+/g, " ")
-                        .trim()
-                }
-            }
+        if (createProductQuery.handle === undefined || createProductQuery.metaTitle === undefined || createProductQuery.metaDescription === undefined) {
+            throw new HttpException("Поиск и SEO не заполнено", HttpStatus.BAD_REQUEST)
         }
 
         if (data.connectCollections !== undefined) {
@@ -250,7 +245,6 @@ export class ProductService {
                 data: product.id
             }
         } catch (e) {
-
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     throw new HttpException("Продукт с таким handle уже существует", HttpStatus.BAD_REQUEST)
@@ -1040,25 +1034,26 @@ export class ProductService {
 
 
     async updateProduct(productId: string, data: UpdateProductDto) {
+        if (data.title !== undefined && data.title.length > 255) {
+            throw new HttpException("Максимальная длина названия 255 символов", HttpStatus.BAD_REQUEST)
+        }
+
+        if (data.metaTitle !== undefined && data.metaTitle.length > 255) {
+            throw new HttpException("Максимальная длина мета названия 255 символов", HttpStatus.BAD_REQUEST)
+        }
+
         const updateProductQuery = {
             title: data.title,
             description: data.description,
             available: data.available,
             vendor: data.vendor,
-            handle: data.handle,
+            handle: this.url.getSlug(data.handle),
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,
             SKU: data.SKU,
             barcode: data.barcode
         }
 
-        if (updateProductQuery.handle !== undefined) {
-            updateProductQuery.handle = this.url.getSlug(updateProductQuery.handle)
-        }
-
-        if ((data.title !== undefined && data.title.length > 255) || (data.metaTitle !== undefined && data.metaTitle.length > 255)) {
-            throw new HttpException("Максимальная длина названия 255 символов", HttpStatus.BAD_REQUEST)
-        }
 
         if (data.connectCollections !== undefined || data.disconnectCollections !== undefined) {
             Object.assign(updateProductQuery, {
@@ -1082,52 +1077,6 @@ export class ProductService {
 
         try {
             await this.prisma.$transaction(async tx => {
-                // обновляем снипет если title, SKU или vendor был изменен
-                if (
-                    (updateProductQuery.metaTitle === undefined || updateProductQuery.metaDescription === undefined) &&
-                    (updateProductQuery.title !== undefined || updateProductQuery.vendor !== undefined || updateProductQuery.SKU !== undefined)
-                ) {
-                    const snippets = await tx.setting.findMany({ where: { setting: "SEO-SNIPPET" } })
-                    const metaTitle = snippets.find(snippet => snippet.title === "title")?.value
-                    const metaDescription = snippets.find(snippet => snippet.title === "description")?.value
-
-                    const productSnippetInfo = await tx.product.findUnique({
-                        where: { id: productId },
-                        select: {
-                            SKU: true,
-                            title: true,
-                            vendor: true
-                        }
-                    })
-
-                    const title = updateProductQuery.title || productSnippetInfo.title
-                    const vendor = updateProductQuery.vendor || productSnippetInfo.vendor
-                    const SKU = updateProductQuery.SKU || productSnippetInfo.SKU
-
-                    if (updateProductQuery.metaTitle === undefined) {
-                        if (metaTitle !== undefined) {
-                            updateProductQuery.metaTitle = metaTitle
-                                .replaceAll("[title]", title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
-                                .replaceAll("[vendor]", vendor || "")
-                                .replaceAll("[SKU]", SKU || "")
-                                .replace(/\s+/g, " ")
-                                .trim()
-                        } else {
-                            updateProductQuery.metaTitle = productSnippetInfo.title
-                        }
-                    }
-
-                    if (updateProductQuery.metaDescription === undefined) {
-                        if (metaDescription !== undefined) {
-                            updateProductQuery.metaDescription = metaDescription
-                                .replaceAll("[title]", title.replace(/[^a-zA-Z0-9 ]/gi, "") || "")
-                                .replaceAll("[vendor]", vendor || "")
-                                .replaceAll("[SKU]", SKU || "")
-                                .replace(/\s+/g, " ")
-                                .trim()
-                        }
-                    }
-                }
 
                 // Обновляем название офферов
                 if (data.title !== undefined) {

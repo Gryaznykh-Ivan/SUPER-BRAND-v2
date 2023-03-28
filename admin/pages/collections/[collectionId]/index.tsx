@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import GeneralInfo from '../../../components/collections/blocks/GeneralInfo'
 import CollectionProducts from '../../../components/collections/blocks/CollectionProducts'
 import Products from '../../../components/collections/blocks/CollectionProducts'
-import SeoTags from '../../../components/collections/blocks/SeoTags'
+import SeoSearch from '../../../components/collections/blocks/SeoSearch'
 import MainLayout from '../../../components/layouts/Main'
 import { CollectionUpdateRequest, IErrorResponse } from '../../../types/api'
 import { useDeleteCollectionMutation, useGetCollectionByIdQuery, useUpdateCollectionMutation } from '../../../services/collectionService'
@@ -127,7 +127,7 @@ export default function Index() {
                                     disconnectProducts={changes.disconnectProducts}
                                     onChange={onCollectChanges}
                                 />
-                                <SeoTags
+                                <SeoSearch
                                     metaTitle={data.data.metaTitle}
                                     metaDescription={data.data.metaDescription}
                                     handle={data.data.handle}

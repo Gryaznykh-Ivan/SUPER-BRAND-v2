@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 import GeneralInfo from '../../components/collections/blocks/GeneralInfo'
-import SeoTags from '../../components/collections/blocks/SeoTags'
+import SeoSearch from '../../components/collections/blocks/SeoSearch'
 import MainLayout from '../../components/layouts/Main'
 import { useCreateCollectionMutation } from '../../services/collectionService'
 import { CollectionCreateRequest, IErrorResponse } from '../../types/api'
@@ -75,7 +75,7 @@ export default function New() {
                             connectProducts={changes.connectProducts}
                             onChange={onCollectChanges}
                         />
-                        <SeoTags
+                        <SeoSearch
                             metaTitle={null}
                             metaDescription={null}
                             handle={null}
