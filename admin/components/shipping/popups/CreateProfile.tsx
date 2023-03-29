@@ -5,15 +5,17 @@ import Modal from '../../portals/Modal'
 import SearchInput from '../../inputs/SearchInput';
 import Input from '../../inputs/Input';
 import { toast } from 'react-toastify';
+import CountriesSmartInput from '../../inputs/CountriesSmartInput';
 
 interface IProps {
     onClose: () => void;
-    onDone: (title: string) => void;
+    onDone: (title: string, location: string) => void;
 }
 
 export default function ProfileName({ onClose, onDone }: IProps) {
     const [state, setState] = useState({
-        title: ""
+        title: "",
+        location: ""
     })
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +27,7 @@ export default function ProfileName({ onClose, onDone }: IProps) {
             return toast.error("Название не может быть пустым")
         }
 
-        onDone(state.title)    
+        onDone(state.title, state.location)
         onClose();
     }
 
@@ -42,9 +44,14 @@ export default function ProfileName({ onClose, onDone }: IProps) {
                         </button>
                     </div>
                     <div className="max-h-[60vh] overflow-y-auto">
-                        <div className="p-5">
+                        <div className="p-5 space-y-4">
                             <div className="flex flex-col">
+                                <label htmlFor="title" className="text-sm text-gray-600 mb-1">Название профиля</label>
                                 <Input placeholder="Название профиля" type="text" name="title" value={state.title} onChange={onInputChange} />
+                            </div>
+                            <div className="flex flex-col">
+                                <label htmlFor="location" className="text-sm text-gray-600 mb-1">Местоположение</label>
+                                <CountriesSmartInput id="location" placeholder="Местоположение" name="location" value={state.location} onChange={onInputChange} />
                             </div>
                         </div>
                     </div>

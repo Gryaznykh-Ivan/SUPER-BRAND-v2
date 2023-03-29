@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
 import Profile from '../../components/shipping/cards/Profile'
-import ProfileName from '../../components/shipping/popups/ProfileName'
+import CreateProfile from '../../components/shipping/popups/CreateProfile'
 import { useCreateDeliveryProfileMutation, useGetAllDeliveryProfileQuery } from '../../services/shippingService'
 import { IErrorResponse } from '../../types/api'
 
@@ -33,8 +33,8 @@ function Index() {
     const onPopupOpen = () => setPopup(true)
     const onPopupClose = () => setPopup(false)
 
-    const onCreateProfile = (title: string) => {
-        createProfile({ title })
+    const onCreateProfile = (title: string, location: string) => {
+        createProfile({ title, location })
     }
 
     return (
@@ -87,7 +87,7 @@ function Index() {
                     </div>
                 </div>
             </div>
-            {popup && <ProfileName onClose={onPopupClose} onDone={onCreateProfile} />}
+            {popup && <CreateProfile onClose={onPopupClose} onDone={onCreateProfile} />}
         </MainLayout>
     )
 }

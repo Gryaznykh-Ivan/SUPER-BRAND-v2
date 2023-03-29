@@ -2,6 +2,7 @@
     {
         "id": "default",
         "title": "Товары с долгой доставкой",
+        "location": "Россия",
         "zones": [
             {
                 "id": "clfe1oa8q0058lt08hk2pu9u0",
@@ -1113,6 +1114,7 @@
     {
         "id": null,
         "title": "Товары с быстрой доставкой",
+        "location": "Россия",
         "zones": [
             {
                 "id": "clfe2m80800bblt08inchfskv",

@@ -9,6 +9,12 @@ export class UpdateProfileDto {
     @ValidateIf((object, value) => value !== undefined)
     title: string;
 
+    @IsNotEmpty()
+    @IsString()
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
+    location: string;
+
     @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })

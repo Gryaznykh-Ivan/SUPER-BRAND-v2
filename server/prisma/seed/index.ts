@@ -132,7 +132,8 @@ const deliveryProfiles = async () => {
         const createdProfile = await prisma.deliveryProfile.create({
             data: {
                 id: profile.id ?? undefined,
-                title: profile.title
+                title: profile.title,
+                location: profile.location
             },
             select: {
                 id: true

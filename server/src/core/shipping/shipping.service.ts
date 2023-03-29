@@ -85,7 +85,8 @@ export class ShippingService {
             where: { id: profileId },
             select: {
                 id: true,
-                title: true
+                title: true,
+                location: true
             }
         })
 
@@ -99,7 +100,8 @@ export class ShippingService {
         try {
             const profile = await this.prisma.deliveryProfile.create({
                 data: {
-                    title: data.title
+                    title: data.title,
+                    location: data.location
                 }
             })
 
@@ -199,7 +201,8 @@ export class ShippingService {
 
     async updateProfile(profileId: string, data: UpdateProfileDto) {
         const updateDeliveryProfileQuery = {
-            title: data.title
+            title: data.title,
+            location: data.location,
         }
 
         if (data.connectOffers !== undefined) {

@@ -38,7 +38,11 @@ export class ProductService {
                     select: {
                         id: true,
                         key: true,
-                        value: true
+                        value: true,
+                        createdAt: true,
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
                     }
                 },
                 images: {
@@ -200,6 +204,8 @@ export class ProductService {
             barcode: data.barcode
         }
 
+
+        // todo: вынести эту логику на клиент
         if (data.defaultSnippet === true) {
             if (data.metaTitle !== undefined && data.metaTitle.length > 255) {
                 throw new HttpException("Максимальная длина мета названия 255 символов", HttpStatus.BAD_REQUEST)
@@ -1120,6 +1126,8 @@ export class ProductService {
                 success: true
             }
         } catch (e) {
+            console.log(e)
+
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 if (e.code === 'P2002') {
                     if (e.meta?.target === "Metafield_productId_key_key") {

@@ -107,6 +107,7 @@ export default function Index() {
                             <div className="flex-1 space-y-4">
                                 <ProfileGeneralInfo
                                     title={data.data.title}
+                                    location={data.data.location}
                                     onChange={onCollectChanges}
                                 />
                                 <ProfileOffers

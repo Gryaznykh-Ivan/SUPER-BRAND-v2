@@ -61,6 +61,7 @@ export interface IDeliveryProfilePreview {
 export interface IDeliveryProfile {
     id: string;
     title: string;
+    location: string;
 }
 
 
@@ -845,6 +846,7 @@ export type DeliveryProfileGetByIdRequest = {
 export type DeliveryProfileCreateResponse = IResponse<string>
 export type DeliveryProfileCreateRequest = {
     title: string;
+    location: string;
 }
 
 export type DeliveryProfileUpdateResponse = IResponse<void>
