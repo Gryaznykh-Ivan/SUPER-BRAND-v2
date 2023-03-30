@@ -374,6 +374,7 @@ model Product {
     productIsFavored FavoriteProduct[]
     options          Option[]
     metafields       Metafield[]
+    tags             Tag[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
 
@@ -382,6 +383,18 @@ model Product {
     @@fulltext([type])
     @@fulltext([title, vendor])
     @@map("product")
+}
+
+model Tag {
+    id        String   @id @default(cuid())
+    title     String
+    product   Product  @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    productId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@fulltext([title])
+    @@map("tag")
 }
 
 model Metafield {

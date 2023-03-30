@@ -44,7 +44,7 @@ export class UserService {
     }
 
     async getUsersBySearch(q: string, limit: number, skip: number) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length > 2).map(word => `+${word}*`).join(" ") : undefined
         const users = await this.prisma.user.findMany({
             where: {
                 phone: {

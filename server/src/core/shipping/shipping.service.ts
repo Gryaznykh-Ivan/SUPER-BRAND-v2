@@ -19,7 +19,7 @@ export class ShippingService {
                 title: true,
                 _count: {
                     select: {
-                        offers: true,
+                        offers: { where: { status: OfferStatus.ACTIVE } },
                         zones: true
                     }
                 }
@@ -43,7 +43,7 @@ export class ShippingService {
     }
 
     async getDeliveryZones(profileId: string, data: SearchZoneDto) {
-        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length > 2).map(word => `+${word}*`).join(" ") : undefined
         const zones = await this.prisma.deliveryZone.findMany({
             where: {
                 deliveryProfileId: profileId,
