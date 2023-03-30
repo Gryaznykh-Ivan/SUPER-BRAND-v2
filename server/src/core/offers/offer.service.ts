@@ -79,7 +79,7 @@ export class OfferService {
 
 
     async getOffersBySearch(data: SearchOfferDto) {
-        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
+        const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length > 1).map(word => `+${word}*`).join(" ") : undefined
         const offers = await this.prisma.offer.findMany({
             where: {
                 AND: [{

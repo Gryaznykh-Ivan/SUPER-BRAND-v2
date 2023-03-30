@@ -63,7 +63,7 @@ export class CollectionService {
     }
 
     async getCollectionProducts(collectionId: string, q: string, limit: number, skip: number) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length > 1).map(word => `+${word}*`).join(" ") : undefined
         const products = await this.prisma.product.findMany({
             where: {
                 title: {
@@ -111,7 +111,7 @@ export class CollectionService {
     }
 
     async getCollectionsBySearch(q: string, limit: number, skip: number) {
-        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length > 1).map(word => `+${word}*`).join(" ") : undefined
         const collections = await this.prisma.collection.findMany({
             where: {
                 title: {
