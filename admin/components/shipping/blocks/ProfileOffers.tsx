@@ -125,7 +125,7 @@ export default function ProfileOffers({ onChange, deliveryProfileId, connectOffe
                 {data?.data &&
                     <>
                         {data.data.map(offer =>
-                            <div key={offer.id} className="flex items-center pl-5 pr-3 py-1 space-x-4 hover:bg-gray-100 min-h-[50px]">
+                            <div key={offer.id} className="flex items-center pl-5 pr-3 py-2 space-x-4 hover:bg-gray-100 min-h-[50px]">
                                 <div className="relative w-12 aspect-square border-[1px] rounded-md">
                                     {offer.image !== null ?
                                         <Image

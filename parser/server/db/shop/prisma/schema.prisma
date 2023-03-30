@@ -371,6 +371,7 @@ model Product {
     SKU              String?
     barcode          String?
     vendor           String?
+    type             String?
     description      String?           @db.Text
     images           Image[]
     collections      Collection[]      @relation(name: "collectiontoproduct")

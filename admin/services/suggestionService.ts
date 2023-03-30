@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryOptionsSuggestionRequest, DeliveryOptionsSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, DeliveryZonesSuggestionRequest, deliveryZonesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
+import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryOptionsSuggestionRequest, DeliveryOptionsSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, DeliveryZonesSuggestionRequest, deliveryZonesSuggestionResponse, ProductTypesSuggestionRequest, ProductTypesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
 
 export const suggestionService = api.injectEndpoints({
     endpoints: builder => ({
@@ -38,6 +38,13 @@ export const suggestionService = api.injectEndpoints({
                 params: credentials
             })
         }),
+        productTypes: builder.query<ProductTypesSuggestionResponse, ProductTypesSuggestionRequest>({
+            query: (credentials) => ({
+                url: "suggestions/productTypes",
+                method: "GET",
+                params: credentials
+            })
+        }),
         deliveryProfiles: builder.query<DeliveryProfilesSuggestionResponse, DeliveryProfilesSuggestionRequest>({
             query: () => ({
                 url: "suggestions/deliveryProfiles",
@@ -70,5 +77,6 @@ export const {
     useLazyRegionsQuery,
     useLazyCollectionsQuery,
     useLazyVendorsQuery,
-    useLazyDeliveryOptionsQuery
+    useLazyDeliveryOptionsQuery,
+    useLazyProductTypesQuery
 } = suggestionService

@@ -32,6 +32,7 @@ export class ProductService {
                 metaTitle: true,
                 metaDescription: true,
                 vendor: true,
+                type: true,
                 SKU: true,
                 barcode: true,
                 metafields: {
@@ -149,6 +150,7 @@ export class ProductService {
                 title: true,
                 available: true,
                 vendor: true,
+                type: true,
                 variants: {
                     select: {
                         _count: {
@@ -197,6 +199,7 @@ export class ProductService {
             description: data.description,
             available: data.available,
             vendor: data.vendor,
+            type: data.type,
             handle: this.url.getSlug(data.handle),
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,
@@ -1053,6 +1056,7 @@ export class ProductService {
             description: data.description,
             available: data.available,
             vendor: data.vendor,
+            type: data.type,
             handle: this.url.getSlug(data.handle),
             metaTitle: data.metaTitle,
             metaDescription: data.metaDescription,

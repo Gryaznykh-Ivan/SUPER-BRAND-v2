@@ -49,6 +49,28 @@ export class SuggestionService {
         }
     }
 
+    async productTypes(q: string) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
+        const vendors = await this.prisma.product.findMany({
+            distinct: ["type"],
+            where: {
+                type: {
+                    search: fulltextSearch ? fulltextSearch : undefined,
+                    not: null
+                },
+            },
+            select: {
+                type: true
+            },
+            take: 5
+        })
+
+        return {
+            success: true,
+            data: vendors.map(({ type }) => type).filter(c => c !== null)
+        }
+    }
+
     async deliveryZones(profileId: string, data: SearchDto) {
         const fulltextSearch = data.q ? data.q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 3).map(word => `+${word}*`).join(" ") : undefined
 

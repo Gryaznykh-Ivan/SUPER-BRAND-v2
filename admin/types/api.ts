@@ -222,6 +222,7 @@ export interface IProductSearch {
     title: string;
     available: boolean;
     vendor: string;
+    type: string;
     offersCount: number;
 }
 
@@ -241,6 +242,7 @@ export interface IProduct {
     metaTitle: string | null;
     metaDescription: string | null;
     vendor: string | null;
+    type: string | null;
     SKU: string | null;
     barcode: string | null;
     images: IImage[];
@@ -493,6 +495,11 @@ export type CollectionsSuggestionRequest = {
 
 export type VendorsSuggestionResponse = IResponse<string[]>
 export type VendorsSuggestionRequest = {
+    q: string;
+}
+
+export type ProductTypesSuggestionResponse = IResponse<string[]>
+export type ProductTypesSuggestionRequest = {
     q: string;
 }
 

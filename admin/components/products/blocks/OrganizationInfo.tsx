@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ICollection, ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
 import CollectionsSmartInput from '../../inputs/CollectionsSmartInput'
 import Input from '../../inputs/Input'
+import ProductTypesSmartInput from '../../inputs/ProductTypesSmartInput';
 import VendorsSmartInput from '../../inputs/VendorsSmartInput';
 
 interface IProps {
+    type: string | null;
     vendor: string | null;
     collections: Pick<ICollection, "id" | "title">[];
     onChange: (obj: ProductCreateRequest | ProductUpdateRequest) => void;
@@ -13,7 +15,8 @@ interface IProps {
 export default function OrganizationInfo({ onChange, ...data }: IProps) {
     const [collections, setCollections] = useState(data.collections)
     const [state, setState] = useState({
-        vendor: data.vendor ?? ""
+        type: data.type ?? "",
+        vendor: data.vendor ?? "",
     })
 
     useEffect(() => {
@@ -59,6 +62,10 @@ export default function OrganizationInfo({ onChange, ...data }: IProps) {
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Организация</h2>
             <div className="space-y-4 p-5">
+                <div className="flex flex-col">
+                    <label htmlFor="type" className="text-sm text-gray-600 mb-1">Тип</label>
+                    <ProductTypesSmartInput id="type" placeholder="Тип" name="type" value={state.type} onChange={onInputChange} />
+                </div>
                 <div className="flex flex-col">
                     <label htmlFor="vendor" className="text-sm text-gray-600 mb-1">Производитель</label>
                     <VendorsSmartInput id="vendor" placeholder="Производитель" name="vendor" value={state.vendor} onChange={onInputChange} />

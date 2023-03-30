@@ -139,7 +139,6 @@ function Index() {
                                     metaTitle={data.data.metaTitle}
                                     metaDescription={data.data.metaDescription}
                                     handle={data.data.handle}
-                                    defaultSnippet={data.data.defaultSnippet}
                                     onChange={onCollectChanges}
                                 />
                                 <Metafields
@@ -153,6 +152,7 @@ function Index() {
                                     onChange={onCollectChanges}
                                 />
                                 <OrganizationInfo
+                                    type={data.data.type}
                                     vendor={data.data.vendor}
                                     collections={data.data.collections}
                                     onChange={onCollectChanges}

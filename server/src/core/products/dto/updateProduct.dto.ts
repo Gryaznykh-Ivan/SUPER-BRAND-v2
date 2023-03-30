@@ -42,6 +42,10 @@ export class UpdateProductDto {
 
     @IsOptional()
     @IsString()
+    type: string;
+
+    @IsOptional()
+    @IsString()
     barcode: string;
 
     @IsOptional()

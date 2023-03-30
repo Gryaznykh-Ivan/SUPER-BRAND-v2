@@ -43,7 +43,7 @@ export default function ProfileName({ onClose, onDone }: IProps) {
                             </svg>
                         </button>
                     </div>
-                    <div className="max-h-[60vh] overflow-y-auto">
+                    <div className="max-h-[60vh] min-h-[30vh] overflow-y-auto">
                         <div className="p-5 space-y-4">
                             <div className="flex flex-col">
                                 <label htmlFor="title" className="text-sm text-gray-600 mb-1">Название профиля</label>
