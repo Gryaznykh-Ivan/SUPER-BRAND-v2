@@ -233,6 +233,11 @@ export interface ICollectionProduct {
     available: boolean;
 }
 
+export interface ITag {
+    id: string;
+    title: string;
+}
+
 export interface IProduct {
     id: string;
     title: string;
@@ -249,6 +254,7 @@ export interface IProduct {
     collections: Pick<ICollection, "id" | "title">[];
     options: IProductOption[];
     metafields: IMetafield[];
+    tags: ITag[];
 }
 
 export interface IOrderSearch {
@@ -498,6 +504,11 @@ export type VendorsSuggestionRequest = {
     q: string;
 }
 
+export type TagsSuggestionResponse = IResponse<string[]>
+export type TagsSuggestionRequest = {
+    q: string;
+}
+
 export type ProductTypesSuggestionResponse = IResponse<string[]>
 export type ProductTypesSuggestionRequest = {
     q: string;
@@ -551,6 +562,7 @@ export type ProductCreateRequest = {
     metaDescription?: string | null;
     vendor?: string | null;
     connectCollections?: Pick<ICollection, "id">[];
+    createTags?: Omit<ITag, "id">[];
 }
 
 export type ProductUpdateResponse = IResponse<void>
@@ -568,6 +580,8 @@ export type ProductUpdateRequest = {
     createMetafields?: Omit<IMetafield, "id">[];
     updateMetafields?: IMetafield[];
     deleteMetafields?: Pick<IMetafield, "id">[];
+    createTags?: Omit<ITag, "id">[];
+    deleteTags?: Pick<ITag, "id">[];
 }
 
 export type ProductDeleteResponse = IResponse<void>

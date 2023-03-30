@@ -54,6 +54,13 @@ export class SuggestionController {
         return this.suggestionService.vendors(q)
     }
 
+    @Get('tags')
+    tags(
+        @Query('q') q: string,
+    ) {
+        return this.suggestionService.tags(q)
+    }
+
     @Get('productTypes')
     productTypes(
         @Query('q') q: string,

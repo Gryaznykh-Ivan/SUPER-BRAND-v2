@@ -88,8 +88,10 @@ function New() {
                             onChange={onCollectChanges}
                         />
                         <OrganizationInfo
+                            type={null}
                             vendor={null}
                             collections={[]}
+                            tags={[]}
                             onChange={onCollectChanges}
                         />
                     </div>

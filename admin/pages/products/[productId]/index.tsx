@@ -155,6 +155,7 @@ function Index() {
                                     type={data.data.type}
                                     vendor={data.data.vendor}
                                     collections={data.data.collections}
+                                    tags={data.data.tags}
                                     onChange={onCollectChanges}
                                 />
                                 <VariantList

@@ -1,32 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
 import useDebounce from '../../hooks/useDebounce';
-import { useLazyCitiesQuery, useLazyCollectionsQuery, useLazyCountriesQuery, useLazyRegionsQuery } from '../../services/suggestionService';
-import { ICollection } from '../../types/api';
+import { useLazyTagsQuery } from '../../services/suggestionService';
+import { ITag } from '../../types/api';
 import Input from './Input';
 
 interface IProps {
     className?: string;
     id?: string;
     name?: string;
-    collections: Pick<ICollection, "id" | "title">[];
+    tags: ITag[];
     placeholder: string;
-    onChange: (e: Pick<ICollection, "id" | "title">[]) => void;
+    onChange: (e: ITag[]) => void;
 }
 
-export default function CollectionsSmartInput({ onChange, placeholder, className, collections, id, name }: IProps) {
+export default function TagsSmartInput({ onChange, placeholder, className, tags, id, name }: IProps) {
     const ref = useRef<HTMLInputElement>(null)
     const [focus, setFocus] = useState(false)
     const [state, setState] = useState("")
     const debounced = useDebounce(state)
 
-    const [suggest, { isFetching, isSuccess, data }] = useLazyCollectionsQuery()
+    const [suggest, { isFetching, isSuccess, data }] = useLazyTagsQuery()
 
     useEffect(() => {
         if (focus) {
             suggest({
-                q: debounced,
-                ids: collections.length > 0 ? collections.map(collection => collection.id) : undefined
+                q: debounced
             })
         }
     }, [debounced, focus])
@@ -34,16 +33,16 @@ export default function CollectionsSmartInput({ onChange, placeholder, className
     const onFocus = () => setFocus(true)
     const onBlur = () => setFocus(false)
 
-    const onSelect = (collection: Pick<ICollection, "id" | "title">) => {
+    const onSelect = (tag: string) => {
         setState("")
 
-        if (collections.some(c => c.id === collection.id) === false) {
-            onChange([...collections, collection])
+        if (tags.some(c => c.title === tag) === false) {
+            onChange([...tags, { id: `new${Math.random()}`, title: tag }])
         }
     }
 
     const onDelete = (id: string) => {
-        onChange(collections.filter(c => c.id !== id))
+        onChange(tags.filter(c => c.id !== id))
     }
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +53,8 @@ export default function CollectionsSmartInput({ onChange, placeholder, className
         <div className="relative">
             <input className={`w-full text-sm border-[1px] border-gray-300 rounded-md ${className}`} type="text" autoComplete="off" name={name} id={id} placeholder={placeholder} ref={ref} value={state} onChange={onInputChange} onFocus={onFocus} onBlur={onBlur} />
             {focus &&
-                <div className={`absolute inset-x-0 flex flex-col bg-white mt-2 rounded-md z-40 ${data?.data.length !== 0 && "border-[1px] shadow-md"}`}>
-                    {isFetching &&
+                <div className={`absolute inset-x-0 flex flex-col bg-white rounded-md mt-2 z-10 ${data?.data.length !== 0 && "border-[1px] shadow-md"}`}>
+                    {isFetching === true &&
                         <div className="flex justify-center">
                             <div className="animate-spin p-3">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -64,20 +63,24 @@ export default function CollectionsSmartInput({ onChange, placeholder, className
                             </div>
                         </div>
                     }
-                    {!isFetching && isSuccess &&
-                        data?.data.map(collection =>
-                            <div key={collection.id} className="px-3 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => onSelect(collection)}>{collection.title}</div>
-                        )
+                    {isFetching === false && data?.data.length === 0 && state.trim().length !== 0 &&
+                        <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-md border-[1px]" onMouseDown={() => onSelect(state)}>
+                            <span className="font-medium">Создать </span>
+                            {state}
+                        </div>
+                    }
+                    {isFetching === false && isSuccess === true &&
+                        data?.data.map(tag => <div key={tag} className="px-3 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => onSelect(tag)}>{tag}</div>)
                     }
                 </div>
             }
             {
-                collections.length !== 0 &&
+                tags.length !== 0 &&
                 <div className="flex flex-wrap gap-2 mt-2">
-                    {collections.map(collection => (
-                        <div key={collection.id} className="flex items-center text-sm pl-2 py-1 pr-1 bg-blue-500 text-white rounded">
-                            <span>{collection.title}</span>
-                            <button className="ml-1 rounded hover:bg-blue-600" onClick={() => onDelete(collection.id)}>
+                    {tags.map(tag => (
+                        <div key={tag.id} className="flex items-center text-sm pl-2 py-1 pr-1 bg-blue-500 text-white rounded">
+                            <span>{tag.title}</span>
+                            <button className="ml-1 rounded hover:bg-blue-600" onClick={() => onDelete(tag.id)}>
                                 <svg width={20} height={20} className="fill-white" viewBox="0 0 20 20">
                                     <path d="M6.707 5.293a1 1 0 0 0-1.414 1.414l3.293 3.293-3.293 3.293a1 1 0 1 0 1.414 1.414l3.293-3.293 3.293 3.293a1 1 0 0 0 1.414-1.414l-3.293-3.293 3.293-3.293a1 1 0 0 0-1.414-1.414l-3.293 3.293-3.293-3.293Z"></path>
                                 </svg>

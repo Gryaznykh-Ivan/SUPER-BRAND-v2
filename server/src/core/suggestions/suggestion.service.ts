@@ -49,9 +49,30 @@ export class SuggestionService {
         }
     }
 
+    async tags(q: string) {
+        const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length >= 2).map(word => `+${word}*`).join(" ") : undefined
+        const tags = await this.prisma.tag.findMany({
+            distinct: ["title"],
+            where: {
+                title: {
+                    search: fulltextSearch ? fulltextSearch : undefined
+                },
+            },
+            select: {
+                title: true
+            },
+            take: 5
+        })
+
+        return {
+            success: true,
+            data: tags.map(({ title }) => title).filter(c => c !== null)
+        }
+    }
+
     async productTypes(q: string) {
         const fulltextSearch = q ? q.replace(/[+\-<>()~*\"@]+/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(word => word.length > 2).map(word => `+${word}*`).join(" ") : undefined
-        const vendors = await this.prisma.product.findMany({
+        const types = await this.prisma.product.findMany({
             distinct: ["type"],
             where: {
                 type: {
@@ -67,7 +88,7 @@ export class SuggestionService {
 
         return {
             success: true,
-            data: vendors.map(({ type }) => type).filter(c => c !== null)
+            data: types.map(({ type }) => type).filter(c => c !== null)
         }
     }
 

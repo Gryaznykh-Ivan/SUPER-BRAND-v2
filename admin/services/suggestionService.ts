@@ -1,5 +1,5 @@
 import { api } from "../store/api";
-import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryOptionsSuggestionRequest, DeliveryOptionsSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, DeliveryZonesSuggestionRequest, deliveryZonesSuggestionResponse, ProductTypesSuggestionRequest, ProductTypesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
+import { CitiesSuggestionRequest, CitiesSuggestionResponse, CollectionsSuggestionRequest, CollectionsSuggestionResponse, CountriesSuggestionRequest, CountriesSuggestionResponse, DeliveryOptionsSuggestionRequest, DeliveryOptionsSuggestionResponse, DeliveryProfilesSuggestionRequest, DeliveryProfilesSuggestionResponse, DeliveryZonesSuggestionRequest, deliveryZonesSuggestionResponse, ProductTypesSuggestionRequest, ProductTypesSuggestionResponse, RegionsSuggestionRequest, RegionsSuggestionResponse, TagsSuggestionRequest, TagsSuggestionResponse, VendorsSuggestionRequest, VendorsSuggestionResponse } from "../types/api";
 
 export const suggestionService = api.injectEndpoints({
     endpoints: builder => ({
@@ -34,6 +34,13 @@ export const suggestionService = api.injectEndpoints({
         vendors: builder.query<VendorsSuggestionResponse, VendorsSuggestionRequest>({
             query: (credentials) => ({
                 url: "suggestions/vendors",
+                method: "GET",
+                params: credentials
+            })
+        }),
+        tags: builder.query<TagsSuggestionResponse, TagsSuggestionRequest>({
+            query: (credentials) => ({
+                url: "suggestions/tags",
                 method: "GET",
                 params: credentials
             })
@@ -78,5 +85,6 @@ export const {
     useLazyCollectionsQuery,
     useLazyVendorsQuery,
     useLazyDeliveryOptionsQuery,
-    useLazyProductTypesQuery
+    useLazyProductTypesQuery,
+    useLazyTagsQuery
 } = suggestionService

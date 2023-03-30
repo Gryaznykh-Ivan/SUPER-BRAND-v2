@@ -1,19 +1,22 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { ICollection, ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
+import { ICollection, ITag, ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
 import CollectionsSmartInput from '../../inputs/CollectionsSmartInput'
 import Input from '../../inputs/Input'
 import ProductTypesSmartInput from '../../inputs/ProductTypesSmartInput';
+import TagsSmartInput from '../../inputs/TagsSmartInput';
 import VendorsSmartInput from '../../inputs/VendorsSmartInput';
 
 interface IProps {
     type: string | null;
     vendor: string | null;
+    tags: ITag[];
     collections: Pick<ICollection, "id" | "title">[];
     onChange: (obj: ProductCreateRequest | ProductUpdateRequest) => void;
 }
 
 export default function OrganizationInfo({ onChange, ...data }: IProps) {
     const [collections, setCollections] = useState(data.collections)
+    const [tags, setTags] = useState(data.tags)
     const [state, setState] = useState({
         type: data.type ?? "",
         vendor: data.vendor ?? "",
@@ -50,6 +53,16 @@ export default function OrganizationInfo({ onChange, ...data }: IProps) {
         })
     }, [collections])
 
+    useEffect(() => {
+        const createTags = tags.filter(tag => !data.tags.some(c => c.id === tag.id)).map(c => ({ title: c.title }))
+        const deleteTags = data.tags.filter(tag => !tags.some(c => c.id === tag.id)).map(c => ({ id: c.id }))
+
+        onChange({
+            createTags: createTags.length !== 0 ? createTags : undefined,
+            deleteTags: deleteTags.length !== 0 ? deleteTags : undefined
+        })
+    }, [tags])
+
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
@@ -58,21 +71,29 @@ export default function OrganizationInfo({ onChange, ...data }: IProps) {
         setCollections(collections)
     }
 
+    const onTagsChange = (tags: ITag[]) => {
+        setTags(tags)
+    }
+
     return (
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Организация</h2>
-            <div className="space-y-4 p-5">
+            <div className="space-y-3 p-5">
                 <div className="flex flex-col">
-                    <label htmlFor="type" className="text-sm text-gray-600 mb-1">Тип</label>
-                    <ProductTypesSmartInput id="type" placeholder="Тип" name="type" value={state.type} onChange={onInputChange} />
+                    <label htmlFor="type" className="text-sm text-gray-600 mb-1">Тип продукта</label>
+                    <ProductTypesSmartInput id="type" placeholder="Тип продукта" name="type" value={state.type} onChange={onInputChange} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="vendor" className="text-sm text-gray-600 mb-1">Производитель</label>
                     <VendorsSmartInput id="vendor" placeholder="Производитель" name="vendor" value={state.vendor} onChange={onInputChange} />
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="collection" className="text-sm text-gray-600 mb-1">Коллекция</label>
-                    <CollectionsSmartInput id="collections" placeholder="Коллекция" collections={collections} onChange={onCollectionsChange} />
+                    <label htmlFor="collections" className="text-sm text-gray-600 mb-1">Коллекции</label>
+                    <CollectionsSmartInput id="collections" placeholder="Коллекции" collections={collections} onChange={onCollectionsChange} />
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="tags" className="text-sm text-gray-600 mb-1">Теги</label>
+                    <TagsSmartInput id="tags" placeholder="Теги" tags={tags} onChange={onTagsChange} />
                 </div>
             </div>
         </div>

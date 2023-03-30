@@ -39,11 +39,16 @@ export class ProductService {
                     select: {
                         id: true,
                         key: true,
-                        value: true,
-                        createdAt: true,
+                        value: true
                     },
                     orderBy: {
                         createdAt: 'desc'
+                    }
+                },
+                tags: {
+                    select: {
+                        id: true,
+                        title: true
                     }
                 },
                 images: {
@@ -240,6 +245,16 @@ export class ProductService {
             Object.assign(createProductQuery, {
                 collections: {
                     connect: data.connectCollections
+                }
+            })
+        }
+
+        if (data.createTags !== undefined) {
+            Object.assign(createProductQuery, {
+                tags: {
+                    createMany: {
+                        data: data.createTags ?? []
+                    },
                 }
             })
         }
@@ -1080,6 +1095,17 @@ export class ProductService {
                     deleteMany: data.deleteMetafields ?? [],
                     createMany: {
                         data: data.createMetafields ?? []
+                    },
+                }
+            })
+        }
+
+        if (data.createTags !== undefined || data.deleteTags !== undefined) {
+            Object.assign(updateProductQuery, {
+                tags: {
+                    deleteMany: data.deleteTags ?? [],
+                    createMany: {
+                        data: data.createTags ?? []
                     },
                 }
             })
