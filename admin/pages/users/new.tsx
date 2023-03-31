@@ -29,7 +29,7 @@ export default function New() {
 
         if (isCreateUserError) {
             if (createUserError && "status" in createUserError) {
-                toast.error((createUserError.data as IErrorResponse).message)
+                toast.error((createUserError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

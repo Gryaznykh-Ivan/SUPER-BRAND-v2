@@ -21,8 +21,6 @@ services:
       COOKIE_DOMAIN: adminsb.space
       EXPIRES_IN: 15d
       BOT_ID: super-brand-parser
-    volumes:
-      - ./static:/static
     depends_on:
       - db
       - nginx

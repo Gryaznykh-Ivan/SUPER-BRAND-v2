@@ -34,7 +34,7 @@ export default function OptionList({ productId, options }: IProps) {
 
         if (isCreateOptionError) {
             if (createOptionError && "status" in createOptionError) {
-                toast.error((createOptionError.data as IErrorResponse).message)
+                toast.error((createOptionError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -48,7 +48,7 @@ export default function OptionList({ productId, options }: IProps) {
 
         if (isUpdateOptionError) {
             if (updateOptionError && "status" in updateOptionError) {
-                toast.error((updateOptionError.data as IErrorResponse).message)
+                toast.error((updateOptionError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -62,7 +62,7 @@ export default function OptionList({ productId, options }: IProps) {
 
         if (isRemoveOptionError) {
             if (removeOptionError && "status" in removeOptionError) {
-                toast.error((removeOptionError.data as IErrorResponse).message)
+                toast.error((removeOptionError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

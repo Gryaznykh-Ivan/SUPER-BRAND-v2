@@ -34,7 +34,7 @@ export default function Index() {
 
         if (isUpdateProductsError) {
             if (updateProductsError && "status" in updateProductsError) {
-                toast.error((updateProductsError.data as IErrorResponse).message)
+                toast.error((updateProductsError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -125,7 +125,7 @@ export default function Index() {
                                 <div className="flex flex-col items-center py-5">
                                     <div className="text-2xl font-bold text-red-600">Что-то пошло не так</div>
                                     {(getProductError && "status" in getProductError) &&
-                                        <div className="text-gray-500">{(getProductError.data as IErrorResponse).message}</div>
+                                        <div className="text-gray-500">{(getProductError.data as IErrorResponse)?.message}</div>
                                     }
                                 </div>
                             }

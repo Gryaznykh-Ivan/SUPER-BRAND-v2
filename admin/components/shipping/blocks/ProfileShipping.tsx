@@ -56,7 +56,7 @@ export default function ProfileShipping({ profileId }: IProps) {
 
         if (isCreateDeliveryZoneError) {
             if (createDeliveryZoneError && "status" in createDeliveryZoneError) {
-                toast.error((createDeliveryZoneError.data as IErrorResponse).message)
+                toast.error((createDeliveryZoneError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -70,7 +70,7 @@ export default function ProfileShipping({ profileId }: IProps) {
 
         if (isUpdateDeliveryZoneError) {
             if (updateDeliveryZoneError && "status" in updateDeliveryZoneError) {
-                toast.error((updateDeliveryZoneError.data as IErrorResponse).message)
+                toast.error((updateDeliveryZoneError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -84,7 +84,7 @@ export default function ProfileShipping({ profileId }: IProps) {
 
         if (isRemoveDeliveryZoneError) {
             if (removeDeliveryZoneError && "status" in removeDeliveryZoneError) {
-                toast.error((removeDeliveryZoneError.data as IErrorResponse).message)
+                toast.error((removeDeliveryZoneError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -138,7 +138,7 @@ export default function ProfileShipping({ profileId }: IProps) {
                 <div className="flex flex-col items-center py-5">
                     <div className="text-2xl font-bold text-red-600">Что-то пошло не так</div>
                     {(error && "status" in error) &&
-                        <div className="text-gray-500">{(error.data as IErrorResponse).message}</div>
+                        <div className="text-gray-500">{(error.data as IErrorResponse)?.message}</div>
                     }
                 </div>
             }

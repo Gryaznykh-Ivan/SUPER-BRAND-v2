@@ -65,7 +65,7 @@ export default function PickDelivery({ onSelectShipping, region }: IProps) {
             </div>
             {!isDeliveryOptionsFetching && (deliveryOptionsError && "status" in deliveryOptionsError) &&
                 <div className="pt-5">
-                    <div className="text-center text-red-600">{(deliveryOptionsError.data as IErrorResponse).message}</div>
+                    <div className="text-center text-red-600">{(deliveryOptionsError.data as IErrorResponse)?.message}</div>
                 </div>
             }
             {isDeliveryOptionsFetching &&

@@ -58,7 +58,7 @@ function Index() {
 
         if (isUpdateOrderError) {
             if (updateOrderError && "status" in updateOrderError) {
-                toast.error((updateOrderError.data as IErrorResponse).message)
+                toast.error((updateOrderError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -105,7 +105,7 @@ function Index() {
                     <div className="flex flex-col items-center py-5">
                         <div className="text-2xl font-bold text-red-600">Что-то пошло не так</div>
                         {(error && "status" in error) &&
-                            <div className="text-gray-500">{(error.data as IErrorResponse).message}</div>
+                            <div className="text-gray-500">{(error.data as IErrorResponse)?.message}</div>
                         }
                         <button className="text-blue-500 underline text-sm mt-4" onClick={() => router.back()}>Вернуться назад</button>
                     </div>

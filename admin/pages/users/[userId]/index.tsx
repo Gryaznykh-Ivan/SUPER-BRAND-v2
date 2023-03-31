@@ -32,7 +32,7 @@ export default function Index() {
 
         if (isUpdateUserError) {
             if (updateUserError && "status" in updateUserError) {
-                toast.error((updateUserError.data as IErrorResponse).message)
+                toast.error((updateUserError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -46,7 +46,7 @@ export default function Index() {
 
         if (isDeleteUserError) {
             if (deleteUserError && "status" in deleteUserError) {
-                toast.error((deleteUserError.data as IErrorResponse).message)
+                toast.error((deleteUserError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -79,7 +79,7 @@ export default function Index() {
                     <div className="flex flex-col items-center py-5">
                         <div className="text-2xl font-bold text-red-600">Что-то пошло не так</div>
                         {(error && "status" in error) &&
-                            <div className="text-gray-500">{(error.data as IErrorResponse).message}</div>
+                            <div className="text-gray-500">{(error.data as IErrorResponse)?.message}</div>
                         }
                         <button className="text-blue-500 underline text-sm mt-4" onClick={() => router.back()}>Вернуться назад</button>
                     </div>

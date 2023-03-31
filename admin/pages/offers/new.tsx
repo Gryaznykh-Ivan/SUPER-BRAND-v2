@@ -33,7 +33,7 @@ function New() {
 
         if (isCreateOfferError) {
             if (createOfferError && "status" in createOfferError) {
-                toast.error((createOfferError.data as IErrorResponse).message)
+                toast.error((createOfferError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

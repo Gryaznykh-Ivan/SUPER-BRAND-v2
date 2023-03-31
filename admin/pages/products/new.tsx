@@ -30,7 +30,7 @@ function New() {
 
         if (isCreateProductError) {
             if (createProductError && "status" in createProductError) {
-                toast.error((createProductError.data as IErrorResponse).message)
+                toast.error((createProductError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

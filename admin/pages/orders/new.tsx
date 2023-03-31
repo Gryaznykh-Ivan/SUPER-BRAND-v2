@@ -39,7 +39,7 @@ function New() {
 
         if (isCreateOrderError) {
             if (createOrderError && "status" in createOrderError) {
-                toast.error((createOrderError.data as IErrorResponse).message)
+                toast.error((createOrderError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

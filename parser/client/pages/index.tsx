@@ -24,7 +24,7 @@ export default function Index() {
 
         if (isBotStartError) {
             if (botStartError && "status" in botStartError) {
-                toast.error((botStartError.data as IErrorResponse).message)
+                toast.error((botStartError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
@@ -38,7 +38,7 @@ export default function Index() {
 
         if (isBotCompleteError) {
             if (botCompleteError && "status" in botCompleteError) {
-                toast.error((botCompleteError.data as IErrorResponse).message)
+                toast.error((botCompleteError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

@@ -26,7 +26,7 @@ export default function Return() {
 
         if (isCreateReturnError) {
             if (createReturnError && "status" in createReturnError) {
-                toast.error((createReturnError.data as IErrorResponse).message)
+                toast.error((createReturnError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

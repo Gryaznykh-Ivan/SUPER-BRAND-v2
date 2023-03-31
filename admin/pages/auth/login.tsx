@@ -74,10 +74,10 @@ export default function Login() {
                     <button className="bg-green-700 rounded-md w-full text-white py-2">Войти</button>
                     {count > 0 && <div className="text-gray-500">До повторной отправки письма {count} сек.</div>}
                     {(error && "status" in error) &&
-                        <div className="text-red-500 font-semibold">{(error.data as IErrorResponse).message}</div>
+                        <div className="text-red-500 font-semibold">{(error.data as IErrorResponse)?.message}</div>
                     }
                     {(codeSentError && "status" in codeSentError) &&
-                        <div className="text-red-500 font-semibold">{(codeSentError.data as IErrorResponse).message}</div>
+                        <div className="text-red-500 font-semibold">{(codeSentError.data as IErrorResponse)?.message}</div>
                     }
                 </form>
             </div>

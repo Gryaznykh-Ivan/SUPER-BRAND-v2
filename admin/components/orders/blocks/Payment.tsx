@@ -25,7 +25,7 @@ export default function Payment({ orderId, offers, services, priceDiffrence }: I
 
         if (isError) {
             if (error && "status" in error) {
-                toast.error((error.data as IErrorResponse).message)
+                toast.error((error.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

@@ -39,7 +39,7 @@ export default function ProductsToFulfill({ onChange, ...data }: IProps) {
 
         if (isCreateFulfillmentError) {
             if (createFulfillmentError && "status" in createFulfillmentError) {
-                toast.error((createFulfillmentError.data as IErrorResponse).message)
+                toast.error((createFulfillmentError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }

@@ -27,7 +27,7 @@ export default function New() {
 
         if (isCreateCollectionError) {
             if (createCollectionError && "status" in createCollectionError) {
-                toast.error((createCollectionError.data as IErrorResponse).message)
+                toast.error((createCollectionError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
