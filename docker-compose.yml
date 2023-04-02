@@ -21,6 +21,8 @@ services:
       COOKIE_DOMAIN: adminsb.space
       EXPIRES_IN: 15d
       BOT_ID: super-brand-parser
+      CHROME_BINARY_PATH: /app/chrome/linux/chrome
+      WEBDRIVER_PATH: /app/chrome/linux/chromedriver
     depends_on:
       - db
       - nginx

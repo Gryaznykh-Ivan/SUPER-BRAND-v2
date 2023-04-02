@@ -20,8 +20,8 @@ export class BrowserService {
             } catch (e) { }
         }
 
-        const service = new ServiceBuilder(/* process.env.WEBDRIVER_PATH */);
-        const options = new Options()//.setChromeBinaryPath(process.env.CHROME_BINARY_PATH)
+        const service = new ServiceBuilder(process.env.WEBDRIVER_PATH);
+        const options = new Options().setChromeBinaryPath(process.env.CHROME_BINARY_PATH)
 
         const proxyUrl = await this.proxy.getProxy()
         if (proxyUrl !== null) {
