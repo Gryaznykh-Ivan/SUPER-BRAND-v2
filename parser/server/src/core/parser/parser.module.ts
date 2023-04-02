@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ParserDBModule } from "src/db/parser/parser.module";
 import { ShopDBModule } from "src/db/shop/shop.module";
 import { PriceModule } from "src/utils/price/price.module";
-import { PuppetterModule } from "src/utils/puppetter/puppetter.module";
+import { BrowserModule } from "src/utils/browser/browser.module";
 import { ShopModule } from "../shop/shop.module";
 import { ParserController } from "./parser.controller";
 import { ParserService } from "./parser.service";
@@ -12,7 +12,7 @@ import { ParserService } from "./parser.service";
     imports: [
         ParserDBModule,
         ShopDBModule,
-        PuppetterModule,
+        BrowserModule,
         PriceModule,
         ShopModule
     ],

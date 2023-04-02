@@ -3,9 +3,10 @@ import { Browser } from 'puppeteer';
 import { Cron } from '@nestjs/schedule';
 import { BotAction, BotStatus, ProductStatus } from '@prisma-parser';
 import { PriceService } from 'src/utils/price/price.service';
-import { PuppetterService } from 'src/utils/puppetter/puppetter.service';
+import { BrowserService } from 'src/utils/browser/browser.service';
 import { ParserDBService } from '../../db/parser/parser.service';
 import { ShopService } from '../shop/shop.service';
+import { By, WebDriver } from 'selenium-webdriver';
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class ParserService {
     constructor(
         private parser: ParserDBService,
         private shop: ShopService,
-        private puppetter: PuppetterService,
+        private browser: BrowserService,
         private shopPrice: PriceService
     ) { }
 
@@ -96,7 +97,7 @@ export class ParserService {
         } catch (e) {
             console.log(e)
         }
-        
+
         await this.parser.bot.update({
             where: { id: process.env.BOT_ID },
             data: {
@@ -154,7 +155,7 @@ export class ParserService {
     }
 
     private async getStockxProducts() {
-        let browser = await this.puppetter.createOrUpdateBrowser()
+        let browser = await this.browser.createOrUpdateBrowser()
 
         const limit = 10;
         let hasNextPage = true
@@ -184,7 +185,7 @@ export class ParserService {
                         }
                     })
 
-                    browser = await this.puppetter.createOrUpdateBrowser()
+                    browser = await this.browser.createOrUpdateBrowser()
                     return null
                 })
 
@@ -363,31 +364,33 @@ export class ParserService {
     }
 
 
-    private getStockxProduct = async (browser: Browser, handle: string) => {
+    private getStockxProduct = async (browser: WebDriver, handle: string) => {
         return new Promise(async (resolve, reject) => {
-            for (const _ of new Array(3)) {
-                try {
-                    const page = await browser.newPage();
+            try {
+                // const tabHandle = await browser.getWindowHandle()
 
-                    await page.goto(`https://stockx.com/api/products/${handle}?includes=market,360&currency=USD&country=PL`);
+                // await browser.switchTo().newWindow("tab")
+                await browser.get(`https://stockx.com/api/products/${handle}?includes=market,360&currency=USD&country=PL`)
 
-                    const element = await page.$('pre')
-                    const value = await element.evaluate(element => element.innerText)
-                    const result = JSON.parse(value)
+                const text = await browser.findElement(By.xpath("//pre")).getText()
+                const result = JSON.parse(text)
 
-                    const pages = await browser.pages()
-                    pages.shift()
-                    await Promise.all(pages.map(p => p.close()))
+                // await browser.close()
+                // await browser.switchTo().window(tabHandle)
 
-                    return resolve(result)
-                } catch (e) { }
+                return resolve(result)
+            } catch (e) {
+
+                // const tabHandles = await browser.getAllWindowHandles();
+                // await browser.switchTo().window(tabHandles[0]);
+                // for (let i = 1; i < tabHandles.length; i++) {
+                //     await browser.switchTo().window(tabHandles[i]);
+                //     await browser.close();
+                // }
+                // await browser.switchTo().window(tabHandles[0]);
+
+                return reject(null)
             }
-
-            const pages = await browser.pages()
-            pages.shift()
-            await Promise.all(pages.map(p => p.close()))
-
-            return reject(null)
         })
     }
 }
