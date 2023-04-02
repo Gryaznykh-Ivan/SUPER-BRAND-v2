@@ -22,5 +22,8 @@
   "homepage": "https://github.com/Gryaznykh-Ivan/SUPER-BRAND#readme",
   "dependencies": {
     "jwt-decode": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/selenium-webdriver": "^4.1.13"
   }
 }
