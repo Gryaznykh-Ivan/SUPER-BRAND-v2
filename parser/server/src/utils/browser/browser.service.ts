@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Builder, WebDriver } from 'selenium-webdriver'
-import { ServiceBuilder, Options } from 'selenium-webdriver/chrome'
 import { Injectable } from '@nestjs/common';
+import { executablePath } from 'puppeteer';
 import { ProxyService } from '../proxy/proxy.service';
 
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 
 @Injectable()
 export class BrowserService {
@@ -11,28 +12,32 @@ export class BrowserService {
         private proxy: ProxyService
     ) { }
 
-    private _browser: WebDriver = null
+    private _browser = null
 
     async createOrUpdateBrowser() {
-        if (this._browser !== null && this._browser.getSession() !== null) {
-            try {
-                await this._browser.quit()
-            } catch (e) { }
+        if (this._browser !== null) {
+            await this._browser.close()
         }
 
-        const service = new ServiceBuilder(process.env.WEBDRIVER_PATH);
-        const options = new Options().setChromeBinaryPath(process.env.CHROME_BINARY_PATH)
+        puppeteer.use(StealthPlugin())
+
+        const args = [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+        ]
 
         const proxyUrl = await this.proxy.getProxy()
         if (proxyUrl !== null) {
-            options.addArguments(`--proxy-server=${proxyUrl}`)
+            args.push(`--proxy-server=${proxyUrl}`)
         }
 
-        this._browser = new Builder()
-            .forBrowser('chrome')
-            .setChromeOptions(options)
-            .setChromeService(service)
-            .build();
+        console.log(executablePath())
+
+        this._browser = await puppeteer.launch({
+            headless: false,
+            executablePath: executablePath(),
+            args,
+        });
 
         return this._browser
     }

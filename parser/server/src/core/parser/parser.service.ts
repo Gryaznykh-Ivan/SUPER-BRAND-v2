@@ -107,7 +107,7 @@ export class ParserService {
         })
     }
 
-    @Cron('0 0 * * *')
+    @Cron('0 0 */3 * *')
     private async parse() {
         try {
             const provider = await this.shop.getStockxProvider()
@@ -364,33 +364,35 @@ export class ParserService {
     }
 
 
-    private getStockxProduct = async (browser: WebDriver, handle: string) => {
+    private getStockxProduct = async (browser: Browser, handle: string) => {
         return new Promise(async (resolve, reject) => {
-            try {
-                // const tabHandle = await browser.getWindowHandle()
+            setTimeout(() => reject(null), 30000) // timeout 30 секунд
 
-                // await browser.switchTo().newWindow("tab")
-                await browser.get(`https://stockx.com/api/products/${handle}?includes=market,360&currency=USD&country=PL`)
+            for (const _ of new Array(3)) {
+                try {
+                    await new Promise<void>((r) => setTimeout(() => r(), 5000)) // 5 секунд задержка перед каждым запросом
 
-                const text = await browser.findElement(By.xpath("//pre")).getText()
-                const result = JSON.parse(text)
+                    const page = await browser.newPage();
 
-                // await browser.close()
-                // await browser.switchTo().window(tabHandle)
+                    await page.goto(`https://stockx.com/api/products/${handle}?includes=market,360&currency=USD&country=PL`);
 
-                return resolve(result)
-            } catch (e) {
+                    const element = await page.$('pre')
+                    const value = await element.evaluate(element => element.innerText)
+                    const result = JSON.parse(value)
 
-                // const tabHandles = await browser.getAllWindowHandles();
-                // await browser.switchTo().window(tabHandles[0]);
-                // for (let i = 1; i < tabHandles.length; i++) {
-                //     await browser.switchTo().window(tabHandles[i]);
-                //     await browser.close();
-                // }
-                // await browser.switchTo().window(tabHandles[0]);
+                    const pages = await browser.pages()
+                    pages.shift()
+                    await Promise.all(pages.map(p => p.close()))
 
-                return reject(null)
+                    return resolve(result)
+                } catch (e) { }
             }
+
+            const pages = await browser.pages()
+            pages.shift()
+            await Promise.all(pages.map(p => p.close()))
+
+            return reject(null)
         })
     }
 }

@@ -9,6 +9,7 @@
     "seed": "ts-node db/parser/prisma/seed/index.ts"
   },
   "scripts": {
+    "push": "npx prisma db push --schema ./db/parser/prisma/schema.prisma && npx prisma db push --schema ./db/shop/prisma/schema.prisma",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -34,13 +35,12 @@
     "cookie-parser": "^1.4.6",
     "csv-parse": "^5.3.4",
     "proxy-chain": "^2.2.1",
-    "puppeteer": "^19.8.0",
+    "puppeteer": "^19.8.3",
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-stealth": "^2.11.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "selenium-webdriver": "^4.8.2",
     "shopify-api-node": "^3.12.2"
   },
   "devDependencies": {
@@ -49,10 +49,12 @@
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
     "@types/bcryptjs": "^2.4.2",
+    "@types/chromedriver": "^81.0.1",
     "@types/express": "^4.17.13",
     "@types/jest": "28.1.8",
     "@types/multer": "^1.4.7",
     "@types/node": "^16.0.0",
+    "@types/selenium-webdriver": "^4.1.13",
     "@types/supertest": "^2.0.11",
     "@types/user-agents": "^1.0.2",
     "@types/uuid": "^9.0.0",
