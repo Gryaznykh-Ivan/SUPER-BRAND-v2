@@ -7,6 +7,7 @@ import { BrowserModule } from "src/utils/browser/browser.module";
 import { ShopModule } from "../shop/shop.module";
 import { ParserController } from "./parser.controller";
 import { ParserService } from "./parser.service";
+import { RequestModule } from "src/utils/request/request.module";
 
 @Module({
     imports: [
@@ -14,7 +15,8 @@ import { ParserService } from "./parser.service";
         ShopDBModule,
         BrowserModule,
         PriceModule,
-        ShopModule
+        ShopModule,
+        RequestModule
     ],
     controllers: [ParserController],
     providers: [JwtService, ParserService]

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { anonymizeProxy } from 'proxy-chain'
 import { ParserDBService } from 'src/db/parser/parser.service';
+import { HttpsProxyAgent } from 'https-proxy-agent'
 
 @Injectable()
 export class ProxyService {
@@ -21,10 +22,16 @@ export class ProxyService {
     }
 
     async getFormatProxy(url: string) {
-        return await anonymizeProxy(url);
+        return new HttpsProxyAgent(url);
     }
 
     async getProxy() {
+        if (this._selectedProxy === "") return null
+
+        return this.getFormatProxy("http://" + this._selectedProxy)
+    }
+
+    async createOrUpdateProxy() {
         const proxyList = await this.getProxyList();
 
         if (proxyList.length === 0) return null

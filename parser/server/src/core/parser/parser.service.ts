@@ -7,6 +7,7 @@ import { BrowserService } from 'src/utils/browser/browser.service';
 import { ParserDBService } from '../../db/parser/parser.service';
 import { ShopService } from '../shop/shop.service';
 import { By, WebDriver } from 'selenium-webdriver';
+import { RequestService } from 'src/utils/request/request.service';
 
 
 @Injectable()
@@ -15,7 +16,8 @@ export class ParserService {
         private parser: ParserDBService,
         private shop: ShopService,
         private browser: BrowserService,
-        private shopPrice: PriceService
+        private shopPrice: PriceService,
+        private request: RequestService
     ) { }
 
     async getBotById(botId: string) {
@@ -155,7 +157,7 @@ export class ParserService {
     }
 
     private async getStockxProducts() {
-        let browser = await this.browser.createOrUpdateBrowser()
+        let fetcher = await this.request.getFetcher()
 
         const limit = 10;
         let hasNextPage = true
@@ -177,7 +179,7 @@ export class ParserService {
             })
 
             for (const product of products) {
-                const data: any = await this.getStockxProduct(browser, product.stockx).catch(async () => {
+                const data: any = await this.getStockxProduct(fetcher, product.stockx).catch(async () => {
                     await this.parser.product.update({
                         where: { id: product.id },
                         data: {
@@ -185,7 +187,7 @@ export class ParserService {
                         }
                     })
 
-                    browser = await this.browser.createOrUpdateBrowser()
+                    fetcher = await this.request.getFetcher()
                     return null
                 })
 
@@ -234,7 +236,7 @@ export class ParserService {
             hasNextPage = products.length === limit
         } while (hasNextPage === true)
 
-        await browser.close()
+        // await browser.close()
     }
 
     private async getShopProducts({ id: providerId }: { id: string }) {
@@ -364,35 +366,19 @@ export class ParserService {
     }
 
 
-    private getStockxProduct = async (browser: Browser, handle: string) => {
+    private getStockxProduct = async (fetcher, handle: string) => {
         return new Promise(async (resolve, reject) => {
-            setTimeout(() => reject(null), 30000) // timeout 30 секунд
+            try {
+                await new Promise<void>((res) => setTimeout(() => res(), 5000)) // Ожидание 5 секунд
 
-            for (const _ of new Array(3)) {
-                try {
-                    await new Promise<void>((r) => setTimeout(() => r(), 5000)) // 5 секунд задержка перед каждым запросом
+                const response = await fetcher(`https://stockx.com/api/products/${handle}?includes=market,360&currency=USD&country=PL`);
+                const result = await response.json()
 
-                    const page = await browser.newPage();
-
-                    await page.goto(`https://stockx.com/api/products/${handle}?includes=market,360&currency=USD&country=PL`);
-
-                    const element = await page.$('pre')
-                    const value = await element.evaluate(element => element.innerText)
-                    const result = JSON.parse(value)
-
-                    const pages = await browser.pages()
-                    pages.shift()
-                    await Promise.all(pages.map(p => p.close()))
-
-                    return resolve(result)
-                } catch (e) { }
+                return resolve(result)
+            } catch (e) {
+                console.log(e)
+                return reject(null)
             }
-
-            const pages = await browser.pages()
-            pages.shift()
-            await Promise.all(pages.map(p => p.close()))
-
-            return reject(null)
         })
     }
 }
