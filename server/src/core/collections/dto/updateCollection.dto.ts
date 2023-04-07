@@ -15,6 +15,12 @@ export class UpdateCollectionDto {
     @ValidateIf((object, value) => value !== undefined)
     handle: string;
 
+    @IsBoolean()
+    @NotEquals(null)
+    @ValidateIf((_, value) => value !== undefined)
+    @Type(() => Boolean)
+    hidden: boolean;
+
     @IsOptional()
     @IsString()
     description: string;

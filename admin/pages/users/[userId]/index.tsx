@@ -11,6 +11,7 @@ import Roles from '../../../components/users/blocks/Roles'
 import { useRouter } from 'next/router'
 import { useDeleteUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../../services/userService'
 import { toast } from 'react-toastify'
+import { Role } from '../../../types/store'
 
 export default function Index() {
     const router = useRouter()
@@ -128,7 +129,7 @@ export default function Index() {
                                     passport={data.data.passport}
                                     onChange={onCollectChanges}
                                 />
-                                {(data.data.role === "ADMIN" || data.data.role === "MANAGER") &&
+                                {(data.data.role === Role.ADMIN || data.data.role === Role.MANAGER) &&
                                     <Permissions
                                         permissions={data.data.permissions}
                                         onChange={onCollectChanges}

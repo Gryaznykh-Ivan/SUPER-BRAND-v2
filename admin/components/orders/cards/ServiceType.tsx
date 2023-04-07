@@ -6,7 +6,11 @@ interface IProps {
 }
 
 const serviceType = {
-    "DISCOUNT": {
+    "DISCOUNT_AMOUNT": {
+        className: "",
+        text: "Скидка"
+    },
+    "DISCOUNT_PERCENT": {
         className: "",
         text: "Скидка"
     },

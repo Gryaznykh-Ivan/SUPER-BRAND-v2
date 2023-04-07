@@ -35,17 +35,17 @@ export default function Permissions({ onChange, permissions }: IProps) {
     return (
         <div className="rounded-md bg-white shadow-sm">
             <h2 className="font-semibold p-5 border-b-[1px]">Контроль доступа</h2>
-            <div className="p-5 grid grid-cols-4 gap-8">
+            <div className="p-5 grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div className="">
                     <div className=" text-gray-500 mb-2">Заказы</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
-                            <input type="checkbox" id="ORDER_READ" name="ORDER_READ" className="w-5 h-5 rounded-md" checked={state.some(c => c === "ORDER_READ")} onChange={onInputChange} />
-                            <label htmlFor="ORDER_READ" className="ml-3">Read</label>
+                            <input type="checkbox" id={Right.ORDER_READ} name={Right.ORDER_READ} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.ORDER_READ)} onChange={onInputChange} />
+                            <label htmlFor={Right.ORDER_READ} className="ml-3">Read</label>
                         </div>
                         <div className="flex items-center">
-                            <input type="checkbox" id="ORDER_UPDATE" name="ORDER_UPDATE" className="w-5 h-5 rounded-md" checked={state.some(c => c === "ORDER_UPDATE")} onChange={onInputChange} />
-                            <label htmlFor="ORDER_UPDATE" className="ml-3">Update</label>
+                            <input type="checkbox" id={Right.ORDER_UPDATE} name={Right.ORDER_UPDATE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.ORDER_UPDATE)} onChange={onInputChange} />
+                            <label htmlFor={Right.ORDER_UPDATE} className="ml-3">Update</label>
                         </div>
                     </div>
                 </div>
@@ -53,12 +53,12 @@ export default function Permissions({ onChange, permissions }: IProps) {
                     <div className="text-gray-500 mb-2">Товары</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
-                            <input type="checkbox" id="PRODUCT_READ" name="PRODUCT_READ" className="w-5 h-5 rounded-md" checked={state.some(c => c === "PRODUCT_READ")} onChange={onInputChange} />
-                            <label htmlFor="PRODUCT_READ" className="ml-3">Read</label>
+                            <input type="checkbox" id={Right.PRODUCT_READ} name={Right.PRODUCT_READ} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.PRODUCT_READ)} onChange={onInputChange} />
+                            <label htmlFor={Right.PRODUCT_READ} className="ml-3">Read</label>
                         </div>
                         <div className="flex items-center">
-                            <input type="checkbox" id="PRODUCT_UPDATE" name="PRODUCT_UPDATE" className="w-5 h-5 rounded-md" checked={state.some(c => c === "PRODUCT_UPDATE")} onChange={onInputChange} />
-                            <label htmlFor="PRODUCT_UPDATE" className="ml-3">Update</label>
+                            <input type="checkbox" id={Right.PRODUCT_UPDATE} name={Right.PRODUCT_UPDATE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.PRODUCT_UPDATE)} onChange={onInputChange} />
+                            <label htmlFor={Right.PRODUCT_UPDATE} className="ml-3">Update</label>
                         </div>
                     </div>
                 </div>
@@ -66,12 +66,12 @@ export default function Permissions({ onChange, permissions }: IProps) {
                     <div className="text-gray-500 mb-2">Офферы</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
-                            <input type="checkbox" id="OFFER_READ" name="OFFER_READ" className="w-5 h-5 rounded-md" checked={state.some(c => c === "OFFER_READ")} onChange={onInputChange} />
-                            <label htmlFor="OFFER_READ" className="ml-3">Read</label>
+                            <input type="checkbox" id={Right.OFFER_READ} name={Right.OFFER_READ} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.OFFER_READ)} onChange={onInputChange} />
+                            <label htmlFor={Right.OFFER_READ} className="ml-3">Read</label>
                         </div>
                         <div className="flex items-center">
-                            <input type="checkbox" id="OFFER_UPDATE" name="OFFER_UPDATE" className="w-5 h-5 rounded-md" checked={state.some(c => c === "OFFER_UPDATE")} onChange={onInputChange} />
-                            <label htmlFor="OFFER_UPDATE" className="ml-3">Update</label>
+                            <input type="checkbox" id={Right.OFFER_UPDATE} name={Right.OFFER_UPDATE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.OFFER_UPDATE)} onChange={onInputChange} />
+                            <label htmlFor={Right.OFFER_UPDATE} className="ml-3">Update</label>
                         </div>
                     </div>
                 </div>
@@ -79,12 +79,12 @@ export default function Permissions({ onChange, permissions }: IProps) {
                     <div className="text-gray-500 mb-2">Коллекции</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
-                            <input type="checkbox" id="COLLECTION_READ" name="COLLECTION_READ" className="w-5 h-5 rounded-md" checked={state.some(c => c === "COLLECTION_READ")} onChange={onInputChange} />
-                            <label htmlFor="COLLECTION_READ" className="ml-3">Read</label>
+                            <input type="checkbox" id={Right.COLLECTION_READ} name={Right.COLLECTION_READ} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.COLLECTION_READ)} onChange={onInputChange} />
+                            <label htmlFor={Right.COLLECTION_READ} className="ml-3">Read</label>
                         </div>
                         <div className="flex items-center">
-                            <input type="checkbox" id="COLLECTION_UPDATE" name="COLLECTION_UPDATE" className="w-5 h-5 rounded-md" checked={state.some(c => c === "COLLECTION_UPDATE")} onChange={onInputChange} />
-                            <label htmlFor="COLLECTION_UPDATE" className="ml-3">Update</label>
+                            <input type="checkbox" id={Right.COLLECTION_UPDATE} name={Right.COLLECTION_UPDATE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.COLLECTION_UPDATE)} onChange={onInputChange} />
+                            <label htmlFor={Right.COLLECTION_UPDATE} className="ml-3">Update</label>
                         </div>
                     </div>
                 </div>
@@ -92,12 +92,12 @@ export default function Permissions({ onChange, permissions }: IProps) {
                     <div className="text-gray-500 mb-2">Ползователи</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
-                            <input type="checkbox" id="USER_READ" name="USER_READ" className="w-5 h-5 rounded-md" checked={state.some(c => c === "USER_READ")} onChange={onInputChange} />
-                            <label htmlFor="USER_READ" className="ml-3">Read</label>
+                            <input type="checkbox" id={Right.USER_READ} name={Right.USER_READ} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.USER_READ)} onChange={onInputChange} />
+                            <label htmlFor={Right.USER_READ} className="ml-3">Read</label>
                         </div>
                         <div className="flex items-center">
-                            <input type="checkbox" id="USER_UPDATE" name="USER_UPDATE" className="w-5 h-5 rounded-md" checked={state.some(c => c === "USER_UPDATE")} onChange={onInputChange} />
-                            <label htmlFor="USER_UPDATE" className="ml-3">Update</label>
+                            <input type="checkbox" id={Right.USER_UPDATE} name={Right.USER_UPDATE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.USER_UPDATE)} onChange={onInputChange} />
+                            <label htmlFor={Right.USER_UPDATE} className="ml-3">Update</label>
                         </div>
                     </div>
                 </div>
@@ -105,12 +105,12 @@ export default function Permissions({ onChange, permissions }: IProps) {
                     <div className="text-gray-500 mb-2">Доставка</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
-                            <input type="checkbox" id="SHIPPING_READ" name="SHIPPING_READ" className="w-5 h-5 rounded-md" checked={state.some(c => c === "SHIPPING_READ")} onChange={onInputChange} />
-                            <label htmlFor="SHIPPING_READ" className="ml-3">Read</label>
+                            <input type="checkbox" id={Right.SHIPPING_READ} name={Right.SHIPPING_READ} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.SHIPPING_READ)} onChange={onInputChange} />
+                            <label htmlFor={Right.SHIPPING_READ} className="ml-3">Read</label>
                         </div>
                         <div className="flex items-center">
-                            <input type="checkbox" id="SHIPPING_UPDATE" name="SHIPPING_UPDATE" className="w-5 h-5 rounded-md" checked={state.some(c => c === "SHIPPING_UPDATE")} onChange={onInputChange} />
-                            <label htmlFor="SHIPPING_UPDATE" className="ml-3">Update</label>
+                            <input type="checkbox" id={Right.SHIPPING_UPDATE} name={Right.SHIPPING_UPDATE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.SHIPPING_UPDATE)} onChange={onInputChange} />
+                            <label htmlFor={Right.SHIPPING_UPDATE} className="ml-3">Update</label>
                         </div>
                     </div>
 
@@ -119,12 +119,12 @@ export default function Permissions({ onChange, permissions }: IProps) {
                     <div className="text-gray-500 mb-2">Работа с файлами</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
-                            <input type="checkbox" id="MEDIA_UPLOAD" name="MEDIA_UPLOAD" className="w-5 h-5 rounded-md" checked={state.some(c => c === "MEDIA_UPLOAD")} onChange={onInputChange} />
-                            <label htmlFor="MEDIA_UPLOAD" className="ml-3">Upload</label>
+                            <input type="checkbox" id={Right.MEDIA_UPLOAD} name={Right.MEDIA_UPLOAD} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.MEDIA_UPLOAD)} onChange={onInputChange} />
+                            <label htmlFor={Right.MEDIA_UPLOAD} className="ml-3">Read</label>
                         </div>
                         <div className="flex items-center">
-                            <input type="checkbox" id="MEDIA_DELETE" name="MEDIA_DELETE" className="w-5 h-5 rounded-md" checked={state.some(c => c === "MEDIA_DELETE")} onChange={onInputChange} />
-                            <label htmlFor="MEDIA_DELETE" className="ml-3">Delete</label>
+                            <input type="checkbox" id={Right.MEDIA_DELETE} name={Right.MEDIA_DELETE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.MEDIA_DELETE)} onChange={onInputChange} />
+                            <label htmlFor={Right.MEDIA_DELETE} className="ml-3">Update</label>
                         </div>
                     </div>
                 </div>

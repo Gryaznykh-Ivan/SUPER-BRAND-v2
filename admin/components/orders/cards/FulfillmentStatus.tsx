@@ -23,11 +23,7 @@ const FulfillmentStatuses = {
         </svg>
 
 
-    },
-    // "RETURNED": {
-    //     className: "bg-red-500",
-    //     text: "Возврат"
-    // }
+    }
 }
 
 export default function FulfillmentStatus({ status }: IProps) {

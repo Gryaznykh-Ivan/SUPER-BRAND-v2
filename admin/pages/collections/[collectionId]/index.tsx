@@ -115,6 +115,7 @@ export default function Index() {
                                 <GeneralInfo
                                     title={data.data.title}
                                     description={data.data.description}
+                                    hidden={data.data.hidden}
                                     onChange={onCollectChanges}
                                 />
                                 <Media

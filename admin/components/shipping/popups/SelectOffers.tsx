@@ -7,6 +7,7 @@ import JSXAccordion from '../../accordions/JSXAccordion';
 import { IDeliveryProfile, IErrorResponse, IOffer, IOfferSearch } from '../../../types/api';
 import { useLazyGetOffersBySearchQuery } from '../../../services/offerService';
 import ImageLoader from '../../image/ImageLoader';
+import { OfferStatus } from '../../../types/store';
 
 interface IProps {
     deliveryProfileId: string;
@@ -26,7 +27,7 @@ export default function SelectOffers({ title, deliveryProfileId, connectOffers, 
         q: "",
         limit: itemPerPage,
         skip: 0,
-        notStatus: "SOLD",
+        notStatus: OfferStatus.SOLD,
         notDeliveryProfileId: deliveryProfileId
     })
 

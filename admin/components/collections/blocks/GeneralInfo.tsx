@@ -6,6 +6,7 @@ import TextArea from '../../inputs/TextArea'
 interface IProps {
     title: string | null;
     description: string | null;
+    hidden: boolean | null;
     onChange: (obj: CollectionCreateRequest | CollectionUpdateRequest) => void;
 }
 
@@ -13,6 +14,7 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
         title: data.title ?? "",
         description: data.description ?? "",
+        hidden: data.hidden ?? false,
     })
 
     useEffect(() => {
@@ -32,7 +34,7 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
 
             return [key, value]
         })
-        
+
         onChange(Object.fromEntries(changes))
     }, [state])
 
@@ -40,16 +42,24 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
+    const onInputCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setState(prev => ({ ...prev, [e.target.name]: e.target.checked }))
+    }
+
     return (
         <div className="rounded-md bg-white shadow-sm p-5">
             <div className="space-y-4">
                 <div className="flex flex-col">
                     <label htmlFor="title" className="text-sm text-gray-600 mb-1">Название продукта</label>
-                    <Input type="text" id="title" placeholder="Название продукта" name="title" value={ state.title } onChange={onInputChange} />
+                    <Input type="text" id="title" placeholder="Название продукта" name="title" value={state.title} onChange={onInputChange} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="description" className="text-sm text-gray-600 mb-1">Описание</label>
-                    <TextArea id="description" placeholder="Описание" name="description" value={ state.description } onChange={onInputChange} />
+                    <TextArea id="description" placeholder="Описание" name="description" value={state.description} onChange={onInputChange} />
+                </div>
+                <div className="flex items-center">
+                    <input type="checkbox" className="rounded" id="hidden" name="hidden" checked={state.hidden} onChange={onInputCheckboxChange} />
+                    <label htmlFor="hidden" className="text-sm text-gray-600 ml-3">Коллекция для внутреннего использования</label>
                 </div>
             </div>
         </div>

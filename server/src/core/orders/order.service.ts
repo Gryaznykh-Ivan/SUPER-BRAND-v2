@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { FulfillmentStatus, InvoiceStatus, OfferStatus, OrderStatus, PaymentStatus, Prisma, ReturnStatus } from '@prisma/client';
+import { Fulfillment, FulfillmentStatus, InvoiceStatus, Offer, OfferStatus, OrderStatus, PaymentStatus, Return, ReturnStatus, OrderService as Service, Invoice, InvoiceType, Service as ServiceEnum, InvoiceMethod, Prisma } from '@prisma/client';
 import { IUser } from 'src/interfaces/user.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/createOrder.dto';
@@ -226,7 +226,7 @@ export class OrderService {
                         id: true,
                         type: true,
                         description: true,
-                        price: true
+                        amount: true
                     }
                 },
                 invoices: {
@@ -235,8 +235,8 @@ export class OrderService {
                     },
                     select: {
                         id: true,
+                        type: true,
                         amount: true,
-                        currency: true
                     }
                 },
                 removedOffers: {
@@ -320,7 +320,7 @@ export class OrderService {
                 price: offer.price
             })),
             services: order.services,
-            paid: order.invoices.map(invoice => invoice.amount).reduce((a, c) => a + Number(c), 0)
+            paid: this.getPaymentSummary(order.invoices)
         }
 
         return {
@@ -350,6 +350,10 @@ export class OrderService {
                     }]
                 }
             }
+        }
+
+        if (data.services && data.services.some(service => service.type === ServiceEnum.DISCOUNT_PERCENT && (service.amount > 100 || service.amount <= 0))) {
+            throw new HttpException("Процентная скидка должна быть больше 0 и меньше либо равно 100", HttpStatus.BAD_REQUEST)
         }
 
         try {
@@ -383,14 +387,12 @@ export class OrderService {
                     }
                 })
 
-                const subtotalProducts = offers.reduce((a, c) => a + Number(c.price), 0)
-                const subtotalService = data.services.reduce((a, c) => a + Number(c.price), 0)
-                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
+                const { total } = this.getOrderSummary(offers, data.services.map(service => ({ type: service.type, amount: new Prisma.Decimal(service.amount) })));
 
                 return await tx.order.create({
                     data: {
                         ...createOrderQuery,
-                        totalPrice: totalPrice,
+                        totalPrice: total,
                         offers: {
                             connect: offers.map(offer => ({ id: offer.id }))
                         }
@@ -422,6 +424,10 @@ export class OrderService {
                     userId: self.id,
                 }
             }
+        }
+
+        if (data.createServices && data.createServices.some(service => service.type === ServiceEnum.DISCOUNT_PERCENT && (service.amount > 100 || service.amount <= 0))) {
+            throw new HttpException("Процентная скидка должна быть больше 0 и меньше либо равно 100", HttpStatus.BAD_REQUEST)
         }
 
         if (data.deleteServices !== undefined || data.createServices !== undefined) {
@@ -533,7 +539,8 @@ export class OrderService {
                         services: {
                             select: {
                                 id: true,
-                                price: true
+                                type: true,
+                                amount: true
                             }
                         },
                         invoices: {
@@ -542,37 +549,24 @@ export class OrderService {
                             },
                             select: {
                                 id: true,
+                                type: true,
                                 amount: true
                             }
                         }
                     }
                 })
 
-                const subtotalProducts = order.offers.reduce((a, c) => a + Number(c.price), 0)
-                const subtotalService = order.services.reduce((a, c) => a + Number(c.price), 0)
-                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
-                const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
+                const { total } = this.getOrderSummary(order.offers, order.services)
+                const paid = this.getPaymentSummary(order.invoices)
 
                 await tx.order.update({
                     where: {
                         id: orderId
                     },
                     data: {
-                        totalPrice: totalPrice,
-                        paymentStatus: totalPrice === totalPaid && totalPaid !== 0
-                            ? PaymentStatus.PAID
-                            : totalPrice < totalPaid
-                                ? PaymentStatus.NEED_TO_RETURN
-                                : totalPaid !== 0
-                                    ? PaymentStatus.PARTIALLY_PAID
-                                    : PaymentStatus.UNPAID,
-                        orderStatus: order.offers.filter(offer => offer.fulfillmentId === null).length === 0 && order.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && order.offers.length !== 0
-                            ? OrderStatus.FULFILLED
-                            : order.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-                                ? OrderStatus.PARTIALLY_FULFILLED
-                                : order.offers.length !== 0
-                                    ? OrderStatus.UNFULFILLED
-                                    : OrderStatus.CANCELED
+                        totalPrice: total,
+                        paymentStatus: this.getPaymentStatus(total, paid),
+                        orderStatus: this.getOrderStatus(order.offers, order.fulfillments)
                     }
                 })
             })
@@ -774,13 +768,7 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
-                            ? OrderStatus.FULFILLED
-                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-                                ? OrderStatus.PARTIALLY_FULFILLED
-                                : updatedOrder.offers.length !== 0
-                                    ? OrderStatus.UNFULFILLED
-                                    : OrderStatus.CANCELED
+                        orderStatus: this.getOrderStatus(updatedOrder.offers, updatedOrder.fulfillments)
                     }
                 })
 
@@ -845,13 +833,7 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
-                            ? OrderStatus.FULFILLED
-                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-                                ? OrderStatus.PARTIALLY_FULFILLED
-                                : updatedOrder.offers.length !== 0
-                                    ? OrderStatus.UNFULFILLED
-                                    : OrderStatus.CANCELED
+                        orderStatus: this.getOrderStatus(updatedOrder.offers, updatedOrder.fulfillments)
                     }
                 })
             })
@@ -924,13 +906,7 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
-                            ? OrderStatus.FULFILLED
-                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-                                ? OrderStatus.PARTIALLY_FULFILLED
-                                : updatedOrder.offers.length !== 0
-                                    ? OrderStatus.UNFULFILLED
-                                    : OrderStatus.CANCELED
+                        orderStatus: this.getOrderStatus(updatedOrder.offers, updatedOrder.fulfillments)
                     }
                 })
             })
@@ -956,7 +932,7 @@ export class OrderService {
                         services: {
                             select: {
                                 id: true,
-                                price: true
+                                amount: true
                             }
                         },
                         invoices: {
@@ -965,6 +941,7 @@ export class OrderService {
                             },
                             select: {
                                 id: true,
+                                type: true,
                                 amount: true
                             }
                         }
@@ -972,7 +949,7 @@ export class OrderService {
                 })
 
                 const totalPrice = Number(order.totalPrice)
-                const totalPaid = order.invoices.reduce((a, c) => a + Number(c.amount), 0)
+                const totalPaid = this.getPaymentSummary(order.invoices)
                 const priceDifference = totalPrice - totalPaid;
 
                 if (priceDifference === 0) {
@@ -983,8 +960,9 @@ export class OrderService {
                     data: {
                         orderId: orderId,
                         status: InvoiceStatus.SUCCEEDED,
-                        amount: priceDifference,
-                        method: priceDifference > 0 ? "Наличные" : "Возврат"
+                        amount: Math.abs(priceDifference),
+                        type: priceDifference > 0 ? InvoiceType.PAYMENT : InvoiceType.REFUND,
+                        method: priceDifference > 0 ? InvoiceMethod.CASH : InvoiceMethod.CASHLESS
                     }
                 })
 
@@ -997,7 +975,7 @@ export class OrderService {
                         timeline: {
                             create: {
                                 title: priceDifference > 0 ? `Заказ оплачен` : `Возврат разрыва`,
-                                message: priceDifference > 0 ? `Заказ отмечен как оплаченный наличными: ${Math.abs(priceDifference)} руб.` : `Разница была возвращена клиенту: ${Math.abs(priceDifference)} руб.`,
+                                message: priceDifference > 0 ? `Заказ отмечен как оплаченный: ${Math.abs(priceDifference)} руб.` : `Разница была возвращена клиенту: ${Math.abs(priceDifference)} руб.`,
                                 userId: self.id,
                             }
                         },
@@ -1114,7 +1092,8 @@ export class OrderService {
                         services: {
                             select: {
                                 id: true,
-                                price: true
+                                type: true,
+                                amount: true
                             }
                         },
                         invoices: {
@@ -1123,16 +1102,15 @@ export class OrderService {
                             },
                             select: {
                                 id: true,
+                                type: true,
                                 amount: true
                             }
                         }
                     }
                 })
 
-                const subtotalProducts = updatedOrder.offers.reduce((a, c) => a + Number(c.price), 0)
-                const subtotalService = updatedOrder.services.reduce((a, c) => a + Number(c.price), 0)
-                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
-                const totalPaid = updatedOrder.invoices.reduce((a, c) => a + Number(c.amount), 0)
+                const { total } = this.getOrderSummary(updatedOrder.offers, updatedOrder.services)
+                const paid = this.getPaymentSummary(updatedOrder.invoices)
 
                 await tx.order.update({
                     where: { id: order.id },
@@ -1144,28 +1122,10 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        totalPrice: totalPrice,
-                        paymentStatus: totalPrice === totalPaid && totalPaid !== 0
-                            ? PaymentStatus.PAID
-                            : totalPrice < totalPaid
-                                ? PaymentStatus.NEED_TO_RETURN
-                                : totalPaid !== 0
-                                    ? PaymentStatus.PARTIALLY_PAID
-                                    : PaymentStatus.UNPAID,
-                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
-                            ? OrderStatus.FULFILLED
-                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-                                ? OrderStatus.PARTIALLY_FULFILLED
-                                : updatedOrder.offers.length !== 0
-                                    ? OrderStatus.UNFULFILLED
-                                    : OrderStatus.CANCELED,
-                        returnStatus: updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_REQUESTED)
-                            ? ReturnStatus.RETURN_REQUESTED
-                            : updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_IN_PROGRESS)
-                                ? ReturnStatus.RETURN_IN_PROGRESS
-                                : updatedOrder.returns.every(c => c.status === ReturnStatus.RETURNED)
-                                    ? ReturnStatus.RETURNED
-                                    : null
+                        totalPrice: total,
+                        paymentStatus: this.getPaymentStatus(total, paid),
+                        orderStatus: this.getOrderStatus(updatedOrder.offers, updatedOrder.fulfillments),
+                        returnStatus: this.getReturnStatus(updatedOrder.returns)
                     }
                 })
 
@@ -1268,13 +1228,7 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        returnStatus: updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_REQUESTED)
-                            ? ReturnStatus.RETURN_REQUESTED
-                            : updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_IN_PROGRESS)
-                                ? ReturnStatus.RETURN_IN_PROGRESS
-                                : updatedOrder.returns.every(c => c.status === ReturnStatus.RETURNED)
-                                    ? ReturnStatus.RETURNED
-                                    : null
+                        returnStatus: this.getReturnStatus(updatedOrder.returns)
                     }
                 })
             })
@@ -1372,7 +1326,8 @@ export class OrderService {
                         services: {
                             select: {
                                 id: true,
-                                price: true
+                                type: true,
+                                amount: true,
                             }
                         },
                         invoices: {
@@ -1381,16 +1336,15 @@ export class OrderService {
                             },
                             select: {
                                 id: true,
+                                type: true,
                                 amount: true
                             }
                         }
                     }
                 })
 
-                const subtotalProducts = updatedOrder.offers.reduce((a, c) => a + Number(c.price), 0)
-                const subtotalService = updatedOrder.services.reduce((a, c) => a + Number(c.price), 0)
-                const totalPrice = subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
-                const totalPaid = updatedOrder.invoices.reduce((a, c) => a + Number(c.amount), 0)
+                const { total } = this.getOrderSummary(updatedOrder.offers, updatedOrder.services)
+                const paid = this.getPaymentSummary(updatedOrder.invoices)
 
                 await tx.order.update({
                     where: { id: orderId },
@@ -1402,28 +1356,10 @@ export class OrderService {
                                 userId: self.id,
                             }
                         },
-                        totalPrice: totalPrice,
-                        paymentStatus: totalPrice === totalPaid && totalPaid !== 0
-                            ? PaymentStatus.PAID
-                            : totalPrice < totalPaid
-                                ? PaymentStatus.NEED_TO_RETURN
-                                : totalPaid !== 0
-                                    ? PaymentStatus.PARTIALLY_PAID
-                                    : PaymentStatus.UNPAID,
-                        orderStatus: updatedOrder.offers.filter(offer => offer.fulfillmentId === null).length === 0 && updatedOrder.fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && updatedOrder.offers.length !== 0
-                            ? OrderStatus.FULFILLED
-                            : updatedOrder.fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
-                                ? OrderStatus.PARTIALLY_FULFILLED
-                                : updatedOrder.offers.length !== 0
-                                    ? OrderStatus.UNFULFILLED
-                                    : OrderStatus.CANCELED,
-                        returnStatus: updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_REQUESTED)
-                            ? ReturnStatus.RETURN_REQUESTED
-                            : updatedOrder.returns.some(c => c.status === ReturnStatus.RETURN_IN_PROGRESS)
-                                ? ReturnStatus.RETURN_IN_PROGRESS
-                                : updatedOrder.returns.every(c => c.status === ReturnStatus.RETURNED)
-                                    ? ReturnStatus.RETURNED
-                                    : null
+                        totalPrice: total,
+                        paymentStatus: this.getPaymentStatus(total, paid),
+                        orderStatus: this.getOrderStatus(updatedOrder.offers, updatedOrder.fulfillments),
+                        returnStatus: this.getReturnStatus(updatedOrder.returns)
                     }
                 })
             })
@@ -1434,5 +1370,76 @@ export class OrderService {
         } catch (e) {
             throw new HttpException("Произошла ошибка на стороне сервера", HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
+
+
+    private getOrderSummary(offers: Pick<Offer, "price">[], services: Pick<Service, "type" | "amount">[]) {
+        const subtotalProducts = offers.reduce((total, product) => total + Number(product.price), 0)
+        const subtotalService = services.reduce((total, service) => {
+            switch (service.type) {
+                case ServiceEnum.DISCOUNT_AMOUNT:
+                    total = total - Number(service.amount)
+                    break;
+                case ServiceEnum.DISCOUNT_PERCENT:
+                    total = total - (subtotalProducts * (Number(service.amount) / 100))
+                    break;
+                case ServiceEnum.SHIPPING:
+                    total = total + Number(service.amount)
+                    break;
+            }
+
+            return total
+        }, 0)
+
+        return {
+            subtotalProducts,
+            subtotalService,
+            total: subtotalProducts + subtotalService > 0 ? subtotalProducts + subtotalService : 0
+        }
+    }
+
+    private getPaymentSummary(invoices: Pick<Invoice, "amount" | "type">[]) {
+        return invoices.reduce((total, invoice) => {
+            switch (invoice.type) {
+                case InvoiceType.PAYMENT:
+                    total = total + Number(invoice.amount)
+                    break;
+                case InvoiceType.REFUND:
+                    total = total - Number(invoice.amount)
+                    break;
+            }
+
+            return total
+        }, 0)
+    }
+
+    private getReturnStatus(returns: Pick<Return, "status">[]) {
+        return returns.some(c => c.status === ReturnStatus.RETURN_REQUESTED)
+            ? ReturnStatus.RETURN_REQUESTED
+            : returns.some(c => c.status === ReturnStatus.RETURN_IN_PROGRESS)
+                ? ReturnStatus.RETURN_IN_PROGRESS
+                : returns.every(c => c.status === ReturnStatus.RETURNED)
+                    ? ReturnStatus.RETURNED
+                    : null
+    }
+
+    private getOrderStatus(offers: Pick<Offer, "id" | "fulfillmentId">[], fulfillments: Pick<Fulfillment, "id" | "status">[]) {
+        return offers.filter(offer => offer.fulfillmentId === null).length === 0 && fulfillments.every(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED) && offers.length !== 0
+            ? OrderStatus.FULFILLED
+            : fulfillments.some(fulfillment => fulfillment.status === FulfillmentStatus.DELIVERED)
+                ? OrderStatus.PARTIALLY_FULFILLED
+                : offers.length !== 0
+                    ? OrderStatus.UNFULFILLED
+                    : OrderStatus.CANCELED
+    }
+
+    private getPaymentStatus(total: number, paid: number) {
+        return total === paid && paid !== 0
+            ? PaymentStatus.PAID
+            : total < paid
+                ? PaymentStatus.NEED_TO_RETURN
+                : paid !== 0
+                    ? PaymentStatus.PARTIALLY_PAID
+                    : PaymentStatus.UNPAID
     }
 }

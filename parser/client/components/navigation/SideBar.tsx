@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAppSelector } from '../../hooks/store'
 import NavLink from './NavLink'
+import { Role } from '../../types/store'
 
 interface IProps {
     onClick?: () => void
@@ -30,7 +31,7 @@ export default function SideBar({ onClick }: IProps) {
                 </svg>
                 <span className="ml-2">Цены</span>
             </NavLink>
-            {auth.isAuth === true && auth.payload?.role === "ADMIN" &&
+            {auth.isAuth === true && auth.payload?.role === Role.ADMIN &&
                 <>
                     <NavLink href="/products" className={({ isActive }) => `flex items-center font-semibold px-3 py-2 hover:bg-gray-200 rounded-md ${isActive ? "stroke-green-700 text-green-700 bg-gray-200" : "stroke-black"}`}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount", "interactiveTransactions"]
+    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount"]
 }
 
 datasource db {
@@ -45,7 +45,8 @@ enum OfferStatus {
 
 enum Service {
     SHIPPING
-    DISCOUNT
+    DISCOUNT_AMOUNT
+    DISCOUNT_PERCENT
 }
 
 enum Currency {
@@ -56,6 +57,11 @@ enum Currency {
 enum InvoiceType {
     PAYMENT
     REFUND
+}
+
+enum InvoiceMethod {
+    CASH
+    CASHLESS
 }
 
 enum OrderStatus {
@@ -197,7 +203,7 @@ model Order {
     orderStatus    OrderStatus    @default(UNFULFILLED)
     paymentStatus  PaymentStatus  @default(UNPAID)
     returnStatus   ReturnStatus?
-    totalPrice     Decimal        @db.Decimal(9, 2)
+    totalPrice     Decimal        @db.Decimal(10, 2)
     mailingCountry String
     mailingCity    String
     mailingRegion  String
@@ -219,16 +225,16 @@ model Order {
 }
 
 model Invoice {
-    id          String        @id @default(cuid())
-    invoiceType InvoiceType   @default(PAYMENT)
-    status      InvoiceStatus @default(PENDING)
-    method      String
-    amount      Decimal       @db.Decimal(9, 2)
-    currency    Currency      @default(RUB)
-    order       Order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    orderId     Int
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime      @updatedAt
+    id        String        @id @default(cuid())
+    type      InvoiceType   @default(PAYMENT)
+    status    InvoiceStatus @default(PENDING)
+    method    InvoiceMethod
+    amount    Decimal       @db.Decimal(10, 2)
+    currency  Currency      @default(RUB)
+    order     Order         @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    orderId   Int
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
 
     @@map("invoice")
 }
@@ -237,7 +243,7 @@ model OrderService {
     id          String  @id @default(cuid())
     type        Service @default(SHIPPING)
     description String? @db.Text
-    price       Decimal @db.Decimal(9, 2)
+    amount      Decimal @db.Decimal(10, 2)
     order       Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     orderId     Int
 
@@ -301,9 +307,9 @@ model Offer {
     id                String           @id @default(cuid())
     productTitle      String           @db.VarChar(255)
     variantTitle      String
-    price             Decimal          @db.Decimal(9, 2)
-    offerPrice        Decimal          @db.Decimal(9, 2)
-    compareAtPrice    Decimal?         @db.Decimal(9, 2)
+    price             Decimal          @db.Decimal(10, 2)
+    offerPrice        Decimal          @db.Decimal(10, 2)
+    compareAtPrice    Decimal?         @db.Decimal(10, 2)
     comment           String?
     status            OfferStatus      @default(OFFERED)
     user              User?            @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
@@ -346,6 +352,7 @@ model Collection {
     description     String?   @db.Text
     metaTitle       String?   @db.VarChar(255)
     metaDescription String?   @db.Text
+    hidden          Boolean   @default(false)
     handle          String    @unique() @db.VarChar(255)
     products        Product[] @relation(name: "collectiontoproduct")
     images          Image[]
@@ -506,7 +513,7 @@ model DeliveryOption {
     id             String       @id @default(cuid())
     title          String
     duration       Int
-    price          Decimal      @db.Decimal(9, 2)
+    price          Decimal      @db.Decimal(10, 2)
     deliveryZone   DeliveryZone @relation(fields: [deliveryZoneId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     deliveryZoneId String
     createdAt      DateTime     @default(now())

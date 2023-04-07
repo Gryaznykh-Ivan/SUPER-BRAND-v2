@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, NotEquals, ValidateIf, ValidateNested } from "class-validator";
 import { ConnectProductDto } from "./products.dto";
 
 export class CreateCollectionDto {
@@ -10,6 +10,12 @@ export class CreateCollectionDto {
     @IsOptional()
     @IsString()
     handle: string;
+
+    @IsBoolean()
+    @NotEquals(null)
+    @ValidateIf((_, value) => value !== undefined)
+    @Type(() => Boolean)
+    hidden: boolean;
 
     @IsOptional()
     @IsString()

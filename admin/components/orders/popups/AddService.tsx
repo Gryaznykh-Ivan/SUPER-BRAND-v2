@@ -22,9 +22,9 @@ interface IProps {
 
 export default function AddService({ title, onClose, onDone, ...data }: IProps) {
     const [state, setState] = useState<Omit<IService, "id">>({
-        type: "DISCOUNT",
+        type: Service.DISCOUNT_AMOUNT,
         description: "",
-        price: ""
+        amount: ""
     })
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,8 +32,13 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
     }
 
     const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const price = e.target.value.replace(/[^0-9.]/g, "")
-        setState(prev => ({ ...prev, [e.target.name]: price.length !== 0 ? `-${price}` : "" }))
+        const price = e.target.value.replace(/[^0-9]/g, "")
+        setState(prev => ({ ...prev, [e.target.name]: price }))
+    }
+
+    const onPercentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const percent = e.target.value.replace(/[^0-9]/g, "")
+        setState(prev => ({ ...prev, [e.target.name]: percent }))
     }
 
     const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -41,7 +46,7 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
             ...prev,
             type: e.target.value as Service,
             description: "",
-            price: ""
+            amount: ""
         }))
     }
 
@@ -50,13 +55,13 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
             ...prev,
             type: service.type,
             description: service.description,
-            price: service.price
+            amount: service.amount
         }))
     }
 
     const onDoneEvent = () => {
-        if (state.price.length === 0) {
-            return toast.error("Вы не указали стоимость")
+        if (state.amount?.length === 0) {
+            return toast.error("Вы не указали сумму")
         }
 
         onDone({ ...state, id: `new${Math.random()}` })
@@ -83,26 +88,39 @@ export default function AddService({ title, onClose, onDone, ...data }: IProps) 
                                     id="serviceType"
                                     options={{
                                         SHIPPING: { value: "Доставка", disabled: false },
-                                        DISCOUNT: { value: "Скидка", disabled: false }
+                                        DISCOUNT_AMOUNT: { value: "Скидка в деньгах", disabled: false },
+                                        DISCOUNT_PERCENT: { value: "Скидка в процентах", disabled: false },
                                     }}
                                     name="type"
                                     value={state.type}
                                     onChange={onSelectChange}
                                 />
                             </div>
-                            {state.type === 'DISCOUNT' &&
+                            {state.type === Service.DISCOUNT_AMOUNT &&
                                 <div className="mt-2 space-y-2">
                                     <div className="">
                                         <label htmlFor="description" className="text-sm">Описание</label>
                                         <Input type="text" placeholder="Описание" name="description" id="description" value={state.description} onChange={onInputChange} />
                                     </div>
                                     <div className="">
-                                        <label htmlFor="discount" className="text-sm">Величина скидки</label>
-                                        <Input type="text" placeholder="Величина скидки" name="price" id="price" value={state.price} onChange={onPriceChange} />
+                                        <label htmlFor="amount" className="text-sm">Величина скидки</label>
+                                        <Input type="text" placeholder="Величина скидки" name="amount" id="amount" value={state.amount} onChange={onPriceChange} />
                                     </div>
                                 </div>
                             }
-                            {state.type === 'SHIPPING' &&
+                            {state.type === Service.DISCOUNT_PERCENT &&
+                                <div className="mt-2 space-y-2">
+                                    <div className="">
+                                        <label htmlFor="description" className="text-sm">Описание</label>
+                                        <Input type="text" placeholder="Описание" name="description" id="description" value={state.description} onChange={onInputChange} />
+                                    </div>
+                                    <div className="">
+                                        <label htmlFor="amount" className="text-sm">Величина скидки в процентах</label>
+                                        <Input type="text" placeholder="Величина скидки в процентах" name="amount" id="amount" value={state.amount} onChange={onPercentChange} />
+                                    </div>
+                                </div>
+                            }
+                            {state.type === Service.SHIPPING &&
                                 <>
                                     {
                                         data.region === null ?

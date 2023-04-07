@@ -8,6 +8,7 @@ import { DeliveryProfileUpdateRequest, IDeliveryProfile, IErrorResponse, IOfferS
 import { useRouter } from 'next/router'
 import ImageLoader from '../../image/ImageLoader'
 import Link from 'next/link'
+import { OfferStatus } from '../../../types/store'
 
 
 interface IProps {
@@ -31,7 +32,7 @@ export default function ProfileOffers({ onChange, deliveryProfileId, connectOffe
         q: "",
         limit: itemPerPage,
         skip: 0,
-        notStatus: "SOLD",
+        notStatus: OfferStatus.SOLD,
     })
 
     useEffect(() => {

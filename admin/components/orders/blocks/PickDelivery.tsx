@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Select from '../../inputs/Select';
 import { useDeliveryProfilesQuery, useLazyDeliveryOptionsQuery } from '../../../services/suggestionService';
+import { Service } from '../../../types/store';
 
 
 interface IProps {
@@ -48,7 +49,7 @@ export default function PickDelivery({ onSelectShipping, region }: IProps) {
     const onSelectOption = (option: IDeliveryOption) => {
         if (state.selectedOption === option.id) return
 
-        onSelectShipping({ type: "SHIPPING", description: option.title, price: option.price })
+        onSelectShipping({ type: Service.SHIPPING, description: option.title, amount: option.price })
         setState(prev => ({ ...prev, selectedOption: option.id }))
     }
 

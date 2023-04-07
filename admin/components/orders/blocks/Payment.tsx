@@ -3,9 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { CollectionCreateRequest, CollectionUpdateRequest, ICollectionProduct, IErrorResponse, IOfferSearch, IOrderProduct, IProduct, IService } from '../../../types/api';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import ServiceType from '../cards/ServiceType';
 import { toast } from 'react-toastify';
 import { useConfirmPaymentMutation } from '../../../services/orderService';
+import { Service } from '../../../types/store';
+import ServiceType from '../cards/ServiceType';
 
 
 interface IProps {
@@ -34,7 +35,21 @@ export default function Payment({ orderId, offers, services, priceDiffrence }: I
 
     const payment = useMemo(() => {
         const subtotal = offers.reduce((a, c) => a + Number(c.price), 0)
-        let total = subtotal + services.reduce((a, c) => a + Number(c.price), 0)
+        let total = subtotal + services.reduce((a, c) => {
+            switch (c.type) {
+                case Service.DISCOUNT_AMOUNT:
+                    a = a - Number(c.amount)
+                    break;
+                case Service.DISCOUNT_PERCENT:
+                    a = a - Number(subtotal * (Number(c.amount) / 100))
+                    break;
+                case Service.SHIPPING:
+                    a = a - Number(c.amount)
+                    break;
+            }
+
+            return a
+        }, 0)
 
         total = total > 0 ? total : 0
 
@@ -65,7 +80,13 @@ export default function Payment({ orderId, offers, services, priceDiffrence }: I
                         <ServiceType type={service.type} />
                         <div className="col-span-3 flex justify-between">
                             <div className="text-sm text-gray-500">{service.description}</div>
-                            <div className="">{Number(service.price) === 0 ? "Бесплатно" : `${service.price}₽`}</div>
+                            <div className="">
+                                {
+                                    Number(service.amount) === 0
+                                        ? "Бесплатно" : service.type === Service.DISCOUNT_PERCENT
+                                            ? `${payment.subtotal * (Number(service.amount) / 100)}₽` : `${service.amount}₽`
+                                }
+                            </div>
                         </div>
                     </div>
                 )}

@@ -66,6 +66,11 @@ export class ProductService {
                     select: {
                         id: true,
                         title: true
+                    },
+                    orderBy: {
+                        products: {
+                            _count: 'desc'
+                        }
                     }
                 },
                 options: {

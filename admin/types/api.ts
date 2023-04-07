@@ -167,6 +167,7 @@ export interface ICollection {
     id: string;
     title: string;
     handle: string;
+    hidden: boolean;
     description: string | null;
     metaTitle: string | null;
     metaDescription: string | null;
@@ -315,7 +316,7 @@ export interface IService {
     id: string;
     type: Service;
     description: string | null;
-    price: string;
+    amount: string;
 }
 
 export interface IRemovedOffer {
@@ -740,7 +741,7 @@ export type CollectionCreateResponse = IResponse<string>
 export type CollectionCreateRequest = {
     title?: string;
     handle?: string;
-    available?: boolean;
+    hidden?: boolean;
     description?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -753,7 +754,7 @@ export type CollectionUpdateRequest = {
     collectionId?: string
     title?: string;
     handle?: string;
-    available?: boolean;
+    hidden?: boolean;
     description?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;

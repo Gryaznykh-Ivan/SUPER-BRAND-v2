@@ -28,6 +28,7 @@ export class CollectionService {
                 handle: true,
                 metaTitle: true,
                 metaDescription: true,
+                hidden: true,
                 images: {
                     select: {
                         id: true,
@@ -50,10 +51,11 @@ export class CollectionService {
             id: collection.id,
             title: collection.title,
             description: collection.description,
+            hidden: collection.hidden,
             handle: collection.handle,
             metaTitle: collection.metaTitle,
             metaDescription: collection.metaDescription,
-            images: collection.images
+            images: collection.images,
         }
 
         return {
@@ -152,15 +154,10 @@ export class CollectionService {
         const createCollectionQuery = {
             title: data.title,
             description: data.description,
-            handle: data.handle,
-            metaTitle: data.metaTitle,
+            handle: this.url.getSlug(data.handle) || this.url.getSlug(data.title),
+            metaTitle: data.metaTitle || data.title,
             metaDescription: data.metaDescription,
-        }
-
-        createCollectionQuery.handle = this.url.getSlug(createCollectionQuery.handle === undefined ? createCollectionQuery.title : createCollectionQuery.handle)
-
-        if (createCollectionQuery.metaTitle === undefined) {
-            createCollectionQuery.metaTitle = createCollectionQuery.title
+            hidden: data.hidden
         }
 
         if (data.connectProducts !== undefined) {
@@ -334,13 +331,10 @@ export class CollectionService {
         const updateCollectionQuery = {
             title: data.title,
             description: data.description,
-            handle: data.handle,
+            handle: this.url.getSlug(data.handle),
             metaTitle: data.metaTitle,
-            metaDescription: data.metaDescription
-        }
-
-        if (updateCollectionQuery.handle !== undefined) {
-            updateCollectionQuery.handle = this.url.getSlug(updateCollectionQuery.handle)
+            metaDescription: data.metaDescription,
+            hidden: data.hidden
         }
 
         if (data.connectProducts !== undefined || data.disconnectProducts !== undefined) {

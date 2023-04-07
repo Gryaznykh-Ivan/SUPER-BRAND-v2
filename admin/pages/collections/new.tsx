@@ -45,7 +45,7 @@ export default function New() {
     }
 
     const mustBeSaved = useMemo(() => {
-        return Object.values(changes).some(c => c !== undefined)
+        return Object.values(changes).some(c => c !== undefined) && changes.title !== undefined
     }, [changes])
 
     return (
@@ -69,6 +69,7 @@ export default function New() {
                         <GeneralInfo
                             title={null}
                             description={null}
+                            hidden={false}
                             onChange={onCollectChanges}
                         />
                         <CreateCollectionProducts

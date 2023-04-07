@@ -1,6 +1,6 @@
 import { Service } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsDecimal, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsDecimal, IsEnum, IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, ValidateNested } from "class-validator";
 
 export class ServiceDto {
     @IsEnum(Service)
@@ -11,7 +11,7 @@ export class ServiceDto {
     descrption: string;
 
     @IsDecimal()
-    price: number;
+    amount: number;
 }
 
 export class DeleteServices {
