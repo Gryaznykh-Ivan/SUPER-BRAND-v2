@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev:store": "cd ./store && npm run dev",
     "dev:server": "cd ./server && npm run start:dev",
     "dev:admin": "cd ./admin && npm run dev",
     "dev:parser": "cd ./parser/client && npm run dev",
     "dev:api.parser": "cd ./parser/server && npm run start:dev",
-    "dev": "concurrently \"npm run dev:parser\" \"npm run dev:server\" \"npm run dev:admin\" \"npm run dev:api.parser\""
+    "dev": "concurrently \"npm run dev:parser\" \"npm run dev:server\" \"npm run dev:admin\" \"npm run dev:api.parser\" \"npm run dev:store\""
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,10 @@
   },
   "homepage": "https://github.com/Gryaznykh-Ivan/SUPER-BRAND#readme",
   "dependencies": {
-    "jwt-decode": "^3.1.2"
+    "jwt-decode": "^3.1.2",
+    "next": "^13.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/selenium-webdriver": "^4.1.13"
