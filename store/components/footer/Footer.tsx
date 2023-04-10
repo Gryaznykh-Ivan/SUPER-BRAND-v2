@@ -1,18 +1,18 @@
 import Link from 'next/link'
 import React from 'react'
-import FooterContact from '../accordions/FooterContact'
-import FooterInfo from '../accordions/FooterInfo'
-import FooterSupport from '../accordions/FooterSupport'
 import AcceptForPayment from './AcceptForPayment'
+import ContactAccordion from './ContactAccordion'
+import InfoAccordion from './InfoAccordion'
+import SupportAccordion from './SupportAccordion'
 
 export default function Footer() {
     return (
         <div className="bg-main-gray px-4">
             <div className="container">
                 <div className="divide-y-[1px] divide-line-divider border-y-[1px] border-line-divider my-8 md:hidden">
-                    <FooterSupport />
-                    <FooterInfo />
-                    <FooterContact />
+                    <SupportAccordion />
+                    <InfoAccordion />
+                    <ContactAccordion />
                 </div>
                 <div className="grid-cols-4 justify-start my-14 px-10 hidden md:grid">
                     <div className="pb-4 px-4 flex gap-3 flex-col">

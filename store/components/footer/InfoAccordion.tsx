@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import React from 'react'
-import Accordion from './Accordion'
+import Accordion from '../accordions/Accordion'
 
-export default function FooterInfo() {
+export default function InfoAccordion() {
     return <Accordion title="Информация">
         <div className="pb-4 px-4 flex gap-4 flex-col">
             <Link href="#" className="text-md text-text-gray">О нас</Link>

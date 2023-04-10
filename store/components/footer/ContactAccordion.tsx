@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import React from 'react'
-import Accordion from './Accordion'
+import Accordion from '../accordions/Accordion'
 
-export default function FooterContact() {
+export default function ContactAccordion() {
     return <Accordion title="Контакты">
         <div className="pb-4 px-4 flex gap-4 flex-col">
             <span className="text-md text-text-gray">8 (495) 336-25-56</span>
