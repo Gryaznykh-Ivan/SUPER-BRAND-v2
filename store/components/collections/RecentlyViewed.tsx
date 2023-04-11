@@ -3,8 +3,8 @@ import ProductSlider from '../sliders/ProductSlider'
 
 export default function RecentlyViewed() {
     return (
-        <div className="container px-4 md:px-10 py-8">
-            <div className="text-xl tracking-widest mb-5">Недавно просмотренные</div>
+        <div className="container py-8">
+            <div className="px-4 md:px-10 text-xl tracking-widest mb-5">Недавно просмотренные</div>
             <ProductSlider
                 products={[{
                     id: "1",
