@@ -17,6 +17,12 @@ export interface IProduct {
     compareAtPrice?: string;
 }
 
+export interface IImage {
+    id: string;
+    src: string;
+    alt: string;
+}
+
 // AuthService
 
 export type LoginResponse = IResponse<string>

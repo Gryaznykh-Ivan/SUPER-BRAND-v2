@@ -3,7 +3,7 @@ import React from 'react'
 import Accordion from '../accordions/Accordion'
 
 export default function ContactAccordion() {
-    return <Accordion title="Контакты">
+    return <Accordion className="font-semibold" title="Контакты">
         <div className="pb-4 px-4 flex gap-4 flex-col">
             <span className="text-md text-text-gray">8 (495) 336-25-56</span>
             <span className="text-md text-text-gray">hello@brandname.ru</span>

@@ -9,7 +9,7 @@ export default function FilterAccordion({ title, children }: IProps) {
     return (
         <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex items-center justify-between cursor-pointer group-open:border-b-[1px] border-line-divider pr-2">
-                <div className="flex items-center text-md font-medium h-11 border-b-[1px] group-open:border-black border-transparent">
+                <div className="text-md flex items-center font-medium h-11 border-b-[1px] group-open:border-black border-transparent">
                     {title}
                 </div>
                 <div className="flex-shrink-0 transition duration-200 group-open:-rotate-180">

@@ -3,16 +3,16 @@ import { Navigation, Pagination, Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 import { IProduct } from '../../types/api';
+import ProductCard from '../products/ProductCard';
 
 import 'swiper/css';
-import ProductCard from '../products/ProductCard';
 
 interface IProps {
     className?: string;
     products: IProduct[];
 }
 
-export default function ProductSlider({ className, products }: IProps) {
+export default function CollectionSlider({ className, products }: IProps) {
     const [swiper, setSwiper] = useState<SwiperType>();
     const [pagination, setPagination] = useState({
         hidden: true,

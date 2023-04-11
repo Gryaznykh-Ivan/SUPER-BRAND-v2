@@ -1,11 +1,11 @@
 import React from 'react'
-import ProductSlider from '../sliders/ProductSlider'
+import CollectionSlider from '../sliders/CollectionSlider'
 
 export default function RecentlyViewed() {
     return (
-        <div className="container py-8">
-            <div className="px-4 md:px-10 text-xl tracking-widest mb-5">Недавно просмотренные</div>
-            <ProductSlider
+        <div className="container">
+            <div className="px-4 md:px-10 text-lg tracking-widest mb-5">Недавно просмотренные</div>
+            <CollectionSlider
                 products={[{
                     id: "1",
                     title: "Air Jordan 1 Retro High Primer",

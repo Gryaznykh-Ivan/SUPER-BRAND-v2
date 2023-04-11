@@ -8,7 +8,7 @@ import MainLayout from '../../components/layouts/Main'
 import Pagination from '../../components/Pagination'
 import ProductCard from '../../components/products/ProductCard'
 import ProductFilterSort from '../../components/products/ProductFilterSort'
-import ProductSlider from '../../components/sliders/ProductSlider'
+import ProductSlider from '../../components/sliders/CollectionSlider'
 
 export default function Index() {
     return (

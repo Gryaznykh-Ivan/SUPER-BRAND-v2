@@ -9,7 +9,7 @@ interface IProps {
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
-export default function Select({ onChange, options, className, id, value, name }: IProps) {
+export default function FilterSizeSelect({ onChange, options, className, id, value, name }: IProps) {
     return (
         <div className="relative">
             <div className="absolute top-1/2 -translate-y-1/2 left-3 p-1">

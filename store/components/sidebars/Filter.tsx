@@ -1,6 +1,6 @@
 import React from 'react'
 import FilterAccordion from '../accordions/FilterAccordion';
-import SizeSelect from '../inputs/SizeSelect';
+import FilterSizeSelect from '../inputs/FilterSizeSelect';
 import Modal from '../portals/Modal';
 
 interface IProps {
@@ -26,7 +26,7 @@ export default function Filter({ isActive, onClose }: IProps) {
                         <div className="flex-1 px-5 py-4 overflow-y-auto">
                             <FilterAccordion title="Размер">
                                 <div className="py-4">
-                                    <SizeSelect options={{ "size men": { value: "size men", disabled: false } }} onChange={() => { }} />
+                                    <FilterSizeSelect options={{ "size men": { value: "size men", disabled: false } }} onChange={() => { }} />
                                     <div className="grid grid-cols-3 md:grid-cols-4 gap-2 mt-4">
                                         <div className="border-[1px] border-black h-10 flex justify-center items-center text-md font-medium">3.5 US</div>
                                         <div className="border-[1px] border-line-divider h-10 flex justify-center items-center text-md font-medium">3.5 US</div>

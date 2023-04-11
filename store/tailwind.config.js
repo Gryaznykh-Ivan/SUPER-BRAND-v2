@@ -30,6 +30,7 @@ module.exports = {
                 'main-green': '#4CAF50',
                 'main-gray': '#FAFAFA',
                 'main-red': '#D91A21',
+                'main-blue': '#595AD3',
             },
             aspectRatio: {
                 '5/3': '5 / 3',
