@@ -1,10 +1,12 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { wrapper } from '../store';
 import { Provider } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+
+import '../styles/globals.css'
+import '../styles/quill.css'
 
 export default function App({ Component, ...rest }: AppProps) {
     const router = useRouter()

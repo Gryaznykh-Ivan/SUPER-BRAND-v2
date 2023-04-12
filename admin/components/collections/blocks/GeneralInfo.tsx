@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { CollectionCreateRequest, CollectionUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
+import ReactQuill from '../../textEditor/ReactQuill';
 
 interface IProps {
     title: string | null;
@@ -46,6 +47,11 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
         setState(prev => ({ ...prev, [e.target.name]: e.target.checked }))
     }
 
+    const onQuillChange = (value: string) => {
+        console.log(value)
+        setState(prev => ({ ...prev, description: value !== "<p><br></p>" ? value : "" }))
+    }
+
     return (
         <div className="rounded-md bg-white shadow-sm p-5">
             <div className="space-y-4">
@@ -55,7 +61,7 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="description" className="text-sm text-gray-600 mb-1">Описание</label>
-                    <TextArea id="description" placeholder="Описание" name="description" value={state.description} onChange={onInputChange} />
+                    <ReactQuill value={state.description} onChange={onQuillChange} />
                 </div>
                 <div className="flex items-center">
                     <input type="checkbox" className="rounded" id="hidden" name="hidden" checked={state.hidden} onChange={onInputCheckboxChange} />
