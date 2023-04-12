@@ -28,7 +28,7 @@ export default function ProductCard({ title, vendor, type, price, compareAtPrice
             </div>
             <div className="mt-5 text-md text-center space-y-1 px-2">
                 <div className="font-semibold tracking-widest text-black uppercase">Nike</div>
-                <div className="text-text-gray">Кроссовки</div>
+                {/* <div className="text-text-gray">Кроссовки</div> */}
                 <div className="text-text-gray line-clamp-3">Air Jordan 1 Retro High Primer</div>
                 <div className="flex justify-center gap-3">
                     <div className={`${compareAtPrice !== undefined ? "text-main-red" : ""}`}>{price}</div>
