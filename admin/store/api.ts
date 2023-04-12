@@ -69,6 +69,8 @@ export const api = createApi({
         "DELIVERY_PROFILE",
         "DELIVERY_PROFILES",
         "DELIVERY_ZONES",
+        "PAGE",
+        "PAGES",
         "SETTING"
     ],
     extractRehydrationInfo(action, { reducerPath }) {

@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount"]
+    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount", "interactiveTransactions"]
 }
 
 datasource db {
@@ -28,6 +28,8 @@ enum Right {
     USER_UPDATE
     SHIPPING_READ
     SHIPPING_UPDATE
+    PAGE_READ
+    PAGE_UPDATE
     MEDIA_UPLOAD
     MEDIA_DELETE
 }
@@ -361,6 +363,20 @@ model Collection {
 
     @@fulltext([title])
     @@map("collection")
+}
+
+model Page {
+    id              String   @id @default(cuid())
+    title           String   @db.VarChar(255)
+    content         String   @db.Text
+    metaTitle       String?  @db.VarChar(255)
+    metaDescription String?  @db.Text
+    handle          String   @unique() @db.VarChar(255)
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
+
+    @@fulltext([title])
+    @@map("page")
 }
 
 model Product {

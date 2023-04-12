@@ -113,10 +113,22 @@ export default function Permissions({ onChange, permissions }: IProps) {
                             <label htmlFor={Right.SHIPPING_UPDATE} className="ml-3">Update</label>
                         </div>
                     </div>
-
                 </div>
-                <div className="col-span-2">
-                    <div className="text-gray-500 mb-2">Работа с файлами</div>
+                <div className="">
+                    <div className="text-gray-500 mb-2">Страницы</div>
+                    <div className="grid md:grid-cols-1 gap-3">
+                        <div className="flex items-center">
+                            <input type="checkbox" id={Right.PAGE_READ} name={Right.PAGE_READ} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.PAGE_READ)} onChange={onInputChange} />
+                            <label htmlFor={Right.PAGE_READ} className="ml-3">Read</label>
+                        </div>
+                        <div className="flex items-center">
+                            <input type="checkbox" id={Right.PAGE_UPDATE} name={Right.PAGE_UPDATE} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.PAGE_UPDATE)} onChange={onInputChange} />
+                            <label htmlFor={Right.PAGE_UPDATE} className="ml-3">Update</label>
+                        </div>
+                    </div>
+                </div>
+                <div className="">
+                    <div className="text-gray-500 mb-2">Файлы</div>
                     <div className="grid md:grid-cols-1 gap-3">
                         <div className="flex items-center">
                             <input type="checkbox" id={Right.MEDIA_UPLOAD} name={Right.MEDIA_UPLOAD} className="w-5 h-5 rounded-md" checked={state.some(c => c === Right.MEDIA_UPLOAD)} onChange={onInputChange} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CollectionCreateRequest, CollectionUpdateRequest } from '../../../types/api';
+import { PageCreateRequest, PageUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
 
@@ -7,7 +7,7 @@ interface IProps {
     metaTitle: string | null;
     metaDescription: string | null;
     handle: string | null;
-    onChange: (obj: CollectionCreateRequest | CollectionUpdateRequest) => void;
+    onChange: (obj: PageCreateRequest | PageUpdateRequest) => void;
 }
 
 export default function SeoSearch({ onChange, ...data }: IProps) {

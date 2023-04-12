@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { CollectionCreateRequest, CollectionUpdateRequest } from '../../../types/api';
+import { PageCreateRequest, PageUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
-import TextArea from '../../inputs/TextArea'
 import ReactQuill from '../../textEditor/ReactQuill';
 
 interface IProps {
     title: string | null;
-    description: string | null;
-    hidden: boolean | null;
-    onChange: (obj: CollectionCreateRequest | CollectionUpdateRequest) => void;
+    content: string | null;
+    onChange: (obj: PageCreateRequest | PageUpdateRequest) => void;
 }
 
 export default function GeneralInfo({ onChange, ...data }: IProps) {
     const [state, setState] = useState({
         title: data.title ?? "",
-        description: data.description ?? "",
-        hidden: data.hidden ?? false,
+        content: data.content ?? "",
     })
 
     useEffect(() => {
@@ -43,28 +40,20 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
-    const onInputCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setState(prev => ({ ...prev, [e.target.name]: e.target.checked }))
-    }
-
     const onQuillChange = (value: string) => {
-        setState(prev => ({ ...prev, description: value !== "<p><br></p>" ? value : "" }))
+        setState(prev => ({ ...prev, content: value !== "<p><br></p>" ? value : "" }))
     }
 
     return (
         <div className="rounded-md bg-white shadow-sm p-5">
             <div className="space-y-4">
                 <div className="flex flex-col">
-                    <label htmlFor="title" className="text-sm text-gray-600 mb-1">Название коллекции</label>
-                    <Input type="text" id="title" placeholder="Название коллекции" name="title" value={state.title} onChange={onInputChange} />
+                    <label htmlFor="title" className="text-sm text-gray-600 mb-1">Название страницы</label>
+                    <Input type="text" id="title" placeholder="Название страницы" name="title" value={state.title} onChange={onInputChange} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="description" className="text-sm text-gray-600 mb-1">Описание</label>
-                    <ReactQuill value={state.description} onChange={onQuillChange} />
-                </div>
-                <div className="flex items-center">
-                    <input type="checkbox" className="rounded" id="hidden" name="hidden" checked={state.hidden} onChange={onInputCheckboxChange} />
-                    <label htmlFor="hidden" className="text-sm text-gray-600 ml-3">Коллекция для внутреннего использования</label>
+                    <ReactQuill value={state.content} onChange={onQuillChange} />
                 </div>
             </div>
         </div>

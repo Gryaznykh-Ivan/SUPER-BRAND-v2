@@ -174,6 +174,21 @@ export interface ICollection {
     images: IImage[];
 }
 
+export interface IPage {
+    id: string;
+    title: string;
+    handle: string;
+    content: string;
+    metaTitle: string | null;
+    metaDescription: string | null;
+}
+
+export interface IPageSearch {
+    id: string;
+    title: string;
+    createdAt: Date
+}
+
 export interface ICollectionSearch {
     id: string;
     title: string;
@@ -758,7 +773,6 @@ export type CollectionUpdateRequest = {
     description?: string | null;
     metaTitle?: string | null;
     metaDescription?: string | null;
-    vendor?: string | null;
     connectProducts?: Pick<IProduct, "id">[];
     disconnectProducts?: Pick<IProduct, "id">[];
 }
@@ -788,6 +802,49 @@ export type CollectionRemoveImageRequest = {
     collectionId: string;
     imageId: string;
 }
+
+
+
+
+
+// pageService
+
+export type PageSearchResponse = IResponse<IPageSearch[]>
+export type PageSearchRequest = {
+    q?: string;
+    limit?: number;
+    skip?: number;
+}
+
+export type PageGetByIdResponse = IResponse<IPage>
+export type PageGetByIdRequest = {
+    pageId: string
+}
+
+export type PageCreateResponse = IResponse<string>
+export type PageCreateRequest = {
+    title?: string;
+    handle?: string;
+    content?: string;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+}
+
+export type PageUpdateResponse = IResponse<void>
+export type PageUpdateRequest = {
+    pageId?: string
+    title?: string;
+    handle?: string;
+    content?: string;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+}
+
+export type PageDeleteResponse = IResponse<void>
+export type PageDeleteRequest = {
+    pageId: string;
+}
+
 
 
 

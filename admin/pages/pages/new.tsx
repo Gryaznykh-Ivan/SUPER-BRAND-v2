@@ -1,46 +1,44 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
-import GeneralInfo from '../../components/collections/blocks/GeneralInfo'
-import SeoSearch from '../../components/collections/blocks/SeoSearch'
+import GeneralInfo from '../../components/pages/blocks/GeneralInfo'
+import SeoSearch from '../../components/pages/blocks/SeoSearch'
 import MainLayout from '../../components/layouts/Main'
-import { useCreateCollectionMutation } from '../../services/collectionService'
-import { CollectionCreateRequest, IErrorResponse } from '../../types/api'
+import { useCreatePageMutation } from '../../services/pageService'
+import { PageCreateRequest, IErrorResponse } from '../../types/api'
 import { toast } from 'react-toastify'
-import CollectionProducts from '../../components/collections/blocks/CollectionProducts'
-import CreateCollectionProducts from '../../components/collections/blocks/CreateCollectionProducts'
 
 export default function New() {
     const router = useRouter()
 
-    const [createCollection, { isSuccess: isCreateCollectionSuccess, isError: isCreateCollectionError, error: createCollectionError }] = useCreateCollectionMutation()
+    const [createPage, { isSuccess: isCreatePageSuccess, isError: isCreatePageError, error: createPageError }] = useCreatePageMutation()
 
-    const [changes, setChanges] = useState<CollectionCreateRequest>({})
-    const onCollectChanges = (obj: CollectionCreateRequest) => {
+    const [changes, setChanges] = useState<PageCreateRequest>({})
+    const onCollectChanges = (obj: PageCreateRequest) => {
         setChanges(prev => ({ ...prev, ...obj }))
     }
 
     useEffect(() => {
-        if (isCreateCollectionSuccess) {
-            setTimeout(() => toast.success("Коллекция создана"), 100)
+        if (isCreatePageSuccess) {
+            setTimeout(() => toast.success("Страница создана"), 100)
         }
 
-        if (isCreateCollectionError) {
-            if (createCollectionError && "status" in createCollectionError) {
-                toast.error((createCollectionError.data as IErrorResponse)?.message)
+        if (isCreatePageError) {
+            if (createPageError && "status" in createPageError) {
+                toast.error((createPageError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
         }
-    }, [isCreateCollectionSuccess, isCreateCollectionError])
+    }, [isCreatePageSuccess, isCreatePageError])
 
     const onSaveChanges = async () => {
-        const createCollectionData = changes
+        const createPageData = changes
 
-        const result = await createCollection(createCollectionData).unwrap()
+        const result = await createPage(createPageData).unwrap()
         if (result.success === true) {
             setChanges({})
-            router.push('/collections/' + result.data)
+            router.push('/pages/' + result.data)
         }
     }
 
@@ -53,12 +51,12 @@ export default function New() {
             <div className="px-6 my-4 max-w-3xl mx-auto">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                        <Link href="/collections" className="p-2 font-bold border-[1px] border-gray-400 rounded-md">
+                        <Link href="/pages" className="p-2 font-bold border-[1px] border-gray-400 rounded-md">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </Link>
-                        <h1 className="text-xl font-medium">Создание коллекции</h1>
+                        <h1 className="text-xl font-medium">Создание страницы</h1>
                     </div>
                     <div className="flex justify-end">
 
@@ -68,12 +66,7 @@ export default function New() {
                     <div className="flex-1 space-y-4">
                         <GeneralInfo
                             title={null}
-                            description={null}
-                            hidden={false}
-                            onChange={onCollectChanges}
-                        />
-                        <CreateCollectionProducts
-                            connectProducts={changes.connectProducts}
+                            content={null}
                             onChange={onCollectChanges}
                         />
                         <SeoSearch

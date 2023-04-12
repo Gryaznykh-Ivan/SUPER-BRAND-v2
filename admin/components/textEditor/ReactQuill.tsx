@@ -8,7 +8,8 @@ const QuillNoSSRWrapper = dynamic(() => import('react-quill'), {
 
 const modules = {
     toolbar: [
-        [{ size: ['small', false, 'large', 'huge'] }],
+        [{ header: [1, 2] }, { size: ['small', false, 'large', 'huge'] }],
+        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
         ['bold', 'italic', 'underline', 'strike'],
         [
             { list: 'ordered' },
@@ -25,6 +26,7 @@ const modules = {
 const formats = [
     'header',
     'font',
+    'align',
     'size',
     'bold',
     'italic',

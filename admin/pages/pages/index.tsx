@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import SearchInput from '../../components/inputs/SearchInput'
 import MainLayout from '../../components/layouts/Main'
-import { useLazyGetCollectionsBySearchQuery } from '../../services/collectionService'
+import { useLazyGetPagesBySearchQuery } from '../../services/pageService'
 import { IErrorResponse } from '../../types/api'
 
 
@@ -11,7 +11,7 @@ function Index() {
     const router = useRouter()
     const itemPerPage = 20
 
-    const [getCollectionBySearch, { isError, isFetching, data, error }] = useLazyGetCollectionsBySearchQuery();
+    const [getPageBySearch, { isError, isFetching, data, error }] = useLazyGetPagesBySearchQuery();
     const [query, setQuery] = useState({
         q: "",
         limit: itemPerPage,
@@ -19,7 +19,7 @@ function Index() {
     })
 
     useEffect(() => {
-        getCollectionBySearch(query)
+        getPageBySearch(query)
     }, [query])
 
     const onSearch = (q: string) => {
@@ -42,9 +42,9 @@ function Index() {
         <MainLayout>
             <div className="px-6 my-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-medium">Коллекции</h1>
+                    <h1 className="text-xl font-medium">Страницы</h1>
                     <div className="">
-                        <Link href="/collections/new" className="block bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</Link>
+                        <Link href="/pages/new" className="block bg-green-700 px-4 py-2 text-white font-medium rounded-md">Создать</Link>
                     </div>
                 </div>
                 <div className="mt-4 px-4 bg-white rounded-md">
@@ -78,20 +78,18 @@ function Index() {
                                     <thead>
                                         <tr className="border-b-[1px] text-sm">
                                             <th className="font-medium text-gray-500 text-start px-3 py-2">Название</th>
-                                            <th className="font-medium text-gray-500 text-start px-3 py-2 w-24">Товары</th>
                                             <th className="font-medium text-gray-500 text-start px-3 py-2 w-40">Дата создания</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.data.map(collection => (
+                                        {data.data.map(page => (
                                             <tr
-                                                key={collection.id}
+                                                key={page.id}
                                                 className="border-b-[1px] hover:bg-gray-100 cursor-pointer whitespace-nowrap"
-                                                onClick={() => router.push(`/collections/${collection.id}`)}
+                                                onClick={() => router.push(`/pages/${page.id}`)}
                                             >
-                                                <td className="px-3 py-2 font-medium">{collection.title}</td>
-                                                <td className="px-3 py-2">{collection.productsCount}</td>
-                                                <td className="px-3 py-2">{new Date(collection.createdAt).toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" })}</td>
+                                                <td className="px-3 py-2 font-medium">{page.title}</td>
+                                                <td className="px-3 py-2">{new Date(page.createdAt).toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" })}</td>
                                             </tr>
                                         ))}
                                     </tbody>

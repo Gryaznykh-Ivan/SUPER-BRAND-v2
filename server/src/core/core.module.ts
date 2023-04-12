@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CollectionModule } from './collections/collection.module';
 import { OfferModule } from './offers/offer.module';
 import { OrderModule } from './orders/order.module';
+import { PageModule } from './pages/page.module';
 import { ProductModule } from './products/product.module';
 import { SettingModule } from './settings/setting.module';
 import { ShippingModule } from './shipping/shipping.module';
@@ -19,6 +20,7 @@ import { VariantModule } from './variants/variant.module';
         ShippingModule,
         SuggestionModule,
         OrderModule,
+        PageModule,
         SettingModule
     ],
 })

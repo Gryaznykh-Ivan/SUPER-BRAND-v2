@@ -2,59 +2,56 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
-import GeneralInfo from '../../../components/collections/blocks/GeneralInfo'
-import CollectionProducts from '../../../components/collections/blocks/CollectionProducts'
-import Products from '../../../components/collections/blocks/CollectionProducts'
-import SeoSearch from '../../../components/collections/blocks/SeoSearch'
+import GeneralInfo from '../../../components/pages/blocks/GeneralInfo'
+import SeoSearch from '../../../components/pages/blocks/SeoSearch'
 import MainLayout from '../../../components/layouts/Main'
-import { CollectionUpdateRequest, IErrorResponse } from '../../../types/api'
-import { useDeleteCollectionMutation, useGetCollectionByIdQuery, useUpdateCollectionMutation } from '../../../services/collectionService'
+import { PageUpdateRequest, IErrorResponse } from '../../../types/api'
+import { useDeletePageMutation, useGetPageByIdQuery, useUpdatePageMutation } from '../../../services/pageService'
 import { toast } from 'react-toastify'
-import Media from '../../../components/collections/blocks/Media'
 
 export default function Index() {
     const router = useRouter()
 
-    const { isError, error, isLoading, data } = useGetCollectionByIdQuery({ collectionId: router.query.collectionId as string })
+    const { isError, error, isLoading, data } = useGetPageByIdQuery({ pageId: router.query.pageId as string })
 
-    const [updateCollection, { isSuccess: isUpdateCollectionSuccess, isError: isUpdateCollectionError, error: updateCollectionError }] = useUpdateCollectionMutation()
-    const [deleteCollection, { isSuccess: isDeleteCollectionSuccess, isError: isDeleteCollectionError, error: deleteCollectionError }] = useDeleteCollectionMutation()
+    const [updatePage, { isSuccess: isUpdatePageSuccess, isError: isUpdatePageError, error: updatePageError }] = useUpdatePageMutation()
+    const [deletePage, { isSuccess: isDeletePageSuccess, isError: isDeletePageError, error: deletePageError }] = useDeletePageMutation()
 
-    const [changes, setChanges] = useState<CollectionUpdateRequest>({})
-    const onCollectChanges = (obj: CollectionUpdateRequest) => {
+    const [changes, setChanges] = useState<PageUpdateRequest>({})
+    const onCollectChanges = (obj: PageUpdateRequest) => {
         setChanges(prev => ({ ...prev, ...obj }))
     }
 
     useEffect(() => {
-        if (isUpdateCollectionSuccess) {
-            toast.success("Коллекция обновлена")
+        if (isUpdatePageSuccess) {
+            toast.success("Страница обновлена")
         }
 
-        if (isUpdateCollectionError) {
-            if (updateCollectionError && "status" in updateCollectionError) {
-                toast.error((updateCollectionError.data as IErrorResponse)?.message)
+        if (isUpdatePageError) {
+            if (updatePageError && "status" in updatePageError) {
+                toast.error((updatePageError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
         }
-    }, [isUpdateCollectionSuccess, isUpdateCollectionError])
+    }, [isUpdatePageSuccess, isUpdatePageError])
 
     useEffect(() => {
-        if (isDeleteCollectionSuccess) {
-            setTimeout(() => toast.success("Коллекция удалена"), 100)
+        if (isDeletePageSuccess) {
+            setTimeout(() => toast.success("Страница удалена"), 100)
         }
 
-        if (isDeleteCollectionError) {
-            if (deleteCollectionError && "status" in deleteCollectionError) {
-                toast.error((deleteCollectionError.data as IErrorResponse)?.message)
+        if (isDeletePageError) {
+            if (deletePageError && "status" in deletePageError) {
+                toast.error((deletePageError.data as IErrorResponse)?.message)
             } else {
                 toast.error("Произошла неизвесная ошибка")
             }
         }
-    }, [isDeleteCollectionSuccess, isDeleteCollectionError])
+    }, [isDeletePageSuccess, isDeletePageError])
 
     const onSaveChanges = async () => {
-        const result = await updateCollection({ collectionId: router.query.collectionId as string, ...changes }).unwrap()
+        const result = await updatePage({ pageId: router.query.pageId as string, ...changes }).unwrap()
         if (result.success === true) {
             setChanges({})
         }
@@ -64,11 +61,11 @@ export default function Index() {
         return Object.values(changes).some(c => c !== undefined)
     }, [changes])
 
-    const onCollectionDelete = async () => {
-        const result = await deleteCollection({ collectionId: router.query.collectionId as string }).unwrap();
+    const onPageDelete = async () => {
+        const result = await deletePage({ pageId: router.query.pageId as string }).unwrap();
         if (result.success === true) {
             setChanges({})
-            router.push("/collections")
+            router.push("/pages")
         }
     }
     return (
@@ -94,12 +91,12 @@ export default function Index() {
                     <>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <Link href="/collections" className="p-2 font-bold border-[1px] border-gray-400 rounded-md">
+                                <Link href="/pages" className="p-2 font-bold border-[1px] border-gray-400 rounded-md">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M10 19L3 12M3 12L10 5M3 12H21" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </Link>
-                                <h1 className="text-xl font-medium">Коллекция {data.data.title}</h1>
+                                <h1 className="text-xl font-medium">{data.data.title}</h1>
                             </div>
                             <div className="flex justify-end">
                                 <Link href="http://google.com" className="hover:bg-gray-300 p-2 text-gray-700 font-medium rounded-md">
@@ -114,18 +111,7 @@ export default function Index() {
                             <div className="flex-1 space-y-4">
                                 <GeneralInfo
                                     title={data.data.title}
-                                    description={data.data.description}
-                                    hidden={data.data.hidden}
-                                    onChange={onCollectChanges}
-                                />
-                                <Media
-                                    collectionId={data.data.id}
-                                    images={data.data.images}
-                                />
-                                <CollectionProducts
-                                    collectionId={data.data.id}
-                                    connectProducts={changes.connectProducts}
-                                    disconnectProducts={changes.disconnectProducts}
+                                    content={data.data.content}
                                     onChange={onCollectChanges}
                                 />
                                 <SeoSearch
@@ -141,7 +127,7 @@ export default function Index() {
                                 {mustBeSaved ?
                                     <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={() => router.reload()}>Отменить</button>
                                     :
-                                    <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={onCollectionDelete}>Удалить</button>
+                                    <button className="border-red-600 border-[1px] text-red-600 px-4 py-2 font-medium rounded-md hover:bg-red-700 hover:text-white" onClick={onPageDelete}>Удалить</button>
                                 }
                             </div>
                             <div className="flex justify-end">
