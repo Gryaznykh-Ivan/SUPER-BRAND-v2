@@ -21,7 +21,7 @@ export default function SizeSelect() {
                 <div className="text-md">US 11</div>
                 <div className="px-1">
                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8.75 1L5 5L1.25 1" stroke="black" stroke-linecap="square" />
+                        <path d="M8.75 1L5 5L1.25 1" stroke="black" strokeLinecap="square" />
                     </svg>
                 </div>
             </div>

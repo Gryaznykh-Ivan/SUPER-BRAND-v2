@@ -115,13 +115,13 @@ export default function CollectionSlider({ className, products }: IProps) {
                 <div className="flex justify-center items-center mt-5 h-10">
                     <button className={`px-4 ${pagination.snapIndex === 1 ? "stroke-line-divider" : "stroke-black"}`} onClick={onPrevSlide}>
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 8.75L1 5L5 1.25" stroke="inherit" stroke-linecap="square" />
+                            <path d="M5 8.75L1 5L5 1.25" stroke="inherit" strokeLinecap="square" />
                         </svg>
                     </button>
                     <div className="px-3 text-sm tracking-widest">{pagination.snapIndex}/{pagination.slidesLength}</div>
                     <button className={`px-4 ${pagination.snapIndex === pagination.slidesLength ? "stroke-line-divider" : "stroke-black"}`} onClick={onNextSlide}>
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 1.25L5 5L1 8.75" stroke="inherit" stroke-linecap="square" />
+                            <path d="M1 1.25L5 5L1 8.75" stroke="inherit" strokeLinecap="square" />
                         </svg>
                     </button>
                 </div>

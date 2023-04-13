@@ -26,7 +26,7 @@ export default function FilterSizeSelect({ onChange, options, className, id, val
             <div className="absolute top-1/2 -translate-y-1/2 right-3 p-1">
                 <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1.03996 1.15234L4.29996 4.54675C4.68496 4.94762 5.31496 4.94762 5.69996 4.54675L8.95996 1.15234" fill="white" />
-                    <path d="M1.03996 1.15234L4.29996 4.54675C4.68496 4.94762 5.31496 4.94762 5.69996 4.54675L8.95996 1.15234" stroke="#6E6E6E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M1.03996 1.15234L4.29996 4.54675C4.68496 4.94762 5.31496 4.94762 5.69996 4.54675L8.95996 1.15234" stroke="#6E6E6E" stroke-width="1.5" stroke-miterlimit="10" strokeLinecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
         </div>

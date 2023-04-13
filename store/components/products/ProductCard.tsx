@@ -16,7 +16,7 @@ export default function ProductCard({ title, vendor, type, price, compareAtPrice
             <div className="relative aspect-5/3">
                 <Image
                     fill
-                    src="/image.png"
+                    src="/image.jpg"
                     alt="TEST"
                 />
                 <div className="absolute top-0 right-2 transition-opacity opacity-0 group-hover:opacity-100" onClick={e => e.preventDefault()}>

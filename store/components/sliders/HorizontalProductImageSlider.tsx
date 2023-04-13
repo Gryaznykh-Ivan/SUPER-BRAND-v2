@@ -11,17 +11,15 @@ interface IProps {
     images: IImage[];
 }
 
-export default function ProductImages({ images }: IProps) {
+export default function HorizontalProductImageSlider({ images }: IProps) {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
     return (
         <div className="">
             <Swiper
-                loop={true}
                 spaceBetween={10}
-                navigation={true}
                 thumbs={{ swiper: thumbsSwiper }}
-                modules={[FreeMode, Navigation, Thumbs]}
+                modules={[Thumbs]}
             >
                 {images.map(image =>
                     <SwiperSlide key={image.id}>
@@ -38,12 +36,9 @@ export default function ProductImages({ images }: IProps) {
             <div className="px-4 md:px-10">
                 <Swiper
                     onSwiper={setThumbsSwiper}
-                    loop={true}
                     spaceBetween={20}
                     slidesPerView={5}
-                    freeMode={true}
-                    watchSlidesProgress={true}
-                    modules={[FreeMode, Navigation, Thumbs]}
+                    modules={[Thumbs]}
                 >
                     {images.map(image =>
                         <SwiperSlide key={image.id}>
