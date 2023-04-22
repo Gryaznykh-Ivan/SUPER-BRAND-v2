@@ -12,13 +12,13 @@ interface IProps {
 }
 
 export default function VerticalProductImageSlider({ images }: IProps) {
-    const [swiper, setSwiper] = useState<SwiperType>(null);
-    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType>(null);
+    const [swiper, setSwiper] = useState<SwiperType | null>(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
     const onScrollToSlide = (index: number) => {
         window.scrollTo({
             behavior: "smooth",
-            top: swiper.slides[index].offsetTop
+            top: swiper?.slides[index].offsetTop
         })
     }
 
@@ -54,7 +54,7 @@ export default function VerticalProductImageSlider({ images }: IProps) {
                 className="flex-1 h-full"
                 direction="vertical"
                 slidesPerView="auto"
-                thumbs={{ swiper: thumbsSwiper }}
+                thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                 onSwiper={setSwiper}
                 modules={[Thumbs]}
             >

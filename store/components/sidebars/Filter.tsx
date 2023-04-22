@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import FilterAccordion from '../accordions/FilterAccordion';
+import Checkbox from '../inputs/Checkbox';
 import FilterSizeSelect from '../inputs/FilterSizeSelect';
+import Toggle from '../inputs/Toggle';
 import Modal from '../portals/Modal';
 
 interface IProps {
@@ -9,6 +11,15 @@ interface IProps {
 }
 
 export default function Filter({ isActive, onClose }: IProps) {
+    const [filters, setFilters] = useState({
+        expressDelivery: false,
+        salesOnly: false
+    });
+
+    const onToggleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFilters(prev => ({ ...prev, [e.target.name]: e.target.checked }))
+    }
+
     return (
         <Modal>
             <div className={`fixed inset-0 bg-black ${isActive ? "bg-opacity-30 visible" : "bg-opacity-0 invisible"} flex justify-end transition-all duration-300 z-20`} onClick={onClose}>
@@ -28,7 +39,7 @@ export default function Filter({ isActive, onClose }: IProps) {
                                 <div className="py-4">
                                     <FilterSizeSelect options={{ "size men": { value: "size men", disabled: false } }} onChange={() => { }} />
                                     <div className="grid grid-cols-3 md:grid-cols-4 gap-2 mt-4">
-                                        <div className="border-[1px] border-black h-10 flex justify-center items-center text-md font-medium">3.5 US</div>
+                                        <div className="border-[1px] border-main-blue bg-main-blue/10 h-10 flex justify-center items-center text-md font-medium">3.5 US</div>
                                         <div className="border-[1px] border-line-divider h-10 flex justify-center items-center text-md font-medium">3.5 US</div>
                                         <div className="border-[1px] border-line-divider h-10 flex justify-center items-center text-md font-medium">3.5 US</div>
                                         <div className="border-[1px] border-line-divider h-10 flex justify-center items-center text-md font-medium">3.5 US</div>
@@ -50,43 +61,37 @@ export default function Filter({ isActive, onClose }: IProps) {
                             <FilterAccordion title="Бренд">
                                 <div className="py-2">
                                     <label className="flex items-center gap-2 h-11 cursor-pointer">
-                                        <input type="checkbox" className="w-4 h-4 checked:bg-black accent-black rounded border-[1px] border-black" />
+                                        <Checkbox name="" checked={true} onChange={() => { }} />
                                         <span className="text-md font-medium">Nike</span>
                                     </label>
                                     <label className="flex items-center gap-2 h-11 cursor-pointer">
-                                        <input type="checkbox" className="w-4 h-4 checked:bg-black accent-black rounded border-[1px] border-black" />
+                                        <Checkbox name="" checked={false} onChange={() => { }} />
                                         <span className="text-md font-medium">Adidas</span>
                                     </label>
                                     <label className="flex items-center gap-2 h-11 cursor-pointer">
-                                        <input type="checkbox" className="w-4 h-4 checked:bg-black accent-black rounded border-[1px] border-black" />
+                                        <Checkbox name="" checked={false} onChange={() => { }} />
                                         <span className="text-md font-medium">New Balance</span>
                                     </label>
                                 </div>
                             </FilterAccordion>
                             <FilterAccordion title="Цена">
                                 <div className="py-4 flex gap-6">
-                                    <input type="text" className="w-full h-11 rounded px-3 py-4 border-[1px] border-line-divider text-md" placeholder="от 37 000 ₽" inputMode="numeric" />
-                                    <input type="text" className="w-full h-11 rounded px-3 py-4 border-[1px] border-line-divider text-md" placeholder="до 67 000 ₽" inputMode="numeric" />
+                                    <input type="text" className="w-full h-11 rounded-lg px-3 py-4 border-[1px] border-line-divider text-md" placeholder="от 37 000 ₽" inputMode="numeric" />
+                                    <input type="text" className="w-full h-11 rounded-lg px-3 py-4 border-[1px] border-line-divider text-md" placeholder="до 67 000 ₽" inputMode="numeric" />
                                 </div>
                             </FilterAccordion>
                             <label className="flex justify-between items-center h-11 cursor-pointer">
                                 <div className="text-md font-medium">Товары со скидкой</div>
-                                <div className="relative">
-                                    <input type="checkbox" value="" className="sr-only peer" />
-                                    <div className="w-[30px] h-4 bg-line-divider rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-[14px] after:w-[14px] after:transition-all peer-checked:bg-green-600"></div>
-                                </div>
+                                <Toggle name="salesOnly" checked={filters.salesOnly} onChange={onToggleChecked} />
                             </label>
                             <label className="flex justify-between items-center h-11 cursor-pointer">
                                 <div className="text-md font-medium">Доступна экспресс-доставка</div>
-                                <div className="relative">
-                                    <input type="checkbox" value="" className="sr-only peer" />
-                                    <div className="w-[30px] h-4 bg-line-divider rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-[14px] after:w-[14px] after:transition-all peer-checked:bg-green-600"></div>
-                                </div>
+                                <Toggle name="expressDelivery" checked={filters.expressDelivery} onChange={onToggleChecked} />
                             </label>
                         </div>
                         <div className="flex gap-2 pt-5 mx-5 mb-5 border-t-[1px] border-line-divider">
-                            <button className="w-full h-10 border-[1px] border-black text-md box-border">Сбросить</button>
-                            <button className="w-full h-10 text-white bg-black text-md">Применить</button>
+                            <button className="w-full h-12 rounded-md border-[1px] border-black text-md box-border">Сбросить</button>
+                            <button className="w-full h-12 rounded-md text-white bg-black text-md">Применить</button>
                         </div>
                     </div>
                 </div>

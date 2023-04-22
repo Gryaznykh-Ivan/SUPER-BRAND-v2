@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export default function CollectionSlider({ className, products }: IProps) {
-    const [swiper, setSwiper] = useState<SwiperType>();
+    const [swiper, setSwiper] = useState<SwiperType | null>(null);
     const [pagination, setPagination] = useState({
         hidden: true,
         slidesLength: 0,
@@ -35,12 +35,6 @@ export default function CollectionSlider({ className, products }: IProps) {
     }
 
     const onSwiper = (swiper: SwiperType) => {
-        setPagination(prev => ({
-            ...prev,
-            hidden: swiper.pagination.bullets.length !== 1,
-            slidesLength: swiper.pagination.bullets.length,
-            snapIndex: swiper.snapIndex + 1
-        }))
         setSwiper(prev => swiper)
     }
 

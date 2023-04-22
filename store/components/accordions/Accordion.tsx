@@ -10,7 +10,7 @@ export default function Accordion({ title, children, className }: IProps) {
     return (
         <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex items-center justify-between p-4 rounded-lg cursor-pointer">
-                <div className={`text-md ${className}`}>
+                <div className={className}>
                     {title}
                 </div>
                 <div className="flex-shrink-0 transition duration-200 group-open:-rotate-180">

@@ -9,9 +9,7 @@ import { useRouter } from 'next/router';
 import Confirm from '../components/portals/Confirm';
 
 import '../styles/globals.css'
-import 'react-quill/dist/quill.snow.css';
 import 'react-toastify/dist/ReactToastify.css';
-import '../styles/quill.css'
 
 export default function App({ Component, ...rest }: AppProps) {
     const { store, props } = wrapper.useWrappedStore(rest);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ProductCreateRequest, ProductUpdateRequest } from '../../../types/api';
 import Input from '../../inputs/Input'
 import TextArea from '../../inputs/TextArea'
-import ReactQuill from '../../textEditor/ReactQuill';
+import ReactJodit from '../../textEditor/ReactJodit';
 
 interface IProps {
     title: string | null;
@@ -48,8 +48,7 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
         setState(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
-    const onQuillChange = (value: string) => {
-        console.log(value)
+    const onTextChange = (value: string) => {
         setState(prev => ({ ...prev, description: value !== "<p><br></p>" ? value : "" }))
     }
 
@@ -62,7 +61,7 @@ export default function GeneralInfo({ onChange, ...data }: IProps) {
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="description" className="text-sm text-gray-600 mb-1">Описание</label>
-                    <ReactQuill value={state.description} onChange={onQuillChange} />
+                    <ReactJodit value={state.description} onChange={onTextChange} />
                 </div>
             </div>
         </div>

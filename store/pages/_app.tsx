@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 import '../styles/globals.css'
-import '../styles/quill.css'
 
 export default function App({ Component, ...rest }: AppProps) {
     const router = useRouter()

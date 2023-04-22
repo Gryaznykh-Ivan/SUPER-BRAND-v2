@@ -12,13 +12,13 @@ interface IProps {
 }
 
 export default function HorizontalProductImageSlider({ images }: IProps) {
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
     return (
         <div className="">
             <Swiper
                 spaceBetween={10}
-                thumbs={{ swiper: thumbsSwiper }}
+                thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                 modules={[Thumbs]}
             >
                 {images.map(image =>
