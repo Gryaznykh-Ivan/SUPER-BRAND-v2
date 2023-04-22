@@ -12,7 +12,7 @@ export default function Index() {
                 <meta name="description" content="Главная страница сайта. Тут будет meta-description" />
             </Head>
             <div className="">
-                <div className="prose text-md" dangerouslySetInnerHTML={{ __html: content }} ></div>
+                {/* <div className="prose text-md" dangerouslySetInnerHTML={{ __html: content }} ></div> */}
             </div>
         </MainLayout>
     )

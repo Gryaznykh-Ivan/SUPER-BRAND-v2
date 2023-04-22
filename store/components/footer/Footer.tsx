@@ -3,12 +3,14 @@ import React from 'react'
 import AcceptForPayment from './AcceptForPayment'
 import ContactAccordion from './ContactAccordion'
 import InfoAccordion from './InfoAccordion'
+import NewsletterSubscribe from './NewsletterSubscribe'
 import SupportAccordion from './SupportAccordion'
 
 export default function Footer() {
     return (
         <div className="bg-main-gray px-4">
             <div className="container">
+                <NewsletterSubscribe />
                 <div className="divide-y-[1px] divide-line-divider border-y-[1px] border-line-divider my-8 md:hidden">
                     <SupportAccordion />
                     <InfoAccordion />

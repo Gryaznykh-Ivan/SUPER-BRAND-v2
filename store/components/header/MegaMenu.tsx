@@ -5,7 +5,7 @@ import MegaMenuItem from './MegaMenuItem'
 export default function MegaMenu() {
     return (
         <div className="border-b-[1px] bg-white hidden md:block">
-            <div className="container px-3 md:px-10 flex">
+            <div className="container px-3 md:px-6 flex">
                 <MegaMenuItem title="nike" link="/collections/nike">
                     <div className="">1</div>
                 </MegaMenuItem>
