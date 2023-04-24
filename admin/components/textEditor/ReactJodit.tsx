@@ -20,6 +20,7 @@ const joditConfig = {
     showCharsCounter: false,
     showWordsCounter: false,
     showXPathInStatusbar: false,
+    maxHeight: 600,
     removeButtons: ['image', 'video', 'copyformat', 'font'],
     buttons: [
         'underline',

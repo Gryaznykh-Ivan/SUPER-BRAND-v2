@@ -23,8 +23,21 @@ export interface IImage {
     alt: string;
 }
 
-// AuthService
+export interface IPage {
+    id: string;
+    title: string;
+    content: string;
+    handle: string;
+    metaTitle: string;
+    metaDescription: string;
+    createdAt: Date;
+}
 
+
+
+
+
+//authService
 export type LoginResponse = IResponse<string>
 export type LoginRequest = {
     login: string;
@@ -42,3 +55,12 @@ export type RefreshRequest = void
 
 export type LogoutResponse = IResponse<void>
 export type LogoutRequest = void
+
+
+
+
+//pageService
+export type PageGetByHandleResponse = IResponse<IPage>
+export type PageGetByHandleRequest = {
+    handle: string
+}

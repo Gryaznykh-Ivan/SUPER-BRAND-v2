@@ -5,7 +5,7 @@ export const productService = api.injectEndpoints({
     endpoints: builder => ({
         getProductsBySearch: builder.query<ProductSearchResponse, ProductSearchRequest>({
             query: (credentials) => ({
-                url: "products/search",
+                url: "admin/products/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,14 +13,14 @@ export const productService = api.injectEndpoints({
         }),
         getProductById: builder.query<ProductGetByIdResponse, ProductGetByIdRequest>({
             query: ({ productId }) => ({
-                url: `products/${productId}`,
+                url: `admin/products/${productId}`,
                 method: "GET",
             }),
             providesTags: ["PRODUCT"]
         }),
         createProduct: builder.mutation<ProductCreateResponse, ProductCreateRequest>({
             query: (credentials) => ({
-                url: "products/create",
+                url: "admin/products/create",
                 method: "POST",
                 body: credentials
             }),
@@ -28,7 +28,7 @@ export const productService = api.injectEndpoints({
         }),
         updateProduct: builder.mutation<ProductUpdateResponse, ProductUpdateRequest>({
             query: ({ productId, ...rest }) => ({
-                url: `products/${productId}`,
+                url: `admin/products/${productId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -36,14 +36,14 @@ export const productService = api.injectEndpoints({
         }),
         deleteProduct: builder.mutation<ProductDeleteResponse, ProductDeleteRequest>({
             query: ({ productId }) => ({
-                url: `products/${productId}`,
+                url: `admin/products/${productId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["OFFER", "OFFERS"]
         }),
         uploadProductImages: builder.mutation<ProductUploadImagesResponse, ProductUploadImagesRequest>({
             query: ({ productId, formData }) => ({
-                url: `products/${productId}/uploadImages`,
+                url: `admin/products/${productId}/uploadImages`,
                 method: "POST",
                 body: formData
             }),
@@ -51,7 +51,7 @@ export const productService = api.injectEndpoints({
         }),
         updateProductImage: builder.mutation<ProductUpdateImageResponse, ProductUpdateImageRequest>({
             query: ({ productId, imageId, ...rest }) => ({
-                url: `products/${productId}/updateImage/${imageId}`,
+                url: `admin/products/${productId}/updateImage/${imageId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -59,14 +59,14 @@ export const productService = api.injectEndpoints({
         }),
         removeProductImage: builder.mutation<ProductRemoveImageResponse, ProductRemoveImageRequest>({
             query: ({ productId, imageId }) => ({
-                url: `products/${productId}/removeImage/${imageId}`,
+                url: `admin/products/${productId}/removeImage/${imageId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["PRODUCT", "OFFER", "OFFERS"]
         }),
         createOption: builder.mutation<ProductCreateOptionResponse, ProductCreateOptionRequest>({
             query: ({ productId, ...rest }) => ({
-                url: `products/${productId}/createOption`,
+                url: `admin/products/${productId}/createOption`,
                 method: "POST",
                 body: rest
             }),
@@ -74,7 +74,7 @@ export const productService = api.injectEndpoints({
         }),
         updateOption: builder.mutation<ProductUpdateOptionResponse, ProductUpdateOptionRequest>({
             query: ({ productId, optionId, ...rest }) => ({
-                url: `products/${productId}/updateOption/${optionId}`,
+                url: `admin/products/${productId}/updateOption/${optionId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -82,7 +82,7 @@ export const productService = api.injectEndpoints({
         }),
         removeOption: builder.mutation<ProductRemoveOptionResponse, ProductRemoveOptionRequest>({
             query: ({ productId, optionId }) => ({
-                url: `products/${productId}/removeOption/${optionId}`,
+                url: `admin/products/${productId}/removeOption/${optionId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["PRODUCT", "VARIANTS", "VARIANT", "OPTIONS", "OFFER", "OFFERS"]

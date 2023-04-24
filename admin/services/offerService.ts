@@ -5,7 +5,7 @@ export const offerService = api.injectEndpoints({
     endpoints: builder => ({
         getOffersBySearch: builder.query<OfferSearchResponse, OfferSearchRequest>({
             query: (credentials) => ({
-                url: "offers/search",
+                url: "admin/offers/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,14 +13,14 @@ export const offerService = api.injectEndpoints({
         }),
         getOfferById: builder.query<OfferGetByIdResponse, OfferGetByIdRequest>({
             query: ({ offerId }) => ({
-                url: `offers/${offerId}`,
+                url: `admin/offers/${offerId}`,
                 method: "GET",
             }),
             providesTags: ["OFFER"]
         }),
         createOffer: builder.mutation<OfferCreateResponse, OfferCreateRequest>({
             query: (credentials) => ({
-                url: "offers/create",
+                url: "admin/offers/create",
                 method: "POST",
                 body: credentials
             }),
@@ -28,7 +28,7 @@ export const offerService = api.injectEndpoints({
         }),
         updateOffer: builder.mutation<OfferUpdateResponse, OfferUpdateRequest>({
             query: ({ offerId, ...rest }) => ({
-                url: `offers/${offerId}`,
+                url: `admin/offers/${offerId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -36,7 +36,7 @@ export const offerService = api.injectEndpoints({
         }),
         deleteOffer: builder.mutation<OfferDeleteResponse, OfferDeleteRequest>({
             query: ({ offerId }) => ({
-                url: `offers/${offerId}`,
+                url: `admin/offers/${offerId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["VARIANTS"]

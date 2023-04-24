@@ -5,7 +5,7 @@ export const pageService = api.injectEndpoints({
     endpoints: builder => ({
         getPagesBySearch: builder.query<PageSearchResponse, PageSearchRequest>({
             query: (credentials) => ({
-                url: "pages/search",
+                url: "admin/pages/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,14 +13,14 @@ export const pageService = api.injectEndpoints({
         }),
         getPageById: builder.query<PageGetByIdResponse, PageGetByIdRequest>({
             query: ({ pageId }) => ({
-                url: `pages/${pageId}`,
+                url: `admin/pages/${pageId}`,
                 method: "GET",
             }),
             providesTags: ["PAGE"]
         }),
         createPage: builder.mutation<PageCreateResponse, PageCreateRequest>({
             query: (credentials) => ({
-                url: "pages/create",
+                url: "admin/pages/create",
                 method: "POST",
                 body: credentials
             }),
@@ -28,7 +28,7 @@ export const pageService = api.injectEndpoints({
         }),
         updatePage: builder.mutation<PageUpdateResponse, PageUpdateRequest>({
             query: ({ pageId, ...rest }) => ({
-                url: `pages/${pageId}`,
+                url: `admin/pages/${pageId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -36,7 +36,7 @@ export const pageService = api.injectEndpoints({
         }),
         deletePage: builder.mutation<PageDeleteResponse, PageDeleteRequest>({
             query: ({ pageId }) => ({
-                url: `pages/${pageId}`,
+                url: `admin/pages/${pageId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["PAGES"]

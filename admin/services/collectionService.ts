@@ -5,7 +5,7 @@ export const collectionService = api.injectEndpoints({
     endpoints: builder => ({
         getCollectionsBySearch: builder.query<CollectionSearchResponse, CollectionSearchRequest>({
             query: (credentials) => ({
-                url: "collections/search",
+                url: "admin/collections/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,7 +13,7 @@ export const collectionService = api.injectEndpoints({
         }),
         getCollectionProducts: builder.query<CollectionGetProductsResponse, CollectionGetProductsRequest>({
             query: ({ collectionId, ...credentials }) => ({
-                url: `collections/${collectionId}/getProducts`,
+                url: `admin/collections/${collectionId}/getProducts`,
                 method: "GET",
                 params: credentials
             }),
@@ -21,21 +21,21 @@ export const collectionService = api.injectEndpoints({
         }),
         getCollectionById: builder.query<CollectionGetByIdResponse, CollectionGetByIdRequest>({
             query: ({ collectionId }) => ({
-                url: `collections/${collectionId}`,
+                url: `admin/collections/${collectionId}`,
                 method: "GET",
             }),
             providesTags: ["COLLECTION"]
         }),
         createCollection: builder.mutation<CollectionCreateResponse, CollectionCreateRequest>({
             query: (credentials) => ({
-                url: "collections/create",
+                url: "admin/collections/create",
                 method: "POST",
                 body: credentials
             }),
         }),
         updateCollection: builder.mutation<CollectionUpdateResponse, CollectionUpdateRequest>({
             query: ({ collectionId, ...rest }) => ({
-                url: `collections/${collectionId}`,
+                url: `admin/collections/${collectionId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -43,13 +43,13 @@ export const collectionService = api.injectEndpoints({
         }),
         deleteCollection: builder.mutation<CollectionDeleteResponse, CollectionDeleteRequest>({
             query: ({ collectionId }) => ({
-                url: `collections/${collectionId}`,
+                url: `admin/collections/${collectionId}`,
                 method: "DELETE"
             }),
         }),
         uploadCollectionImages: builder.mutation<CollectionUploadImagesResponse, CollectionUploadImagesRequest>({
             query: ({ collectionId, formData }) => ({
-                url: `collections/${collectionId}/uploadImages`,
+                url: `admin/collections/${collectionId}/uploadImages`,
                 method: "POST",
                 body: formData
             }),
@@ -57,7 +57,7 @@ export const collectionService = api.injectEndpoints({
         }),
         updateCollectionImage: builder.mutation<CollectionUpdateImageResponse, CollectionUpdateImageRequest>({
             query: ({ collectionId, imageId, ...rest }) => ({
-                url: `collections/${collectionId}/updateImage/${imageId}`,
+                url: `admin/collections/${collectionId}/updateImage/${imageId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -65,7 +65,7 @@ export const collectionService = api.injectEndpoints({
         }),
         removeCollectionImage: builder.mutation<CollectionRemoveImageResponse, CollectionRemoveImageRequest>({
             query: ({ collectionId, imageId }) => ({
-                url: `collections/${collectionId}/removeImage/${imageId}`,
+                url: `admin/collections/${collectionId}/removeImage/${imageId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["COLLECTION"]

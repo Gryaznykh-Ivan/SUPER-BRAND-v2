@@ -5,7 +5,7 @@ export const userService = api.injectEndpoints({
     endpoints: builder => ({
         getUsersBySearch: builder.query<UserSearchResponse, UserSearchRequest>({
             query: (credentials) => ({
-                url: "users/search",
+                url: "admin/users/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,28 +13,28 @@ export const userService = api.injectEndpoints({
         }),
         getUserById: builder.query<UserGetByIdResponse, UserGetByIdRequest>({
             query: ({ userId }) => ({
-                url: `users/${ userId }`,
+                url: `admin/users/${ userId }`,
                 method: "GET",
             }),
             providesTags: ["USER"]
         }),
         getUserAddresses: builder.query<UserGetAddressesResponse, UserGetAddressesRequest>({
             query: ({ userId }) => ({
-                url: `users/${ userId }/addresses`,
+                url: `admin/users/${ userId }/addresses`,
                 method: "GET",
             }),
             providesTags: ["USER"]
         }),
         createUser: builder.mutation<UserCreateResponse, UserCreateRequest>({
             query: (credentials) => ({
-                url: "users/create",
+                url: "admin/users/create",
                 method: "POST",
                 body: credentials
             })
         }),
         updateUser: builder.mutation<UserUpdateResponse, UserUpdateRequest>({
             query: ({ userId, ...rest }) => ({
-                url: `users/${ userId }`,
+                url: `admin/users/${ userId }`,
                 method: "PUT",
                 body: rest
             }),
@@ -42,7 +42,7 @@ export const userService = api.injectEndpoints({
         }),
         deleteUser: builder.mutation<UserDeleteResponse, UserDeleteRequest>({
             query: ({ userId }) => ({
-                url: `users/${ userId }`,
+                url: `admin/users/${ userId }`,
                 method: "DELETE"
             }),
         }),

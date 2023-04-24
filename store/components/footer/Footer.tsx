@@ -19,17 +19,17 @@ export default function Footer() {
                 <div className="grid-cols-4 justify-start my-14 px-10 hidden md:grid">
                     <div className="pb-4 px-4 flex gap-3 flex-col">
                         <h2 className="text-md font-semibold uppercase tracking-widest mb-1">ПОДДЕРЖКА</h2>
-                        <Link href="#" className="text-md text-text-gray">Помощь покупателю</Link>
-                        <Link href="#" className="text-md text-text-gray">Доставка и самовывоз</Link>
-                        <Link href="#" className="text-md text-text-gray">Обмен и возврат</Link>
-                        <Link href="#" className="text-md text-text-gray">Способы оплаты</Link>
+                        <Link href="/pages/support" className="text-md text-text-gray">Помощь покупателю</Link>
+                        <Link href="/pages/delivery" className="text-md text-text-gray">Доставка и самовывоз</Link>
+                        <Link href="/pages/refund" className="text-md text-text-gray">Обмен и возврат</Link>
+                        <Link href="/pages/payment" className="text-md text-text-gray">Способы оплаты</Link>
                     </div>
                     <div className="pb-4 px-4 flex gap-3 flex-col">
                         <h2 className="text-md font-semibold uppercase tracking-widest mb-1">ИНФОРМАЦИЯ</h2>
-                        <Link href="#" className="text-md text-text-gray">О нас</Link>
-                        <Link href="#" className="text-md text-text-gray">Сотрудничество</Link>
-                        <Link href="#" className="text-md text-text-gray">Вакансии</Link>
-                        <Link href="#" className="text-md text-text-gray">Блог</Link>
+                        <Link href="/pages/about-us" className="text-md text-text-gray">О нас</Link>
+                        <Link href="/pages/cooperation" className="text-md text-text-gray">Сотрудничество</Link>
+                        <Link href="/pages/job" className="text-md text-text-gray">Вакансии</Link>
+                        <Link href="/pages/blog" className="text-md text-text-gray">Блог</Link>
                     </div>
                     <div className="pb-4 px-4 flex gap-4 flex-col">
                         <h2 className="text-md font-semibold uppercase tracking-widest mb-1">КОНТАКТЫ</h2>

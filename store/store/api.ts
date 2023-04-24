@@ -52,30 +52,13 @@ export const api = createApi({
     reducerPath: 'api',
     baseQuery: baseQueryWithLogic,
     tagTypes: [
-        "ORDER",
-        "ORDERS",
-        "USER",
-        "USERS",
-        "PRODUCT",
-        "PRODUCTS",
-        "VARIANTS",
-        "VARIANT",
-        "OPTIONS",
-        "COLLECTIONS",
-        "COLLECTION",
-        "COLLECTION_PRODUCTS",
-        "OFFER",
-        "OFFERS",
-        "DELIVERY_PROFILE",
-        "DELIVERY_PROFILES",
-        "DELIVERY_ZONES",
-        "SETTING"
+        "PAGE",
     ],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {
             return action.payload[reducerPath];
         }
     },
-    endpoints: (builder) => ({}),
+    endpoints: () => ({}),
 })
 

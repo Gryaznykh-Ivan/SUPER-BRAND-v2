@@ -1,11 +1,14 @@
+import { test } from '@/store/slices/auth.slice';
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import useSetBodyScroll from '../../hooks/useSetBodyScroll';
 import Burger from '../sidebars/Burger';
 import MegaMenu from './MegaMenu';
 
 export default function Header() {
+    const dispatch = useAppDispatch()
+
     const [isSearchOpened, setIsSearchOpened] = useState<boolean>(false);
     const [isBurgerOpened, setIsBurgerOpened] = useState<boolean>(false);
 
@@ -21,6 +24,8 @@ export default function Header() {
     }, [isSearchOpened]);
 
     const onSearchToggle = () => {
+        dispatch(test())
+
         setIsSearchOpened(prev => !prev)
     }
 

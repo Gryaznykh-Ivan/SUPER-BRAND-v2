@@ -16,27 +16,19 @@ export const rootReducer: combinedReducerType = (
     state,
     action: AnyAction
 ) => {
-    if (action.type === HYDRATE) {
-        delete action.payload.auth // не трогаем авторизацию auth при хидрации
 
-        const nextState = {
-            ...state,
-            ...action.payload,
-        }
+    // if (action.type === HYDRATE) {
+    //     delete action.payload.auth // не трогаем авторизацию auth при хидрации
+    // } 
 
-        return nextState;
-    } else {
-        return combinedReducer(state, action);
-    }
+    return combinedReducer(state, action);
 };
 
-export const store = configureStore({
+const makeStore = () => configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(api.middleware),
 })
-
-const makeStore = () => store
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type AppState = ReturnType<AppStore['getState']>;

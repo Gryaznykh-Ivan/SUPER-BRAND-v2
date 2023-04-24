@@ -6,7 +6,7 @@ interface IProps {
 }
 
 export default function Hero({ title, description }: IProps) {
-    const descriptionRef = useRef(null);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [canExpand, setCanExpand] = useState(false);
 

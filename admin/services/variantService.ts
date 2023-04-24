@@ -5,7 +5,7 @@ export const variantService = api.injectEndpoints({
     endpoints: builder => ({
         getVariantsBySearch: builder.query<VariantSearchResponse, VariantSearchRequest>({
             query: credentials => ({
-                url: "variants/search",
+                url: "admin/variants/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,34 +13,34 @@ export const variantService = api.injectEndpoints({
         }),
         getVariants: builder.query<VariantGetAllResponse, VariantGetAllRequest>({
             query: ({ productId }) => ({
-                url: `variants/getAll/${productId}`,
+                url: `admin/variants/getAll/${productId}`,
                 method: "GET",
             }),
             providesTags: ["VARIANTS"]
         }),
         getVariantPreview: builder.query<VariantGetPreviewResponse, VariantGetPreviewRequest>({
             query: ({ variantId }) => ({
-                url: `variants/getPreview/${variantId}`,
+                url: `admin/variants/getPreview/${variantId}`,
                 method: "GET",
             })
         }),
         getVariantOptions: builder.query<VariantGetOptionsResponse, VariantGetOptionsRequest>({
             query: ({ productId }) => ({
-                url: `variants/getOptions/${productId}`,
+                url: `admin/variants/getOptions/${productId}`,
                 method: "GET",
             }),
             providesTags: ["OPTIONS"]
         }),
         getVariantById: builder.query<VariantGetByIdResponse, VariantGetByIdRequest>({
             query: ({ variantId }) => ({
-                url: `variants/${variantId}`,
+                url: `admin/variants/${variantId}`,
                 method: "GET",
             }),
             providesTags: ["VARIANT"]
         }),
         createVariant: builder.mutation<VariantCreateResponse, VariantCreateRequest>({
             query: (credentials) => ({
-                url: "variants/create",
+                url: "admin/variants/create",
                 method: "POST",
                 body: credentials
             }),
@@ -48,7 +48,7 @@ export const variantService = api.injectEndpoints({
         }),
         updateVariant: builder.mutation<VariantUpdateResponse, VariantUpdateRequest>({
             query: ({ variantId, ...rest }) => ({
-                url: `variants/${variantId}`,
+                url: `admin/variants/${variantId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -56,14 +56,14 @@ export const variantService = api.injectEndpoints({
         }),
         deleteVariant: builder.mutation<VariantDeleteResponse, VariantDeleteRequest>({
             query: ({ variantId }) => ({
-                url: `variants/${variantId}`,
+                url: `admin/variants/${variantId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["VARIANTS", "OFFERS", "OFFER"]
         }),
         uploadVariantImages: builder.mutation<VariantUploadImagesResponse, VariantUploadImagesRequest>({
             query: ({ variantId, formData }) => ({
-                url: `variants/${variantId}/uploadImages`,
+                url: `admin/variants/${variantId}/uploadImages`,
                 method: "POST",
                 body: formData
             }),
@@ -71,7 +71,7 @@ export const variantService = api.injectEndpoints({
         }),
         updateVariantImage: builder.mutation<VariantUpdateImageResponse, VariantUpdateImageRequest>({
             query: ({ variantId, imageId, ...rest }) => ({
-                url: `variants/${variantId}/updateImage/${imageId}`,
+                url: `admin/variants/${variantId}/updateImage/${imageId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -79,7 +79,7 @@ export const variantService = api.injectEndpoints({
         }),
         removeVariantImage: builder.mutation<VariantRemoveImageResponse, VariantRemoveImageRequest>({
             query: ({ variantId, imageId }) => ({
-                url: `variants/${variantId}/removeImage/${imageId}`,
+                url: `admin/variants/${variantId}/removeImage/${imageId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["VARIANT", "VARIANTS"]

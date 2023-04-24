@@ -2,6 +2,7 @@ import jwt_decode from 'jwt-decode'
 import { createSlice } from "@reduxjs/toolkit";
 import { authService } from "../../services/authService";
 import { IAuthState, IJwtDecode } from "../../types/store";
+import { HYDRATE,  } from 'next-redux-wrapper';
 
 const initialState: IAuthState = {
     isAuth: false,
@@ -24,6 +25,9 @@ const authSlice = createSlice({
             state.isAuth = false
             state.token = null
             state.payload = null
+        },
+        test: (state) => {
+            state.isAuth = true
         }
     },
     extraReducers: builder => {
@@ -48,5 +52,6 @@ const authSlice = createSlice({
 export default authSlice.reducer
 
 export const {
-    login
+    login,
+    test
 } = authSlice.actions

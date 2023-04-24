@@ -5,7 +5,7 @@ export const settingService = api.injectEndpoints({
     endpoints: builder => ({
         getSettingsBySearch: builder.query<SettingSearchResponse, SettingSearchRequest>({
             query: (credentials) => ({
-                url: "settings/search",
+                url: "admin/settings/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,7 +13,7 @@ export const settingService = api.injectEndpoints({
         }),
         updateSetting: builder.mutation<SettingUpdateResponse, SettingUpdateRequest>({
             query: (credentials) => ({
-                url: "settings/update",
+                url: "admin/settings/update",
                 method: "PUT",
                 body: credentials
             }),

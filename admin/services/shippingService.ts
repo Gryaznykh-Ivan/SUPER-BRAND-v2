@@ -5,14 +5,14 @@ export const shippingService = api.injectEndpoints({
     endpoints: builder => ({
         getAllDeliveryProfile: builder.query<DeliveryProfileGetAllResponse, DeliveryProfileGetAllRequest>({
             query: () => ({
-                url: "shipping/getAll",
+                url: "admin/shipping/getAll",
                 method: "GET"
             }),
             providesTags: ["DELIVERY_PROFILES"]
         }),
         getDeliveryZones: builder.query<DeliveryProfileGetDeliveryZonesResponse, DeliveryProfileGetDeliveryZonesRequest>({
             query: ({ profileId, ...rest }) => ({
-                url: `shipping/${profileId}/getDeliveryZones`,
+                url: `admin/shipping/${profileId}/getDeliveryZones`,
                 method: "GET",
                 params: rest
             }),
@@ -20,14 +20,14 @@ export const shippingService = api.injectEndpoints({
         }),
         getDeliveryProfileById: builder.query<DeliveryProfileGetByIdResponse, DeliveryProfileGetByIdRequest>({
             query: ({ profileId }) => ({
-                url: `shipping/${profileId}`,
+                url: `admin/shipping/${profileId}`,
                 method: "GET"
             }),
             providesTags: ["DELIVERY_PROFILE"]
         }),
         createDeliveryProfile: builder.mutation<DeliveryProfileCreateResponse, DeliveryProfileCreateRequest>({
             query: (credentials) => ({
-                url: "shipping/create",
+                url: "admin/shipping/create",
                 method: "POST",
                 body: credentials
             }),
@@ -35,7 +35,7 @@ export const shippingService = api.injectEndpoints({
         }),
         createDeliveryZone: builder.mutation<DeliveryZoneCreateResponse, DeliveryZoneCreateRequest>({
             query: ({ profileId, ...rest }) => ({
-                url: `shipping/${profileId}/createDeliveryZone`,
+                url: `admin/shipping/${profileId}/createDeliveryZone`,
                 method: "POST",
                 body: rest
             }),
@@ -43,7 +43,7 @@ export const shippingService = api.injectEndpoints({
         }),
         updateDeliveryProfile: builder.mutation<DeliveryProfileUpdateResponse, DeliveryProfileUpdateRequest>({
             query: ({ profileId, ...rest }) => ({
-                url: `shipping/${profileId}`,
+                url: `admin/shipping/${profileId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -51,7 +51,7 @@ export const shippingService = api.injectEndpoints({
         }),
         updateDeliveryZone: builder.mutation<DeliveryZoneUpdateResponse, DeliveryZoneUpdateRequest>({
             query: ({ profileId, zoneId, ...rest }) => ({
-                url: `shipping/${profileId}/updateDeliveryZone/${zoneId}`,
+                url: `admin/shipping/${profileId}/updateDeliveryZone/${zoneId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -59,14 +59,14 @@ export const shippingService = api.injectEndpoints({
         }),
         deleteDeliveryZone: builder.mutation<DeliveryZoneDeleteResponse, DeliveryZoneDeleteRequest>({
             query: ({ profileId, zoneId }) => ({
-                url: `shipping/${profileId}/removeDeliveryZone/${zoneId}`,
+                url: `admin/shipping/${profileId}/removeDeliveryZone/${zoneId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["DELIVERY_ZONES", "DELIVERY_PROFILES"]
         }),
         deleteDeliveryProfile: builder.mutation<DeliveryProfileDeleteResponse, DeliveryProfileDeleteRequest>({
             query: ({ profileId }) => ({
-                url: `shipping/${profileId}`,
+                url: `admin/shipping/${profileId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["DELIVERY_PROFILES"]

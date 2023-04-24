@@ -5,7 +5,7 @@ export const orderService = api.injectEndpoints({
     endpoints: builder => ({
         getOrdersBySearch: builder.query<OrderSearchResponse, OrderSearchRequest>({
             query: (credentials) => ({
-                url: "orders/search",
+                url: "admin/orders/search",
                 method: "GET",
                 params: credentials
             }),
@@ -13,7 +13,7 @@ export const orderService = api.injectEndpoints({
         }),
         getOrderTimelineBySearch: builder.query<OrderTimelineSearchResponse, OrderTimelineSearchRequest>({
             query: ({ orderId, ...data }) => ({
-                url: `orders/${orderId}/timeline`,
+                url: `admin/orders/${orderId}/timeline`,
                 method: "GET",
                 params: data
             }),
@@ -21,28 +21,28 @@ export const orderService = api.injectEndpoints({
         }),
         getOrderById: builder.query<OrderGetByIdResponse, OrderGetByIdRequest>({
             query: ({ orderId }) => ({
-                url: `orders/${orderId}`,
+                url: `admin/orders/${orderId}`,
                 method: "GET",
             }),
             providesTags: ["ORDER"]
         }),
         getFulfillmentById: builder.query<OrderFulfillmentGetByIdResponse, OrderFulfillmentGetByIdRequest>({
             query: ({ orderId, fulfillmentId }) => ({
-                url: `orders/${orderId}/fulfillment/${fulfillmentId}`,
+                url: `admin/orders/${orderId}/fulfillment/${fulfillmentId}`,
                 method: "GET",
             }),
             providesTags: ["ORDER"]
         }),
         getReturnById: builder.query<OrderReturnGetByIdResponse, OrderReturnGetByIdRequest>({
             query: ({ orderId, returnId }) => ({
-                url: `orders/${orderId}/return/${returnId}`,
+                url: `admin/orders/${orderId}/return/${returnId}`,
                 method: "GET",
             }),
             providesTags: ["ORDER"]
         }),
         createOrder: builder.mutation<OrderCreateResponse, OrderCreateRequest>({
             query: (credentials) => ({
-                url: "orders/create",
+                url: "admin/orders/create",
                 method: "POST",
                 body: credentials
             }),
@@ -50,7 +50,7 @@ export const orderService = api.injectEndpoints({
         }),
         updateOrder: builder.mutation<OrderUpdateResponse, OrderUpdateRequest>({
             query: ({ orderId, ...rest }) => ({
-                url: `orders/${orderId}`,
+                url: `admin/orders/${orderId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -58,14 +58,14 @@ export const orderService = api.injectEndpoints({
         }),
         confirmPayment: builder.mutation<OrderConfirmPaymentUpdateResponse, OrderConfirmPaymentUpdateRequest>({
             query: ({ orderId }) => ({
-                url: `orders/${orderId}/confirmPayment`,
+                url: `admin/orders/${orderId}/confirmPayment`,
                 method: "PUT"
             }),
             invalidatesTags: ["ORDER"]
         }),
         createFulfillment: builder.mutation<OrderFulfillmentCreateResponse, OrderFulfillmentCreateRequest>({
             query: ({ orderId, ...rest }) => ({
-                url: `orders/${orderId}/createFulfillment`,
+                url: `admin/orders/${orderId}/createFulfillment`,
                 method: "POST",
                 body: rest
             }),
@@ -73,7 +73,7 @@ export const orderService = api.injectEndpoints({
         }),
         updateFulfillment: builder.mutation<OrderFulfillmentUpdateResponse, OrderFulfillmentUpdateRequest>({
             query: ({ orderId, fulfillmentId, ...rest }) => ({
-                url: `orders/${orderId}/fulfillment/${fulfillmentId}`,
+                url: `admin/orders/${orderId}/fulfillment/${fulfillmentId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -81,14 +81,14 @@ export const orderService = api.injectEndpoints({
         }),
         deleteFulfillment: builder.mutation<OrderFulfillmentDeleteResponse, OrderFulfillmentDeleteRequest>({
             query: ({ orderId, fulfillmentId }) => ({
-                url: `orders/${orderId}/fulfillment/${fulfillmentId}`,
+                url: `admin/orders/${orderId}/fulfillment/${fulfillmentId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["ORDER"]
         }),
         createReturn: builder.mutation<OrderReturnCreateResponse, OrderReturnCreateRequest>({
             query: ({ orderId, ...rest }) => ({
-                url: `orders/${orderId}/createReturn`,
+                url: `admin/orders/${orderId}/createReturn`,
                 method: "POST",
                 body: rest
             }),
@@ -96,7 +96,7 @@ export const orderService = api.injectEndpoints({
         }),
         updateReturn: builder.mutation<OrderReturnUpdateResponse, OrderReturnUpdateRequest>({
             query: ({ orderId, returnId, ...rest }) => ({
-                url: `orders/${orderId}/return/${returnId}`,
+                url: `admin/orders/${orderId}/return/${returnId}`,
                 method: "PUT",
                 body: rest
             }),
@@ -104,7 +104,7 @@ export const orderService = api.injectEndpoints({
         }),
         deleteReturn: builder.mutation<OrderReturnDeleteResponse, OrderReturnDeleteRequest>({
             query: ({ orderId, returnId }) => ({
-                url: `orders/${orderId}/return/${returnId}`,
+                url: `admin/orders/${orderId}/return/${returnId}`,
                 method: "DELETE"
             }),
             invalidatesTags: ["ORDER", "OFFERS", "OFFER"]
