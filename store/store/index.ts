@@ -6,26 +6,13 @@ import { api } from './api'
 
 const reducers = {
     [api.reducerPath]: api.reducer,
-    auth: authSlice
+    [authSlice.name]: authSlice.reducer
 };
 
-const combinedReducer = combineReducers<typeof reducers>(reducers);
-type combinedReducerType = typeof combinedReducer;
-
-export const rootReducer: combinedReducerType = (
-    state,
-    action: AnyAction
-) => {
-
-    // if (action.type === HYDRATE) {
-    //     delete action.payload.auth // не трогаем авторизацию auth при хидрации
-    // } 
-
-    return combinedReducer(state, action);
-};
+const reducer = combineReducers<typeof reducers>(reducers);
 
 const makeStore = () => configureStore({
-    reducer: rootReducer,
+    reducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(api.middleware),
 })

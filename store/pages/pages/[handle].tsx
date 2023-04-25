@@ -49,28 +49,15 @@ function Page() {
 
 Page.getInitialProps = wrapper.getInitialPageProps(
     store => async (context) => {
-        await store.dispatch(pageService.endpoints.getPageByHandle.initiate({ handle: context.query.handle as string }))
+        const isCSR = typeof window === "undefined"
+        if (isCSR === false) return { props: {} }
 
-        console.log('test')
+        await store.dispatch(pageService.endpoints.getPageByHandle.initiate({ handle: context.query.handle as string }))
 
         return {
             props: {}
         }
     }
 )
-
-
-// появляется ошибка
-// export const getServerSideProps = wrapper.getServerSideProps(
-//     store => async (context) => {
-//         await store.dispatch(pageService.endpoints.getPageByHandle.initiate({ handle: context.query.handle as string }))
-
-//         console.log('test')
-
-//         return {
-//             props: {}
-//         }
-//     }
-// )
 
 export default Page
