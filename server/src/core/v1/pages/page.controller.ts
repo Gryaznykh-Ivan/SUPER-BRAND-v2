@@ -2,7 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { PageService } from './page.service';
 
 
-@Controller('api/pages')
+@Controller('v1/pages')
 export class PageController {
     constructor(
         private pageService: PageService

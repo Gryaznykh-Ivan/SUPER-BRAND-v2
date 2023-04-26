@@ -53,6 +53,7 @@ export const api = createApi({
     baseQuery: baseQueryWithLogic,
     tagTypes: [
         "PAGE",
+        "COLLECTION"
     ],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {

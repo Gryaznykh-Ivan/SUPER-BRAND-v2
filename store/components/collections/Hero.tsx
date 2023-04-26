@@ -37,9 +37,7 @@ export default function Hero({ title, description }: IProps) {
         <div className="flex flex-col items-center py-10 px-8 md:px-10 border-b-[1px] border-line-divider">
             <div className="container px-4 md:px-10 max-w-[800px] text-center">
                 <h1 className="text-xl tracking-widest font-medium uppercase mb-4">{title}</h1>
-                <p className={`${isExpanded === false ? "line-clamp-3" : ""} text-md font-normal`} ref={descriptionRef}>
-                    {description}
-                </p>
+                <p className={`${isExpanded === false ? "line-clamp-3" : ""} prose max-w-full`} ref={descriptionRef} dangerouslySetInnerHTML={{ __html: description }}></p>
                 {canExpand === true &&
                     <button className="text-md font-normal underline" onClick={onToggleExpanded}>{ isExpanded === true ? "Скрыть" : "Читать дальше" }</button>
                 }

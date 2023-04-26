@@ -5,7 +5,7 @@ export const pageService = api.injectEndpoints({
     endpoints: builder => ({
         getPageByHandle: builder.query<PageGetByHandleResponse, PageGetByHandleRequest>({
             query: ({ handle }) => ({
-                url: `api/pages/${handle}`,
+                url: `v1/pages/${handle}`,
                 method: "GET",
             }),
             providesTags: ["PAGE"]

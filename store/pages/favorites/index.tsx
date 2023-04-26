@@ -24,32 +24,9 @@ export default function Index() {
                         title="Air Jordan 1 Retro High Primer"
                         vendor="NIKE"
                         type="Кроссовки"
-                        price="от 37 000 ₽"
-                        compareAtPrice="57 000 ₽"
-                    />
-                    <ProductCard
-                        title="Air Jordan 1 Retro High Primer"
-                        vendor="NIKE"
-                        type="Кроссовки"
-                        price="от 37 000 ₽"
-                    />
-                    <ProductCard
-                        title="Air Jordan 1 Retro High Primer"
-                        vendor="NIKE"
-                        type="Кроссовки"
-                        price="от 37 000 ₽"
-                    />
-                    <ProductCard
-                        title="Air Jordan 1 Retro High Primer"
-                        vendor="NIKE"
-                        type="Кроссовки"
-                        price="от 37 000 ₽"
-                    />
-                    <ProductCard
-                        title="Air Jordan 1 Retro High Primer"
-                        vendor="NIKE"
-                        type="Кроссовки"
-                        price="от 37 000 ₽"
+                        image={null}
+                        price="37000"
+                        compareAtPrice="57000"
                     />
                 </div>
             </div>

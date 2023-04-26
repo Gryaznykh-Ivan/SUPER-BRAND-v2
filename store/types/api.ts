@@ -8,24 +8,27 @@ export interface IErrorResponse {
     statusCode: number;
 }
 
-export interface IProduct {
-    id: string;
+export interface IProductCard {
+    handle: string
     title: string;
     type: string;
     vendor: string;
-    price: string;
-    compareAtPrice?: string;
+    image: IImage | null;
+    price: string | null;
+    compareAtPrice: string | null;
 }
 
 export interface IImage {
     id: string;
     src: string;
     alt: string;
+    blurhash: string;
 }
 
 export interface IPage {
     id: string;
     title: string;
+    type: string;
     content: string;
     handle: string;
     metaTitle: string;
@@ -33,7 +36,17 @@ export interface IPage {
     createdAt: Date;
 }
 
-
+export interface ICollection {
+    handle: string;
+    title: string;
+    description: string;
+    metaTitle: string;
+    metaDescription: string;
+    hidden: boolean;
+    products: IProductCard[];
+    currentPage: number;
+    totalPages: number;
+}
 
 
 
@@ -63,4 +76,14 @@ export type LogoutRequest = void
 export type PageGetByHandleResponse = IResponse<IPage>
 export type PageGetByHandleRequest = {
     handle: string
+}
+
+
+
+//collectionService
+export type CollectionGetByHandleResponse = IResponse<ICollection>
+export type CollectionGetByHandleRequest = {
+    handle: string;
+    skip: number;
+    limit: number;
 }

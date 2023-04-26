@@ -84,11 +84,12 @@ export default function CollectionSlider({ className, products }: IProps) {
                 }}
             >
                 {products.map(product =>
-                    <SwiperSlide key={product.id}>
+                    <SwiperSlide key={product.handle}>
                         <ProductCard
                             title={product.title}
-                            type={product.type}
                             vendor={product.vendor}
+                            image={product.image}
+                            type={product.type}
                             price={product.price}
                             compareAtPrice={product.compareAtPrice}
                         />

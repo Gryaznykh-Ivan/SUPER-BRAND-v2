@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ApiModule } from './api/api.module';
+import { ApiV1Module } from './v1/api.module';
 import { AdminModule } from './admin/admin.module';
 
 
 @Module({
     imports: [
-        ApiModule,
+        ApiV1Module,
         AdminModule,
     ],
 })
