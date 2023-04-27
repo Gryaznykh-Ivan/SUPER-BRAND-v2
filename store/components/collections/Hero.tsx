@@ -22,12 +22,13 @@ export default function Hero({ title, description }: IProps) {
         let resizeTimeout: NodeJS.Timeout;
         const handleResize = () => {
             clearTimeout(resizeTimeout);
+
             resizeTimeout = setTimeout(resetCanExpand, 100);
-        };
+        }
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [isExpanded]);
 
     const onToggleExpanded = () => {
         setIsExpanded(prev => !prev);
@@ -38,8 +39,8 @@ export default function Hero({ title, description }: IProps) {
             <div className="container px-4 md:px-10 max-w-[800px] text-center">
                 <h1 className="text-xl tracking-widest font-medium uppercase mb-4">{title}</h1>
                 <p className={`${isExpanded === false ? "line-clamp-3" : ""} prose max-w-full`} ref={descriptionRef} dangerouslySetInnerHTML={{ __html: description }}></p>
-                {canExpand === true &&
-                    <button className="text-md font-normal underline" onClick={onToggleExpanded}>{ isExpanded === true ? "Скрыть" : "Читать дальше" }</button>
+                {(canExpand === true || isExpanded === true) &&
+                    <button className="text-md font-normal underline" onClick={onToggleExpanded}>{isExpanded === true ? "Скрыть" : "Читать дальше"}</button>
                 }
             </div>
         </div>

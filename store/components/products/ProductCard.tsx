@@ -21,7 +21,7 @@ export default function ProductCard({ handle, title, vendor, type, image, price,
         const num = parseInt(price);
         const formattedNum = num.toLocaleString('ru-RU');
 
-        return `${formattedNum} ₽`;
+        return `От ${formattedNum} ₽`;
     }
 
 

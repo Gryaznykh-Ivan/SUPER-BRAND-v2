@@ -22,7 +22,7 @@ export default function Product() {
                 <meta name="description" content="Тут будет meta-description" />
             </Head>
             <div className="pb-8 pt-5">
-                <div className="container flex flex-col lg:flex-row pb-8">
+                <div className="container flex flex-col px-4 md:px-10 lg:flex-row pb-8">
                     <div className="flex-1 hidden lg:block">
                         <VerticalProductImageSlider
                             images={[
@@ -62,9 +62,9 @@ export default function Product() {
                             ]}
                         />
                     </div>
-                    <div className="lg:w-[500px]">
+                    <div className="lg:w-[460px]">
                         <div className="space-y-8 sticky top-28">
-                            <div className="px-4 md:px-10">
+                            <div className="px-0 md:pl-8">
                                 <div className="text-xs tracking-widest uppercase text-text-gray">Nike</div>
                                 <div className="text-lg tracking-widest uppercase font-semibold">Air Jordan 1 Retro High OG "Stage Haze"</div>
                                 <div className="text-xs tracking-widest uppercase text-text-gray">Кроссовки</div>
@@ -108,7 +108,7 @@ export default function Product() {
                                     ]}
                                 />
                             </div>
-                            <div className="px-4 md:px-10">
+                            <div className="px-0 md:pl-8">
                                 <div className="flex items-center">
                                     <div className="text-main-red text-lg">от 32 000 ₽</div>
                                     <div className="text-md text-text-gray line-through ml-4">42 000 ₽</div>
@@ -117,7 +117,7 @@ export default function Product() {
                                     Все налоги и таможенные сборы включены. Стоимость доставки рассчитывается на этапе оформления заказа.
                                 </div>
                             </div>
-                            <div className="px-4 md:px-10 space-y-2">
+                            <div className="px-0 md:pl-8 space-y-2">
                                 <SizeSelect />
                                 {/* <button className="w-full text-md text-white bg-black rounded-lg h-12">Добавить в корзину</button> */}
                                 <button className="w-full text-md text-white bg-main-blue rounded-lg h-14">
@@ -131,7 +131,7 @@ export default function Product() {
                                     <span className="text-sm">132 000 ₽</span>
                                 </button>
                             </div>
-                            <div className="px-4 md:px-10">
+                            <div className="px-0 md:pl-8">
                                 <div className="border-y-[1px] border-line-divider divide-y-[1px] divide-line-divider">
                                     <Accordion title="О товаре">
                                         <div className="pb-4 px-4 flex gap-4 flex-col text-md">

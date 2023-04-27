@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSwipeable } from 'react-swipeable';
 import Modal from '../portals/Modal';
 
 interface IProps {
@@ -8,14 +7,14 @@ interface IProps {
 }
 
 export default function SizePicker({ isActive, onClose }: IProps) {
-    const handlers = useSwipeable({ onSwipedDown: () => onClose() })
+
 
     return (
         <Modal>
             <div className={`fixed inset-0 bg-black ${isActive ? "bg-opacity-30 visible" : "bg-opacity-0 invisible"} flex items-end justify-end transition-all duration-300 z-20`} onClick={onClose}>
                 <div className={`${isActive === false ? "translate-y-full translate-x-0 md:translate-x-full md:translate-y-0" : ""} w-full md:w-5/6 md:max-w-sm bg-white h-2/3 md:h-screen transform transition-all duration-300 overflow-hidden rounded-t-3xl md:rounded-none`} onClick={e => e.stopPropagation()}>
                     <div className="flex flex-col h-full md:h-screen rounded-t-lg">
-                        <div className="relative py-5 border-b-[1px] border-line-divider" {...handlers}>
+                        <div className="relative py-5 border-b-[1px] border-line-divider">
                             <div className="flex justify-center md:hidden">
                                 <div className="w-11 h-1 bg-gray-300 rounded-full mb-4"></div>
                             </div>
