@@ -9,7 +9,7 @@ export class CollectionService {
         private prisma: PrismaService
     ) { }
 
-    async getCollectionByHandle(collectionHandle: string, data: SearchDto) {
+    async getCollectionInfoByHandle(collectionHandle: string) {
         const collection = await this.prisma.collection.findUnique({
             where: {
                 handle: collectionHandle
@@ -20,6 +20,27 @@ export class CollectionService {
                 description: true,
                 metaTitle: true,
                 metaDescription: true,
+                hidden: true,
+            }
+        })
+
+        if (collection === null || collection.hidden === true) {
+            throw new HttpException("Коллекция не найдена", HttpStatus.NOT_FOUND)
+        }
+
+        return {
+            success: true,
+            data: collection
+        }
+    }
+
+    async getCollectionProductsByHandle(collectionHandle: string, data: SearchDto) {
+        const collection = await this.prisma.collection.findUnique({
+            where: {
+                handle: collectionHandle
+            },
+            select: {
+                handle: true,
                 hidden: true,
                 products: {
                     where: {
@@ -84,10 +105,7 @@ export class CollectionService {
             throw new HttpException("Коллекция не найдена", HttpStatus.NOT_FOUND)
         }
 
-        // console.log(JSON.stringify(collection, null, 2))
-
         const result = {
-            ...collection,
             currentPage: Math.floor(data.skip / data.limit) + 1,
             totalPages: Math.ceil(collection._count.products / data.limit),
             products: collection.products.map(product => ({

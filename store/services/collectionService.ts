@@ -1,20 +1,28 @@
 import { api } from "../store/api";
-import { CollectionGetByHandleResponse, CollectionGetByHandleRequest } from "../types/api";
+import { CollectionGetInfoByHandleRequest, CollectionGetInfoByHandleResponse, CollectionGetProductsByHandleRequest, CollectionGetProductsByHandleResponse } from "../types/api";
 
 export const collectionService = api.injectEndpoints({
     endpoints: builder => ({
-        getCollectionByHandle: builder.query<CollectionGetByHandleResponse, CollectionGetByHandleRequest>({
+        getCollectionInfoByHandle: builder.query<CollectionGetInfoByHandleResponse, CollectionGetInfoByHandleRequest>({
             query: ({ handle, ...rest }) => ({
-                url: `v1/collections/${handle}`,
+                url: `v1/collections/${handle}/info`,
                 method: "GET",
                 params: rest
             }),
             providesTags: ["COLLECTION"]
         }),
+        getCollectionProductsByHandle: builder.query<CollectionGetProductsByHandleResponse, CollectionGetProductsByHandleRequest>({
+            query: ({ handle, ...rest }) => ({
+                url: `v1/collections/${handle}/products`,
+                method: "GET",
+                params: rest
+            }),
+            providesTags: ["COLLECTION_PRODUCTS"]
+        }),
     })
 })
 
 export const {
-    useGetCollectionByHandleQuery,
-    useLazyGetCollectionByHandleQuery
+    useGetCollectionInfoByHandleQuery,
+    useGetCollectionProductsByHandleQuery
 } = collectionService

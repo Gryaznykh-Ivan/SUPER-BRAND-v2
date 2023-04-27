@@ -8,12 +8,18 @@ export class CollectionController {
         private collectionService: CollectionService
     ) { }
 
-    @Get(':collectionHandle')
-    getCollectionByHandle(
+    @Get(':collectionHandle/info')
+    getCollectionInfoByHandle(
+        @Param('collectionHandle') collectionHandle: string,
+    ) {
+        return this.collectionService.getCollectionInfoByHandle(collectionHandle)
+    }
+
+    @Get(':collectionHandle/products')
+    getCollectionProductsByHandle(
         @Param('collectionHandle') collectionHandle: string,
         @Query(new ValidationPipe({ transform: true })) data: SearchDto
     ) {
-        return this.collectionService.getCollectionByHandle(collectionHandle, data)
+        return this.collectionService.getCollectionProductsByHandle(collectionHandle, data)
     }
-
 }

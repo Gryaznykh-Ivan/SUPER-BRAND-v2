@@ -43,6 +43,9 @@ export interface ICollection {
     metaTitle: string;
     metaDescription: string;
     hidden: boolean;
+}
+
+export interface ICollectionProducts {
     products: IProductCard[];
     currentPage: number;
     totalPages: number;
@@ -81,8 +84,13 @@ export type PageGetByHandleRequest = {
 
 
 //collectionService
-export type CollectionGetByHandleResponse = IResponse<ICollection>
-export type CollectionGetByHandleRequest = {
+export type CollectionGetInfoByHandleResponse = IResponse<ICollection>
+export type CollectionGetInfoByHandleRequest = {
+    handle: string;
+}
+
+export type CollectionGetProductsByHandleResponse = IResponse<ICollectionProducts>
+export type CollectionGetProductsByHandleRequest = {
     handle: string;
     skip: number;
     limit: number;
