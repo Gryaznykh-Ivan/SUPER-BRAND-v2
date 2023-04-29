@@ -35,6 +35,8 @@ export class CollectionService {
     }
 
     async getCollectionProductsByHandle(collectionHandle: string, data: SearchDto) {
+        
+
         const collection = await this.prisma.collection.findUnique({
             where: {
                 handle: collectionHandle
@@ -82,8 +84,7 @@ export class CollectionService {
                                         price: 'asc'
                                     }
                                 }
-                            },
-
+                            }
                         },
                     },
                     skip: data.skip,
