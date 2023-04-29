@@ -44,11 +44,11 @@ export default function Filter({ isActive, onClose }: IProps) {
         }
 
         setFilter(prev => ({ ...prev, ...filter }))
-    }, [query.salesOnly, query.expressDelivery, query.minPrice, query.maxPrice, query.brands?.length, query.sizes?.length])
+    }, [query.salesOnly, query.expressDelivery, query.minPrice, query.maxPrice, query.brands, query.sizes])
 
 
     const onFilterChange = () => {
-        const currentQuery = { ...query }
+        const { page, ...currentQuery } = query
 
         Object.keys(filter).forEach(key => delete currentQuery[key])
 

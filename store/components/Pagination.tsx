@@ -9,12 +9,20 @@ interface IProps {
 }
 
 export default function Pagination({ basePath, currentPage, totalPages }: IProps) {
+    const router = useRouter()
+
     const prevPage = currentPage > 1 ? currentPage - 1 : null;
     const nextPage = currentPage < totalPages ? currentPage + 1 : null;
     const maxPages = 6; // максимальное количество страниц
     const middlePage = Math.ceil(maxPages / 2); // середина
 
-    const getPageLink = (page: number) => `${basePath}?page=${page}`;
+    const getPageLink = (page: number) => {
+        const { handle, ...currentQuery } = router.query;
+
+        currentQuery.page = page.toString();
+
+        return `${basePath}?${new URLSearchParams(currentQuery as any).toString()}`
+    };
 
     if (totalPages <= maxPages) {
         return (
@@ -31,7 +39,11 @@ export default function Pagination({ basePath, currentPage, totalPages }: IProps
                     const page = i + 1;
                     const isActive = page === currentPage;
 
-                    return <Link key={page} href={getPageLink(page)} className={`flex justify-center items-center w-10 h-10 rounded ${isActive ? "bg-black text-white" : "bg-gray-100 text-black"}`}>{page}</Link>
+                    if (isActive === true) {
+                        return <span key={page} className={`flex justify-center items-center w-10 h-10 rounded bg-black text-white`}>{page}</span>
+                    } else {
+                        return <Link key={page} href={getPageLink(page)} className={`flex justify-center items-center w-10 h-10 rounded bg-gray-100 text-black`}>{page}</Link>
+                    }
                 })}
                 {nextPage &&
                     <Link href={getPageLink(nextPage)} className="flex justify-center items-center w-10 h-10 rounded bg-gray-100 text-black ml-1">
@@ -71,7 +83,11 @@ export default function Pagination({ basePath, currentPage, totalPages }: IProps
                 const page = startPage + i;
                 const isActive = page === currentPage;
 
-                return <Link key={page} href={getPageLink(page)} className={`flex justify-center items-center w-10 h-10 rounded ${isActive ? "bg-black text-white" : "bg-gray-100 text-black"}`}>{page}</Link>
+                if (isActive === true) {
+                    return <span key={page} className={`flex justify-center items-center w-10 h-10 rounded bg-black text-white`}>{page}</span>
+                } else {
+                    return <Link key={page} href={getPageLink(page)} className={`flex justify-center items-center w-10 h-10 rounded bg-gray-100 text-black`}>{page}</Link>
+                }
             })}
             {currentPage <= totalPages - maxPages + middlePage - 1 &&
                 <>
