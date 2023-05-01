@@ -648,7 +648,7 @@ export class VariantService {
     async removeVariant(variantId: string) {
         try {
             await this.prisma.$transaction(async tx => {
-                await this.prisma.variant.delete({
+                await tx.variant.delete({
                     where: { id: variantId }
                 })
 

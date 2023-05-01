@@ -11,19 +11,17 @@ import ProductFilterSort from '../../components/products/ProductFilterSort'
 import { wrapper } from '@/store'
 import { collectionService, useGetCollectionInfoByHandleQuery, useGetCollectionProductsByHandleQuery } from '@/services/collectionService'
 import { useRouter } from 'next/router'
-import { IErrorResponse } from '@/types/api'
+import { CollectionGetProductsByHandleRequest, IErrorResponse } from '@/types/api'
 
 const productsPerPage = 20
 
 interface IInitialProps {
-    handle: string;
-    skip: number;
-    limit: number;
+    query: CollectionGetProductsByHandleRequest;
 }
 
-function Collection({ handle, skip, limit }: IInitialProps) {
-    const { isFetching: isCollectionInfoFetching, isError: isCollectionInfoError, error: collectionInfoError, data: collectionInfoData } = useGetCollectionInfoByHandleQuery({ handle })
-    const { isFetching: isCollectionProductsFetching, isError: isCollectionProductsError, error: collectionProductsError, data: collectionProductsData } = useGetCollectionProductsByHandleQuery({ handle, skip, limit })
+function Collection({ query }: IInitialProps) {
+    const { isFetching: isCollectionInfoFetching, isError: isCollectionInfoError, error: collectionInfoError, data: collectionInfoData } = useGetCollectionInfoByHandleQuery({ handle: query.handle })
+    const { isFetching: isCollectionProductsFetching, isError: isCollectionProductsError, error: collectionProductsError, data: collectionProductsData } = useGetCollectionProductsByHandleQuery(query)
 
     return (
         <MainLayout>
@@ -88,7 +86,7 @@ function Collection({ handle, skip, limit }: IInitialProps) {
                                         )}
                                     </div>
                                     <Pagination
-                                        basePath={`/collections/${handle}`}
+                                        basePath={`/collections/${query.handle}`}
                                         currentPage={collectionProductsData.data.currentPage}
                                         totalPages={collectionProductsData.data.totalPages}
                                     />
@@ -110,18 +108,19 @@ function Collection({ handle, skip, limit }: IInitialProps) {
 Collection.getInitialProps = wrapper.getInitialPageProps(
     store => async (context) => {
         const query = {
+            ...context.query,
             handle: context.query.handle as string,
-            limit: 20,
+            limit: productsPerPage,
             skip: isNaN(+(context.query.page ?? 1)) === true ? 0 : (+(context.query.page ?? 1) - 1) * productsPerPage,
         }
 
         const isCSR = typeof window === "undefined"
-        if (isCSR === false) return query
+        if (isCSR === false) return { query: query }
 
         await store.dispatch(collectionService.endpoints.getCollectionInfoByHandle.initiate({ handle: query.handle }))
         await store.dispatch(collectionService.endpoints.getCollectionProductsByHandle.initiate(query))
 
-        return query
+        return { query: query }
     }
 )
 

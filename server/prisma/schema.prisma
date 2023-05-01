@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount", "interactiveTransactions"]
+    previewFeatures = ["fullTextSearch", "fullTextIndex", "filteredRelationCount", "interactiveTransactions", "orderByNulls"]
 }
 
 datasource db {
@@ -388,6 +388,8 @@ model Product {
     available        Boolean           @default(false)
     metaTitle        String            @db.VarChar(255)
     metaDescription  String            @db.Text
+    minPrice         Decimal?          @db.Decimal(10, 2)
+    maxPrice         Decimal?          @db.Decimal(10, 2)
     SKU              String?
     barcode          String?
     vendor           String?

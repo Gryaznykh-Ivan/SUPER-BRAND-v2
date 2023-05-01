@@ -44,12 +44,12 @@ export default function Sort({ isActive, onClose }: IProps) {
                             <div className="h-14 flex justify-center items-center font-medium text-md" ref={handle}>Сортировка</div>
                         </div>
                         <div className="py-4 overflow-y-auto" style={{ height: `${280 - deltaY}px` }}>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "relevance" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("relevance")}>Наши рекомендации</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "popular" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("popular")}>Самое популярное</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceAsc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceAsc")}>По возрастанию цены</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceDesc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceDesc")}>По убыванию цены</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "newProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("newProduct")}>Сначала новые товары</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "oldProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("oldProduct")}>Сначала старые товары</button>
+                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "relevance" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("relevance")}>По релевантности</button>
+                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "popular" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("popular")}>Популярные</button>
+                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceAsc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceAsc")}>Сначала недорогие</button>
+                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceDesc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceDesc")}>Сначала дорогие</button>
+                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "newProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("new")}>Новинки</button>
+                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "oldProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("old")}>Старые товары</button>
                         </div>
                     </div>
                 </div>

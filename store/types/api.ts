@@ -94,4 +94,11 @@ export type CollectionGetProductsByHandleRequest = {
     handle: string;
     skip: number;
     limit: number;
+    sort?: string;
+    sizes?: string;
+    brands?: string;
+    maxPrice?: string;
+    minPrice?: string;
+    salesOnly?: string;
+    expressDelivery?: string;
 }

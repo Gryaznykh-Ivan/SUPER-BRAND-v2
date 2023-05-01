@@ -172,6 +172,7 @@ export class OfferService {
                 option2: true,
                 product: {
                     select: {
+                        id: true,
                         title: true,
                         options: {
                             select: {
@@ -201,6 +202,7 @@ export class OfferService {
         const offerImage = variant.product.images[0] ?? null
 
         const createOfferQuery = {
+            productId: variant.product.id,
             productTitle: variant.product.title,
             variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
             imageId: offerImage !== null ? offerImage.id : undefined,
@@ -278,6 +280,7 @@ export class OfferService {
                     option2: true,
                     product: {
                         select: {
+                            id: true,
                             title: true,
                             options: {
                                 select: {
@@ -308,6 +311,7 @@ export class OfferService {
 
             Object.assign(updateOfferQuery, {
                 status: (offer.status === OfferStatus.NO_MATCH && data.status === undefined) ? OfferStatus.ACTIVE : data.status,
+                productId: variant.product.id,
                 productTitle: variant.product.title,
                 variantTitle: variant.product.options.map((option) => variant[`option${option.option}`]).join(' | '),
                 variantId: data.variantId,

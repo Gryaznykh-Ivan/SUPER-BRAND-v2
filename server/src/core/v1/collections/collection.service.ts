@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma-module/prisma.service';
 import { OfferStatus } from '@prisma/client';
-import { SearchDto } from './dto/search.dto';
+import { CollectionSortEnum, SearchDto } from './dto/search.dto';
 
 @Injectable()
 export class CollectionService {
@@ -35,18 +35,18 @@ export class CollectionService {
     }
 
     async getCollectionProductsByHandle(collectionHandle: string, data: SearchDto) {
-        
+        const { where, orederBy } = await this.collectionFilterAndSort(data)
 
         const collection = await this.prisma.collection.findUnique({
             where: {
-                handle: collectionHandle
+                handle: collectionHandle,
             },
             select: {
-                handle: true,
                 hidden: true,
                 products: {
                     where: {
-                        available: true
+                        ...where,
+                        available: true,
                     },
                     select: {
                         handle: true,
@@ -61,13 +61,15 @@ export class CollectionService {
                             },
                             take: 1,
                             orderBy: {
-                                position: 'asc'
+                                position: "asc"
                             }
                         },
                         variants: {
                             where: {
                                 offers: {
-                                    some: {}
+                                    some: {
+                                        status: OfferStatus.ACTIVE
+                                    }
                                 }
                             },
                             select: {
@@ -81,20 +83,24 @@ export class CollectionService {
                                     },
                                     take: 1,
                                     orderBy: {
-                                        price: 'asc'
+                                        price: "asc"
                                     }
                                 }
                             }
-                        },
+                        }
+                    },
+                    orderBy: {
+                        ...orederBy
                     },
                     skip: data.skip,
-                    take: data.limit,
+                    take: data.limit
                 },
                 _count: {
                     select: {
                         products: {
                             where: {
-                                available: true
+                                ...where,
+                                available: true,
                             }
                         }
                     }
@@ -106,25 +112,60 @@ export class CollectionService {
             throw new HttpException("Коллекция не найдена", HttpStatus.NOT_FOUND)
         }
 
-        const result = {
-            currentPage: Math.floor(data.skip / data.limit) + 1,
-            totalPages: Math.ceil(collection._count.products / data.limit),
-            products: collection.products.map(product => ({
-                handle: product.handle,
-                title: product.title,
-                vendor: product.vendor,
-                image: product.images[0] ?? null,
-                ...(
-                    product.variants.length !== 0 && product.variants.some(variant => variant.offers.length !== 0) == true
-                        ? product.variants.sort((a, b) => Number(a.offers[0].price) - Number(b.offers[0].price))[0].offers[0]
-                        : { price: null, compareAtPrice: null }
-                )
-            }))
-        }
+        const mappedProducts = collection.products.map(product => ({
+            handle: product.handle,
+            title: product.title,
+            vendor: product.vendor,
+            image: product.images[0] ?? null,
+            ...(
+                product.variants.length !== 0
+                    ? product.variants.sort((a, b) => Number(a.offers[0].price) - Number(b.offers[0].price))[0].offers[0]
+                    : { price: null, compareAtPrice: null }
+            )
+        }))
 
         return {
             success: true,
-            data: result
+            data: {
+                currentPage: Math.floor(data.skip / data.limit) + 1,
+                totalPages: Math.ceil(collection._count.products / data.limit),
+                products: mappedProducts
+            }
         }
+    }
+
+    private async collectionFilterAndSort(data: SearchDto) {
+        const where = {}
+        const orederBy = {}
+
+        switch (data.sort) {
+            case CollectionSortEnum.relevance:
+                orederBy["id"] = "asc"
+                break;
+            case CollectionSortEnum.popular:
+                orederBy["productIsFavored"] = { _count: "desc" }
+                break;
+            case CollectionSortEnum.new:
+                orederBy["createdAt"] = "desc"
+                break;
+            case CollectionSortEnum.old:
+                orederBy["createdAt"] = "asc"
+                break;
+            case CollectionSortEnum.priceAsc:
+                orederBy["minPrice"] = { sort: "asc", nulls: "last" }
+                break;
+            case CollectionSortEnum.priceDesc:
+                orederBy["minPrice"] = { sort: "desc", nulls: "last" }
+                break;
+        }
+
+        if (data.maxPrice !== undefined || data.minPrice !== undefined) {
+            where["minPrice"] = {
+                lte: data.maxPrice,
+                gte: data.minPrice
+            }
+        }
+
+        return { where, orederBy }
     }
 }
