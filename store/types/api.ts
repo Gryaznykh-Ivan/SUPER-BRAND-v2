@@ -51,6 +51,18 @@ export interface ICollectionProducts {
     totalPages: number;
 }
 
+export interface ICollectionFilters {
+    prices: {
+        min: number;
+        max: number;
+    };
+    sizes: {
+        title: string;
+        values: string[];
+    }[];
+    brands: string[];
+}
+
 
 
 //authService
@@ -84,8 +96,8 @@ export type PageGetByHandleRequest = {
 
 
 //collectionService
-export type CollectionGetInfoByHandleResponse = IResponse<ICollection>
-export type CollectionGetInfoByHandleRequest = {
+export type CollectionGetByHandleResponse = IResponse<ICollection>
+export type CollectionGetByHandleRequest = {
     handle: string;
 }
 
@@ -94,6 +106,18 @@ export type CollectionGetProductsByHandleRequest = {
     handle: string;
     skip: number;
     limit: number;
+    sort?: string;
+    sizes?: string;
+    brands?: string;
+    maxPrice?: string;
+    minPrice?: string;
+    salesOnly?: string;
+    expressDelivery?: string;
+}
+
+export type CollectionGetFiltersByHandleResponse = IResponse<ICollectionFilters>
+export type CollectionGetFiltersByHandleRequest = {
+    handle: string;
     sort?: string;
     sizes?: string;
     brands?: string;

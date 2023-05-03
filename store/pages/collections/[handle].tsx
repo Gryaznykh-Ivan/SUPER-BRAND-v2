@@ -9,7 +9,7 @@ import Pagination from '../../components/Pagination'
 import ProductCard from '../../components/products/ProductCard'
 import ProductFilterSort from '../../components/products/ProductFilterSort'
 import { wrapper } from '@/store'
-import { collectionService, useGetCollectionInfoByHandleQuery, useGetCollectionProductsByHandleQuery } from '@/services/collectionService'
+import { collectionService, useGetCollectionByHandleQuery, useGetCollectionProductsByHandleQuery } from '@/services/collectionService'
 import { useRouter } from 'next/router'
 import { CollectionGetProductsByHandleRequest, IErrorResponse } from '@/types/api'
 
@@ -20,7 +20,7 @@ interface IInitialProps {
 }
 
 function Collection({ query }: IInitialProps) {
-    const { isFetching: isCollectionInfoFetching, isError: isCollectionInfoError, error: collectionInfoError, data: collectionInfoData } = useGetCollectionInfoByHandleQuery({ handle: query.handle })
+    const { isFetching: isCollectionInfoFetching, isError: isCollectionInfoError, error: collectionInfoError, data: collectionInfoData } = useGetCollectionByHandleQuery({ handle: query.handle })
     const { isFetching: isCollectionProductsFetching, isError: isCollectionProductsError, error: collectionProductsError, data: collectionProductsData } = useGetCollectionProductsByHandleQuery(query)
 
     return (
@@ -117,7 +117,7 @@ Collection.getInitialProps = wrapper.getInitialPageProps(
         const isCSR = typeof window === "undefined"
         if (isCSR === false) return { query: query }
 
-        await store.dispatch(collectionService.endpoints.getCollectionInfoByHandle.initiate({ handle: query.handle }))
+        await store.dispatch(collectionService.endpoints.getCollectionByHandle.initiate({ handle: query.handle }))
         await store.dispatch(collectionService.endpoints.getCollectionProductsByHandle.initiate(query))
 
         return { query: query }

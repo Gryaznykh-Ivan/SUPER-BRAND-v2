@@ -134,6 +134,80 @@ export class CollectionService {
         }
     }
 
+    async getCollectionFiltersByHandle(collectionHandle: string, data: SearchDto) {
+        const { where } = await this.collectionFilterAndSort(data)
+
+        const sizes = await this.prisma.option.findMany({
+            distinct: ["title"],
+            where: {
+                product: {
+                    collections: {
+                        some: {
+                            handle: collectionHandle
+                        }
+                    },
+                    available: true,
+                }
+            },
+            select: {
+                title: true,
+                values: {
+                    select: {
+                        title: true
+                    }
+                }
+            }
+        })
+
+        const prices = await this.prisma.product.aggregate({
+            where: {
+                ...where,
+                collections: {
+                    some: {
+                        handle: collectionHandle
+                    }
+                },
+                available: true,
+            },
+            _min: {
+                minPrice: true,
+            },
+            _max: {
+                maxPrice: true
+            }
+        })
+
+        const brands = await this.prisma.product.groupBy({
+            by: ["vendor"],
+            where: {
+                collections: {
+                    some: {
+                        handle: collectionHandle
+                    }
+                },
+                vendor: {
+                    not: null
+                },
+                available: true,
+            }
+        })
+
+        return {
+            success: true,
+            data: {
+                brands: brands.map(brand => brand.vendor),
+                sizes: sizes.map(size => ({
+                    title: size.title,
+                    values: size.values.map(value => value.title)
+                })),
+                prices: {
+                    min: prices._min.minPrice,
+                    max: prices._max.maxPrice
+                },
+            }
+        }
+    }
+
     private async collectionFilterAndSort(data: SearchDto) {
         const where = {}
         const orederBy = {}
@@ -161,8 +235,58 @@ export class CollectionService {
 
         if (data.maxPrice !== undefined || data.minPrice !== undefined) {
             where["minPrice"] = {
+                ...where["minPrice"],
                 lte: data.maxPrice,
                 gte: data.minPrice
+            }
+        }
+
+        if (data.salesOnly === true) {
+            where["offers"] = {
+                ...where["offers"],
+                some: {
+                    ...where["offers"]?.some,
+                    compareAtPrice: {
+                        not: null
+                    }
+                }
+            }
+        }
+
+        if (data.expressDelivery === true) {
+            where["offers"] = {
+                ...where["offers"],
+                some: {
+                    ...where["offers"]?.some,
+                    deliveryProfile: {
+                        location: "Россия"
+                    }
+                }
+            }
+        }
+
+        if (data.brands !== undefined) {
+            where['vendor'] = {
+                ...where['vendor'],
+                in: data.brands
+            }
+        }
+
+        if (data.sizes !== undefined) {
+            where['options'] = {
+                ...where['options'],
+                some: {
+                    ...where['options']?.some,
+                    values: {
+                        ...where['options']?.some?.values,
+                        some: {
+                            ...where['options']?.some?.values?.some,
+                            title: {
+                                in: data.sizes
+                            }
+                        }
+                    }
+                }
             }
         }
 

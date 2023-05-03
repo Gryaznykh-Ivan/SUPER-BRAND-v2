@@ -11,16 +11,18 @@ export enum CollectionSortEnum {
 }
 
 export class SearchDto {
+    @IsOptional()
     @IsInt()
     @Min(0)
     @Transform(({ value }) => parseInt(value, 10))
-    readonly skip: number;
+    readonly skip: number = 0;
 
+    @IsOptional()
     @IsInt()
     @Max(20)
     @Min(0)
     @Transform(({ value }) => parseInt(value, 10))
-    readonly limit: number;
+    readonly limit: number = 20;
 
     @IsOptional()
     @IsNumber()

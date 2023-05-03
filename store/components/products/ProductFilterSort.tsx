@@ -1,5 +1,7 @@
+import { useGetCollectionFiltersByHandleQuery, useLazyGetCollectionFiltersByHandleQuery } from '@/services/collectionService'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import useSetBodyScroll from '../../hooks/useSetBodyScroll'
+import useSetBodyScroll from '@/hooks/useSetBodyScroll'
 import Filterbar from '../sidebars/Filter'
 import Sortbar from '../sidebars/Sort'
 
@@ -46,13 +48,13 @@ export default function ProductFilterSort() {
                     </button>
                 </div>
             </div>
-            <Sortbar
-                isActive={isSortbarOpen}
-                onClose={onToggleSortbar}
-            />
             <Filterbar
                 isActive={isFilterbarOpen}
                 onClose={onToggleFilterbar}
+            />
+            <Sortbar
+                isActive={isSortbarOpen}
+                onClose={onToggleSortbar}
             />
         </>
     )

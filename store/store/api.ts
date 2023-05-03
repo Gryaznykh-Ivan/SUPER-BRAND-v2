@@ -54,7 +54,8 @@ export const api = createApi({
     tagTypes: [
         "PAGE",
         "COLLECTION",
-        "COLLECTION_PRODUCTS"
+        "COLLECTION_PRODUCTS",
+        "COLLECTION_FILTERS",
     ],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {

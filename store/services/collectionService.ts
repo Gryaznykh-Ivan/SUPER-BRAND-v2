@@ -1,11 +1,11 @@
 import { api } from "../store/api";
-import { CollectionGetInfoByHandleRequest, CollectionGetInfoByHandleResponse, CollectionGetProductsByHandleRequest, CollectionGetProductsByHandleResponse } from "../types/api";
+import { CollectionGetByHandleRequest, CollectionGetByHandleResponse, CollectionGetFiltersByHandleRequest, CollectionGetFiltersByHandleResponse, CollectionGetProductsByHandleRequest, CollectionGetProductsByHandleResponse } from "../types/api";
 
 export const collectionService = api.injectEndpoints({
     endpoints: builder => ({
-        getCollectionInfoByHandle: builder.query<CollectionGetInfoByHandleResponse, CollectionGetInfoByHandleRequest>({
+        getCollectionByHandle: builder.query<CollectionGetByHandleResponse, CollectionGetByHandleRequest>({
             query: ({ handle, ...rest }) => ({
-                url: `v1/collections/${handle}/info`,
+                url: `v1/collections/${handle}`,
                 method: "GET",
                 params: rest
             }),
@@ -19,10 +19,19 @@ export const collectionService = api.injectEndpoints({
             }),
             providesTags: ["COLLECTION_PRODUCTS"]
         }),
+        getCollectionFiltersByHandle: builder.query<CollectionGetFiltersByHandleResponse, CollectionGetFiltersByHandleRequest>({
+            query: ({ handle, ...rest }) => ({
+                url: `v1/collections/${handle}/filters`,
+                method: "GET",
+                params: rest
+            }),
+            providesTags: ["COLLECTION_FILTERS"]
+        }),
     })
 })
 
 export const {
-    useGetCollectionInfoByHandleQuery,
-    useGetCollectionProductsByHandleQuery
+    useGetCollectionByHandleQuery,
+    useGetCollectionFiltersByHandleQuery,
+    useGetCollectionProductsByHandleQuery,
 } = collectionService
