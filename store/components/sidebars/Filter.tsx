@@ -151,7 +151,7 @@ export default function Filter({ isActive, onClose }: IProps) {
                         <div className="flex-1 px-5 py-4 overflow-y-auto">
                             {isCollectionFiltersFetching === false && isCollectionFiltersError === false && collectionFiltersData?.data &&
                                 <>
-                                    {collectionFiltersData.data.sizes.length > 1 &&
+                                    {collectionFiltersData.data.sizes.length > 0 &&
                                         <FilterAccordion title="Размер">
                                             <div className="py-4">
                                                 <FilterSizeSelect options={Object.fromEntries(collectionFiltersData.data.sizes.map(size => ([size.title, { value: size.title, disabled: false }])))} onChange={onSizeTableChange} />
