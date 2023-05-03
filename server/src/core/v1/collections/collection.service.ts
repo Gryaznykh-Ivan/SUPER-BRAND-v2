@@ -154,6 +154,9 @@ export class CollectionService {
                 values: {
                     select: {
                         title: true
+                    },
+                    orderBy: {
+                        position: 'asc'
                     }
                 }
             }
