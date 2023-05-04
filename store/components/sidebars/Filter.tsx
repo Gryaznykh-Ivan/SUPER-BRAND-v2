@@ -38,12 +38,19 @@ export default function Filter({ isActive, onClose }: IProps) {
         salesOnly: false
     });
 
-    const { isFetching: isCollectionFiltersFetching, isError: isCollectionFiltersError, data: collectionFiltersData, error: collectionFiltersError } = useGetCollectionFiltersByHandleQuery({ ...query, handle: query.handle as string }, { skip })
+    const { isFetching: isCollectionFiltersFetching, isError: isCollectionFiltersError, data: collectionFiltersData, error: collectionFiltersError } = useGetCollectionFiltersByHandleQuery({
+        handle: query.handle as string,
+        brands: query.brands as string,
+        expressDelivery: query.expressDelivery as string,
+        maxPrice: query.maxPrice as string,
+        minPrice: query.minPrice as string,
+        salesOnly: query.salesOnly as string,
+        sizes: query.sizes as string,
+        sort: query.sort as string
+    }, { skip })
 
     useEffect(() => {
-        if (isActive === true) {
-            setSkip(false)
-        }
+        setSkip(isActive === true ? false : true)
     }, [isActive])
 
     useEffect(() => {
