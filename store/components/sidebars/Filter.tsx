@@ -78,11 +78,15 @@ export default function Filter({ isActive, onClose }: IProps) {
         if (filter.maxPrice !== "") currentQuery.maxPrice = filter.maxPrice
         if (filter.salesOnly !== false) currentQuery.salesOnly = filter.salesOnly.toString()
         if (filter.expressDelivery !== false) currentQuery.expressDelivery = filter.expressDelivery.toString()
-
+        
         router.push({ pathname, query: currentQuery })
-
+        
         onClose()
     }
+    
+    const priceFromFormat = (price: string) => `От ${price} ₽`
+    const priceToFormat = (price: string) => `До ${price} ₽`
+    const priceFormat = (price: string) => price
 
     const onFilterReset = () => {
         const currentQuery = { ...query }
@@ -97,8 +101,8 @@ export default function Filter({ isActive, onClose }: IProps) {
     }
 
     const onPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const numValue = parseInt(e.target.value, 10);
-        setFilter(prev => ({ ...prev, [e.target.name]: isNaN(numValue) === false ? numValue.toString() : "" }));
+        const numValue = parseInt(e.target.value.replace(/[^0-9]/g, ""), 10);
+        setFilter(prev => ({ ...prev, [e.target.name]: isNaN(numValue) === false ? convertToCurrencyFormat(priceFormat, numValue.toString()) : "" }));
     }
 
     const onSizesChange = (size: string) => {
@@ -123,8 +127,6 @@ export default function Filter({ isActive, onClose }: IProps) {
         }
     }
 
-    const priceFromFormat = (price: string) => `От ${price} ₽`
-    const priceToFormat = (price: string) => `До ${price} ₽`
 
     return (
         <Modal>
