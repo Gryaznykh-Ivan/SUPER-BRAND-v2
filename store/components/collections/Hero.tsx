@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react'
 
 interface IProps {
@@ -6,6 +7,9 @@ interface IProps {
 }
 
 export default function Hero({ title, description }: IProps) {
+    const router = useRouter()
+    const { query } = router
+
     const descriptionRef = useRef<HTMLParagraphElement>(null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [canExpand, setCanExpand] = useState(false);
@@ -28,7 +32,7 @@ export default function Hero({ title, description }: IProps) {
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, [isExpanded]);
+    }, [query.handle, isExpanded]);
 
     const onToggleExpanded = () => {
         setIsExpanded(prev => !prev);
