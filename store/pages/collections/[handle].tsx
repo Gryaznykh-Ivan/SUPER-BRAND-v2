@@ -10,7 +10,6 @@ import ProductCard from '../../components/products/ProductCard'
 import ProductFilterSort from '../../components/products/ProductFilterSort'
 import { wrapper } from '@/store'
 import { collectionService, useGetCollectionByHandleQuery, useGetCollectionProductsByHandleQuery } from '@/services/collectionService'
-import { useRouter } from 'next/router'
 import { CollectionGetProductsByHandleRequest, IErrorResponse } from '@/types/api'
 
 const productsPerPage = 20

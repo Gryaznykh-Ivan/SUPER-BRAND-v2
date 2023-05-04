@@ -134,6 +134,106 @@ export class CollectionService {
         }
     }
 
+    async getCollectionProductsRecommendationByHandle(collectionHandle: string, data: SearchDto) {
+        const { where } = await this.collectionFilterAndSort(data)
+
+        const collection = await this.prisma.collection.findUnique({
+            where: {
+                handle: collectionHandle,
+            },
+            select: {
+                hidden: true,
+                _count: {
+                    select: {
+                        products: {
+                            where: {
+                                ...where,
+                                available: true,
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        if (collection === null) {
+            throw new HttpException("Коллекция не найдена", HttpStatus.NOT_FOUND)
+        }
+
+        const randomSkip = Math.floor(Math.random() * collection._count.products) - data.limit
+        const products = await this.prisma.product.findMany({
+            where: {
+                ...where,
+                available: true,
+                collections: {
+                    some: {
+                        handle: collectionHandle
+                    }
+                }
+            },
+            select: {
+                handle: true,
+                title: true,
+                vendor: true,
+                type: true,
+                images: {
+                    select: {
+                        alt: true,
+                        src: true,
+                        blurhash: true,
+                    },
+                    take: 1,
+                    orderBy: {
+                        position: "asc"
+                    }
+                },
+                variants: {
+                    where: {
+                        offers: {
+                            some: {
+                                status: OfferStatus.ACTIVE
+                            }
+                        }
+                    },
+                    select: {
+                        offers: {
+                            where: {
+                                status: OfferStatus.ACTIVE
+                            },
+                            select: {
+                                price: true,
+                                compareAtPrice: true,
+                            },
+                            take: 1,
+                            orderBy: {
+                                price: "asc"
+                            }
+                        }
+                    }
+                }
+            },
+            skip: randomSkip >= 0 ? randomSkip : 0,
+            take: data.limit
+        })
+
+        const mappedProducts = products.map(product => ({
+            handle: product.handle,
+            title: product.title,
+            vendor: product.vendor,
+            image: product.images[0] ?? null,
+            ...(
+                product.variants.length !== 0
+                    ? product.variants.sort((a, b) => Number(a.offers[0].price) - Number(b.offers[0].price))[0].offers[0]
+                    : { price: null, compareAtPrice: null }
+            )
+        }))
+
+        return {
+            success: true,
+            data: this.shuffleArray(mappedProducts)
+        }
+    }
+
     async getCollectionFiltersByHandle(collectionHandle: string, data: SearchDto) {
         const { where } = await this.collectionFilterAndSort(data)
 
@@ -294,5 +394,14 @@ export class CollectionService {
         }
 
         return { where, orederBy }
+    }
+
+    private shuffleArray(array: Array<any>) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+
+        return array;
     }
 }

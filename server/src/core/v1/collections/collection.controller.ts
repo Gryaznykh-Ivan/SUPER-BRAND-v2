@@ -23,6 +23,14 @@ export class CollectionController {
         return this.collectionService.getCollectionProductsByHandle(collectionHandle, data)
     }
 
+    @Get(':collectionHandle/recommendation')
+    getCollectionProductsRecommendationByHandle(
+        @Param('collectionHandle') collectionHandle: string,
+        @Query(new ValidationPipe({ transform: true })) data: SearchDto
+    ) {
+        return this.collectionService.getCollectionProductsRecommendationByHandle(collectionHandle, data)
+    }
+
     @Get(':collectionHandle/filters')
     getCollectionFiltersByHandle(
         @Param('collectionHandle') collectionHandle: string,

@@ -45,7 +45,7 @@ export interface ICollection {
     hidden: boolean;
 }
 
-export interface ICollectionProducts {
+export interface ICollectionPage {
     products: IProductCard[];
     currentPage: number;
     totalPages: number;
@@ -101,7 +101,7 @@ export type CollectionGetByHandleRequest = {
     handle: string;
 }
 
-export type CollectionGetProductsByHandleResponse = IResponse<ICollectionProducts>
+export type CollectionGetProductsByHandleResponse = IResponse<ICollectionPage>
 export type CollectionGetProductsByHandleRequest = {
     handle: string;
     skip: number;
@@ -113,6 +113,12 @@ export type CollectionGetProductsByHandleRequest = {
     minPrice?: string;
     salesOnly?: string;
     expressDelivery?: string;
+}
+
+export type CollectionGetProductsRecommendationByHandleResponse = IResponse<IProductCard[]>
+export type CollectionGetProductsRecommendationByHandleRequest = {
+    handle: string;
+    limit: number;
 }
 
 export type CollectionGetFiltersByHandleResponse = IResponse<ICollectionFilters>
