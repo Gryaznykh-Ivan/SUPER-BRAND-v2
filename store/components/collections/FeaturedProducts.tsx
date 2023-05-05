@@ -7,13 +7,13 @@ import CollectionSlider from '../sliders/CollectionSlider'
 
 export default function FeaturedProducts() {
     const router = useRouter()
-    const { pathname } = router;
+    const { pathname, query } = router;
 
     const [getRecommendations, { isFetching: isCollectionProductsFetching, isError: isCollectionProductsError, error: collectionProductsError, data: collectionProductsData }] = useLazyGetCollectionProductsRecommendationByHandleQuery()
 
     useEffect(() => {
         getRecommendations({ handle: "recommendation", limit: 16 })
-    }, [pathname])
+    }, [pathname, query.handle])
 
     return (
         <div className="container">
