@@ -18,7 +18,7 @@ export default function Login() {
                 <title>Авторизация/регистрация</title>
                 <meta name="description" content="Тут будет meta-description" />
             </Head>
-            <div className="flex justify-center py-12">
+            <div className="flex justify-center py-20">
                 <Authorization />
             </div>
         </MainLayout>

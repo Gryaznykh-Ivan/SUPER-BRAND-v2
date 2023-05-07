@@ -41,15 +41,15 @@ export default function Sort({ isActive, onClose }: IProps) {
                                     <path d="M1 1L9 9" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
-                            <div className="h-14 flex justify-center items-center font-medium text-md" ref={handle}>Сортировка</div>
+                            <div className="h-14 flex justify-center items-center font-medium text-base" ref={handle}>Сортировка</div>
                         </div>
                         <div className="py-4 overflow-y-auto" style={{ height: `${280 - deltaY}px` }}>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "relevance" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("relevance")}>По релевантности</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "popular" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("popular")}>Популярные</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceAsc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceAsc")}>Сначала недорогие</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceDesc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceDesc")}>Сначала дорогие</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "newProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("new")}>Новинки</button>
-                            <button className={`w-full h-10 font-medium text-md hover:bg-main-blue hover:bg-opacity-10 ${ sort === "oldProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("old")}>Старые товары</button>
+                            <button className={`w-full h-10 font-medium text-base hover:bg-main-blue hover:bg-opacity-10 ${ sort === "relevance" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("relevance")}>По релевантности</button>
+                            <button className={`w-full h-10 font-medium text-base hover:bg-main-blue hover:bg-opacity-10 ${ sort === "popular" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("popular")}>Популярные</button>
+                            <button className={`w-full h-10 font-medium text-base hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceAsc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceAsc")}>Сначала недорогие</button>
+                            <button className={`w-full h-10 font-medium text-base hover:bg-main-blue hover:bg-opacity-10 ${ sort === "priceDesc" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("priceDesc")}>Сначала дорогие</button>
+                            <button className={`w-full h-10 font-medium text-base hover:bg-main-blue hover:bg-opacity-10 ${ sort === "newProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("new")}>Новинки</button>
+                            <button className={`w-full h-10 font-medium text-base hover:bg-main-blue hover:bg-opacity-10 ${ sort === "oldProduct" ? "bg-main-blue bg-opacity-10" : ""}`} onClick={() => onSortChange("old")}>Старые товары</button>
                         </div>
                     </div>
                 </div>

@@ -9,7 +9,7 @@ interface IProps {
 
 export default function Breadcrumb({ className, crumbs }: IProps) {
     return (
-        <ul className={`text-text-gray text-md font-normal ${className}`} itemScope itemType="https://schema.org/BreadcrumbList">
+        <ul className={`text-text-gray text-base font-normal ${className}`} itemScope itemType="https://schema.org/BreadcrumbList">
             <li itemProp="itemListElement" itemScope
                 itemType="https://schema.org/ListItem">
                 <Link itemProp="item" href="/">

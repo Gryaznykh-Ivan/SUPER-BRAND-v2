@@ -46,7 +46,7 @@ export default function ProductCard({ handle, title, vendor, type, image, price,
                     </svg>
                 </div>
             </div>
-            <div className="mt-5 text-md text-center space-y-1 px-2">
+            <div className="mt-5 text-base text-center space-y-1 px-2">
                 <div className="font-semibold tracking-widest text-black uppercase">{vendor}</div>
                 {/* <div className="text-text-gray">{ type }</div> */}
                 <div className="text-text-gray line-clamp-3">{title}</div>

@@ -4,7 +4,7 @@ import Accordion from '../accordions/Accordion'
 
 export default function DeliveryAndPaymentAccordion() {
     return <Accordion title="Оплата и доставка">
-        <div className="pb-4 px-4 flex gap-4 flex-col text-md">
+        <div className="pb-4 px-4 flex gap-4 flex-col text-base">
             <p>Мы предлагаем бесплатный обмен и полный возврат для всех заказов при следующих условиях:</p>
             <ul>
                 <li>1) товар не был в употреблении (стиран, ношен);</li>

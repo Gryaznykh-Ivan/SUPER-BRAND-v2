@@ -4,7 +4,7 @@ import CollectionSlider from '../sliders/CollectionSlider'
 export default function RecentlyViewed() {
     return (
         <div className="container">
-            <div className="px-4 md:px-10 text-lg tracking-widest mb-5">Недавно просмотренные</div>
+            <div className="px-4 md:px-10 text-lg mb-5">Недавно просмотренные</div>
             <CollectionSlider
                 products={[{
                     handle: "2",

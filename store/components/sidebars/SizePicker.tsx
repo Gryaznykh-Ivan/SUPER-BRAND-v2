@@ -19,8 +19,8 @@ export default function SizePicker({ isActive, onClose }: IProps) {
                                 <div className="w-11 h-1 bg-gray-300 rounded-full mb-4"></div>
                             </div>
                             <div className="flex justify-between px-4">
-                                <div className="text-md">Выберите US размер</div>
-                                <button className="text-md underline">Таблица размеров</button>
+                                <div className="text-base">Выберите US размер</div>
+                                <button className="text-base underline">Таблица размеров</button>
                             </div>
                         </div>
                         <div className="flex-1 overflow-y-auto">
@@ -62,7 +62,7 @@ export default function SizePicker({ isActive, onClose }: IProps) {
                             </div>
                         </div>
                         <div className="mx-5 py-5  border-t-[1px] border-line-divider">
-                            <button className="w-full text-md text-white font-medium bg-black rounded-lg h-12">Выбрать</button>
+                            <button className="w-full text-base text-white font-medium bg-black rounded-lg h-12">Выбрать</button>
                         </div>
                     </div>
                 </div>

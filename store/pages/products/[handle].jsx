@@ -111,7 +111,7 @@ export default function Product() {
                             <div className="px-0 md:pl-8">
                                 <div className="flex items-center">
                                     <div className="text-main-red text-lg">от 32 000 ₽</div>
-                                    <div className="text-md text-text-gray line-through ml-4">42 000 ₽</div>
+                                    <div className="text-base text-text-gray line-through ml-4">42 000 ₽</div>
                                 </div>
                                 <div className="text-text-gray text-sm mt-3">
                                     Все налоги и таможенные сборы включены. Стоимость доставки рассчитывается на этапе оформления заказа.
@@ -119,13 +119,13 @@ export default function Product() {
                             </div>
                             <div className="px-0 md:pl-8 space-y-2">
                                 <SizeSelect />
-                                {/* <button className="w-full text-md text-white bg-black rounded-lg h-12">Добавить в корзину</button> */}
-                                <button className="w-full text-md text-white bg-main-blue rounded-lg h-14">
+                                {/* <button className="w-full text-base text-white bg-black rounded-lg h-12">Добавить в корзину</button> */}
+                                <button className="w-full text-base text-white bg-main-blue rounded-lg h-14">
                                     <span className="font-semibold">Купить под заказ</span>
                                     <br />
                                     <span className="text-sm">56 000 ₽</span>
                                 </button>
-                                <button className="w-full text-md text-white bg-black rounded-lg h-14">
+                                <button className="w-full text-base text-white bg-black rounded-lg h-14">
                                     <span className="font-semibold">Купить из наличия</span>
                                     <br />
                                     <span className="text-sm">132 000 ₽</span>
@@ -134,7 +134,7 @@ export default function Product() {
                             <div className="px-0 md:pl-8">
                                 <div className="border-y-[1px] border-line-divider divide-y-[1px] divide-line-divider">
                                     <Accordion title="О товаре">
-                                        <div className="pb-4 px-4 flex gap-4 flex-col text-md">
+                                        <div className="pb-4 px-4 flex gap-4 flex-col text-base">
                                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab ea, voluptatem dolorum ipsa cumque, asperiores consequuntur architecto quidem, sequi aliquid ducimus. Aperiam sunt temporibus quo in ab. Dolor facere dolores voluptate iste ipsa maiores voluptatum mollitia rerum veniam quod saepe nostrum doloremque explicabo placeat, quas quo est pariatur reprehenderit eaque sit sequi nisi ad necessitatibus quidem. Deserunt repellat eaque hic ducimus, dolorem nam fugiat quae, at aspernatur voluptates perferendis voluptate quo, provident ullam doloremque qui laborum! Esse alias obcaecati, rerum sapiente possimus et quam commodi corporis tempore soluta ex tempora molestiae molestias iusto! Cum voluptatem repellat aut autem explicabo, reprehenderit culpa, at dicta perspiciatis libero beatae nemo doloremque rem ducimus ea non nesciunt sunt reiciendis voluptatibus hic maiores amet asperiores minus. Quidem at velit perspiciatis, consectetur vero laudantium nihil excepturi iure aspernatur. Delectus veniam reiciendis facere est ut cupiditate soluta? Praesentium, qui nisi odit voluptatem fugiat culpa nulla dignissimos dolor.</p>
                                         </div>
                                     </Accordion>
@@ -147,7 +147,7 @@ export default function Product() {
                         </div>
                     </div>
                 </div>
-                <div className="space-y-8">
+                <div className="py-8 space-y-8">
                     <FeaturedProducts />
                     <RecentlyViewed />
                 </div>

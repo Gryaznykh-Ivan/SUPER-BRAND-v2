@@ -44,7 +44,7 @@ export default function Hero({ title, description }: IProps) {
                 <h1 className="text-xl tracking-widest font-medium uppercase mb-4">{title}</h1>
                 <p className={`${isExpanded === false ? "line-clamp-3" : ""} prose max-w-full`} ref={descriptionRef} dangerouslySetInnerHTML={{ __html: description }}></p>
                 {(canExpand === true || isExpanded === true) &&
-                    <button className="text-md font-normal underline" onClick={onToggleExpanded}>{isExpanded === true ? "Скрыть" : "Читать дальше"}</button>
+                    <button className="text-base font-normal underline" onClick={onToggleExpanded}>{isExpanded === true ? "Скрыть" : "Читать дальше"}</button>
                 }
             </div>
         </div>

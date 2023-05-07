@@ -15,8 +15,7 @@ export default function Accordion({ title, children, className }: IProps) {
                 </div>
                 <div className="flex-shrink-0 transition duration-200 group-open:-rotate-180">
                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1.03996 1.15234L4.29996 4.54675C4.68496 4.94762 5.31496 4.94762 5.69996 4.54675L8.95996 1.15234" fill="white" />
-                        <path d="M1.03996 1.15234L4.29996 4.54675C4.68496 4.94762 5.31496 4.94762 5.69996 4.54675L8.95996 1.15234" stroke="#6E6E6E" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M8.75 1L5 5L1.25 1" stroke="black" stroke-linecap="square" />
                     </svg>
                 </div>
             </summary>

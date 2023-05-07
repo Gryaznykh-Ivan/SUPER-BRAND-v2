@@ -140,7 +140,7 @@ export default function Filter({ isActive, onClose }: IProps) {
                                     <path d="M1 1L9 9" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
-                            <div className="h-14 flex justify-center items-center border-b-[1px] border-line-divider font-medium text-md">Фильтры</div>
+                            <div className="h-14 flex justify-center items-center border-b-[1px] border-line-divider font-medium text-base">Фильтры</div>
                         </div>
                         {isCollectionFiltersFetching === true &&
                             <div className="flex justify-center p-5 z-10 ">
@@ -166,7 +166,7 @@ export default function Filter({ isActive, onClose }: IProps) {
                                                 <FilterSizeSelect options={Object.fromEntries(collectionFiltersData.data.sizes.map(size => ([size.title, { value: size.title, disabled: false }])))} onChange={onSizeTableChange} />
                                                 <div className="grid grid-cols-3 md:grid-cols-4 gap-2 mt-4">
                                                     {collectionFiltersData.data.sizes[sizeTable].values.map(size =>
-                                                        <button key={size} className={`border-[1px] h-10 text-md font-medium ${filter.sizes.some(c => c === size) === true ? "border-main-blue bg-main-blue/10" : "border-line-divider"}`} name={ size } onClick={() => onSizesChange(size)}>{ size }</button>
+                                                        <button key={size} className={`border-[1px] h-10 text-base font-medium ${filter.sizes.some(c => c === size) === true ? "border-main-blue bg-main-blue/10" : "border-line-divider"}`} name={ size } onClick={() => onSizesChange(size)}>{ size }</button>
                                                     )}
                                                 </div>
                                             </div>
@@ -178,7 +178,7 @@ export default function Filter({ isActive, onClose }: IProps) {
                                                 {collectionFiltersData.data.brands.map(brand =>
                                                     <label key={brand} className="flex items-center gap-2 h-10 cursor-pointer">
                                                         <Checkbox name={brand} checked={filter.brands.some(c => c === brand) === true} onChange={onBrandsChange} />
-                                                        <span className="text-md font-medium">{brand}</span>
+                                                        <span className="text-base font-medium">{brand}</span>
                                                     </label>
                                                 )}
                                             </div>
@@ -187,25 +187,25 @@ export default function Filter({ isActive, onClose }: IProps) {
                                     {collectionFiltersData.data.prices.min !== null && collectionFiltersData.data.prices.max !== null &&
                                         <FilterAccordion title="Цена">
                                             <div className="py-4 flex gap-6">
-                                                <input type="text" className="w-full h-11 rounded-lg px-3 py-4 border-[1px] border-line-divider text-md" placeholder={convertToCurrencyFormat(priceFromFormat, collectionFiltersData.data.prices.min.toString())} inputMode="numeric" name="minPrice" value={filter.minPrice} onChange={onPriceChange} />
-                                                <input type="text" className="w-full h-11 rounded-lg px-3 py-4 border-[1px] border-line-divider text-md" placeholder={convertToCurrencyFormat(priceToFormat, collectionFiltersData.data.prices.max.toString())} inputMode="numeric" name="maxPrice" value={filter.maxPrice} onChange={onPriceChange} />
+                                                <input type="text" className="w-full h-11 rounded-lg px-3 py-4 border-[1px] border-line-divider text-base" placeholder={convertToCurrencyFormat(priceFromFormat, collectionFiltersData.data.prices.min.toString())} inputMode="numeric" name="minPrice" value={filter.minPrice} onChange={onPriceChange} />
+                                                <input type="text" className="w-full h-11 rounded-lg px-3 py-4 border-[1px] border-line-divider text-base" placeholder={convertToCurrencyFormat(priceToFormat, collectionFiltersData.data.prices.max.toString())} inputMode="numeric" name="maxPrice" value={filter.maxPrice} onChange={onPriceChange} />
                                             </div>
                                         </FilterAccordion>
                                     }
                                     <label className="flex justify-between items-center h-11 cursor-pointer">
-                                        <div className="text-md font-medium">Товары со скидкой</div>
+                                        <div className="text-base font-medium">Товары со скидкой</div>
                                         <Toggle name="salesOnly" checked={filter.salesOnly} onChange={onToggleChecked} />
                                     </label>
                                     <label className="flex justify-between items-center h-11 cursor-pointer">
-                                        <div className="text-md font-medium">Доступна экспресс-доставка</div>
+                                        <div className="text-base font-medium">Доступна экспресс-доставка</div>
                                         <Toggle name="expressDelivery" checked={filter.expressDelivery} onChange={onToggleChecked} />
                                     </label>
                                 </>
                             }
                         </div>
                         <div className="flex gap-2 pt-5 mx-5 mb-5 border-t-[1px] border-line-divider">
-                            <button className="w-full h-12 rounded-md border-[1px] border-black text-md box-border" onClick={onFilterReset}>Сбросить</button>
-                            <button className="w-full h-12 rounded-md text-white bg-black text-md" onClick={onFilterChange}>Применить</button>
+                            <button className="w-full h-12 rounded-md border-[1px] border-black text-base box-border" onClick={onFilterReset}>Сбросить</button>
+                            <button className="w-full h-12 rounded-md text-white bg-black text-base" onClick={onFilterChange}>Применить</button>
                         </div>
                     </div>
                 </div>

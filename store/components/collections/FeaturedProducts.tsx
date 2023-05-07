@@ -17,7 +17,8 @@ export default function FeaturedProducts() {
 
     return (
         <div className="container">
-            <div className="px-4 md:px-10 text-lg tracking-widest mb-5">Вам может понравиться</div>
+            {/* px-4 md:px-10 */}
+            <div className="px-4 md:px-10 text-lg mb-5">Вам может понравиться</div>
             {isCollectionProductsFetching === true &&
                 <div className="flex justify-center p-5 z-10 ">
                     <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
