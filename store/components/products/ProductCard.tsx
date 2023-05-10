@@ -1,7 +1,7 @@
 import { IImage } from '@/types/api';
+import Image from 'next/image'
 import blurHashToDataURL from '@/utils/blurhash';
 import { convertToCurrencyFormat } from '@/utils/prices';
-import Image from 'next/image'
 import Link from 'next/link';
 import React from 'react'
 import ImageLoader from '../image/ImageLoader';
@@ -17,7 +17,8 @@ interface IProps {
 }
 
 export default function ProductCard({ handle, title, vendor, type, image, price, compareAtPrice }: IProps) {
-    const format = (price: string) => `От ${price} ₽`
+    const format = (price: string) => `${price} ₽`
+    const formatFrom = (price: string) => `От ${price} ₽`
 
     return (
         <Link href={ `/products/${ handle }` } className="group block">
@@ -51,7 +52,7 @@ export default function ProductCard({ handle, title, vendor, type, image, price,
                 {/* <div className="text-text-gray">{ type }</div> */}
                 <div className="text-text-gray line-clamp-3">{title}</div>
                 <div className="flex justify-center gap-3">
-                    <div className={`${compareAtPrice !== null ? "text-main-red" : ""}`}>{price !== null ? convertToCurrencyFormat(format, price) : "Продано"}</div>
+                    <div className={`${compareAtPrice !== null ? "text-main-red" : ""}`}>{price !== null ? convertToCurrencyFormat(formatFrom, price) : "Продано"}</div>
                     {compareAtPrice !== null &&
                         <div className="line-through text-text-gray">{convertToCurrencyFormat(format, compareAtPrice)}</div>
                     }

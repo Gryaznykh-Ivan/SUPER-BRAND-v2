@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useSetBodyScroll from '../../hooks/useSetBodyScroll'
+import useSetBodyScroll from '@/hooks/useSetBodyScroll'
 import SizePicker from '../sidebars/SizePicker'
 
 export default function SizeSelect() {

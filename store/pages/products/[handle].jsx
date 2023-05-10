@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from 'next/head'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import MainLayout from '@/components/layouts/Main'
 import Accordion from '@/components/accordions/Accordion'
 import FeaturedProducts from '@/components/collections/FeaturedProducts'
@@ -8,8 +8,22 @@ import RecentlyViewed from '@/components/collections/RecentlyViewed'
 import SizeSelect from '@/components/products/SizeSelect'
 import VerticalProductImageSlider from '@/components/sliders/VerticalProductImageSlider'
 import HorizontalProductImageSlider from '@/components/sliders/HorizontalProductImageSlider'
+import AddedToCart from '@/components/popups/AddedToCart'
+import useSetBodyScroll from '@/hooks/useSetBodyScroll'
 
 export default function Product() {
+    const [isAddedToCartOpen, setIsAddedToCartOpen] = useState(false)
+
+    const setBodyScroll = useSetBodyScroll()
+
+    useEffect(() => {
+        setBodyScroll(isAddedToCartOpen === false)
+    }, [isAddedToCartOpen])
+
+    const onToggleAddedToCart = () => {
+        setIsAddedToCartOpen(prev => !prev)
+    }
+
     return (
         <MainLayout>
             <Head>
@@ -115,11 +129,11 @@ export default function Product() {
                             <div className="px-0 md:pl-8 space-y-2">
                                 <SizeSelect />
                                 {/* <button className="w-full text-base text-white bg-black rounded-lg h-12">Добавить в корзину</button> */}
-                                <button className="flex flex-col justify-center items-center w-full bg-main-blue rounded-lg h-[50px]">
-                                    <span className="font-medium text-base text-white leading-4">Купить из наличия</span>
+                                <button className="flex flex-col justify-center items-center w-full bg-main-blue rounded-lg h-[50px]" onClick={onToggleAddedToCart}>
+                                    <span className="font-medium text-base text-white leading-4">Купить под заказ</span>
                                     <span className="text-sm text-white leading-3">132 000 ₽</span>
                                 </button>
-                                <button className="flex flex-col justify-center items-center w-full bg-black rounded-lg h-[50px]">
+                                <button className="flex flex-col justify-center items-center w-full bg-black rounded-lg h-[50px]" onClick={onToggleAddedToCart}>
                                     <span className="font-medium text-base text-white leading-4">Купить из наличия</span>
                                     <div className="flex gap-2">
                                         <span className="text-sm text-white leading-[14px]">132 000 ₽</span>
@@ -197,7 +211,19 @@ export default function Product() {
                     <RecentlyViewed />
                 </div>
             </div>
-
+            <AddedToCart
+                isActive={isAddedToCartOpen}
+                product={{
+                    handle: "2",
+                    title: "Air Jordan 1 Retro High Primer",
+                    vendor: "NIKE",
+                    type: "Кроссовки",
+                    image: null,
+                    price: "37000",
+                    compareAtPrice: "37000"
+                }}
+                onClose={onToggleAddedToCart}
+            />
         </MainLayout>
     )
 }
